@@ -1,3 +1,6 @@
+package view;
+
+import model.*;
 import javax.swing.JFrame;
 
 public class Visuel extends JFrame {
@@ -19,9 +22,5 @@ public class Visuel extends JFrame {
                 e.printStackTrace();
             }
         }
-    }
-
-    public static void main(String[] args) {
-        new Visuel();
     }
 }

@@ -1,3 +1,5 @@
+package model;
+
 public class peg {//les obstacles ronds présents dans un nv
     //atributs
     private int x,y;//ses coordonées
