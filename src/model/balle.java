@@ -1,26 +1,45 @@
 package model;
 
-import javax.swing.JPanel;
-
-import java.awt.Color;
-import java.awt.Graphics;
-public class balle extends JPanel{//la balle du joueur
-    //attributs
-    int x,y;//ses coordonnées
-    double speedX,speedY;//sa vitesse
-    // TODO : ajouter les autres attributs
-
-    public void deplacement(){
-        this.x += 10;// (int)speedX;
-        this.y = (int)speedY;
-        //TODO : collisions bordures jeu, peg...
+public class balle {
+    
+    private double x;
+    private double y;
+    private double vitesseX;
+    private double vitesseY;
+    
+    public balle(double x, double y, double vitesseX, double vitesseY) {
+      this.x = x;
+      this.y = y;
+      this.vitesseX = vitesseX;
+      this.vitesseY = vitesseY;
     }
-
-    @Override
-    public void paint(Graphics g){
-        super.paint(g);
-        g.setColor(Color.red);
-        g.fillOval(this.x,this.y,30,30);
+    
+    public void bouger(double temps) {
+      x = x + vitesseX * temps;
+      y = y + vitesseY * temps;
     }
-}
-
+    
+    public double getX() {
+      return x;
+    }
+    
+    public double getY() {
+      return y;
+    }
+    
+    public double getVitesseX() {
+      return vitesseX;
+    }
+    
+    public double getVitesseY() {
+      return vitesseY;
+    }
+    
+    public void setVitesseX(double vitesseX) {
+      this.vitesseX = vitesseX;
+    }
+    
+    public void setVitesseY(double vitesseY) {
+      this.vitesseY = vitesseY;
+    }
+  }
