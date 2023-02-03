@@ -1,13 +1,13 @@
 package model;
 
-public class balle {
+public class Balle {
     
     private double x;
     private double y;
     private double vitesseX;
     private double vitesseY;
     
-    public balle(double x, double y, double vitesseX, double vitesseY) {
+    public Balle(double x, double y, double vitesseX, double vitesseY) {
       this.x = x;
       this.y = y;
       this.vitesseX = vitesseX;
@@ -43,3 +43,5 @@ public class balle {
       this.vitesseY = vitesseY;
     }
   }
+
+}
