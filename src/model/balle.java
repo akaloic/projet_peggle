@@ -14,10 +14,10 @@ public class Balle {
     protected double vitesseY0;
     protected double accelerationX;
     protected double accelerationY;
-    protected double rayon;
+    protected final double rayon = 1;
     protected Timer clock;
-    protected double masse;
-    protected double g;
+    protected final double masse = 1;
+    protected final double g = 9.81;
     protected double forceAdded;
 
     
@@ -32,7 +32,9 @@ public class Balle {
       x += 0; //A REMPLIR
       y += 0; //A REMPLIR
     }
-    public void addForce(double )
+    public void addForce(){
+
+    }
     
     public double getX() {
       return x;
