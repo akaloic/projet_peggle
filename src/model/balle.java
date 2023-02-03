@@ -1,23 +1,38 @@
 package model;
 
-public class balle {
+import java.util.Timer;
+
+public class Balle {
     
-    private double x;
-    private double y;
-    private double vitesseX;
-    private double vitesseY;
+    protected double x;
+    protected double x0;
+    protected double y;
+    protected double y0;
+    protected double vitesseX;
+    protected double vitesseX0;
+    protected double vitesseY;
+    protected double vitesseY0;
+    protected double accelerationX;
+    protected double accelerationY;
+    protected double rayon;
+    protected Timer clock;
+    protected double masse;
+    protected double g;
+    protected double forceAdded;
+
     
-    public balle(double x, double y, double vitesseX, double vitesseY) {
-      this.x = x;
-      this.y = y;
-      this.vitesseX = vitesseX;
-      this.vitesseY = vitesseY;
+    public Balle(double x0, double y0, double vitesseX0, double vitesseY0, Timer clock) {
+      this.x0 = x0;
+      this.y0 = y0;
+      this.vitesseX0 = vitesseX0;
+      this.vitesseY0 = vitesseY0;
     }
     
-    public void bouger(double temps) {
-      x = x + vitesseX * temps;
-      y = y + vitesseY * temps;
+    public void update() {
+      x += 0; //A REMPLIR
+      y += 0; //A REMPLIR
     }
+    public void addForce(double )
     
     public double getX() {
       return x;
