@@ -1,36 +1,75 @@
 package view;
 
 import model.*;
+import model.sousObjet.*;
 import controller.*;
 
-import java.lang.ModuleLayer.Controller;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
+import javax.swing.*;
+import java.awt.*;
 
 public class View extends JFrame {
 
     // public boolean enJeu = true; // Pour mettre le jeu en pose si besoin
+    private JPanel balle;
+    private JPanel canon;
+    private JPanel[] obstacles;
+    private JPanel fond;
+    private JPanel munition;
+    private JPanel partie;
 
     protected Controleur controleur;
 
-    public View(Controleur c) {
+    public View(Controleur controleur) {
 
         this.setTitle("Hit the Peggles");
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-        this.setVisible(true);
+        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-        this.controleur = c;
+        this.controleur = controleur;
         Modele m = controleur.getModele();
 
-        JPanel balle = new JPanel();
-        balle.setBounds(
-                (int) m.getBalle().getX(),
-                (int) m.getBalle().getY(),
-                (int) m.getBalle().getLargeur(),
-                (int) m.getBalle().getHauteur());
+        // -------Disposition du jeu-------
+        fond = new JPanel(); // represente la fenetre
+        fond.setLayout(new GridLayout(1, 2));
 
-        this.add(balle);
+        munition = new JPanel(); // Partie de gauche de la fenetre
+        munition.setBackground(Color.BLUE);
+
+        partie = new JPanel(); // Partie du jeu, a droite de la fenetre
+        partie.setBackground(Color.RED);
+
+        fond.add(munition, BorderLayout.WEST);
+        fond.add(partie, BorderLayout.CENTER);
+
+        System.out.println("test");
+        // -------Disposition du jeu-------
+
+        // -------Elements du jeu-------
+        /*
+         * balle = getBallPanel(m.getBalle());
+         * 
+         * //this.add(balle);
+         * this.add(new JLabel("test"), 0);
+         */
+        // -------Elements du jeu-------
+
+        this.add(fond);
+        this.pack();
+        this.setVisible(true);
+
     }
+
+    private JPanel getBallPanel(Balle b) {
+        return new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                g.setColor(Color.RED);
+                // g.fillOval((int) b.getX(), (int) b.getY(), (int) b.getLargeur(), (int)
+                // b.getHauteur());
+                g.fillOval(200, 200, 500, 500);
+            }
+        };
+    }
+
 }

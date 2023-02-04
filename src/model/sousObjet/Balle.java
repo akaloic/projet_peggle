@@ -26,7 +26,7 @@ public class Balle extends Objet {
 
   public Balle(double x, double y, double largeur, double hauteur, double angle, double vitesseX, double vitesseY,
       double x0, double y0, double vitesseX0, double vitesseY0, double accelerationX, double accelerationY,
-      double rayon, double masse, double forceAdded) {
+      double masse, double forceAdded) {
 
     super(x, y, largeur, hauteur, angle);
 
@@ -38,7 +38,7 @@ public class Balle extends Objet {
     this.vitesseY0 = vitesseY0;
     this.accelerationX = accelerationX;
     this.accelerationY = accelerationY;
-    this.rayon = rayon;
+    this.rayon = largeur / 2;
     this.masse = masse;
     this.forceAdded = forceAdded;
 
@@ -60,5 +60,42 @@ public class Balle extends Objet {
   public void setVitesseY(double vitesseY) {
     this.vitesseY = vitesseY;
   }
+
+  public double getAccelerationX() {
+    return accelerationX;
+  }
+
+  public void setAccelerationX(double accelerationX) {
+    this.accelerationX = accelerationX;
+  }
+
+  public double getAccelerationY() {
+    return accelerationY;
+  }
+
+  public void setAccelerationY(double accelerationY) {
+    this.accelerationY = accelerationY;
+  }
+
+  public double getRayon() {
+    return rayon;
+  }
+
+  public double getMasse() {
+    return masse;
+  }
+
+  public double getG() {
+    return g;
+  }
+
+  public double getForceAdded() {
+    return forceAdded;
+  }
+
+  public void setForceAdded(double forceAdded) {
+    this.forceAdded = forceAdded;
+  }
   // ---------GETTER SETTER---------
+
 }

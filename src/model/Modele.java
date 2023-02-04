@@ -11,7 +11,7 @@ public class Modele {
     protected Canon canon;
 
     public Modele() {
-        balle = new Balle(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+        balle = new Balle(100, 100, 100, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
         obstacles = new Obstacle[0];
     }
 
