@@ -22,10 +22,7 @@ public class Visuel extends JFrame {
         pageMenu.setSize(frame.getWidth(),frame.getHeight());
         pageMenu.setLayout(null);
         initialisationDuJeu(pageMenu);
-        // this.getContentPane().add(b);
         while(enJeu){
-            // b.deplacement();
-            // b.repaint();
             try {
                 Thread.sleep(30);
             } catch (InterruptedException e) {

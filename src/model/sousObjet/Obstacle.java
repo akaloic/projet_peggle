@@ -4,7 +4,7 @@ import model.Objet;
 
 public class Obstacle extends Objet {
 
-    protected boolean estMort;
+    protected boolean estMort; 
     protected int vie;
 
     public Obstacle(double x, double y, double largeur, double hauteur, double angle, boolean estMort, int vie) {

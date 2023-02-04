@@ -41,7 +41,6 @@ public class Balle extends Objet {
     this.rayon = largeur / 2;
     this.masse = masse;
     this.forceAdded = forceAdded;
-
   }
 
   // ---------GETTER SETTER---------

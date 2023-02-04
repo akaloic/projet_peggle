@@ -37,6 +37,7 @@ public class View extends JFrame {
 
         partie = new JPanel(); // Partie du jeu, a droite de la fenetre
         partie.setBackground(Color.RED);
+        partie.setLayout(null);
 
         fond.add(munition, BorderLayout.WEST);
         fond.add(partie, BorderLayout.CENTER);
@@ -52,7 +53,12 @@ public class View extends JFrame {
          * this.add(new JLabel("test"), 0);
          */
         // -------Elements du jeu-------
+        balle = getBallPanel(m.getBalle());
+        fond.add(balle);
 
+        // Obstacle obs = new Obstacle(0, 0, 100, 100, 0, false, 100);
+        JPanel obstacle = getObstaclesPanel(new Obstacle(0, 0, 100, 100, 0, false, 100));
+        fond.add(obstacle);
         this.add(fond);
         this.pack();
         this.setVisible(true);
@@ -61,13 +67,29 @@ public class View extends JFrame {
     private JPanel getBallPanel(Balle b) {
         return new JPanel() {
             @Override
-            protected void paintComponent(Graphics g) {
-                super.paintComponent(g);
-                g.setColor(Color.RED);
+            public void paint(Graphics g) {
+                Graphics2D g2d = (Graphics2D) g;
+                g2d.setColor(Color.BLACK);
                 // g.fillOval((int) b.getX(), (int) b.getY(), (int) b.getLargeur(), (int)
                 // b.getHauteur());
-                g.fillOval(200, 200, 500, 500);
+                g2d.fillOval(0, 0, 50, 50);
             }
         };
+    }
+    private JPanel getObstaclesPanel(Obstacle obs){
+        return new JPanel() {
+            @Override
+            public void paint(Graphics g) {
+                Graphics2D g2d = (Graphics2D) g;
+                g2d.setColor(Color.YELLOW);
+                g2d.fillOval(0, 0, 100, 100);
+            }
+        };
+    }
+    public static void main(String[] args) {
+        Balle balle = new Balle(100, 100, 100, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+        View view = new View(new Controleur());
+        // view.getBallPanel(balle);    
+        // view.getObstaclePanel(new Obstacle(0, 0, 100, 100, 0, false, 100));
     }
 }
