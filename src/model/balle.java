@@ -1,7 +1,6 @@
 package model;
 
 public class balle {
-    
     private double x;
     private double y;
     private double vitesseX;

@@ -1,5 +1,7 @@
 package view;
 
+import java.awt.Color;
+
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -11,11 +13,15 @@ public class Visuel extends JFrame {
     public boolean enJeu = true;//Pour mettre le jeu en pose si besoin
     // balle b = new balle();
     public Visuel(){
-        this.setTitle("Hit the Peggles");
-        this.setSize(800, 600);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-        this.setVisible(true);
-        initialisationDuJeu(this);
+        JFrame frame = new JFrame("Hit The peggle");
+        frame.setSize(800,500);
+        frame.setVisible( true );
+        frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
+        JPanel pageMenu = new JPanel();
+        frame.add(pageMenu);
+        pageMenu.setSize(frame.getWidth(),frame.getHeight());
+        pageMenu.setLayout(null);
+        initialisationDuJeu(pageMenu);
         // this.getContentPane().add(b);
         while(enJeu){
             // b.deplacement();
@@ -28,17 +34,13 @@ public class Visuel extends JFrame {
             }
         }
     }
-    public void initialisationDuJeu(JFrame frame){
-        JPanel panel = new JPanel();
-        panel.setSize(frame.getWidth(), frame.getHeight());
-        panel.setLayout(null);
-        JLabel label = new JLabel("Hit the peggles");
-        JButton btn = new JButton("HIT IT!");
-        label.setBounds(panel.getWidth()/3, panel.getHeight()/2, 100, 100);
-        btn.setBounds(label.getWidth()+label.getWidth()/2, label.getHeight()-label.getHeight()/2, 50, 50);
-        panel.add(btn);
-        panel.add(label);
-        frame.add(panel);
+    public void initialisationDuJeu(JPanel pane){
+        JLabel titre = new JLabel("Hit the peggles");
+        JButton btn = new JButton("Start");
+        titre.setBounds(pane.getWidth()/3,pane.getHeight()/5,100,75);
+        btn.setBounds(pane.getWidth()/2-pane.getWidth()/10,titre.getHeight()+pane.getHeight()/5,50,50);
+        pane.add(titre);
+        pane.add(btn);
     }
 
 }
