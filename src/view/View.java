@@ -3,9 +3,11 @@ package view;
 import model.*;
 import model.sousObjet.*;
 import controller.*;
-
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 import javax.swing.*;
 import java.awt.*;
+
 
 public class View extends JFrame {
 
@@ -16,6 +18,7 @@ public class View extends JFrame {
     private JPanel fond;
     private JPanel munition;
     private JPanel partie;
+    private JButton leave = new JButton("Fermer");
 
     protected Controleur controleur;
 
@@ -24,24 +27,40 @@ public class View extends JFrame {
         this.setTitle("Hit the Peggles");
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        this.setUndecorated(true);
+        this.setVisible(true);//nécessaire sinon this.getHeight et this.getWidth renvoie 0
 
         this.controleur = controleur;
         Modele m = controleur.getModele();
 
         // -------Disposition du jeu-------
         fond = new JPanel(); // represente la fenetre
-        fond.setLayout(new GridLayout(1, 2));
+        fond.setLayout(new GridBagLayout());
+        GridBagConstraints c = new GridBagConstraints();
+        c.anchor = GridBagConstraints.WEST;
+        c.weightx = 1;
+        c.weighty = 1;
 
         munition = new JPanel(); // Partie de gauche de la fenetre
-        munition.setBackground(Color.BLUE);
+        munition.setLayout(new BorderLayout());
+        munition.setBackground(Color.gray);
+        munition.setPreferredSize(new Dimension(this.getWidth()/5,this.getHeight()));
 
         partie = new JPanel(); // Partie du jeu, a droite de la fenetre
-        partie.setBackground(Color.RED);
+        partie.setLayout(new GridBagLayout());
+        partie.setBackground(Color.darkGray);
+        partie.setPreferredSize(new Dimension(this.getWidth()*4/5,this.getHeight()));
 
-        fond.add(munition, BorderLayout.WEST);
-        fond.add(partie, BorderLayout.CENTER);
+        canon = new JPanel();
+        c.anchor =  GridBagConstraints.NORTH;
+        partie.add(canon,c);
+        canon.setPreferredSize(new Dimension(50,100));
+        canon.add(new JLabel("Canon"));
 
-        System.out.println("test");
+        fond.add(munition, c);
+        c.anchor = GridBagConstraints.EAST;
+        fond.add(partie, c);
+
         // -------Disposition du jeu-------
 
         // -------Elements du jeu-------
@@ -53,9 +72,15 @@ public class View extends JFrame {
          */
         // -------Elements du jeu-------
 
+        munition.add(leave,BorderLayout.SOUTH);
+        leave.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                System.exit(0);
+            }
+        });
         this.add(fond);
-        this.pack();
         this.setVisible(true);
+        //this.pack();
 
     }
 
@@ -73,3 +98,4 @@ public class View extends JFrame {
     }
 
 }
+
