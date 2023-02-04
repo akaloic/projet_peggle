@@ -11,44 +11,57 @@ import java.awt.*;
 public class Visuel extends JFrame {
     public static boolean enJeu = true;//Pour mettre le jeu en pause si besoin
     balle b = new balle();
-    balle c = new balle();
+
 
     JPanel premierePage = new JPanel();
-    JPanel pageActuelle = new JPanel();//Page qui est affiché
-    JButton boutton = new JButton("Jouer");
 
     public Visuel(){
         this.setTitle("Hit the Peggles");
-        this.setSize(800, 600);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
+        this.setExtendedState(JFrame.MAXIMIZED_BOTH); 
+        this.setUndecorated(true);
         this.setVisible(true);
+        this.setLayout(new BorderLayout());
+        this.getContentPane().add(premierePage,BorderLayout.CENTER);
+        premierePage.setLayout(new GridBagLayout());
+        GridBagConstraints c = new GridBagConstraints();
+        c.anchor = GridBagConstraints.WEST;
+        c.weightx = 1;
+        c.weighty = 1;
+        JPanel overlayGauche = new JPanel(){
+            @Override
+            public void setBackground(Color bg) {
+                // TODO Auto-generated method stub
+                super.setBackground(Color.gray);
+            }
+        };
+        System.out.println(this.getWidth()+"  "+this.getHeight());
+        overlayGauche.setPreferredSize(new Dimension(this.getWidth()/5,this.getHeight()));//temporaire
+        premierePage.add(overlayGauche,c);
+        c.anchor = GridBagConstraints.EAST;
+        JPanel paneJeu = new JPanel(){
+            @Override
+            public void paint(Graphics g){
+                super.paint(g);
+                g.fillOval(b.x,b.y,10,10);
+            }
+        };
+        paneJeu.setPreferredSize(new Dimension(this.getWidth()*4/5,this.getHeight()));//temporaire
+        paneJeu.setBackground(Color.lightGray);
+        premierePage.add(paneJeu,c);
 
-        JPanel pageActuelle = premierePage;
-        this.getContentPane().add(pageActuelle);
-        JPanel secondePage = b;//Page avec la balle
-        JPanel troisiemePage = new JPanel();
-        troisiemePage.setBackground(Color.BLUE);
-        troisiemePage.add(new JPanel());
-
-        secondePage.setLayout(new GridBagLayout());
-        //secondePage.add(b);
-        premierePage.add(boutton);
-        premierePage.setBackground(Color.black);
-
-        b.setBackground(Color.gray);
-        
-        boutton.addActionListener(new ActionListener() {
+        JButton leave = new JButton("Fermer la fenêtre");
+        leave.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                changePage(secondePage);
+                System.exit(0);
             }
         });
-        secondePage.setName("a");
-        pageActuelle.setName("a");
+        overlayGauche.setLayout(new BorderLayout());
+        overlayGauche.add(leave,BorderLayout.SOUTH);
+        paneJeu.setLayout(new GridBagLayout());
         while(enJeu){
-            if(!secondePage.getName().equals(pageActuelle.getName())){
-                b.deplacement();
-                b.repaint();
-            }
+            b.deplacement();
+            paneJeu.repaint();
             try {
                 Thread.sleep(30);
             } catch (InterruptedException e) {
@@ -57,16 +70,14 @@ public class Visuel extends JFrame {
             }
             if(b.x >= 800){
                 b.x = 0;
-                changePage(troisiemePage);
+                //changePage(p);
             }
         }
     }
 
     public void changePage(JPanel nouvellePage){
-        this.getContentPane().remove(pageActuelle);
+        this.getContentPane().removeAll();
         this.getContentPane().add(nouvellePage);
-        pageActuelle = nouvellePage;
-        nouvellePage.setName("P");
         revalidate();
         repaint();
         enJeu = true;

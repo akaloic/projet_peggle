@@ -1,12 +1,7 @@
 package model;
 
-import javax.swing.JPanel;
-
 import view.Visuel;
-
-import java.awt.Color;
-import java.awt.Graphics;
-public class balle extends JPanel{//la balle du joueur
+public class balle{//la balle du joueur
     //attributs
     public int x,y;//ses coordonnées
     double speedX,speedY;//sa vitesse
@@ -20,10 +15,5 @@ public class balle extends JPanel{//la balle du joueur
         }
     }
 
-    @Override
-    public void paint(Graphics g){
-        super.paint(g);
-        g.fillOval(this.x,this.y,10,10);
-    }
 }
 
