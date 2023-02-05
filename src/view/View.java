@@ -3,9 +3,11 @@ package view;
 import model.*;
 import model.sousObjet.*;
 import controller.*;
-
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 import javax.swing.*;
 import java.awt.*;
+
 
 public class View extends JFrame {
 
@@ -16,6 +18,7 @@ public class View extends JFrame {
     private JPanel fond;
     private JPanel munition;
     private JPanel partie;
+    private JButton leave = new JButton("Fermer");
 
     protected Controleur controleur;
 
@@ -24,45 +27,59 @@ public class View extends JFrame {
         this.setTitle("Hit the Peggles");
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        this.setUndecorated(true);
+        this.setVisible(true);//nécessaire sinon this.getHeight et this.getWidth renvoie 0
 
         this.controleur = controleur;
         Modele m = controleur.getModele();
 
         // -------Disposition du jeu-------
         fond = new JPanel(); // represente la fenetre
+        fond.setBackground(Color.BLUE);
+        fond.setLayout(new GridBagLayout());
+        GridBagConstraints c = new GridBagConstraints();
+        c.anchor = GridBagConstraints.WEST;
+        c.weightx = 1;
+        c.weighty = 1;
 
-        
-        // fond.setLayout(new GridLayout(1,2));
+        munition = new JPanel(); // Partie de gauche de la fenetre
+        munition.setLayout(new BorderLayout());
+        munition.setBackground(Color.gray);
+        munition.setPreferredSize(new Dimension(this.getWidth()/5,this.getHeight()));
 
-        // munition = new JPanel(); // Partie de gauche de la fenetre
-        // munition.setBackground(Color.BLUE);
+        partie = new JPanel(); // Partie du jeu, a droite de la fenetre
+        partie.setLayout(new GridBagLayout());
+        partie.setBackground(Color.darkGray);
+        partie.setPreferredSize(new Dimension(this.getWidth()*4/5,this.getHeight()));
 
-        // partie = new JPanel(); // Partie du jeu, a droite de la fenetre
-        // partie.setBackground(Color.RED);
-        // partie.setLayout(null);
+        /*---- ELEMENTS DU JEU ----
+         * Canon
+         * Balle
+         * Obstacle(s)
+        */
+        canon = new JPanel();
+        c.anchor =  GridBagConstraints.NORTH;
+        partie.add(canon,c);
+        canon.setPreferredSize(new Dimension(50,100));
+        canon.add(new JLabel("Canon"));
 
-        // fond.add(munition, BorderLayout.WEST);
-        // fond.add(partie, BorderLayout.CENTER);
-
-        System.out.println("test");
-        // -------Disposition du jeu-------
-
-        // -------Elements du jeu-------
-        /*
-         * balle = getBallPanel(m.getBalle());
-         * 
-         * //this.add(balle);
-         * this.add(new JLabel("test"), 0);
-         */
-        // -------Elements du jeu-------
         balle = getBallPanel(m.getBalle());
-        fond.add(balle);
+        partie.add(balle,c);
 
-        // Obstacle obs = new Obstacle(0, 0, 100, 100, 0, false, 100);
-        JPanel obstacle = getObstaclesPanel(new Obstacle(0, 0, 100, 100, 0, false, 100));
-        fond.add(obstacle);
+        obstacles = new JPanel[1];
+        JPanel obstacle1 = getObstaclesPanel(new Obstacle(200,200,75,75,0,true,100));
+        /*---- FIN ELEMENTS DU JEU ----*/
+        fond.add(munition, c);
+        c.anchor = GridBagConstraints.EAST;
+        fond.add(partie, c);
+
+        munition.add(leave,BorderLayout.SOUTH);
+        leave.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                System.exit(0);
+            }
+        });
         this.add(fond);
-        this.pack();
         this.setVisible(true);
     }
 
@@ -72,9 +89,7 @@ public class View extends JFrame {
             public void paint(Graphics g) {
                 Graphics2D g2d = (Graphics2D) g;
                 g2d.setColor(Color.BLACK);
-                // g.fillOval((int) b.getX(), (int) b.getY(), (int) b.getLargeur(), (int)
-                // b.getHauteur());
-                g2d.fillOval(0, 0, 50, 50);
+                g2d.fillOval(0, 0,(int) b.getWidth(), (int)b.getWidth());
             }
         };
     }
@@ -84,14 +99,12 @@ public class View extends JFrame {
             public void paint(Graphics g) {
                 Graphics2D g2d = (Graphics2D) g;
                 g2d.setColor(Color.YELLOW);
-                g2d.fillOval(0, 0, 100, 100);
+                g2d.fillOval(0, 0, (int)obs.getWidth(),(int) obs.getHeight());
             }
         };
     }
     public static void main(String[] args) {
-        Balle balle = new Balle(100, 100, 100, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
         View view = new View(new Controleur());
-        // view.getBallPanel(balle);    
-        // view.getObstaclePanel(new Obstacle(0, 0, 100, 100, 0, false, 100));
     }
 }
+

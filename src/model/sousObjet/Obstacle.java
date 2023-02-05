@@ -26,6 +26,12 @@ public class Obstacle extends Objet {
     public boolean getEstMort(){
         return this.estMort;
     }
+    public double getWidth(){
+        return super.getLargeur();
+    }
+    public double getHeight(){
+        return super.getHauteur();
+    }
     // ---------GETTER SETTER---------
     public void setVie(int pdv){
         this.vie+= pdv;

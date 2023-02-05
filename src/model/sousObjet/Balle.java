@@ -24,6 +24,8 @@ public class Balle extends Objet {
   protected double forceAdded;
   protected Timer clock;
 
+  protected double degatsCommis = 50; //temporaire 
+  
   public Balle(double x, double y, double largeur, double hauteur, double angle, double vitesseX, double vitesseY,
       double x0, double y0, double vitesseX0, double vitesseY0, double accelerationX, double accelerationY,
       double masse, double forceAdded) {
@@ -42,7 +44,12 @@ public class Balle extends Objet {
     this.masse = masse;
     this.forceAdded = forceAdded;
   }
-
+  public double getWidth(){
+    return super.getLargeur();
+  }
+  public double getHeight(){
+    return super.getHauteur();
+  }
   // ---------GETTER SETTER---------
   public double getVitesseX() {
     return vitesseX;

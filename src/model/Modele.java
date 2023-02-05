@@ -11,7 +11,7 @@ public class Modele {
     protected Canon canon;
 
     public Modele() {
-        balle = new Balle(100, 100, 100, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+        balle = new Balle(100, 100, 50, 50, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
         obstacles = new Obstacle[0];
     }
 
@@ -20,24 +20,24 @@ public class Modele {
         return balle;
     }
 
-    public void setBalle(Balle balle) {
-        this.balle = balle;
-    }
-
+    
     public Obstacle[] getObstacles() {
         return obstacles;
     }
-
-    public void setObstacles(Obstacle[] obstacles) {
-        this.obstacles = obstacles;
-    }
-
+    
     public Canon getCanon() {
         return canon;
     }
-
+    
+    // ---------GETTER SETTER---------
+    
+    public void setBalle(Balle balle) {
+        this.balle = balle;
+    }
     public void setCanon(Canon canon) {
         this.canon = canon;
     }
-    // ---------GETTER SETTER---------
+    public void setObstacles(Obstacle[] obstacles) {
+        this.obstacles = obstacles;
+    }
 }
