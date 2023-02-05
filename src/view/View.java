@@ -32,8 +32,12 @@ public class View extends JFrame {
 
     public View(Controleur controleur) {
 
+        Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
+        int width = (int)size.getWidth();
+        int height = (int)size.getHeight();
+        this.setSize(width,height);
+
         this.setTitle("Hit the Peggles");
-        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setUndecorated(true);
         this.setVisible(true);//nécessaire sinon this.getHeight et this.getWidth renvoie 0
