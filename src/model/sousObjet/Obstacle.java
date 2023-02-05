@@ -12,8 +12,26 @@ public class Obstacle extends Objet {
         this.estMort = estMort;
         this.vie = vie;
     }
+    public void perdDeLaVie(int degats){
+        this.vie-=degats;
+        if(this.vie <= 0){
+            this.estMort = false;
+        }
+    }
 
+    // ---------GETTER GETTER---------
+    public int getVie(){
+        return this.vie;
+    }
+    public boolean getEstMort(){
+        return this.estMort;
+    }
     // ---------GETTER SETTER---------
-    // ---------GETTER SETTER---------
+    public void setVie(int pdv){
+        this.vie+= pdv;
+    }
+    public void setEstMort(boolean mort){
+        this.estMort = mort;
+    }
 
 }

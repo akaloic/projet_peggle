@@ -9,7 +9,7 @@ import java.awt.*;
 
 public class View extends JFrame {
 
-    // public boolean enJeu = true; // Pour mettre le jeu en pose si besoin
+    public boolean enJeu = Visuel.enJeu;
     private JPanel balle;
     private JPanel canon;
     private JPanel[] obstacles;
@@ -30,17 +30,19 @@ public class View extends JFrame {
 
         // -------Disposition du jeu-------
         fond = new JPanel(); // represente la fenetre
-        fond.setLayout(new GridLayout(1,2));
 
-        munition = new JPanel(); // Partie de gauche de la fenetre
-        munition.setBackground(Color.BLUE);
+        
+        // fond.setLayout(new GridLayout(1,2));
 
-        partie = new JPanel(); // Partie du jeu, a droite de la fenetre
-        partie.setBackground(Color.RED);
-        partie.setLayout(null);
+        // munition = new JPanel(); // Partie de gauche de la fenetre
+        // munition.setBackground(Color.BLUE);
 
-        fond.add(munition, BorderLayout.WEST);
-        fond.add(partie, BorderLayout.CENTER);
+        // partie = new JPanel(); // Partie du jeu, a droite de la fenetre
+        // partie.setBackground(Color.RED);
+        // partie.setLayout(null);
+
+        // fond.add(munition, BorderLayout.WEST);
+        // fond.add(partie, BorderLayout.CENTER);
 
         System.out.println("test");
         // -------Disposition du jeu-------

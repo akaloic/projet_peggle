@@ -1,35 +1,55 @@
 package view;
 
-import java.awt.Color;
-
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-
-// import controller.main;
+import java.awt.*;
+import javax.swing.*;
+import model.balle;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class Visuel extends JFrame {
-    public boolean enJeu = true;//Pour mettre le jeu en pose si besoin
-    // balle b = new balle();
+
+    public static boolean enJeu = true;//Pour mettre le jeu en pause si besoin
+    balle b = new balle();
+
+    JPanel premierePage = new JPanel();
+
     public Visuel(){
-        JFrame frame = new JFrame("Hit The peggle");
-        frame.setSize(800,500);
-        frame.setVisible( true );
-        frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
+        this.setTitle("Hit the Peggles");
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        this.setExtendedState(JFrame.MAXIMIZED_BOTH); 
+        this.setUndecorated(true);
+        this.setVisible(true);
+        this.setLayout(new BorderLayout());
+        this.getContentPane().add(premierePage,BorderLayout.CENTER);
+
         JPanel pageMenu = new JPanel();
-        frame.add(pageMenu);
-        pageMenu.setSize(frame.getWidth(),frame.getHeight());
+        this.add(pageMenu);
+        pageMenu.setSize(this.getWidth(),this.getHeight());
         pageMenu.setLayout(null);
         initialisationDuJeu(pageMenu);
+
         while(enJeu){
+            b.deplacement();
+            // paneJeu.repaint();
             try {
                 Thread.sleep(30);
             } catch (InterruptedException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
+            if(b.x >= 800){
+                b.x = 0;
+                //changePage(p);
+            }
         }
+    }
+
+    public void changePage(JPanel nouvellePage){
+        this.getContentPane().removeAll();
+        this.getContentPane().add(nouvellePage);
+        revalidate();
+        repaint();
+        enJeu = true;
     }
     public void initialisationDuJeu(JPanel pane){
         JLabel titre = new JLabel("Hit the peggles");

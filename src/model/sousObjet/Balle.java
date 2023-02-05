@@ -96,5 +96,5 @@ public class Balle extends Objet {
     this.forceAdded = forceAdded;
   }
   // ---------GETTER SETTER---------
-
+  
 }
