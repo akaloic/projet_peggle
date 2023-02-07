@@ -14,12 +14,21 @@ public class Obstacle extends Objet {
     }
     public void perdDeLaVie(int degats){
         this.vie-=degats;
-        if(this.vie <= 0){
+        if(isDead()){
             this.estMort = false;
         }
     }
+    public boolean isDead(){
+        return this.vie <= 0;
+    }
 
     // ---------GETTER GETTER---------
+    public double getX(){
+        return this.x;
+    }
+    public double getY(){
+        return this.y;
+    }
     public int getVie(){
         return this.vie;
     }

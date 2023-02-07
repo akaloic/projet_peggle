@@ -4,12 +4,14 @@ import model.*;
 import model.sousObjet.*;
 import controller.*;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
 import java.awt.event.ActionEvent;
 import javax.swing.*;
+import javax.swing.event.MouseInputListener;
 import java.awt.*;
 
 
-public class View extends JFrame {
+public class View extends JFrame implements MouseInputListener{
 
     public boolean enJeu = Visuel.enJeu;
     private JPanel balle;
@@ -20,14 +22,25 @@ public class View extends JFrame {
     private JPanel partie;
     private JButton leave = new JButton("Fermer");
 
+    /* Variable balle */
+    protected double xballSpeed = 10; // vitesse de la balle en abscisse
+    protected double yballSpeed = 10; // vitesse de la balle en ordonnees
+    protected double xPos,yPos; // et position de la balle 
+    protected double max_x,max_y; //pour permettre a la balle de rebondir sur les bords
+
+    /* Variable Canon */
+
     protected Controleur controleur;
 
     public View(Controleur controleur) {
 
         this.setTitle("Hit the Peggles");
-        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setUndecorated(true);
+        Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
+        int width = (int)size.getWidth();
+        int height = (int)size.getHeight();
+        this.setSize(width,height);
         this.setVisible(true);//nécessaire sinon this.getHeight et this.getWidth renvoie 0
 
         this.controleur = controleur;
@@ -47,30 +60,51 @@ public class View extends JFrame {
         munition.setBackground(Color.gray);
         munition.setPreferredSize(new Dimension(this.getWidth()/5,this.getHeight()));
 
-        partie = new JPanel(); // Partie du jeu, a droite de la fenetre
-        partie.setLayout(new GridBagLayout());
-        partie.setBackground(Color.darkGray);
-        partie.setPreferredSize(new Dimension(this.getWidth()*4/5,this.getHeight()));
+        // partie = new JPanel(){
+            partie = new viewPartieDroite(this);
+        //     @Override
+        //     public void paint(Graphics g) {
+        //         // TODO Auto-generated method stub
+        //         super.paint(g);
+        //         try{
+        //             Thread.sleep(20);
+        //         }catch(Exception e){}
+        //         repaint();
+        //     }
+        // }; // Partie du jeu, a droite de la fenetre
+        // partie.setLayout(null);
+        // partie.setBackground(Color.darkGray);
+        // partie.setPreferredSize(new Dimension(this.getWidth()*4/5,this.getHeight()));
 
-        /*---- ELEMENTS DU JEU ----
-         * Canon
-         * Balle
-         * Obstacle(s)
-        */
-        canon = new JPanel();
-        c.anchor =  GridBagConstraints.NORTH;
-        partie.add(canon,c);
-        canon.setPreferredSize(new Dimension(50,100));
-        canon.add(new JLabel("Canon"));
+        // /*---- ELEMENTS DU JEU ----
+        //  * Canon
+        //  * Balle
+        //  * Obstacle(s)
+        // */
+        // canon = new JPanel();
+        // canon.setLayout(null);
+        // canon.setBounds((this.getWidth()*4/5)/2-25,0,50,100);
+        // canon.add(new JLabel("Canon"));
+        // partie.add(canon);
 
-        balle = getBallPanel(m.getBalle());
-        partie.add(balle,c);
+        // /* Initialisation des variables de la balle */
+        // this.xPos = this.getWidth()/2-25;
+        // this.yPos = canon.getHeight()+20;
+        // this.max_x = this.getWidth()-50;
+        // this.max_y = this.getHeight()-50;
+        
+        // balle = getBallPanel(m.getBalle());
+        // partie.add(balle);
 
-        obstacles = new JPanel[1];
-        JPanel obstacle1 = getObstaclesPanel(new Obstacle(200,200,75,75,0,true,100));
+        // obstacles = new JPanel[1];
+        // JPanel obstacle1 = getObstaclesPanel(new Obstacle((this.getWidth()*4/5)/2-25,canon.getHeight()+100,75,75,0,true,100));
+        // System.out.println(obstacle1.getWidth());
+        // partie.add(obstacle1);
+
         /*---- FIN ELEMENTS DU JEU ----*/
-        fond.add(munition, c);
+        
         c.anchor = GridBagConstraints.EAST;
+        fond.add(munition);
         fond.add(partie, c);
 
         munition.add(leave,BorderLayout.SOUTH);
@@ -81,30 +115,203 @@ public class View extends JFrame {
         });
         this.add(fond);
         this.setVisible(true);
+        addMouseListener(this);
     }
 
-    private JPanel getBallPanel(Balle b) {
-        return new JPanel() {
-            @Override
-            public void paint(Graphics g) {
-                Graphics2D g2d = (Graphics2D) g;
-                g2d.setColor(Color.BLACK);
-                g2d.fillOval(0, 0,(int) b.getWidth(), (int)b.getWidth());
-            }
-        };
-    }
-    private JPanel getObstaclesPanel(Obstacle obs){
-        return new JPanel() {
-            @Override
-            public void paint(Graphics g) {
-                Graphics2D g2d = (Graphics2D) g;
-                g2d.setColor(Color.YELLOW);
-                g2d.fillOval(0, 0, (int)obs.getWidth(),(int) obs.getHeight());
-            }
-        };
-    }
+    // private JPanel getBallPanel(Balle b) {
+    //     return new JPanel() {
+    //         @Override
+    //         public void paint(Graphics g) {
+    //             Graphics2D g2d = (Graphics2D) g;
+    //             g2d.setColor(Color.PINK);
+    //             g2d.fillOval((int)getxPos(), (int)getyPos(),(int) b.getWidth(), (int)b.getHeight());
+
+    //             // setxPos(getxPos()+getXballSpeed());
+    //             // setyPos(getyPos()+getYballSpeed());
+    //             // System.out.println(getxPos() + " position x " + getyPos() + " position y");
+
+    //             try {
+    //                 Thread.sleep(30);
+    //             } catch (Exception e) {
+    //                 // TODO: handle exception
+    //             }
+    //             repaint();
+    //         }
+    //     };
+    // }
+    // private JPanel getObstaclesPanel(Obstacle obs){
+    //     return new JPanel() {
+    //         @Override
+    //         public void paint(Graphics g) {
+    //             Graphics2D g2d = (Graphics2D) g;
+    //             g2d.setColor(Color.YELLOW);
+    //             g2d.fillOval(0, 0, 75,75);
+    //         }
+    //     };
+    // }
     public static void main(String[] args) {
         View view = new View(new Controleur());
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        
+
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+        // TODO Auto-generated method stub
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void mouseDragged(MouseEvent e) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void mouseMoved(MouseEvent e) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    public boolean isEnJeu() {
+        return enJeu;
+    }
+
+    public void setEnJeu(boolean enJeu) {
+        this.enJeu = enJeu;
+    }
+
+    public JPanel getBalle() {
+        return balle;
+    }
+
+    public void setBalle(JPanel balle) {
+        this.balle = balle;
+    }
+
+    public JPanel getCanon() {
+        return canon;
+    }
+
+    public void setCanon(JPanel canon) {
+        this.canon = canon;
+    }
+
+    public JPanel[] getObstacles() {
+        return obstacles;
+    }
+
+    public void setObstacles(JPanel[] obstacles) {
+        this.obstacles = obstacles;
+    }
+
+    public JPanel getFond() {
+        return fond;
+    }
+
+    public void setFond(JPanel fond) {
+        this.fond = fond;
+    }
+
+    public JPanel getMunition() {
+        return munition;
+    }
+
+    public void setMunition(JPanel munition) {
+        this.munition = munition;
+    }
+
+    public JPanel getPartie() {
+        return partie;
+    }
+
+    public void setPartie(JPanel partie) {
+        this.partie = partie;
+    }
+
+    public JButton getLeave() {
+        return leave;
+    }
+
+    public void setLeave(JButton leave) {
+        this.leave = leave;
+    }
+
+    public double getXballSpeed() {
+        return xballSpeed;
+    }
+
+    public void setXballSpeed(double xballSpeed) {
+        this.xballSpeed = xballSpeed;
+    }
+
+    public double getYballSpeed() {
+        return yballSpeed;
+    }
+
+    public void setYballSpeed(double yballSpeed) {
+        this.yballSpeed = yballSpeed;
+    }
+
+    public double getxPos() {
+        return xPos;
+    }
+
+    public void setxPos(double xPos) {
+        this.xPos = xPos;
+    }
+
+    public double getyPos() {
+        return yPos;
+    }
+
+    public void setyPos(double yPos) {
+        this.yPos = yPos;
+    }
+
+    public double getMax_x() {
+        return max_x;
+    }
+
+    public void setMax_x(double max_x) {
+        this.max_x = max_x;
+    }
+
+    public double getMax_y() {
+        return max_y;
+    }
+
+    public void setMax_y(double max_y) {
+        this.max_y = max_y;
+    }
+
+    public Controleur getControleur() {
+        return controleur;
+    }
+
+    public void setControleur(Controleur controleur) {
+        this.controleur = controleur;
     }
 }
 

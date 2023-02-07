@@ -2,14 +2,13 @@ package view;
 
 import java.awt.*;
 import javax.swing.*;
-import model.balle;
+import model.sousObjet.*;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 public class Visuel extends JFrame {
 
     public static boolean enJeu = true;//Pour mettre le jeu en pause si besoin
-    balle b = new balle();
 
     JPanel premierePage = new JPanel();
 
@@ -29,7 +28,6 @@ public class Visuel extends JFrame {
         initialisationDuJeu(pageMenu);
 
         while(enJeu){
-            b.deplacement();
             // paneJeu.repaint();
             try {
                 Thread.sleep(30);
@@ -37,10 +35,7 @@ public class Visuel extends JFrame {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
-            if(b.x >= 800){
-                b.x = 0;
-                //changePage(p);
-            }
+
         }
     }
 
