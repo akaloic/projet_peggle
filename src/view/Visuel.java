@@ -2,32 +2,29 @@ package view;
 
 import java.awt.*;
 import javax.swing.*;
-import model.sousObjet.*;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 
 public class Visuel extends JFrame {
 
-    public static boolean enJeu = true;//Pour mettre le jeu en pause si besoin
+    public static boolean enJeu = true;// Pour mettre le jeu en pause si besoin
 
     JPanel premierePage = new JPanel();
 
-    public Visuel(){
+    public Visuel() {
         this.setTitle("Hit the Peggles");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        this.setExtendedState(JFrame.MAXIMIZED_BOTH); 
+        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         this.setUndecorated(true);
         this.setVisible(true);
         this.setLayout(new BorderLayout());
-        this.getContentPane().add(premierePage,BorderLayout.CENTER);
+        this.getContentPane().add(premierePage, BorderLayout.CENTER);
 
         JPanel pageMenu = new JPanel();
         this.add(pageMenu);
-        pageMenu.setSize(this.getWidth(),this.getHeight());
+        pageMenu.setSize(this.getWidth(), this.getHeight());
         pageMenu.setLayout(null);
         initialisationDuJeu(pageMenu);
 
-        while(enJeu){
+        while (enJeu) {
             // paneJeu.repaint();
             try {
                 Thread.sleep(30);
@@ -39,18 +36,19 @@ public class Visuel extends JFrame {
         }
     }
 
-    public void changePage(JPanel nouvellePage){
+    public void changePage(JPanel nouvellePage) {
         this.getContentPane().removeAll();
         this.getContentPane().add(nouvellePage);
         revalidate();
         repaint();
         enJeu = true;
     }
-    public void initialisationDuJeu(JPanel pane){
+
+    public void initialisationDuJeu(JPanel pane) {
         JLabel titre = new JLabel("Hit the peggles");
         JButton btn = new JButton("Start");
-        titre.setBounds(pane.getWidth()/3,pane.getHeight()/5,100,75);
-        btn.setBounds(pane.getWidth()/2-pane.getWidth()/10,titre.getHeight()+pane.getHeight()/5,50,50);
+        titre.setBounds(pane.getWidth() / 3, pane.getHeight() / 5, 100, 75);
+        btn.setBounds(pane.getWidth() / 2 - pane.getWidth() / 10, titre.getHeight() + pane.getHeight() / 5, 50, 50);
         pane.add(titre);
         pane.add(btn);
     }
