@@ -95,6 +95,9 @@ public class View extends JFrame {
                 //Rectangle rect2 = (new Rectangle(this.getWidth()/2+rayonCercle+(canon.largeur/2), canon.y, canon.largeur, canon.hauteur));
 
                 g2d.rotate(Math.toRadians(angle),this.getWidth()/2+45,0);
+                g2d.draw(rect2);
+                
+
                 //g.fillOval(this.getWidth()/2+45, 70, 10, 10);
                 //g2d.rotate(Math.toRadians(canon.angle),this.getWidth()/2+rayonCercle+canon.largeur/4 (reste à vérifer),0);
 
@@ -108,9 +111,13 @@ public class View extends JFrame {
                 int y = 30;*/
                 /*g2d.setClip(rect2);
                 g2d.drawImage(img, x, y,20,50, this);*/
+                g2d.rotate(Math.toRadians(-angle),this.getWidth()/2+45,0);
+
                 double theta = Math.toRadians(angle);
                 double x = (this.getWidth()/2+45) - 70 * Math.sin(theta);
                 double y = 70 * Math.cos(theta) ;
+
+                System.out.println(x+ "  "+y);
                 /*Formule :
                  * newX = centerX + (point2x-centerX)*Math.cos(x) - (point2y-centerY)*Math.sin(x);
                    newY = centerY + (point2x-centerX)*Math.sin(x) + (point2y-centerY)*Math.cos(x)
@@ -119,7 +126,6 @@ public class View extends JFrame {
                 g.fillOval((int)x, (int)y, 10, 10);
 
                 //System.out.println(x+"  "+y);
-                g2d.draw(rect2);
                 g2d.dispose();
             }
         };
