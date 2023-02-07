@@ -8,14 +8,16 @@ public class Obstacle {
     private double hauteur;
     private double vitesseX;
     private double vitesseY;
+    private double rayon;
     
-    public Obstacle(double x, double y, double largeur, double hauteur, double vitesseX, double vitesseY) {
+    public Obstacle(double x, double y, double largeur, double hauteur, double vitesseX, double vitesseY, double rayon) {
       this.x = x;
       this.y = y;
       this.largeur = largeur;
       this.hauteur = hauteur;
       this.vitesseX = vitesseX;
       this.vitesseY = vitesseY;
+      this.rayon = rayon;
     }
     
     public void bouger(double temps) {
@@ -29,6 +31,10 @@ public class Obstacle {
     
     public double getY() {
       return y;
+    }
+
+    public double getRayon(){
+      return this.rayon;
     }
     
     public double getLargeur() {

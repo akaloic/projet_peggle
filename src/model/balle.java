@@ -59,12 +59,7 @@ public class Balle {
     public void setVitesseY(double vitesseY) {
       this.vitesseY = vitesseY;
     }
-    public bool collision(Obstacle o){
-      int ox= o.getX();
-      int oy= o.getY();
-      boolean bx = (this.x-this.rayon==ox || this.x==ox || this.x+this.rayon==ox);
-      boolean by = (this.y-this.rayon==oy || this.y==oy || this.y+this.rayon==oy);
-      if(bx&&by){return true;}
-      return false;
+    public boolean collision(Obstacle o){
+      return o.getRayon() + this.rayon == (this.x-o.getX())*(this.x-o.getX()) + (this.y - o.getY())*(this.y - o.getY());
     }
   }
