@@ -29,7 +29,7 @@ public class View extends JFrame {
     private JPanel partie;
     private JButton leave = new JButton("Fermer");
     private boolean enJeu = true;
-    private int angle = 0;
+    private int angle;
 
     protected Controleur controleur;
     double mouseX;
@@ -81,14 +81,9 @@ public class View extends JFrame {
                 super.paint(g);
                 Graphics2D g2d = (Graphics2D) g;
 
-                Path2D.Double ligne1 = new Path2D.Double();
-                ligne1.moveTo(super.getWidth()/2+45, 0);
-                ligne1.lineTo(super.getWidth()/2+45, this.getHeight());
-                g2d.draw(ligne1);
-
                 Path2D.Double ligne2 = new Path2D.Double();
-                ligne2.moveTo(super.getWidth()/2+45, 0);
-                ligne2.lineTo(mouseX, mouseY);
+                ligne2.moveTo(super.getWidth()/2+50, 0);
+                ligne2.lineTo(mouseX-munition.getWidth()-canon.getX(), mouseY);
                 g2d.draw(ligne2);
                 Arc2D.Double arc2 = new Arc2D.Double(this.getWidth()/2, -50, 100, 100, 180, 180,Arc2D.OPEN);
                 /*g2d.setClip(arc2);
@@ -128,6 +123,8 @@ public class View extends JFrame {
                 g2d.dispose();
             }
         };
+        JLabel a = new JLabel();
+        canon.add(a);
 
         c.anchor =  GridBagConstraints.NORTH;
         partie.add(canon,c);
@@ -164,6 +161,7 @@ public class View extends JFrame {
             int pointX = munition.getWidth()+ canon.getX()+canon.getWidth()/2+45;
             double angle1 = Math.atan2(mouseY - 0, mouseX - pointX);
             double angle2 = Math.atan2(this.getHeight() - 0, pointX - pointX);
+            a.setText(angle+"");
             angle = (int)Math.toDegrees(angle1-angle2);
 
             canon.repaint();
