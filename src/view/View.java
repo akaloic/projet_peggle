@@ -16,8 +16,8 @@ public class View extends JFrame {
     private JPanel fond;
     private JPanel munition;
     private JPanel partie;
-
-    protected Controleur controleur;
+    private Controleur controleur;
+    // private Timer timer =
 
     public View(Controleur controleur) {
 
