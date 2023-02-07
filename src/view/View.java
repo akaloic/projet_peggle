@@ -159,12 +159,13 @@ public class View extends JFrame {
         //this.pack();
 
         while(enJeu){
-            mouseX = MouseInfo.getPointerInfo().getLocation().getX()-this.getWidth()/2+100;
+            mouseX = MouseInfo.getPointerInfo().getLocation().getX();
             mouseY = MouseInfo.getPointerInfo().getLocation().getY();
-            double angle1 = Math.atan2(mouseY - 0, mouseX - this.getWidth()/2);
-            double angle2 = Math.atan2(this.getHeight() - 0, this.getWidth()/2 - this.getWidth()/2);
+            int pointX = munition.getWidth()+ canon.getX()+canon.getWidth()/2+45;
+            double angle1 = Math.atan2(mouseY - 0, mouseX - pointX);
+            double angle2 = Math.atan2(this.getHeight() - 0, pointX - pointX);
             angle = (int)Math.toDegrees(angle1-angle2);
-            System.out.println(mouseX +" "+this.getWidth()/2+" "+ mouseY+" "+this.getHeight()+ "  "+angle);
+
             canon.repaint();
             try {
                 Thread.sleep(30);
