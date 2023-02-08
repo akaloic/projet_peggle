@@ -1,7 +1,7 @@
 package model;
 
 import view.Visuel;
-public class balle{//la balle du joueur
+public class Balle{//la balle du joueur
     //attributs
     public int x,y;//ses coordonnées
     double speedX,speedY;//sa vitesse

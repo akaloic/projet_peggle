@@ -10,7 +10,7 @@ import javax.swing.JPanel;
 import java.awt.*;
 public class Visuel extends JFrame {
     public static boolean enJeu = true;//Pour mettre le jeu en pause si besoin
-    balle b = new balle();
+    Balle b = new Balle();
 
 
     JPanel premierePage = new JPanel();
