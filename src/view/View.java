@@ -98,16 +98,16 @@ public class View extends JFrame {
                 g2d.setColor(Color.black);
                 int widthBase = 150;
                 int heightBase = 150;
-                Arc2D.Double arc2 = new Arc2D.Double(this.getWidth()/2, -heightBase/2, widthBase, heightBase, 180, 180,Arc2D.OPEN);
+                Arc2D.Double arc2 = new Arc2D.Double(this.getWidth()/2-widthBase/2, -heightBase/2, widthBase, heightBase, 180, 180,Arc2D.OPEN);
                 /*g2d.setClip(arc2);
                 g2d.drawImage(img,this.getWidth()/2,-50,this);*/
 
                 g2d.draw(arc2);
 
-                Rectangle rect2 = (new Rectangle(this.getWidth()/2+(heightBase/2-widthBase/10)/*Rayon du cercle - largeur du rectangle divisé par 2 */, heightBase/3, widthBase/5, heightBase/2));
+                Rectangle rect2 = (new Rectangle(this.getWidth()/2-widthBase/10/*Rayon du cercle - largeur du rectangle divisé par 2 */, heightBase/3, widthBase/5, heightBase/2));
                 //Rectangle rect2 = (new Rectangle(this.getWidth()/2+rayonCercle+(canon.largeur/2), canon.y, canon.largeur, canon.hauteur));
 
-                g2d.rotate(Math.toRadians(angle),this.getWidth()/2+widthBase/2,0);
+                g2d.rotate(Math.toRadians(angle),this.getWidth()/2,0);
                 g2d.draw(rect2);
                 
 
@@ -124,10 +124,10 @@ public class View extends JFrame {
                 int y = 30;*/
                 /*g2d.setClip(rect2);
                 g2d.drawImage(img, x, y,20,50, this);*/
-                g2d.rotate(Math.toRadians(-angle),this.getWidth()/2+widthBase/2,0);
+                g2d.rotate(Math.toRadians(-angle),this.getWidth()/2,0);
 
                 double theta = Math.toRadians(angle);
-                double x = (this.getWidth()/2+widthBase/2) - (5*heightBase/6) * Math.sin(theta)-10;
+                double x = (this.getWidth()/2) - (5*heightBase/6) * Math.sin(theta)-10;
                 double y = (5*heightBase/6) * Math.cos(theta) -10;
 
                 //System.out.println(mouseX+"  "+mouseY+" "+ x+ " "+y);
@@ -153,6 +153,15 @@ public class View extends JFrame {
         fond.add(munition, c);
         c.anchor = GridBagConstraints.EAST;
         fond.add(partie, c);
+
+        this.addKeyListener(new KeyAdapter() {
+            public void keyPressed(KeyEvent e) {
+              int keyCode = e.getKeyCode();
+              if (keyCode == KeyEvent.VK_SPACE) {
+                System.out.println("kaboom");
+              }
+            }
+        });
 
         // -------Disposition du jeu-------
 
