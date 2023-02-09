@@ -1,7 +1,5 @@
 package model;
 
-
-
 import java.util.Timer;
 
 public class Balle extends Objet {
