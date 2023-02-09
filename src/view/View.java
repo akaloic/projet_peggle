@@ -1,7 +1,6 @@
 package view;
 
 import model.*;
-import model.Balle;
 import controller.*;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -65,7 +64,7 @@ public class View extends JFrame {
         partie.setLayout(new GridBagLayout());
         partie.setBackground(Color.darkGray);
         partie.setPreferredSize(new Dimension(this.getWidth() * 4 / 5, this.getHeight()));
-        Balle b = new Balle();
+        //Balle b = new Balle();
         canon = new JPanel() {
             @Override
             public void paint(Graphics g) {
@@ -129,10 +128,11 @@ public class View extends JFrame {
                  * newY = centerY + (point2x-centerX)*Math.sin(x) +
                  * (point2y-centerY)*Math.cos(x)
                  */
-                b.x = (int) x;
-                b.y = (int) y;
 
-                g.fillOval((int) b.x, (int) b.y, 10, 10);
+                //b.x = (int) x;
+                // b.y = (int) y;
+ 
+                //g.fillOval((int) b.x, (int) b.y, 10, 10);
                 g2d.dispose();
             }
         };
@@ -143,7 +143,7 @@ public class View extends JFrame {
         partie.add(canon, c);
 
         fond.add(munition, c);
-        c.anchor = GridBagConstraints.EAST;
+        c.anchor = GridBagConstraints.WEST;
         fond.add(partie, c);
         this.addKeyListener(new KeyAdapter() {
             public void keyPressed(KeyEvent e) {

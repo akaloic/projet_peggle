@@ -1,6 +1,4 @@
-package model.sousObjet;
-
-import model.Objet;
+package model;
 
 public class Obstacle extends Objet {
 
