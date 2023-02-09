@@ -60,6 +60,9 @@ public class Balle {
       this.vitesseY = vitesseY;
     }
     public boolean collision(Obstacle o){
-      return o.getRayon() + this.rayon == (this.x-o.getX())*(this.x-o.getX()) + (this.y - o.getY())*(this.y - o.getY());
+      return (o.getRayon() + this.rayon)*(o.getRayon()+this.rayon) == (this.x-o.getX())*(this.x-o.getX()) + (this.y - o.getY())*(this.y - o.getY());
     }
+
+    
+
   }
