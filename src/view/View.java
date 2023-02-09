@@ -35,15 +35,13 @@ public class View extends JFrame {
         Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
         int width = (int) size.getWidth();
         int height = (int) size.getHeight();
-        this.setSize(width, height);
 
+        this.setSize(width, height);
         this.setTitle("Hit the Peggles");
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        this.setUndecorated(true);
-        this.setVisible(true);// nécessaire sinon this.getHeight et this.getWidth renvoie 0
-
+        this.setUndecorated(true); // nécessaire sinon this.getHeight et this.getWidth renvoie 0
         this.controleur = controleur;
-        Modele m = controleur.getModele();
+        // Modele m = controleur.getModele();
 
         fond = new JPanel();
         fond.setLayout(new BorderLayout());
@@ -53,24 +51,31 @@ public class View extends JFrame {
         partie.setLayout(new GridBagLayout());
         partie.setBackground(Color.darkGray);
         GridBagConstraints c = new GridBagConstraints();
+        c.weightx = 1;
+        c.weighty = 1;
 
         JPanel panel1 = new JPanel();
         panel1.setBackground(Color.RED);
         c.gridx = 0;
         c.gridy = 0;
+        c.fill = GridBagConstraints.BOTH;
         partie.add(panel1, c);
 
         JPanel panel2 = new JPanel();
         panel2.setBackground(Color.BLUE);
         c.gridx = 0;
         c.gridy = 1;
+        c.fill = GridBagConstraints.BOTH;
         partie.add(panel2, c);
 
         JPanel panel3 = new JPanel();
         panel3.setBackground(Color.YELLOW);
         c.gridx = 0;
         c.gridy = 2;
+        c.fill = GridBagConstraints.BOTH;
         partie.add(panel3, c);
+
+        fond.add(partie, BorderLayout.CENTER);
         // --------------DROITE---------------------
 
         // --------------GAUCHE---------------------
@@ -78,11 +83,12 @@ public class View extends JFrame {
         fondGauche.setLayout(new BorderLayout());
         fondGauche.setBackground(Color.gray);
         fondGauche.setPreferredSize(new Dimension(this.getWidth() / 5, this.getHeight()));
+
+        fond.add(fondGauche, BorderLayout.WEST);
         // --------------GAUCHE---------------------
 
-        fond.add(partie, BorderLayout.CENTER);
-        fond.add(fondGauche, BorderLayout.WEST);
         this.add(fond);
+        this.setVisible(true);
     }
 
     public void calcLigne(double x1, double y1, double x2, double y2) {
