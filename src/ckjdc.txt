@@ -1,6 +1,4 @@
-
-// -------Disposition du jeu-------
-        fond = new JPanel(); // represente la fenetre
+fond = new JPanel(); // represente la fenetre
         fond.setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
         c.anchor = GridBagConstraints.WEST;
@@ -21,8 +19,11 @@
         puit = new JPanel();
         puit.setLayout(new BorderLayout());
         puit.setPreferredSize(new Dimension(100, 100));
-        puit.setBackground(Color.black);
-        puit.setBorder(BorderFactory.createLineBorder(Color.white, 5));
+        ImageIcon image = new ImageIcon(chemin + "puit.png");
+        JLabel label = new JLabel(image);
+        label.setPreferredSize(new Dimension(100, 100));
+        puit.add(label);
+        puit.setBackground(getForeground());
         puit.setVisible(true);
         partie.add(puit, c);
 

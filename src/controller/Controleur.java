@@ -21,6 +21,9 @@ public class Controleur {
     public void setView(View view) {
         this.view = view;
     }
-    // ---------GETTER SETTER---------
+
+    public void setModele(Modele modele) {
+        // this.modele = modele;
+    }
 
 }

@@ -18,10 +18,11 @@ public class View extends JFrame {
     private JPanel munition;
     private JPanel fondGauche;
     private JPanel partie;
-    private JButton leave = new JButton("Fermer");
+    private JButton leave;
     private boolean enJeu = true;
     private boolean balleEnJeu = false;
     private int angle;
+    private String chemin = System.getProperty("user.dir") + "/ressources/";
 
     protected Controleur controleur;
     double mouseX;
@@ -51,29 +52,38 @@ public class View extends JFrame {
         partie.setLayout(new GridBagLayout());
         partie.setBackground(Color.darkGray);
         GridBagConstraints c = new GridBagConstraints();
-        c.weightx = 1;
-        c.weighty = 1;
 
-        JPanel panel1 = new JPanel();
-        panel1.setBackground(Color.RED);
+        canon = new JPanel();
+        canon.setLayout(new BorderLayout());
+        canon.setBackground(Color.black);
         c.gridx = 0;
         c.gridy = 0;
+        c.weightx = 0.5;
+        c.weighty = 0.5;
         c.fill = GridBagConstraints.BOTH;
-        partie.add(panel1, c);
+        partie.add(canon, c);
 
         JPanel panel2 = new JPanel();
-        panel2.setBackground(Color.BLUE);
+        panel2.setBackground(Color.white);
         c.gridx = 0;
         c.gridy = 1;
+        c.weightx = 1;
+        c.weighty = 1;
         c.fill = GridBagConstraints.BOTH;
         partie.add(panel2, c);
 
-        JPanel panel3 = new JPanel();
-        panel3.setBackground(Color.YELLOW);
+        puit = new JPanel();
+        puit.setLayout(new BorderLayout());
+        puit.setBackground(Color.darkGray);
+        ImageIcon image = new ImageIcon(chemin + "puit.png");
+        JLabel label = new JLabel(image);
+        label.setPreferredSize(new Dimension(puit.getWidth(), puit.getHeight()));
+        puit.add(label);
         c.gridx = 0;
         c.gridy = 2;
         c.fill = GridBagConstraints.BOTH;
-        partie.add(panel3, c);
+        c.weighty = 0.2;
+        partie.add(puit, c);
 
         fond.add(partie, BorderLayout.CENTER);
         // --------------DROITE---------------------
@@ -83,6 +93,18 @@ public class View extends JFrame {
         fondGauche.setLayout(new BorderLayout());
         fondGauche.setBackground(Color.gray);
         fondGauche.setPreferredSize(new Dimension(this.getWidth() / 5, this.getHeight()));
+
+        munition = new JPanel();
+        munition.setLayout(new GridLayout(10, 1));
+        fondGauche.add(munition, BorderLayout.CENTER);
+
+        leave = new JButton("Fermer");
+        leave.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                System.exit(0);
+            }
+        });
+        fondGauche.add(leave, BorderLayout.SOUTH);
 
         fond.add(fondGauche, BorderLayout.WEST);
         // --------------GAUCHE---------------------
