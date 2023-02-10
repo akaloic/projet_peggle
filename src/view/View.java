@@ -52,13 +52,13 @@ public class View extends JFrame {
         partie.setLayout(new GridBagLayout());
         partie.setBackground(Color.darkGray);
         GridBagConstraints c = new GridBagConstraints();
+        c.weightx = 1;
 
         canon = new JPanel();
         canon.setLayout(new BorderLayout());
         canon.setBackground(Color.black);
         c.gridx = 0;
         c.gridy = 0;
-        c.weightx = 0.5;
         c.weighty = 0.5;
         c.fill = GridBagConstraints.BOTH;
         partie.add(canon, c);
@@ -67,7 +67,6 @@ public class View extends JFrame {
         panel2.setBackground(Color.white);
         c.gridx = 0;
         c.gridy = 1;
-        c.weightx = 1;
         c.weighty = 1;
         c.fill = GridBagConstraints.BOTH;
         partie.add(panel2, c);
