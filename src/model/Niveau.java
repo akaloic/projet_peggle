@@ -14,8 +14,10 @@ public class Niveau {
     }
 
     protected void carres(double x, double y, ArrayList<Pegs> list, int pegCote){
-        lignes(x+10, y, list, pegCote, 5);
-        colonne(x, y+10, list, pegCote, 5);
+        lignes(x+50, y, list, pegCote, 50);
+        colonne(x, y+50, list, pegCote, 50);
+        colonne(x+250, y+50,list, pegCote,50);
+        lignes(x+50,y+250,list,pegCote,50);
     }
 
     protected void lignes(double x, double y, ArrayList<Pegs> list, int pegUsed, int distance){
