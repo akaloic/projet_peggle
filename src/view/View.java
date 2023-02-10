@@ -55,6 +55,8 @@ public class View extends JFrame {
             }
         };
 
+
+        
         puit = new JLabel(new ImageIcon(chemin + "puit.png"));
         puit.setLocation(partie.getWidth() / 2 - puit.getWidth() / 2, partie.getHeight() - puit.getHeight());
 
