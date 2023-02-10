@@ -3,42 +3,44 @@ package model;
 import java.util.ArrayList;
 
 public class Niveau {
-    protected int nb_obstacles;
-    protected int nb_cercles;
-    protected int nb_carres;
-    protected int nb_lignes;
     protected ArrayList<Pegs> list_peg;
 
     protected void cercle(double x, double y, ArrayList<Pegs> list, int pegUsed){
 
     }
 
-    protected void carres(double x, double y, ArrayList<Pegs> list, int pegUsed){
-
+    protected void carres(double x, double y, ArrayList<Pegs> list, int pegCote){
+        lignes(x+10, y, list, pegCote, 5);
+        colonne(x, y+10, list, pegCote, 5);
     }
 
-    protected void lignes(double x, double y, ArrayList<Pegs> list, int pegUsed){
+    protected void lignes(double x, double y, ArrayList<Pegs> list, int pegUsed, int distance){
         double nvx=x;
         for(int i=0; i<pegUsed;i++){
-            Pegs p = new Pegs(nvx, y, 10, 10, 1, 5);
-            list.set(i, p);
-            nvx+=10;
+            Pegs p = new Pegs(nvx, y, 1, 5);
+            list.add(p);
+            nvx+=distance;
         }
     }
 
-    Niveau(int npegs, int nobstacles, int ncercles, int ncarres, int nlignes){
-        for (int i=0;i<npegs;i++){
-            list_peg.add(new Pegs(0, 0, 0, 0, 0, 0));
+    protected void colonne(double x, double y, ArrayList<Pegs> list, int pegUsed, int distance){
+        double nvy=y;
+        for(int i=0; i<pegUsed;i++){
+            Pegs p = new Pegs(x, nvy, 1, 5);
+            list.add(p);
+            nvy+=distance;
         }
-        nb_obstacles=nobstacles;
-        for (int i=0;i<ncercles;i++){
-            //cercle(0,0,list_peg);
-        }
-        for (int i=0;i<ncarres;i++){
-            //carres(0,0,list_peg);
-        }
-        for (int i=0;i<nlignes;i++){
-            //lignes(0, 0, list_peg);
+    }
+
+    protected void niveau_1(){
+        lignes(30, 20, list_peg, 10, 5);
+        lignes(20, 40, list_peg, 10, 5);
+        lignes(30, 60, list_peg, 10, 5);
+    }
+
+    Niveau(int i){
+        switch (i){
+            case 1 : niveau_1();
         }
     }
 }

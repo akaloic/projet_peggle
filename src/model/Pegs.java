@@ -6,8 +6,8 @@ public class Pegs extends Obstacle{
         super(v);
         this.rayon=r;
     }
-    public Pegs(double x, double y, double largeur, double hauteur, int v, double rayon){
-        super(x, y, largeur, hauteur, rayon, false, v);
+    public Pegs(double x, double y, int v, double rayon){
+        super(x, y, rayon,rayon, rayon, false, v);
         this.rayon=rayon;
     }
 }
