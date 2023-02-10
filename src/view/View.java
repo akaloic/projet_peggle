@@ -48,48 +48,16 @@ public class View extends JFrame {
         fond.setLayout(new BorderLayout());
 
         // --------------DROITE---------------------
-        partie = new JPanel();
-        partie.setLayout(new GridBagLayout());
-        partie.setBackground(Color.darkGray);
-        GridBagConstraints c = new GridBagConstraints();
-
-        canon = new JPanel(){
+        partie = new JPanel(){
             @Override
             public void paint(Graphics g) {
                 super.paint(g);
                 dessineCanon(g);
             }
         };
-        canon.setLayout(new BorderLayout());
-        canon.setBackground(Color.black);
-        c.gridx = 0;
-        c.gridy = 0;
-        c.weightx = 0.5;
-        c.weighty = 0.5;
-        c.fill = GridBagConstraints.BOTH;
-        partie.add(canon, c);
-
-        JPanel panel2 = new JPanel();
-        panel2.setBackground(Color.white);
-        c.gridx = 0;
-        c.gridy = 1;
-        c.weightx = 1;
-        c.weighty = 1;
-        c.fill = GridBagConstraints.BOTH;
-        partie.add(panel2, c);
-
-        puit = new JPanel();
-        puit.setLayout(new BorderLayout());
-        puit.setBackground(Color.darkGray);
-        ImageIcon image = new ImageIcon(chemin + "puit.png");
-        JLabel label = new JLabel(image);
-        label.setPreferredSize(new Dimension(puit.getWidth(), puit.getHeight()));
-        puit.add(label);
-        c.gridx = 0;
-        c.gridy = 2;
-        c.fill = GridBagConstraints.BOTH;
-        c.weighty = 0.2;
-        partie.add(puit, c);
+        partie.setLayout(new GridBagLayout());
+        partie.setBackground(Color.darkGray);
+        GridBagConstraints c = new GridBagConstraints();
 
         fond.add(partie, BorderLayout.CENTER);
         // --------------DROITE---------------------
@@ -117,6 +85,21 @@ public class View extends JFrame {
 
         this.add(fond);
         this.setVisible(true);
+        
+        while(enJeu){
+            colorX-=1%25;
+            colorY-=1%25;
+
+            partie.repaint();
+            calculeAngle();
+            
+            try {
+                Thread.sleep(30);
+            } catch (InterruptedException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
     }
 
     public void dessineCanon(Graphics g){
@@ -126,38 +109,39 @@ public class View extends JFrame {
 
         //Pour la ligne multicolore
         Path2D.Double ligne2 = new Path2D.Double();
-        ligne2.moveTo(canon.getWidth()/2, 0);
+        ligne2.moveTo(partie.getWidth()/2, 0);
         ligne2.lineTo(mouseX-munition.getWidth(), mouseY);
         g2d.setStroke(new BasicStroke(5));
         GradientPaint gp = new GradientPaint(colorX, colorX, Color.yellow, colorY, colorX, Color.cyan, true);
         g2d.setPaint(gp);
-        //g2d.draw(ligne2);
+        g2d.draw(ligne2);
         g2d.setStroke(new BasicStroke(1));
         g2d.setPaint(null);
         g2d.setColor(Color.lightGray);
 
-        Arc2D.Double arc2 = new Arc2D.Double(canon.getWidth()/2-widthBase/2, -heightBase/2, widthBase, heightBase, 180, 180,Arc2D.OPEN);
+        Arc2D.Double arc2 = new Arc2D.Double(partie.getWidth()/2-widthBase/2, -heightBase/2, widthBase, heightBase, 180, 180,Arc2D.OPEN);
         g2d.draw(arc2);
 
-        Rectangle rect2 = (new Rectangle(canon.getWidth()/2-widthBase/10, heightBase/3, widthBase/5, heightBase/2));
+        Rectangle rect2 = (new Rectangle(partie.getWidth()/2-widthBase/10, heightBase/3, widthBase/5, heightBase/2));
 
-        g2d.rotate(Math.toRadians(angle),canon.getWidth()/2,0);
+        g2d.rotate(Math.toRadians(angle),partie.getWidth()/2,0);
         g2d.draw(rect2);
-        g2d.rotate(Math.toRadians(-angle),canon.getWidth()/2,0);
-        //On annule la rotation après avoir dessiner le rectangle pour que seule le bout du canon rotate
+        g2d.rotate(Math.toRadians(-angle),partie.getWidth()/2,0);
+        //On annule la rotation après avoir dessiner le rectangle pour que seule le bout du partie rotate
 
         double theta = Math.toRadians(angle);
-        double x = (canon.getWidth()/2) - (5*heightBase/6) * Math.sin(theta)-10/*Width balle */;
+        double x = (partie.getWidth()/2) - (5*heightBase/6) * Math.sin(theta)-10/*Width balle */;
         double y = (5*heightBase/6) * Math.cos(theta) -10/*Height balle */;
         //Pour calculer nouvelles coordonnées de la balle après rotaion
+        
 
         g2d.dispose();
     }
 
-    private void calculeAngle() {
+    public void calculeAngle() {
         mouseX = MouseInfo.getPointerInfo().getLocation().getX();
         mouseY = MouseInfo.getPointerInfo().getLocation().getY();
-        int pointX = munition.getWidth() + canon.getX() + canon.getWidth() / 2;
+        int pointX = munition.getWidth() + partie.getWidth() / 2;
         double angle1 = Math.atan2(mouseY - 0, mouseX - pointX);
         double angle2 = Math.atan2(this.getHeight() - 0, pointX - pointX);
         angle = (int) Math.toDegrees(angle1 - angle2);
