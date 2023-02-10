@@ -21,7 +21,7 @@ public class Niveau {
     protected void lignes(double x, double y, ArrayList<Pegs> list, int pegUsed, int distance){
         double nvx=x;
         for(int i=0; i<pegUsed;i++){
-            Pegs p = new Pegs(nvx, y, 1, 5);
+            Pegs p = new Pegs(nvx, y, 1, 25);
             list.add(p);
             nvx+=distance;
         }
@@ -37,9 +37,14 @@ public class Niveau {
     }
 
     protected void niveau_1(){
-        lignes(30, 20, list_peg, 10, 5);
-        lignes(20, 40, list_peg, 10, 5);
-        lignes(30, 60, list_peg, 10, 5);
+        lignes(125, 300, list_peg, 20, 50);
+        lignes(100, 350, list_peg, 20, 50);
+        lignes(125, 400, list_peg, 20, 50);
+        lignes(100, 450, list_peg, 20, 50);
+        lignes(125, 500, list_peg, 20, 50);
+        lignes(100, 550, list_peg, 20, 50);
+        lignes(125, 600, list_peg, 20, 50);
+        lignes(100, 650, list_peg, 20, 50);
     }
 
     public Niveau(int i){
