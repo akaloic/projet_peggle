@@ -5,6 +5,10 @@ import java.util.ArrayList;
 public class Niveau {
     protected ArrayList<Pegs> list_peg;
 
+    public ArrayList<Pegs> getList(){
+        return list_peg;
+    }
+
     protected void cercle(double x, double y, ArrayList<Pegs> list, int pegUsed){
 
     }
