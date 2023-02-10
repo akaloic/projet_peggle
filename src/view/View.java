@@ -1,30 +1,27 @@
 package view;
 
-import model.*;
-import model.Balle;
 import controller.*;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
+import model.*;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.*;
 import java.awt.geom.*;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 
 public class View extends JFrame {
 
     // public boolean enJeu = true; // Pour mettre le jeu en pose si besoin
     private JPanel balle;
-    private JPanel canon;
     private JPanel[] obstacles;
-    private JPanel[] puit;
+    private JLabel puit;
     private JPanel fond;
     private JPanel munition;
+    private JPanel fondGauche;
     private JPanel partie;
-    private JButton leave = new JButton("Fermer");
+    private JButton leave;
     private boolean enJeu = true;
     private boolean balleEnJeu = false;
     private int angle;
+    private String chemin = System.getProperty("user.dir") + "/ressources/";
 
     protected Controleur controleur;
     double mouseX;
@@ -38,155 +35,68 @@ public class View extends JFrame {
         Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
         int width = (int) size.getWidth();
         int height = (int) size.getHeight();
-        this.setSize(width, height);
 
+        this.setSize(width, height);
         this.setTitle("Hit the Peggles");
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        this.setUndecorated(true);
-        this.setVisible(true);// nécessaire sinon this.getHeight et this.getWidth renvoie 0
-
+        this.setUndecorated(true); // nécessaire sinon this.getHeight et this.getWidth renvoie 0
         this.controleur = controleur;
-        Modele m = controleur.getModele();
+        // Modele m = controleur.getModele();
 
-        // -------Disposition du jeu-------
-        fond = new JPanel(); // represente la fenetre
-        fond.setLayout(new GridBagLayout());
-        GridBagConstraints c = new GridBagConstraints();
-        c.anchor = GridBagConstraints.WEST;
-        c.weightx = 1;
-        c.weighty = 1;
+        fond = new JPanel();
+        fond.setLayout(new BorderLayout());
 
-        munition = new JPanel(); // Partie de gauche de la fenetre
-        munition.setLayout(new BorderLayout());
-        munition.setBackground(Color.gray);
-        munition.setPreferredSize(new Dimension(this.getWidth() / 5, this.getHeight()));
-
-        partie = new JPanel(); // Partie du jeu, a droite de la fenetre
-        partie.setLayout(new GridBagLayout());
-        partie.setBackground(Color.darkGray);
-        partie.setPreferredSize(new Dimension(this.getWidth() * 4 / 5, this.getHeight()));
-        Balle b = new Balle();
-        canon = new JPanel() {
+        // --------------DROITE---------------------
+        partie = new JPanel() {
             @Override
             public void paint(Graphics g) {
-                // TODO Auto-generated method stub
-                /*
-                 * BufferedImage img = new BufferedImage(20,50,BufferedImage.TYPE_INT_RGB);
-                 * try {
-                 * img = ImageIO.read(new File("src/view/pomme.jfif"));
-                 * } catch (IOException e) {
-                 * // TODO Auto-generated catch block
-                 * e.printStackTrace();
-                 * }
-                 */
                 super.paint(g);
-                Graphics2D g2d = (Graphics2D) g;
-                int widthBase = 150;
-                int heightBase = 150;
-                Path2D.Double ligne2 = new Path2D.Double();
-                ligne2.moveTo(this.getWidth() / 2, 0);
-                ligne2.lineTo(mouseX - munition.getWidth() - canon.getX(), mouseY);
-                g2d.setStroke(new BasicStroke(5));
-                GradientPaint gp = new GradientPaint(colorX, colorX, Color.yellow, colorY, colorX, Color.cyan, true);
-                g2d.setPaint(gp);
-                g2d.draw(ligne2);
-                g2d.setStroke(new BasicStroke(1));
-                g2d.setPaint(null);
-                g2d.setColor(Color.black);
-                Arc2D.Double arc2 = new Arc2D.Double(this.getWidth() / 2 - widthBase / 2, -heightBase / 2, widthBase,
-                        heightBase, 180, 180, Arc2D.OPEN);
-                g2d.draw(arc2);
-
-                Rectangle rect2 = (new Rectangle(this.getWidth() / 2 - widthBase / 10, heightBase / 3, widthBase / 5,
-                        heightBase / 2));
-
-                g2d.rotate(Math.toRadians(angle), this.getWidth() / 2, 0);
-                g2d.draw(rect2);
-
-                /*
-                 * try {
-                 * img = ImageIO.read(new File("src/view/banane.jfif"));
-                 * } catch (IOException e) {
-                 * // TODO Auto-generated catch block
-                 * e.printStackTrace();
-                 * }
-                 * int x = this.getWidth()/2+(50-10);
-                 * int y = 30;
-                 */
-                /*
-                 * g2d.setClip(rect2);
-                 * g2d.drawImage(img, x, y,20,50, this);
-                 */
-                g2d.rotate(Math.toRadians(-angle), this.getWidth() / 2, 0);
-
-                double theta = Math.toRadians(angle);
-                double x = (this.getWidth() / 2) - (5 * heightBase / 6) * Math.sin(theta) - 10;
-                double y = (5 * heightBase / 6) * Math.cos(theta) - 10;
-                /*
-                 * Formule :
-                 * newX = centerX + (point2x-centerX)*Math.cos(x) -
-                 * (point2y-centerY)*Math.sin(x);
-                 * newY = centerY + (point2x-centerX)*Math.sin(x) +
-                 * (point2y-centerY)*Math.cos(x)
-                 */
-                b.x = (int) x;
-                b.y = (int) y;
-
-                g.fillOval((int) b.x, (int) b.y, 10, 10);
-                g2d.dispose();
+                dessineCanon(g);
             }
         };
-        JLabel a = new JLabel();
-        canon.add(a);
 
-        c.anchor = GridBagConstraints.CENTER;
-        partie.add(canon, c);
 
-        fond.add(munition, c);
-        c.anchor = GridBagConstraints.EAST;
-        fond.add(partie, c);
-        this.addKeyListener(new KeyAdapter() {
-            public void keyPressed(KeyEvent e) {
-                int keyCode = e.getKeyCode();
-                if (keyCode == KeyEvent.VK_SPACE) {
-                    balleEnJeu = true;
-                }
-            }
-        });
+        
+        puit = new JLabel(new ImageIcon(chemin + "puit.png"));
+        puit.setLocation(partie.getWidth() / 2 - puit.getWidth() / 2, partie.getHeight() - puit.getHeight());
 
-        // -------Disposition du jeu-------
+        partie.setLayout(new BorderLayout());
+        partie.setBackground(Color.darkGray);
+        partie.add(puit, BorderLayout.SOUTH);
+        fond.add(partie, BorderLayout.CENTER);
+        // --------------DROITE---------------------
 
-        // -------Elements du jeu-------
-        /*
-         * balle = getBallPanel(m.getBalle());
-         * 
-         * //this.add(balle);
-         * this.add(new JLabel("test"), 0);
-         */
-        // -------Elements du jeu-------
+        // --------------GAUCHE---------------------
+        fondGauche = new JPanel();
+        fondGauche.setLayout(new BorderLayout());
+        fondGauche.setBackground(Color.gray);
+        fondGauche.setPreferredSize(new Dimension(this.getWidth() / 5, this.getHeight()));
 
-        munition.add(leave, BorderLayout.SOUTH);
+        munition = new JPanel();
+        munition.setLayout(new GridLayout(10, 1));
+        fondGauche.add(munition, BorderLayout.CENTER);
+
+        leave = new JButton("Fermer");
         leave.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 System.exit(0);
             }
         });
+        fondGauche.add(leave, BorderLayout.SOUTH);
+
+        fond.add(fondGauche, BorderLayout.WEST);
+        // --------------GAUCHE---------------------
+
         this.add(fond);
         this.setVisible(true);
-        canon.setPreferredSize(new Dimension(partie.getWidth(), partie.getHeight()));
-        canon.setBackground(Color.lightGray);
-        // this.pack();
 
         while (enJeu) {
-            calculeAngle();
-            a.setText(angle + "");
-
             colorX -= 1 % 25;
             colorY -= 1 % 25;
-            canon.repaint();
-            if (balleEnJeu) {
-                // b.deplacement();
-            }
+
+            partie.repaint();
+            calculeAngle();
+
             try {
                 Thread.sleep(30);
             } catch (InterruptedException e) {
@@ -194,35 +104,52 @@ public class View extends JFrame {
                 e.printStackTrace();
             }
         }
-
     }
 
-    public void calcLigne(double x1, double y1, double x2, double y2) {
-        double a = (y2 - y1) / (x2 - x1);
-        double b = a * x1 - y1;
-        System.out.println(a + "x+" + b);
+    public void dessineCanon(Graphics g) {
+        Graphics2D g2d = (Graphics2D) g;
+        int widthBase = 150;
+        int heightBase = 150;
+
+        // Pour la ligne multicolore
+        Path2D.Double ligne2 = new Path2D.Double();
+        ligne2.moveTo(partie.getWidth() / 2, 0);
+        ligne2.lineTo(mouseX - munition.getWidth(), mouseY);
+        g2d.setStroke(new BasicStroke(5));
+        GradientPaint gp = new GradientPaint(colorX, colorX, Color.yellow, colorY, colorX, Color.cyan, true);
+        g2d.setPaint(gp);
+        g2d.draw(ligne2);
+        g2d.setStroke(new BasicStroke(1));
+        g2d.setPaint(null);
+        g2d.setColor(Color.lightGray);
+
+        Arc2D.Double arc2 = new Arc2D.Double(partie.getWidth() / 2 - widthBase / 2, -heightBase / 2, widthBase,
+                heightBase, 180, 180, Arc2D.OPEN);
+        g2d.draw(arc2);
+
+        Rectangle rect2 = (new Rectangle(partie.getWidth() / 2 - widthBase / 10, heightBase / 3, widthBase / 5,
+                heightBase / 2));
+
+        g2d.rotate(Math.toRadians(angle), partie.getWidth() / 2, 0);
+        g2d.draw(rect2);
+        g2d.rotate(Math.toRadians(-angle), partie.getWidth() / 2, 0);
+        // On annule la rotation après avoir dessiner le rectangle pour que seule le
+        // bout du partie rotate
+
+        double theta = Math.toRadians(angle);
+        double x = (partie.getWidth() / 2) - (5 * heightBase / 6) * Math.sin(theta) - 10/* Width balle */;
+        double y = (5 * heightBase / 6) * Math.cos(theta) - 10/* Height balle */;
+        // Pour calculer nouvelles coordonnées de la balle après rotaion
+
+        g2d.dispose();
     }
 
-    private void calculeAngle() {
+    public void calculeAngle() {
         mouseX = MouseInfo.getPointerInfo().getLocation().getX();
         mouseY = MouseInfo.getPointerInfo().getLocation().getY();
-        int pointX = munition.getWidth() + canon.getX() + canon.getWidth() / 2 + 45;
+        int pointX = munition.getWidth() + partie.getWidth() / 2;
         double angle1 = Math.atan2(mouseY - 0, mouseX - pointX);
         double angle2 = Math.atan2(this.getHeight() - 0, pointX - pointX);
         angle = (int) Math.toDegrees(angle1 - angle2);
     }
-
-    private JPanel getBallPanel(Balle b) {
-        return new JPanel() {
-            @Override
-            protected void paintComponent(Graphics g) {
-                super.paintComponent(g);
-                g.setColor(Color.RED);
-                // g.fillOval((int) b.getX(), (int) b.getY(), (int) b.getLargeur(), (int)
-                // b.getHauteur());
-                g.fillOval(200, 200, 500, 500);
-            }
-        };
-    }
-
 }
