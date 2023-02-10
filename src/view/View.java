@@ -22,6 +22,7 @@ public class View extends JFrame {
     private boolean balleEnJeu = false;
     private int angle;
     private String chemin = System.getProperty("user.dir") + "/ressources/";
+    private Niveau niveau = new Niveau(1);
 
     protected Controleur controleur;
     double mouseX;
@@ -140,6 +141,12 @@ public class View extends JFrame {
         double x = (partie.getWidth() / 2) - (5 * heightBase / 6) * Math.sin(theta) - 10/* Width balle */;
         double y = (5 * heightBase / 6) * Math.cos(theta) - 10/* Height balle */;
         // Pour calculer nouvelles coordonnées de la balle après rotaion
+
+
+        for(int i = 0; i <niveau.list_peg.size();i++){
+            g.fillOval((int)niveau.list_peg.get(i).getX(), (int)niveau.list_peg.get(i).getY(), (int)niveau.list_peg.get(i).rayon, (int)niveau.list_peg.get(i).rayon);
+        }
+
 
         g2d.dispose();
     }

@@ -3,7 +3,7 @@ package model;
 import java.util.ArrayList;
 
 public class Niveau {
-    protected ArrayList<Pegs> list_peg;
+    public ArrayList<Pegs> list_peg = new ArrayList<Pegs>();
 
     public ArrayList<Pegs> getList(){
         return list_peg;
@@ -42,7 +42,7 @@ public class Niveau {
         lignes(30, 60, list_peg, 10, 5);
     }
 
-    Niveau(int i){
+    public Niveau(int i){
         switch (i){
             case 1 : niveau_1();
         }
