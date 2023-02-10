@@ -57,6 +57,10 @@ public class View extends JFrame {
 
         partie.setLayout(new BorderLayout());
         partie.setBackground(Color.darkGray);
+
+        puit = new JLabel(new ImageIcon(chemin + "puit.png"));
+        puit.setPreferredSize(new Dimension(this.getWidth() / 5, this.getHeight() / 5));
+
         partie.add(puit, BorderLayout.SOUTH);
         fond.add(partie, BorderLayout.CENTER);
         // --------------DROITE---------------------
