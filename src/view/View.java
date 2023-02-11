@@ -10,8 +10,6 @@ import java.awt.geom.*;
 public class View extends JFrame {
 
     // public boolean enJeu = true; // Pour mettre le jeu en pose si besoin
-    private JPanel balle;
-    private JPanel[] obstacles;
     private JLabel puit;
     private JPanel fond;
     private JPanel munition;
@@ -22,6 +20,8 @@ public class View extends JFrame {
     private boolean balleEnJeu = false;
     private int angle;
     private String chemin = System.getProperty("user.dir") + "/ressources/";
+    private Timer timer;
+    private int directionX = 5;
 
     protected Controleur controleur;
     double mouseX;
@@ -41,7 +41,7 @@ public class View extends JFrame {
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setUndecorated(true); // nécessaire sinon this.getHeight et this.getWidth renvoie 0
         this.controleur = controleur;
-        // Modele m = controleur.getModele();
+        Modele m = controleur.getModele();
 
         fond = new JPanel();
         fond.setLayout(new BorderLayout());
@@ -59,9 +59,10 @@ public class View extends JFrame {
         partie.setBackground(Color.darkGray);
 
         puit = new JLabel(new ImageIcon(chemin + "puit.png"));
-        puit.setPreferredSize(new Dimension(this.getWidth() / 5, this.getHeight() / 5));
+        puit.setPreferredSize(new Dimension(100, 100));
+        puit.setLocation(0, 0);
 
-        partie.add(puit, BorderLayout.SOUTH);
+        partie.add(puit);
         fond.add(partie, BorderLayout.CENTER);
         // --------------DROITE---------------------
 
@@ -89,20 +90,24 @@ public class View extends JFrame {
         this.add(fond);
         this.setVisible(true);
 
-        while (enJeu) {
-            colorX -= 1 % 25;
-            colorY -= 1 % 25;
+        timer = new Timer(30, new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                // canon
+                colorX -= 1 % 25;
+                colorY -= 1 % 25;
+                calculeAngle();
 
-            partie.repaint();
-            calculeAngle();
-
-            try {
-                Thread.sleep(30);
-            } catch (InterruptedException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+                // puit
+                System.out.println(puit.getX() + " " + -partie.getWidth() / 2);
+                puit.setLocation(puit.getX() + directionX, partie.getHeight() / 2);
+                if (puit.getX() > partie.getWidth() / 2)
+                    directionX = -5;
+                if (puit.getX() < -partie.getWidth() / 2)
+                    directionX = 5;
+                partie.repaint();
             }
-        }
+        });
+        timer.start();
     }
 
     public void dessineCanon(Graphics g) {

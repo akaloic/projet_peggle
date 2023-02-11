@@ -6,10 +6,10 @@ import model.*;
 public class Controleur {
 
     protected View view;
-    // protected Modele modele;
+    protected Modele modele;
 
     public Controleur() {
-        // modele = new Modele();
+        modele = new Modele();
         view = new View(this);
 
     }
@@ -21,5 +21,13 @@ public class Controleur {
 
     public void setView(View view) {
         this.view = view;
+    }
+
+    public Modele getModele() {
+        return modele;
+    }
+
+    public void setModele(Modele modele) {
+        this.modele = modele;
     }
 }
