@@ -1,7 +1,5 @@
 package model;
 
-import java.util.Timer;
-
 public class Balle extends Objet {
 
   protected double vitesseX;
@@ -20,7 +18,6 @@ public class Balle extends Objet {
   protected final double g = 9.81; // L'accélération de la pesanteur standard
 
   protected double forceAdded;
-  protected Timer clock;
 
   public Balle(double x, double y, double largeur, double hauteur, double angle, double vitesseX, double vitesseY,
       double x0, double y0, double vitesseX0, double vitesseY0, double accelerationX, double accelerationY,

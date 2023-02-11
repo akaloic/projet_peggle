@@ -10,6 +10,11 @@ public class Obstacle extends Objet {
         this.estMort = estMort;
         this.vie = vie;
     }
+    public Obstacle(int v){
+        super();
+        this.estMort=false;
+        this.vie=v;
+    }
 
     // ---------GETTER SETTER---------
     // ---------GETTER SETTER---------

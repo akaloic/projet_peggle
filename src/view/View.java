@@ -22,13 +22,12 @@ public class View extends JFrame {
     private String chemin = System.getProperty("user.dir") + "/ressources/";
     private Timer timer;
     private int directionX = 5;
-
-    protected Controleur controleur;
-    double mouseX;
-    double mouseY;
-
-    int colorX = 25;
-    int colorY = 15;
+    private Controleur controleur;
+    private int nbMunition;
+    private double mouseX;
+    private double mouseY;
+    private static int colorX = 25;
+    private static int colorY = 15;
 
     public View(Controleur controleur) {
 
@@ -43,6 +42,11 @@ public class View extends JFrame {
         this.controleur = controleur;
 
         Modele m = controleur.getModele();
+        Balle b = m.getBalle();
+        Obstacle[] o = m.getObstacles();
+        Niveau n = m.getNiveau();
+        // nbMunition = n.getNiveau();
+        nbMunition = 4; // Pour le moment on met 10 munitions
 
         fond = new JPanel();
         fond.setLayout(new BorderLayout());
@@ -55,7 +59,6 @@ public class View extends JFrame {
                 dessineCanon(g);
             }
         };
-
         partie.setLayout(new BorderLayout());
         partie.setBackground(Color.darkGray);
 
@@ -141,9 +144,9 @@ public class View extends JFrame {
         Rectangle rect2 = (new Rectangle(partie.getWidth() / 2 - widthBase / 10, heightBase / 3, widthBase / 5,
                 heightBase / 2));
 
-        g2d.rotate(Math.toRadians(angle), partie.getWidth() / 2, 0);
+        g2d.rotate(Math.toRadians(90 - angle), partie.getWidth() / 2, 0);
         g2d.draw(rect2);
-        g2d.rotate(Math.toRadians(-angle), partie.getWidth() / 2, 0);
+        g2d.rotate(Math.toRadians(angle - 90), partie.getWidth() / 2, 0);
         // On annule la rotation après avoir dessiner le rectangle pour que seule le
         // bout du partie rotate
 
@@ -151,6 +154,13 @@ public class View extends JFrame {
         double x = (partie.getWidth() / 2) - (5 * heightBase / 6) * Math.sin(theta) - 10/* Width balle */;
         double y = (5 * heightBase / 6) * Math.cos(theta) - 10/* Height balle */;
         // Pour calculer nouvelles coordonnées de la balle après rotaion
+
+        for (int i = 0; i < controleur.getModele().getNiveau().list_peg.size(); i++) {
+            g.fillOval((int) controleur.getModele().getNiveau().list_peg.get(i).getX(),
+                    (int) controleur.getModele().getNiveau().list_peg.get(i).getY(),
+                    (int) controleur.getModele().getNiveau().list_peg.get(i).rayon,
+                    (int) controleur.getModele().getNiveau().list_peg.get(i).rayon);
+        }
 
         g2d.dispose();
     }
@@ -160,15 +170,21 @@ public class View extends JFrame {
         mouseY = MouseInfo.getPointerInfo().getLocation().getY();
         int pointX = munition.getWidth() + partie.getWidth() / 2;
         double angle1 = Math.atan2(mouseY - 0, mouseX - pointX);
-        double angle2 = Math.atan2(this.getHeight() - 0, pointX - pointX);
-        angle = (int) Math.toDegrees(angle1 - angle2);
+        double angle2 = Math.atan2(0, -pointX);
+        angle = (int) Math.toDegrees(angle2 - angle1);
     }
 
     public void afficheMunition() {
         for (int i = 0; i < 10; i++) {
-            JLabel mun = new JLabel(String.valueOf(i + 1));
-            mun.setBackground(Color.red);
-            munition.add(mun, BorderLayout.EAST);
+            JPanel panel = new JPanel();
+            panel.setLayout(new BorderLayout());
+            panel.setBorder(BorderFactory.createLineBorder(Color.black));
+            if (i > nbMunition + 1) {
+                panel.setBackground(Color.blue);
+            } else {
+                panel.setBackground(Color.red);
+            }
+            munition.add(panel);
         }
     }
 }

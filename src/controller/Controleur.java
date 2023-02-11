@@ -30,4 +30,5 @@ public class Controleur {
     public void setModele(Modele modele) {
         this.modele = modele;
     }
+    // ---------GETTER SETTER---------
 }

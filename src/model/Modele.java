@@ -2,16 +2,25 @@ package model;
 
 public class Modele {
 
-    protected Balle balle;
-    protected Obstacle[] obstacles;
-    protected Canon canon;
+    private Balle balle;
+    private Obstacle[] obstacles;
+    private Niveau niveau;
 
     public Modele() {
         balle = new Balle(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
         obstacles = new Obstacle[0];
+        niveau = new Niveau(3);
     }
 
     // ---------GETTER SETTER---------
+    public Niveau getNiveau() {
+        return niveau;
+    }
+
+    public void setNiveau(Niveau niveau) {
+        this.niveau = niveau;
+    }
+
     public Balle getBalle() {
         return balle;
     }
@@ -26,14 +35,6 @@ public class Modele {
 
     public void setObstacles(Obstacle[] obstacles) {
         this.obstacles = obstacles;
-    }
-
-    public Canon getCanon() {
-        return canon;
-    }
-
-    public void setCanon(Canon canon) {
-        this.canon = canon;
     }
     // ---------GETTER SETTER---------
 }
