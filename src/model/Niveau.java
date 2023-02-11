@@ -32,7 +32,7 @@ public class Niveau {
     protected void colonne(double x, double y, ArrayList<Pegs> list, int pegUsed, int distance){
         double nvy=y;
         for(int i=0; i<pegUsed;i++){
-            Pegs p = new Pegs(x, nvy, 1, 5);
+            Pegs p = new Pegs(x, nvy, 1, 25);
             list.add(p);
             nvy+=distance;
         }
@@ -50,12 +50,13 @@ public class Niveau {
     }
     protected void niveau_2(){
         carres(125, 300, list_peg, 4);
+        carres(600, 200, list_peg, 5);
     }
 
     public Niveau(int i){
         switch (i){
             case 1 : niveau_1();break;
-            case 2 : niveau_1();break;
+            case 2 : niveau_2();break;
         }
     }
 }
