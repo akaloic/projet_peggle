@@ -48,7 +48,6 @@ public class viewPartieDroite extends JPanel{ //partie droite de la fenetre et d
         //     obs = null;
         //     System.out.println("jai finis");
         // }
-        repaint();
     }
     @Override
     public void paint(Graphics g) {
@@ -76,7 +75,7 @@ public class viewPartieDroite extends JPanel{ //partie droite de la fenetre et d
         }
         xPos += xSpeed;
         yPos += ySpeed;
-
+        
         try {
             Thread.sleep(10);
         } catch (Exception e) {
