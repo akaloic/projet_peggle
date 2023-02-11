@@ -28,6 +28,7 @@ public class View extends JFrame {
     private double mouseY;
     private static int colorX = 25;
     private static int colorY = 15;
+    int seconde = 0;
 
     public View(Controleur controleur) {
 
@@ -72,7 +73,7 @@ public class View extends JFrame {
         fondGauche = new JPanel();
         fondGauche.setLayout(new BorderLayout());
         fondGauche.setBackground(Color.gray);
-        fondGauche.setPreferredSize(new Dimension(this.getWidth() / 5, this.getHeight()));
+        fondGauche.setPreferredSize(new Dimension(this.getWidth() / 7, this.getHeight()));
 
         munition = new JPanel();
         munition.setLayout(new GridLayout(10, 1));
@@ -96,6 +97,8 @@ public class View extends JFrame {
 
         timer = new Timer(30, new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                seconde++;
+
                 // canon
                 colorX -= 1 % 25;
                 colorY -= 1 % 25;
@@ -103,6 +106,16 @@ public class View extends JFrame {
 
                 // puit
                 placePuit();
+
+                // munition
+                /*
+                 * if (CONDITION) { // si la balle atteri dans le puit
+                 * nbMunition++;
+                 * munition.removeAll();
+                 * afficheMunition();
+                 * munition.revalidate();
+                 * }
+                 */
 
                 repaint();
             }
@@ -177,13 +190,18 @@ public class View extends JFrame {
     public void afficheMunition() {
         for (int i = 0; i < 10; i++) {
             JPanel panel = new JPanel();
+            if (i > nbMunition + 1) { // il reste i + 1 munition
+                panel = new JPanel() {
+                    @Override
+                    public void paint(Graphics g) {
+                        super.paint(g);
+                        g.fillOval(50, 20, 50, 50);
+                    }
+                };
+            }
+            panel.setBackground(Color.white);
             panel.setLayout(new BorderLayout());
             panel.setBorder(BorderFactory.createLineBorder(Color.black));
-            if (i > nbMunition + 1) {
-                panel.setBackground(Color.blue);
-            } else {
-                panel.setBackground(Color.red);
-            }
             munition.add(panel);
         }
     }
