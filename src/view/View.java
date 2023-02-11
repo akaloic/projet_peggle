@@ -41,6 +41,7 @@ public class View extends JFrame {
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setUndecorated(true); // nécessaire sinon this.getHeight et this.getWidth renvoie 0
         this.controleur = controleur;
+
         Modele m = controleur.getModele();
 
         fond = new JPanel();
@@ -72,7 +73,7 @@ public class View extends JFrame {
 
         munition = new JPanel();
         munition.setLayout(new GridLayout(10, 1));
-        fondGauche.add(munition, BorderLayout.CENTER);
+        afficheMunition();
 
         leave = new JButton("Fermer");
         leave.addActionListener(new ActionListener() {
@@ -80,6 +81,8 @@ public class View extends JFrame {
                 System.exit(0);
             }
         });
+
+        fondGauche.add(munition, BorderLayout.CENTER);
         fondGauche.add(leave, BorderLayout.SOUTH);
 
         fond.add(fondGauche, BorderLayout.WEST);
@@ -159,5 +162,13 @@ public class View extends JFrame {
         double angle1 = Math.atan2(mouseY - 0, mouseX - pointX);
         double angle2 = Math.atan2(this.getHeight() - 0, pointX - pointX);
         angle = (int) Math.toDegrees(angle1 - angle2);
+    }
+
+    public void afficheMunition() {
+        for (int i = 0; i < 10; i++) {
+            JLabel mun = new JLabel(String.valueOf(i + 1));
+            mun.setBackground(Color.red);
+            munition.add(mun, BorderLayout.EAST);
+        }
     }
 }
