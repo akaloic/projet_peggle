@@ -48,10 +48,14 @@ public class Niveau {
         lignes(125, 600, list_peg, 20, 50);
         lignes(100, 650, list_peg, 20, 50);
     }
+    protected void niveau_2(){
+        carres(125, 300, list_peg, 4);
+    }
 
     public Niveau(int i){
         switch (i){
-            case 1 : niveau_1();
+            case 1 : niveau_1();break;
+            case 2 : niveau_1();break;
         }
     }
 }
