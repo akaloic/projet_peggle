@@ -59,8 +59,6 @@ public class View extends JFrame {
         partie.setBackground(Color.darkGray);
 
         puit = new JLabel(new ImageIcon(chemin + "puit.png"));
-        puit.setPreferredSize(new Dimension(100, 100));
-        puit.setLocation(0, 0);
 
         partie.add(puit);
         fond.add(partie, BorderLayout.CENTER);
@@ -98,16 +96,22 @@ public class View extends JFrame {
                 calculeAngle();
 
                 // puit
-                System.out.println(puit.getX() + " " + -partie.getWidth() / 2);
-                puit.setLocation(puit.getX() + directionX, partie.getHeight() / 2);
-                if (puit.getX() > partie.getWidth() / 2)
-                    directionX = -5;
-                if (puit.getX() < -partie.getWidth() / 2)
-                    directionX = 5;
-                partie.repaint();
+                placePuit();
+
+                repaint();
             }
         });
         timer.start();
+    }
+
+    public void placePuit() {
+        // avec la redimension de l'image plus grande
+
+        puit.setLocation(puit.getX() + directionX, partie.getHeight() / 2);
+        if (puit.getX() > partie.getWidth() / 2)
+            directionX = -5;
+        if (puit.getX() < -partie.getWidth() / 2)
+            directionX = 5;
     }
 
     public void dessineCanon(Graphics g) {
