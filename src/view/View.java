@@ -22,7 +22,7 @@ public class View extends JFrame {
     private boolean balleEnJeu = false;
     private int angle;
     private String chemin = System.getProperty("user.dir") + "/ressources/";
-    private Niveau niveau = new Niveau(2);
+    private Niveau niveau = new Niveau(3);
 
     protected Controleur controleur;
     double mouseX;
