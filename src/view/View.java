@@ -131,9 +131,9 @@ public class View extends JFrame {
         Rectangle rect2 = (new Rectangle(partie.getWidth() / 2 - widthBase / 10, heightBase / 3, widthBase / 5,
                 heightBase / 2));
 
-        g2d.rotate(Math.toRadians(angle), partie.getWidth() / 2, 0);
+        g2d.rotate(Math.toRadians(90-angle), partie.getWidth() / 2, 0);
         g2d.draw(rect2);
-        g2d.rotate(Math.toRadians(-angle), partie.getWidth() / 2, 0);
+        g2d.rotate(Math.toRadians(angle-90), partie.getWidth() / 2, 0);
         // On annule la rotation après avoir dessiner le rectangle pour que seule le
         // bout du partie rotate
 
@@ -156,7 +156,7 @@ public class View extends JFrame {
         mouseY = MouseInfo.getPointerInfo().getLocation().getY();
         int pointX = munition.getWidth() + partie.getWidth() / 2;
         double angle1 = Math.atan2(mouseY - 0, mouseX - pointX);
-        double angle2 = Math.atan2(this.getHeight() - 0, pointX - pointX);
-        angle = (int) Math.toDegrees(angle1 - angle2);
+        double angle2 = Math.atan2(0, -pointX);
+        angle = (int) Math.toDegrees(angle2 - angle1);
     }
 }
