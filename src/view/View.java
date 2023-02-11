@@ -44,9 +44,8 @@ public class View extends JFrame {
         Modele m = controleur.getModele();
         Balle b = m.getBalle();
         Obstacle[] o = m.getObstacles();
-
         Niveau n = m.getNiveau();
-        // nbMunititionition = n.getNiveau();
+        // nbMunition = n.getNiveau();
         nbMunition = 4; // Pour le moment on met 10 munitions
 
         fond = new JPanel();
