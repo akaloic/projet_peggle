@@ -22,13 +22,12 @@ public class View extends JFrame {
     private boolean balleEnJeu = false;
     private int angle;
     private String chemin = System.getProperty("user.dir") + "/ressources/";
-
-    protected Controleur controleur;
-    double mouseX;
-    double mouseY;
-
-    int colorX = 25;
-    int colorY = 15;
+    private Controleur controleur;
+    private int nbMunition;
+    private double mouseX;
+    private double mouseY;
+    private static int colorX = 25;
+    private static int colorY = 15;
 
     public View(Controleur controleur) {
 
@@ -43,9 +42,12 @@ public class View extends JFrame {
         this.controleur = controleur;
 
         Modele m = controleur.getModele();
-        Niveau n = m.getNiveau();
         Balle b = m.getBalle();
         Obstacle[] o = m.getObstacles();
+
+        Niveau n = m.getNiveau();
+        // nbMunititionition = n.getNiveau();
+        nbMunition = 4; // Pour le moment on met 10 munitions
 
         fond = new JPanel();
         fond.setLayout(new BorderLayout());
@@ -76,7 +78,7 @@ public class View extends JFrame {
 
         munition = new JPanel();
         munition.setLayout(new GridLayout(10, 1));
-        fondGauche.add(munition, BorderLayout.CENTER);
+        afficheMunition();
 
         leave = new JButton("Fermer");
         leave.addActionListener(new ActionListener() {
@@ -84,6 +86,8 @@ public class View extends JFrame {
                 System.exit(0);
             }
         });
+
+        fondGauche.add(munition, BorderLayout.CENTER);
         fondGauche.add(leave, BorderLayout.SOUTH);
 
         fond.add(fondGauche, BorderLayout.WEST);
@@ -160,5 +164,19 @@ public class View extends JFrame {
         double angle1 = Math.atan2(mouseY - 0, mouseX - pointX);
         double angle2 = Math.atan2(0, -pointX);
         angle = (int) Math.toDegrees(angle2 - angle1);
+    }
+
+    public void afficheMunition() {
+        for (int i = 0; i < 10; i++) {
+            JPanel panel = new JPanel();
+            panel.setLayout(new BorderLayout());
+            panel.setBorder(BorderFactory.createLineBorder(Color.black));
+            if (i > nbMunition + 1) {
+                panel.setBackground(Color.blue);
+            } else {
+                panel.setBackground(Color.red);
+            }
+            munition.add(panel);
+        }
     }
 }
