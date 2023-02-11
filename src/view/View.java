@@ -22,7 +22,6 @@ public class View extends JFrame {
     private boolean balleEnJeu = false;
     private int angle;
     private String chemin = System.getProperty("user.dir") + "/ressources/";
-    private Niveau niveau = new Niveau(3);
 
     protected Controleur controleur;
     double mouseX;
@@ -42,7 +41,11 @@ public class View extends JFrame {
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setUndecorated(true); // nécessaire sinon this.getHeight et this.getWidth renvoie 0
         this.controleur = controleur;
-        // Modele m = controleur.getModele();
+
+        Modele m = controleur.getModele();
+        Niveau n = m.getNiveau();
+        Balle b = m.getBalle();
+        Obstacle[] o = m.getObstacles();
 
         fond = new JPanel();
         fond.setLayout(new BorderLayout());
@@ -56,8 +59,6 @@ public class View extends JFrame {
             }
         };
 
-
-        
         puit = new JLabel(new ImageIcon(chemin + "puit.png"));
         puit.setLocation(partie.getWidth() / 2 - puit.getWidth() / 2, partie.getHeight() - puit.getHeight());
 
@@ -131,9 +132,9 @@ public class View extends JFrame {
         Rectangle rect2 = (new Rectangle(partie.getWidth() / 2 - widthBase / 10, heightBase / 3, widthBase / 5,
                 heightBase / 2));
 
-        g2d.rotate(Math.toRadians(90-angle), partie.getWidth() / 2, 0);
+        g2d.rotate(Math.toRadians(90 - angle), partie.getWidth() / 2, 0);
         g2d.draw(rect2);
-        g2d.rotate(Math.toRadians(angle-90), partie.getWidth() / 2, 0);
+        g2d.rotate(Math.toRadians(angle - 90), partie.getWidth() / 2, 0);
         // On annule la rotation après avoir dessiner le rectangle pour que seule le
         // bout du partie rotate
 
@@ -142,11 +143,12 @@ public class View extends JFrame {
         double y = (5 * heightBase / 6) * Math.cos(theta) - 10/* Height balle */;
         // Pour calculer nouvelles coordonnées de la balle après rotaion
 
-
-        for(int i = 0; i <niveau.list_peg.size();i++){
-            g.fillOval((int)niveau.list_peg.get(i).getX(), (int)niveau.list_peg.get(i).getY(), (int)niveau.list_peg.get(i).rayon, (int)niveau.list_peg.get(i).rayon);
+        for (int i = 0; i < controleur.getModele().getNiveau().list_peg.size(); i++) {
+            g.fillOval((int) controleur.getModele().getNiveau().list_peg.get(i).getX(),
+                    (int) controleur.getModele().getNiveau().list_peg.get(i).getY(),
+                    (int) controleur.getModele().getNiveau().list_peg.get(i).rayon,
+                    (int) controleur.getModele().getNiveau().list_peg.get(i).rayon);
         }
-
 
         g2d.dispose();
     }
