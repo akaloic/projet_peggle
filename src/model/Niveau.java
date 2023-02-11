@@ -12,6 +12,16 @@ public class Niveau {
     protected void cercle(double x, double y, ArrayList<Pegs> list, int pegUsed){
 
     }
+    protected void diagonal(double x, double y, ArrayList<Pegs> list, int pegUsed, int distance, String direction){
+        double nvx=x;
+        double nvy=y;
+        for(int i=0; i<pegUsed;i++){
+            Pegs p = new Pegs(nvx, nvy, 1, 25);
+            list.add(p);
+            nvx=direction.equals("gauche")?nvx-distance:nvx+distance;
+            nvy+=distance;
+        }
+    }
 
     protected void carres(double x, double y, ArrayList<Pegs> list, int pegCote){
         lignes(x, y, list, pegCote+2, 50);
@@ -54,11 +64,27 @@ public class Niveau {
         carres(600, 600, list_peg, 1);
         carres(125, 700, list_peg, 0);
     }
+    protected void niveau_3(){
+        diagonal(100, 200, list_peg, 5, 50,"droite");
+        diagonal(600, 200, list_peg, 6, 50,"gauche");
+        diagonal(600, 200, list_peg, 6, 50,"droite");
+        diagonal(1100, 200, list_peg, 5, 50,"gauche");
+
+        diagonal(100, 400, list_peg, 5, 50,"droite");
+        diagonal(600, 400, list_peg, 6, 50,"gauche");
+        diagonal(600, 400, list_peg, 6, 50,"droite");
+        diagonal(1100, 400, list_peg, 5, 50,"gauche");
+
+        lignes(400, 700, list_peg, 9, 50);
+        lignes(100, 200, list_peg, 20, 50);
+
+    }
 
     public Niveau(int i){
         switch (i){
             case 1 : niveau_1();break;
             case 2 : niveau_2();break;
+            case 3 : niveau_3();break;
         }
     }
 }
