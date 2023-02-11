@@ -21,6 +21,10 @@ public class Niveau {
                 niveau_3();
                 niveau = 3;
                 break;
+            case 4:
+                niveau_4();
+                niveau = 4;
+                break;
         }
     }
 
@@ -63,6 +67,21 @@ public class Niveau {
             nvy += distance;
         }
     }
+    protected void triangle(double x, double y, ArrayList<Pegs> list, int lignes, int distance){
+        double nvx=x;
+        double nvy=y;
+        for(int i=0;i<=lignes;i++){
+            lignes(nvx, nvy, list, i, distance);
+            nvx-=(distance/2);
+            nvy+=distance;
+        }
+    }
+    protected void triangleVide(double x, double y, ArrayList<Pegs> list, int lignes, int distance){
+        list.add(new Pegs(x, y, 1, 25));
+        diagonal(x-(distance/2), y+distance, list, lignes-1, distance/2, "gauche");
+        diagonal(x+(distance/2), y+distance, list, lignes-1, distance/2, "droite");
+        //TODO : a finir, essayer une autre approche que 2 diagonals et une ligne en bas
+    }
 
     protected void niveau_1() {
         lignes(125, 300, list_peg, 20, 50);
@@ -96,6 +115,12 @@ public class Niveau {
         lignes(400, 700, list_peg, 9, 50);
         lignes(100, 200, list_peg, 20, 50);
 
+    }
+    protected void niveau_4(){
+        triangle(625, 300, list_peg, 5, 50);
+        triangleVide(625, 600, list_peg, 5, 50);
+        triangle(225, 600, list_peg, 5, -50);
+        triangle(925, 600, list_peg, 5, -50);
     }
 
     public ArrayList<Pegs> getList() {
