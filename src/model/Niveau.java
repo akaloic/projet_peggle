@@ -21,11 +21,15 @@ public class Niveau {
                 niveau_3();
                 niveau = 3;
                 break;
+            case 4:
+                niveau_4();
+                niveau = 4;
+                break;
+            case 5:
+                niveau_5();
+                niveau = 5;
+                break;
         }
-    }
-
-    protected void cercle(double x, double y, ArrayList<Pegs> list, int pegUsed) {
-
     }
 
     protected void diagonal(double x, double y, ArrayList<Pegs> list, int pegUsed, int distance, String direction) {
@@ -63,6 +67,53 @@ public class Niveau {
             nvy += distance;
         }
     }
+    protected void triangle(double x, double y, ArrayList<Pegs> list, int lignes, int distance){
+        double nvx=x;
+        double nvy=y;
+        for(int i=0;i<=lignes;i++){
+            lignes(nvx, nvy, list, i, distance);
+            nvx-=(distance/2);
+            nvy+=distance;
+        }
+    }
+    protected void triangleVide(double x, double y, ArrayList<Pegs> list, int lignes, int distance){
+        list.add(new Pegs(x, y, 1, 25));
+        diagonal(x-(distance/2), y+distance, list, lignes-1, distance/2, "gauche");
+        diagonal(x+(distance/2), y+distance, list, lignes-1, distance/2, "droite");
+        //TODO : a finir, essayer une autre approche que 2 diagonals et une ligne en bas
+    }
+
+    // Peut-être simplifié ou réutilisé pour le cercle
+    protected void losange(double x, double y, ArrayList<Pegs> list, int pegUsed, int distance) {
+        list.add(new Pegs(x, y, 1, 25));
+        double nvx=x+distance;
+        double nvy=y+distance;
+        double ny=y-distance;
+        for (int i=0;i<pegUsed/2;i++){
+            list.add(new Pegs(nvx,nvy,1,25));
+            list.add(new Pegs(nvx,ny,1,25));
+            nvx+=distance;
+            nvy+=distance;
+            ny-=distance;
+        }
+        nvy-=distance*2;
+        ny+=distance*2;
+        for (int i=0;i<pegUsed/2;i++){
+            list.add(new Pegs(nvx,nvy,1,25));
+            list.add(new Pegs(nvx,ny,1,25));
+            nvx+=distance;
+            nvy-=distance;
+            ny+=distance;
+        }
+    }
+
+    protected void carresRemplis(double x, double y, ArrayList<Pegs> list, int pegCote, int distance){
+        double nvy=y;
+        for (int i=0;i<pegCote;i++){
+            lignes(x, nvy, list, pegCote, distance);
+            nvy+=distance;
+        }
+    }
 
     protected void niveau_1() {
         lignes(125, 300, list_peg, 20, 50);
@@ -96,6 +147,20 @@ public class Niveau {
         lignes(400, 700, list_peg, 9, 50);
         lignes(100, 200, list_peg, 20, 50);
 
+    }
+    protected void niveau_4(){
+        triangle(625, 300, list_peg, 5, 50);
+        triangleVide(625, 600, list_peg, 5, 50);
+        triangle(225, 600, list_peg, 5, -50);
+        triangle(925, 600, list_peg, 5, -50);
+    }
+
+    protected void niveau_5(){
+        carresRemplis(550, 400, list_peg, 4,100);
+        losange(100, 300, list_peg, 6,50);
+        losange(1000, 300, list_peg, 6,50);
+        losange(1000, 800, list_peg, 6,50);
+        losange(100, 800, list_peg, 6,50);
     }
 
     public ArrayList<Pegs> getList() {

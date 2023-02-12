@@ -2,10 +2,15 @@ package view;
 
 import controller.*;
 import model.*;
+
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 public class View extends JFrame {
 
@@ -154,13 +159,34 @@ public class View extends JFrame {
 
         Arc2D.Double arc2 = new Arc2D.Double(partie.getWidth() / 2 - widthBase / 2, -heightBase / 2, widthBase,
                 heightBase, 180, 180, Arc2D.OPEN);
-        g2d.draw(arc2);
+
+        BufferedImage img = new BufferedImage(150,150,BufferedImage.TYPE_INT_RGB);
+        try {
+            img = ImageIO.read(new File("ressources/roue.png"));
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        g2d.setClip(arc2);
+        g2d.drawImage(img, partie.getWidth()/2-85, -85,170,170, partie);
+        //g2d.dispose();
+        //g2d.draw(arc2);
+
+        try {
+            img = ImageIO.read(new File("ressources/canon.png"));
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 
         Rectangle rect2 = (new Rectangle(partie.getWidth() / 2 - widthBase / 10, heightBase / 3, widthBase / 5,
                 heightBase / 2));
 
         g2d.rotate(Math.toRadians(90 - angle), partie.getWidth() / 2, 0);
-        g2d.draw(rect2);
+        g2d.setClip(null);
+        g2d.drawImage(img, partie.getWidth()/2-85, -55,170,170, partie);
+        //g2d.draw(rect2);
         g2d.rotate(Math.toRadians(angle - 90), partie.getWidth() / 2, 0);
         // On annule la rotation après avoir dessiner le rectangle pour que seule le
         // bout du partie rotate
