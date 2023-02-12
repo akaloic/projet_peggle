@@ -2,6 +2,7 @@ package controller;
 
 import view.*;
 import model.*;
+import model.Modele;
 
 public class Controleur {
 

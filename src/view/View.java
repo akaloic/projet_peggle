@@ -1,6 +1,6 @@
 package view;
 
-import controller.*;
+import controller.Controleur;
 import model.*;
 
 import javax.imageio.ImageIO;
