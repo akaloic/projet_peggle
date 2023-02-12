@@ -62,6 +62,8 @@ public class View extends JFrame {
             public void paint(Graphics g) {
                 super.paint(g);
                 dessineCanon(g);
+                drawBall(g);
+
             }
         };
         partie.setLayout(new BorderLayout());
@@ -99,15 +101,18 @@ public class View extends JFrame {
         this.add(fond);
         this.setVisible(true);
 
+        
         timer = new Timer(30, new ActionListener() {
+            double t = 0;
             public void actionPerformed(ActionEvent e) {
                 // canon
                 colorX -= 1 % 25;
                 colorY -= 1 % 25;
                 calculeAngle();
-
+                t+=0.03;
                 // puit
                 placePuit();
+                //controleur.getModele().getBalle().update(0,t);
 
                 repaint();
             }
@@ -213,4 +218,11 @@ public class View extends JFrame {
             munition.add(panel);
         }
     }
+
+    public void drawBall(Graphics g){
+        Graphics g2d = g;
+        g2d.fillOval((int)controleur.getModele().getBalle().getX(), (int)controleur.getModele().getBalle().getY(), (int) controleur.getModele().getBalle().getRayon(), (int) controleur.getModele().getBalle().getRayon());
+        g2d.dispose();
+    }
+
 }

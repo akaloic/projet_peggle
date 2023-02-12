@@ -7,7 +7,7 @@ public class Modele {
     private Niveau niveau;
 
     public Modele() {
-        balle = new Balle(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+        balle = new Balle(5d,5d,0d);
         obstacles = new Obstacle[0];
         niveau = new Niveau(5);
     }

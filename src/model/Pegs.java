@@ -10,4 +10,8 @@ public class Pegs extends Obstacle{
         super(x, y, rayon,rayon, rayon, false, v);
         this.rayon=rayon;
     }
+
+    double getRayon(){
+        return this.rayon;
+    }
 }
