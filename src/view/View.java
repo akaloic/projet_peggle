@@ -192,8 +192,6 @@ public class View extends JFrame {
                     (int) controleur.getModele().getNiveau().list_peg.get(i).rayon,
                     (int) controleur.getModele().getNiveau().list_peg.get(i).rayon);
         }
-
-        g2d.dispose();
     }
 
     public void calculeAngle() {
