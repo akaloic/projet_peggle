@@ -95,6 +95,7 @@ public class View extends JFrame {
         this.add(fond);
         this.setVisible(true);
 
+        // --------------ANIMATION----------------------
         timer = new Timer(30, new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 seconde++;
@@ -121,6 +122,7 @@ public class View extends JFrame {
             }
         });
         timer.start();
+        // --------------ANIMATION----------------------
     }
 
     public void placePuit() {
