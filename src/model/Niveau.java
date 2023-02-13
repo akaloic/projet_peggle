@@ -127,10 +127,21 @@ public class Niveau {
     }
 
     protected void niveau_2() {
-        carres(125, 300, list_peg, 4);
-        carres(600, 200, list_peg, 3);
-        carres(600, 600, list_peg, 1);
-        carres(125, 700, list_peg, 0);
+        //carres du haut
+        carres(50, 200, list_peg, 5);
+        carres(400, 200, list_peg, 4);
+        carres(700, 200, list_peg, 3);
+        carres(950, 200, list_peg, 2);
+        carres(1150, 200, list_peg, 1);
+        //carres du bas
+        carres(950, 500, list_peg, 5);
+        carres(650, 550, list_peg, 4);
+        carres(400, 600, list_peg, 3);
+        carres(200, 650, list_peg, 2);
+        carres(50, 700, list_peg, 1);
+
+        
+
     }
 
     protected void niveau_3() {
