@@ -34,6 +34,8 @@ public class View extends JFrame {
     private static int colorX = 25;
     private static int colorY = 15;
     int seconde = 0;
+    private static float ratioX;
+    private static float ratioY;
 
     public View(Controleur controleur) {
 
@@ -98,7 +100,9 @@ public class View extends JFrame {
         // --------------GAUCHE---------------------
 
         this.add(fond);
-        this.setVisible(true);
+        this.setVisible(true);        
+        ratioX = (width-munition.getWidth())/1920f;
+        ratioY = height/1080f;
 
         // --------------ANIMATION----------------------
         timer = new Timer(30, new ActionListener() {
@@ -197,10 +201,10 @@ public class View extends JFrame {
         // Pour calculer nouvelles coordonnées de la balle après rotaion
 
         for (int i = 0; i < controleur.getModele().getNiveau().list_peg.size(); i++) {
-            g.fillOval((int) controleur.getModele().getNiveau().list_peg.get(i).getX(),
-                    (int) controleur.getModele().getNiveau().list_peg.get(i).getY(),
-                    (int) controleur.getModele().getNiveau().list_peg.get(i).rayon,
-                    (int) controleur.getModele().getNiveau().list_peg.get(i).rayon);
+            g.fillOval((int) (controleur.getModele().getNiveau().list_peg.get(i).getX()*ratioX),
+                    (int) (controleur.getModele().getNiveau().list_peg.get(i).getY()*ratioY),
+                    (int) (controleur.getModele().getNiveau().list_peg.get(i).rayon*ratioX),
+                    (int) (controleur.getModele().getNiveau().list_peg.get(i).rayon*ratioX));
         }
 
         g2d.dispose();
