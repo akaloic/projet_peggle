@@ -101,8 +101,8 @@ public class View extends JFrame {
 
         this.add(fond);
         this.setVisible(true);        
-        ratioX = (width-munition.getWidth())/1920f;
-        ratioY = height/1080f;
+        ratioX = (width-munition.getWidth())/2000f;
+        ratioY = height/1325f;
 
         // --------------ANIMATION----------------------
         timer = new Timer(30, new ActionListener() {
