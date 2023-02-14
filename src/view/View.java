@@ -92,7 +92,7 @@ public class View extends JFrame {
         });
 
         fondGauche.add(munition, BorderLayout.CENTER);
-        fondGauche.add(leave, BorderLayout.SOUTH);
+        //fondGauche.add(leave, BorderLayout.SOUTH);
 
         fond.add(fondGauche, BorderLayout.WEST);
         // --------------GAUCHE---------------------

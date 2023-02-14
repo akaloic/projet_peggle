@@ -2,6 +2,8 @@ package controller;
 
 import view.*;
 import model.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class Controleur {
 
@@ -11,6 +13,14 @@ public class Controleur {
     public Controleur() {
         modele = new Modele();
         view = new View(this);
+        view.addKeyListener(new KeyAdapter() {
+            public void keyPressed(KeyEvent e) {
+              int keyCode = e.getKeyCode();
+              if (keyCode == KeyEvent.VK_ENTER) {
+                System.out.println("kaboom");
+              }
+            }
+        });
 
     }
 
