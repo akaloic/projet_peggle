@@ -13,7 +13,8 @@ public class Controleur {
     public Controleur() {
         modele = new Modele();
         view = new View(this);
-        view.addKeyListener(new KeyAdapter() {
+        view.getPartie().requestFocus();//Pour empecher que le bouton leave le prenne
+        view.getPartie().addKeyListener(new KeyAdapter() {
             public void keyPressed(KeyEvent e) {
               int keyCode = e.getKeyCode();
               if (keyCode == KeyEvent.VK_ENTER) {

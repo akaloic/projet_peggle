@@ -92,7 +92,7 @@ public class View extends JFrame {
         });
 
         fondGauche.add(munition, BorderLayout.CENTER);
-        //fondGauche.add(leave, BorderLayout.SOUTH);
+        fondGauche.add(leave, BorderLayout.SOUTH);
 
         fond.add(fondGauche, BorderLayout.WEST);
         // --------------GAUCHE---------------------
@@ -232,5 +232,8 @@ public class View extends JFrame {
             panel.setBorder(BorderFactory.createLineBorder(Color.black));
             munition.add(panel);
         }
+    }
+    public JPanel getPartie(){
+        return this.partie;
     }
 }
