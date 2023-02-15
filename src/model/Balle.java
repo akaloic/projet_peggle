@@ -9,8 +9,8 @@ public class Balle {
     protected double y;
     protected double y0;
     protected double v0;
-    protected final double rayon = 250;
-    protected final double g = 9.81;
+    protected final double rayon = 25;
+    protected final double g = 300;
 
     
     public Balle(double x0, double y0, double v0) {
@@ -23,7 +23,7 @@ public class Balle {
     
     public void update(double angle, double t) {
       x =  Math.cos(Math.toRadians(angle))*v0*t+this.x0;
-      y = (g*t*t)/2 +v0*Math.sin(Math.toRadians(angle))*t + this.y0;
+      y = (g*t*t)/2 +(v0)*(Math.sin(Math.toRadians(angle)))*t + this.y0;
     }
     
     public double getX() {

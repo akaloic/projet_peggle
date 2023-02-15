@@ -8,6 +8,7 @@ public class Controleur {
 
     protected View view;
     protected Modele modele;
+    protected double angleTir;
 
     public Controleur() {
         modele = new Modele();
@@ -32,4 +33,13 @@ public class Controleur {
         this.modele = modele;
     }
     // ---------GETTER SETTER---------
+
+    public void tirer(){
+        this.angleTir=this.view.getAngle();
+        this.modele.setBalle(new Balle(600d,0d,500d));
+    }
+
+    public double getAngleTir(){
+        return this.angleTir;
+    }
 }

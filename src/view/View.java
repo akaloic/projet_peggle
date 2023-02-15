@@ -101,18 +101,26 @@ public class View extends JFrame {
         this.add(fond);
         this.setVisible(true);
 
+        partie.addMouseListener(new MouseAdapter(){
+            public void mouseClicked(MouseEvent e){
+                controleur.tirer(); 
+            }
+        });
+
         
         timer = new Timer(30, new ActionListener() {
             double t = 0;
             public void actionPerformed(ActionEvent e) {
                 // canon
+                System.out.println(t);
                 colorX -= 1 % 25;
                 colorY -= 1 % 25;
                 calculeAngle();
                 t+=0.03;
                 // puit
                 placePuit();
-                //controleur.getModele().getBalle().update(0,t);
+
+                if(controleur.getModele().getBalle()!=null) controleur.getModele().getBalle().update(controleur.getAngleTir(),t);
 
                 repaint();
             }
@@ -219,8 +227,13 @@ public class View extends JFrame {
 
     public void drawBall(Graphics g){
         Graphics g2d = g;
-        g2d.fillOval((int)controleur.getModele().getBalle().getX(), (int)controleur.getModele().getBalle().getY(), (int) controleur.getModele().getBalle().getRayon(), (int) controleur.getModele().getBalle().getRayon());
-        g2d.dispose();
+        if(this.controleur.getModele().getBalle()!=null){
+            g2d.fillOval((int)controleur.getModele().getBalle().getX(), (int)controleur.getModele().getBalle().getY(), (int) controleur.getModele().getBalle().getRayon(), (int) controleur.getModele().getBalle().getRayon());
+        }
+    }
+
+    public double getAngle(){
+        return this.angle;
     }
 
 }
