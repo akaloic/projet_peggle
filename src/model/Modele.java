@@ -31,13 +31,4 @@ public class Modele {
     
     // ---------GETTER SETTER---------
     
-    public void setBalle(Balle balle) {
-        this.balle = balle;
-    }
-    public void setCanon(Canon canon) {
-        this.canon = canon;
-    }
-    public void setObstacles(Obstacle[] obstacles) {
-        this.obstacles = obstacles;
-    }
 }
