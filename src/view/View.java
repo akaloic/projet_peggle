@@ -5,6 +5,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.ActionEvent;
 import model.*;
+import model.sousObstacle.ObstacleRectangulaire;
+import model.sousObstacle.PegRond;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.event.MouseInputListener;
@@ -77,8 +80,6 @@ public class View extends JFrame implements MouseInputListener{
 
         start.addActionListener(e->{
             changerPanel(choixNiveauPane(this.controleur));
-        //     son.stop();
-        //    LancerMusic("PeggleChoixNiv.wav");
         });
     }
     public JPanel JeuPanel(Controleur controleur){
@@ -96,6 +97,9 @@ public class View extends JFrame implements MouseInputListener{
             public void paint(Graphics g) {
                 super.paint(g);
                 dessineCanon(g);
+                // dessinePegRond(g); // ca marche
+                // dessineObstacleRebond(g); // ca marche
+                // dessineObstacleRect(g); // ca marche
             }
         };
         partie.setLayout(new BorderLayout());
@@ -180,7 +184,7 @@ public class View extends JFrame implements MouseInputListener{
         choixNiv.add(precedent);
         precedent.addActionListener(e->{
             this.invalidate();
-            // son.stop();
+
             new View(this.controleur);
         });
         JButton niveau1 =  new JButton("Niveau 1");
@@ -206,6 +210,22 @@ public class View extends JFrame implements MouseInputListener{
             directionX = -5;
         if (puit.getX() < -partie.getWidth() / 2)
             directionX = 5;
+    }
+    public void dessinePegRond(Graphics g){
+        Graphics2D g2d = (Graphics2D) g;
+        g2d.setColor(Color.PINK);
+        g2d.fillOval(0,0, 40,40);
+    }
+
+    public void dessineObstacleRect(Graphics g){
+        Graphics2D g2d = (Graphics2D) g;
+        g2d.setColor(Color.PINK);
+        g2d.fillRect(50,50, 50,50);
+    }
+    public void dessineObstacleRebond(Graphics g){
+        Graphics2D g2d = (Graphics2D) g;
+        g2d.setColor(Color.PINK);
+        g2d.fillRect(100,100, 50,50);
     }
 
     public void dessineCanon(Graphics g) {
@@ -271,7 +291,7 @@ public class View extends JFrame implements MouseInputListener{
                     (int) (controleur.getModele().getNiveau().list_peg.get(i).rayon*ratioX));
         }
 
-        g2d.dispose();
+        // g2d.dispose();
     }
 
     public void calculeAngle() {
