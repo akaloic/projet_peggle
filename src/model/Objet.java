@@ -15,6 +15,13 @@ public abstract class Objet {
     this.hauteur = hauteur;
     this.angle = angle;
   }
+  public Objet() {
+    this.x =0;
+    this.y =0;
+    this.largeur =0;
+    this.hauteur =0;
+    this.angle =0;
+  }
 
   // ---------GETTER SETTER---------
   public double getX() {

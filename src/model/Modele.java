@@ -1,21 +1,26 @@
 package model;
 
-import model.sousObjet.Canon;
-import model.sousObjet.Balle;
-import model.sousObjet.Obstacle;
-
 public class Modele {
 
-    protected Balle balle;
-    protected Obstacle[] obstacles;
-    protected Canon canon;
+    private Balle balle;
+    private Obstacle[] obstacles;
+    private Niveau niveau;
 
     public Modele() {
-        balle = new Balle(100, 100, 50, 50, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+        balle = new Balle(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
         obstacles = new Obstacle[0];
+        niveau = new Niveau(2);
     }
 
     // ---------GETTER SETTER---------
+    public Niveau getNiveau() {
+        return niveau;
+    }
+
+    public void setNiveau(Niveau niveau) {
+        this.niveau = niveau;
+    }
+
     public Balle getBalle() {
         return balle;
     }
@@ -24,11 +29,10 @@ public class Modele {
     public Obstacle[] getObstacles() {
         return obstacles;
     }
-    
-    public Canon getCanon() {
-        return canon;
+
+    public void setObstacles(Obstacle[] obstacles) {
+        this.obstacles = obstacles;
     }
-    
     // ---------GETTER SETTER---------
     
 }

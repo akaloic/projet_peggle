@@ -11,6 +11,7 @@ public class Controleur {
     public Controleur() {
         modele = new Modele();
         view = new View(this);
+
     }
 
     // ---------GETTER SETTER---------
@@ -30,5 +31,4 @@ public class Controleur {
         this.modele = modele;
     }
     // ---------GETTER SETTER---------
-
 }
