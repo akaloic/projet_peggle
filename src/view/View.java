@@ -205,7 +205,7 @@ public class View extends JFrame implements MouseInputListener{
                 char lettre = nameNiv.getName().charAt(nameNiv.getName().length()-1);
                 numNiveau = Integer.parseInt(""+lettre);
                 changerPanel(JeuPanel(this.controleur));
-                System.out.println(numNiveau);
+                son.stop();
             });
         }
         return choixNiv;
