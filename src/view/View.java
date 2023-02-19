@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.ActionEvent;
 import model.*;
+import model.sousObstacle.ObstacleRebondissant;
 import model.sousObstacle.ObstacleRectangulaire;
 import model.sousObstacle.PegRond;
 
@@ -49,6 +50,7 @@ public class View extends JFrame implements MouseInputListener{
 
     private int width;
     private int height;
+    private int numNiveau;
 
     public View(Controleur controleur) {
 
@@ -98,9 +100,12 @@ public class View extends JFrame implements MouseInputListener{
             public void paint(Graphics g) {
                 super.paint(g);
                 dessineCanon(g);
-                dessinePegRond(g); // ca marche
-                dessineObstacleRebond(g); // ca marche
-                dessineObstacleRect(g); // ca marche
+                PegRond pRond= new PegRond(0,0);
+                dessinePegRond(g,pRond); // ca marche
+                ObstacleRebondissant  oRebond = new ObstacleRebondissant(100, 100);
+                dessineObstacleRebond(g,oRebond); // ca marche
+                ObstacleRectangulaire oR = new ObstacleRectangulaire(50,50);
+                dessineObstacleRect(g,oR); // ca  marche
             }
         };
         partie.setLayout(new BorderLayout());
@@ -186,12 +191,23 @@ public class View extends JFrame implements MouseInputListener{
             son.stop();
             new View(this.controleur);
         });
-        JButton niveau1 =  new JButton("Niveau 1");
-        niveau1.setBounds(precedent.getWidth()*2, precedent.getHeight()*2, 100, 100);
-        niveau1.addActionListener(e->{
-            changerPanel(JeuPanel(this.controleur));
-        });
-        choixNiv.add(niveau1);  
+        int xNiv = precedent.getWidth()*2;
+        int yNiv = precedent.getHeight()*2;
+        int wNiv = 100;
+        int hNiv = 100;
+        for (int i = 1 ; i < 6 ; i++){;
+            JButton nameNiv =  new JButton("Niveau "+i);
+            nameNiv.setBounds(xNiv, yNiv, wNiv, yNiv);
+            xNiv += 2*wNiv;
+            choixNiv.add(nameNiv);
+            nameNiv.setName("niveau"+i);
+            nameNiv.addActionListener(e->{
+                char lettre = nameNiv.getName().charAt(nameNiv.getName().length()-1);
+                numNiveau = Integer.parseInt(""+lettre);
+                changerPanel(JeuPanel(this.controleur));
+                System.out.println(numNiveau);
+            });
+        }
         return choixNiv;
     }
     public void changerPanel(JPanel pane){
@@ -210,21 +226,21 @@ public class View extends JFrame implements MouseInputListener{
         if (puit.getX() < -partie.getWidth() / 2)
             directionX = 5;
     }
-    public void dessinePegRond(Graphics g){
+    public void dessinePegRond(Graphics g,PegRond peg){
         Graphics2D g2d = (Graphics2D) g;
         g2d.setColor(Color.PINK);
-        g2d.fillOval(0,0, 40,40);
+        g2d.fillOval((int)peg.getX(),(int)peg.getY(), (int)peg.getWidth(),(int)peg.getHeight());
     }
 
-    public void dessineObstacleRect(Graphics g){
+    public void dessineObstacleRect(Graphics g,ObstacleRectangulaire oR){
         Graphics2D g2d = (Graphics2D) g;
         g2d.setColor(Color.PINK);
-        g2d.fillRect(50,50, 75,50);
+        g2d.fillRect((int)oR.getX(),(int)oR.getY(), (int)oR.getWidth(),(int)oR.getHeight());
     }
-    public void dessineObstacleRebond(Graphics g){
+    public void dessineObstacleRebond(Graphics g, ObstacleRebondissant oReb){
         Graphics2D g2d = (Graphics2D) g;
         g2d.setColor(Color.PINK);
-        g2d.fillRect(100,100, 50,50);
+        g2d.fillRect((int)oReb.getX(),(int)oReb.getY(), (int)oReb.getWidth(),(int)oReb.getHeight());
     }
 
     public void dessineCanon(Graphics g) {
@@ -282,15 +298,13 @@ public class View extends JFrame implements MouseInputListener{
         double x = (partie.getWidth() / 2) - (5 * heightBase / 6) * Math.sin(theta) - 10/* Width balle */;
         double y = (5 * heightBase / 6) * Math.cos(theta) - 10/* Height balle */;
         // Pour calculer nouvelles coordonnées de la balle après rotaion
-
+        controleur.getModele().setNiveau(new Niveau(numNiveau));
         for (int i = 0; i < controleur.getModele().getNiveau().list_peg.size(); i++) {
             g.fillOval((int) (controleur.getModele().getNiveau().list_peg.get(i).getX()*ratioX),
                     (int) (controleur.getModele().getNiveau().list_peg.get(i).getY()*ratioY),
                     (int) (controleur.getModele().getNiveau().list_peg.get(i).rayon*ratioX),
                     (int) (controleur.getModele().getNiveau().list_peg.get(i).rayon*ratioX));
         }
-
-        // g2d.dispose();
     }
 
     public void calculeAngle() {
@@ -383,5 +397,8 @@ public class View extends JFrame implements MouseInputListener{
     public void mouseMoved(MouseEvent e) {
         // TODO Auto-generated method stub
         
+    }
+    public int getNumNiveau(){
+        return this.numNiveau;
     }
 }

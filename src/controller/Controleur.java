@@ -7,7 +7,7 @@ public class Controleur {
 
     protected View view;
     protected Modele modele;
-
+    
     public Controleur() {
         modele = new Modele();
         view = new View(this);

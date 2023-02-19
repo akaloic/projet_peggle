@@ -1,10 +1,10 @@
 package model.sousObstacle;
 
 import model.Obstacle;
+import model.Pegs;
 
-public class  PegRond extends Obstacle{
-    public PegRond(double x, double y, double largeur, double hauteur, boolean estMort, int vie) {
-        super(x, y, largeur, hauteur, estMort, vie);
-        //TODO Auto-generated constructor stub
+public class  PegRond extends Pegs{
+    public PegRond(double x, double y) {
+        super(x,y,100,40);
     }
 }
