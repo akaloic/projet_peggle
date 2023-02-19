@@ -52,7 +52,7 @@ public class View extends JFrame implements MouseInputListener{
 
     public View(Controleur controleur) {
 
-        String urlDuSon = "view/SonsWav/Accueil.wav";
+        String urlDuSon = "../ressources/SonsWav/Accueil.wav";
         LancerMusic(urlDuSon);
         Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
         width = (int) size.getWidth();
@@ -172,7 +172,7 @@ public class View extends JFrame implements MouseInputListener{
     }
 
     public JPanel choixNiveauPane(Controleur controleur){
-        String url = "view/SonsWav/ChoixNiveau.wav";
+        String url = "../ressources/SonsWav/ChoixNiveau.wav";
         LancerMusic(url);
         JPanel choixNiv = new JPanel();
         choixNiv.setBackground(Color.BLUE); 
