@@ -52,8 +52,8 @@ public class View extends JFrame implements MouseInputListener{
 
     public View(Controleur controleur) {
 
-        // String urlDuSon = "SonsWav/Peggle.wav";
-        // LancerMusic(urlDuSon);
+        String urlDuSon = "view/SonsWav/Accueil.wav";
+        LancerMusic(urlDuSon);
         Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
         width = (int) size.getWidth();
         height = (int) size.getHeight();
@@ -79,6 +79,7 @@ public class View extends JFrame implements MouseInputListener{
         pane.add(start);
 
         start.addActionListener(e->{
+            son.stop();
             changerPanel(choixNiveauPane(this.controleur));
         });
     }
@@ -97,9 +98,9 @@ public class View extends JFrame implements MouseInputListener{
             public void paint(Graphics g) {
                 super.paint(g);
                 dessineCanon(g);
-                // dessinePegRond(g); // ca marche
-                // dessineObstacleRebond(g); // ca marche
-                // dessineObstacleRect(g); // ca marche
+                dessinePegRond(g); // ca marche
+                dessineObstacleRebond(g); // ca marche
+                dessineObstacleRect(g); // ca marche
             }
         };
         partie.setLayout(new BorderLayout());
@@ -171,10 +172,8 @@ public class View extends JFrame implements MouseInputListener{
     }
 
     public JPanel choixNiveauPane(Controleur controleur){
-        int widthNiv = 100;
-        int heightNiv = 100;
-        int xNiv = 0;
-        int yNiv = 0;
+        String url = "view/SonsWav/ChoixNiveau.wav";
+        LancerMusic(url);
         JPanel choixNiv = new JPanel();
         choixNiv.setBackground(Color.BLUE); 
         choixNiv.setLayout(null);
@@ -184,7 +183,7 @@ public class View extends JFrame implements MouseInputListener{
         choixNiv.add(precedent);
         precedent.addActionListener(e->{
             this.invalidate();
-
+            son.stop();
             new View(this.controleur);
         });
         JButton niveau1 =  new JButton("Niveau 1");
@@ -220,7 +219,7 @@ public class View extends JFrame implements MouseInputListener{
     public void dessineObstacleRect(Graphics g){
         Graphics2D g2d = (Graphics2D) g;
         g2d.setColor(Color.PINK);
-        g2d.fillRect(50,50, 50,50);
+        g2d.fillRect(50,50, 75,50);
     }
     public void dessineObstacleRebond(Graphics g){
         Graphics2D g2d = (Graphics2D) g;
