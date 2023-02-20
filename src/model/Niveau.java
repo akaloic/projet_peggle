@@ -15,6 +15,10 @@ public class Niveau {
                 niveau_1();
                 niveau = 1;
                 break;
+            case 2:
+                niveau_2();
+                niveau = 2;
+                break;
         }
     }
 
@@ -97,7 +101,7 @@ public class Niveau {
         double nvy=y;
         for (int i=0;i<pegCote;i++){
             lignes(x, nvy, list, pegCote);
-            nvy+=100;
+            nvy+=getRayon();
         }
     }
 
@@ -105,10 +109,14 @@ public class Niveau {
         for(int i=0;i<6;i++){
             int pegUsed= i%2==0?20:19;
             double l= Math.pow(-1, i);
-            lignes(50-25*l, 400+(100*i), list_peg, pegUsed);
+            lignes(50-25*l, 400+(getRayon()*2*i), list_peg, pegUsed);
         }
         ObstacleRectangulaire obr = new ObstacleRectangulaire(25, 1100);
         list_peg.add(obr);
+    }
+
+    protected void niveau_2(){
+        diagonal(25, 400, list_peg, 5, "droite");
     }
 
     public ArrayList<Obstacle> getList() {
@@ -117,5 +125,9 @@ public class Niveau {
 
     public int getNiveau() {
         return niveau;
+    }
+    public double getRayon(){
+        Pegs p = new Pegs(niveau, niveau);
+        return p.getRayon();
     }
 }

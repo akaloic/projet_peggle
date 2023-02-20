@@ -1,7 +1,7 @@
 package model;
 
 public class Pegs extends Obstacle{
-    public double rayon=50;
+    private double rayon=50;
     public Pegs(int v,double r){
         super(v);
     }
