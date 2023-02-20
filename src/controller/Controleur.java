@@ -35,8 +35,9 @@ public class Controleur {
     // ---------GETTER SETTER---------
 
     public void tirer(){
+        this.modele.setBalle(null);
         this.angleTir=this.view.getAngle();
-        this.modele.setBalle(new Balle(600d,0d,500d));
+        this.modele.setBalle(new Balle(600d,0d,200d));
     }
 
     public double getAngleTir(){

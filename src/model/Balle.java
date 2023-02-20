@@ -10,7 +10,7 @@ public class Balle {
     protected double y0;
     protected double v0;
     protected final double rayon = 25;
-    protected final double g = 300;
+    protected final double g = 150;
 
     
     public Balle(double x0, double y0, double v0) {

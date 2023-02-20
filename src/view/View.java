@@ -112,7 +112,6 @@ public class View extends JFrame {
             double t = 0;
             public void actionPerformed(ActionEvent e) {
                 // canon
-                System.out.println(t);
                 colorX -= 1 % 25;
                 colorY -= 1 % 25;
                 calculeAngle();
@@ -120,7 +119,7 @@ public class View extends JFrame {
                 // puit
                 placePuit();
 
-                if(controleur.getModele().getBalle()!=null) controleur.getModele().getBalle().update(controleur.getAngleTir(),t);
+                if(controleur.getModele().getBalle()!=null) controleur.getModele().getBalle().update(180-controleur.getAngleTir(),t);
 
                 repaint();
             }
