@@ -52,6 +52,16 @@ public class View extends JFrame implements MouseInputListener{
     private int height;
     private int numNiveau;
 
+         /*Pour la balle à effacer plus tard */
+    int x = 0;
+    int y = 0;
+    int ballWidth =20;
+    int ballHeight = 20;
+    int max_x,max_y;
+    int speedX = 10;
+    int speedY = 10;
+            /*fin balle */
+
     public View(Controleur controleur) {
 
         String urlDuSon = "../ressources/SonsWav/Accueil.wav";
@@ -106,6 +116,8 @@ public class View extends JFrame implements MouseInputListener{
                 dessineObstacleRebond(g,oRebond); // ca marche
                 ObstacleRectangulaire oR = new ObstacleRectangulaire(50,50);
                 dessineObstacleRect(g,oR); // ca  marche
+
+                dessineBalle(g); //temporaire à effacer plus tard
             }
         };
         partie.setLayout(new BorderLayout());
@@ -148,7 +160,7 @@ public class View extends JFrame implements MouseInputListener{
         // --------------ANIMATION----------------------
         timer = new Timer(30, new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                seconde++;
+                // seconde++;
 
                 // canon
                 colorX -= 1 % 25;
@@ -241,6 +253,26 @@ public class View extends JFrame implements MouseInputListener{
         Graphics2D g2d = (Graphics2D) g;
         g2d.setColor(Color.PINK);
         g2d.fillRect((int)oReb.getX(),(int)oReb.getY(), (int)oReb.getWidth(),(int)oReb.getHeight());
+    }
+    public void dessineBalle(Graphics g){ //temporaire à effacer plus tard
+        Graphics2D g2d = (Graphics2D) g;
+
+        max_x = partie.getWidth()-ballWidth;
+        max_y = partie.getHeight()-ballHeight;
+
+        g2d.setColor(Color.RED);
+        g.fillOval(x,y,ballWidth,ballHeight);
+        if(x>max_x || x<0){
+            speedX = -speedX;
+        }
+        if(y>max_y || y<0){
+            speedY = -speedY;
+        }
+
+        
+        x = x+speedX;
+        y = y+speedY;
+
     }
 
     public void dessineCanon(Graphics g) {
