@@ -64,8 +64,8 @@ public class View extends JFrame implements MouseInputListener{
 
     public View(Controleur controleur) {
 
-        String urlDuSon = "/ressources/SonsWav/Accueil.wav";
-        LancerMusic(urlDuSon);
+        // String urlDuSon = "/ressources/SonsWav/Accueil.wav";
+        // LancerMusic(urlDuSon);
         Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
         width = (int) size.getWidth();
         height = (int) size.getHeight();
@@ -91,7 +91,7 @@ public class View extends JFrame implements MouseInputListener{
         pane.add(start);
 
         start.addActionListener(e->{
-            son.stop();
+            // son.stop();
             changerPanel(choixNiveauPane(this.controleur));
         });
     }
@@ -189,8 +189,8 @@ public class View extends JFrame implements MouseInputListener{
     }
 
     public JPanel choixNiveauPane(Controleur controleur){
-        String url = "/ressources/SonsWav/ChoixNiveau.wav";
-        LancerMusic(url);
+        // String url = "/ressources/SonsWav/ChoixNiveau.wav";
+        // LancerMusic(url);
         JPanel choixNiv = new JPanel();
         choixNiv.setBackground(Color.BLUE); 
         choixNiv.setLayout(null);
@@ -200,7 +200,7 @@ public class View extends JFrame implements MouseInputListener{
         choixNiv.add(precedent);
         precedent.addActionListener(e->{
             this.invalidate();
-            son.stop();
+            // son.stop();
             new View(this.controleur);
         });
         int xNiv = precedent.getWidth()*2;
@@ -217,7 +217,7 @@ public class View extends JFrame implements MouseInputListener{
                 char lettre = nameNiv.getName().charAt(nameNiv.getName().length()-1);
                 numNiveau = Integer.parseInt(""+lettre);
                 changerPanel(JeuPanel(this.controleur));
-                son.stop();
+                // son.stop();
             });
         }
         return choixNiv;
