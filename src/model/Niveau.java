@@ -117,6 +117,7 @@ public class Niveau {
 
     protected void niveau_2(){
         diagonal(25, 400, list_peg, 5, "droite");
+        colonne(400, 400, list_peg, 5);
     }
 
     public ArrayList<Obstacle> getList() {
