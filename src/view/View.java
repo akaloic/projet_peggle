@@ -64,8 +64,8 @@ public class View extends JFrame implements MouseInputListener{
 
     public View(Controleur controleur) {
 
-        // String urlDuSon = "/ressources/SonsWav/Accueil.wav";
-        // LancerMusic(urlDuSon);
+        String urlDuSon = "ressources/SonsWav/Accueil.wav";
+        LancerMusic(urlDuSon);
         Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
         width = (int) size.getWidth();
         height = (int) size.getHeight();
@@ -297,7 +297,7 @@ public class View extends JFrame implements MouseInputListener{
 
         BufferedImage img = new BufferedImage(150,150,BufferedImage.TYPE_INT_RGB);
         try {
-            img = ImageIO.read(new File("/ressources/roue.png"));
+            img = ImageIO.read(new File("ressources/roue.png"));
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -308,7 +308,7 @@ public class View extends JFrame implements MouseInputListener{
         //g2d.draw(arc2);
 
         try {
-            img = ImageIO.read(new File("/ressources/canon.png"));
+            img = ImageIO.read(new File("ressources/canon.png"));
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
