@@ -111,13 +111,14 @@ public class View extends JFrame implements MouseInputListener{
                 super.paint(g);
                 dessineCanon(g);
                 PegRond pRond= new PegRond(0,0);
-                dessinePegRond(g,pRond); // ca marche
+                /*dessinePegRond(g,pRond); // ca marche
                 ObstacleRebondissant  oRebond = new ObstacleRebondissant(100, 100);
                 dessineObstacleRebond(g,oRebond); // ca marche
                 ObstacleRectangulaire oR = new ObstacleRectangulaire(50,50);
                 dessineObstacleRect(g,oR); // ca  marche
-
+*/
                 dessineBalle(g); //temporaire à effacer plus tard
+                
             }
         };
         partie.setLayout(new BorderLayout());
@@ -333,8 +334,8 @@ public class View extends JFrame implements MouseInputListener{
         for (int i = 0; i < controleur.getModele().getNiveau().list_peg.size(); i++) {
             g.fillOval((int) (controleur.getModele().getNiveau().list_peg.get(i).getX()*ratioX),
                     (int) (controleur.getModele().getNiveau().list_peg.get(i).getY()*ratioY),
-                    (int) (controleur.getModele().getNiveau().list_peg.get(i).rayon*ratioX),
-                    (int) (controleur.getModele().getNiveau().list_peg.get(i).rayon*ratioX));
+                    (int) (controleur.getModele().getNiveau().list_peg.get(i).getLargeur()*ratioX),
+                    (int) (controleur.getModele().getNiveau().list_peg.get(i).getLargeur()*ratioX));
         }
     }
 
