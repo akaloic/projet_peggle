@@ -35,9 +35,9 @@ public class Niveau {
 
     protected void carres(double x, double y, ArrayList<Obstacle> list, int pegCote) {
         lignes(x, y, list, pegCote + 2);
-        colonne(x, y + 50, list, pegCote);
-        colonne(x + ((pegCote + 1) * 50), y + 50, list, pegCote);
-        lignes(x, y + ((pegCote + 1) * 50), list, pegCote + 2);
+        colonne(x, y + getRayon()*2, list, pegCote);
+        colonne(x + ((pegCote + 1) * getRayon()*2), y + getRayon()*2, list, pegCote);
+        lignes(x, y + ((pegCote + 1) * getRayon()*2), list, pegCote + 2);
     }
 
     protected void lignes(double x, double y, ArrayList<Obstacle> list, int pegUsed) {
@@ -117,7 +117,8 @@ public class Niveau {
 
     protected void niveau_2(){
         diagonal(25, 400, list_peg, 5, "droite");
-        colonne(400, 400, list_peg, 5);
+        colonne(25+50*10, 400, list_peg, 5);
+        carres(25+50*12, 400, list_peg, 5);
     }
 
     public ArrayList<Obstacle> getList() {
