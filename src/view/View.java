@@ -273,7 +273,6 @@ public class View extends JFrame implements MouseInputListener{
 
         g2d.setClip(arc2);
         g2d.drawImage(img, partie.getWidth()/2-85, -85,170,170, partie);
-        //g2d.dispose();
         //g2d.draw(arc2);
 
         try {
