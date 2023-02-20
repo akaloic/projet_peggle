@@ -334,8 +334,8 @@ public class View extends JFrame implements MouseInputListener{
         for (int i = 0; i < controleur.getModele().getNiveau().list_peg.size(); i++) {
             g.fillOval((int) (controleur.getModele().getNiveau().list_peg.get(i).getX()*ratioX),
                     (int) (controleur.getModele().getNiveau().list_peg.get(i).getY()*ratioY),
-                    (int) (controleur.getModele().getNiveau().list_peg.get(i).getLargeur()*ratioX),
-                    (int) (controleur.getModele().getNiveau().list_peg.get(i).getLargeur()*ratioX));
+                    (int) (controleur.getModele().getNiveau().list_peg.get(i).getWidth()*ratioX),
+                    (int) (controleur.getModele().getNiveau().list_peg.get(i).getHeight()*ratioX));
         }
     }
 
