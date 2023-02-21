@@ -1,102 +1,45 @@
 package model;
 
-public class Balle extends Objet {
+import java.util.Timer;
 
-  protected double vitesseX;
-  protected double vitesseY;
+public class Balle {
+    
+    protected double x;
+    protected double x0;
+    protected double y;
+    protected double y0;
+    protected double v0;
+    protected final double rayon = 25;
+    protected final double g = 150;
 
-  protected double x0;
-  protected double y0;
-  protected double vitesseX0;
-  protected double vitesseY0;
+    
+    public Balle(double x0, double y0, double v0) {
+      this.x0 = x0;
+      this.x=x0;
+      this.y0 = y0;
+      this.y=y0;
+      this.v0=v0;
+    }
+    
+    public void update(double angle, double t) {
+      x =  Math.cos(Math.toRadians(angle))*v0*t+this.x0;
+      y = (g*t*t)/2 +(v0)*(Math.sin(Math.toRadians(angle)))*t + this.y0;
+    }
+    
+    public double getX() {
+      return x;
+    }
+    
+    public double getY() {
+      return y;
+    }
 
-  protected double accelerationX;
-  protected double accelerationY;
+    public double getRayon(){
+      return this.rayon;
+    }
+    
+    public boolean collision(Pegs o){
+      return (o.getRayon() + this.rayon)*(o.getRayon()+this.rayon) == (this.x-o.getX())*(this.x-o.getX()) + (this.y - o.getY())*(this.y - o.getY());
+    }
 
-  protected final double rayon;
-  protected final double masse;
-  protected final double g = 9.81; // L'accélération de la pesanteur standard
-
-  protected double forceAdded;
-
-  protected double degatsCommis = 50; //temporaire 
-  
-  public Balle(double x, double y, double largeur, double hauteur, double angle, double vitesseX, double vitesseY,
-      double x0, double y0, double vitesseX0, double vitesseY0, double accelerationX, double accelerationY,
-      double masse, double forceAdded) {
-
-    super(x, y, largeur, hauteur, angle);
-
-    this.vitesseX = vitesseX;
-    this.vitesseY = vitesseY;
-    this.x0 = x0;
-    this.y0 = y0;
-    this.vitesseX0 = vitesseX0;
-    this.vitesseY0 = vitesseY0;
-    this.accelerationX = accelerationX;
-    this.accelerationY = accelerationY;
-    this.rayon = largeur / 2;
-    this.masse = masse;
-    this.forceAdded = forceAdded;
   }
-  public double getWidth(){
-    return super.getLargeur();
-  }
-  public double getHeight(){
-    return super.getHauteur();
-  }
-  // ---------GETTER SETTER---------
-  public double getVitesseX() {
-    return vitesseX;
-  }
-
-  public double getVitesseY() {
-    return vitesseY;
-  }
-
-  public void setVitesseX(double vitesseX) {
-    this.vitesseX = vitesseX;
-  }
-
-  public void setVitesseY(double vitesseY) {
-    this.vitesseY = vitesseY;
-  }
-
-  public double getAccelerationX() {
-    return accelerationX;
-  }
-
-  public void setAccelerationX(double accelerationX) {
-    this.accelerationX = accelerationX;
-  }
-
-  public double getAccelerationY() {
-    return accelerationY;
-  }
-
-  public void setAccelerationY(double accelerationY) {
-    this.accelerationY = accelerationY;
-  }
-
-  public double getRayon() {
-    return rayon;
-  }
-
-  public double getMasse() {
-    return masse;
-  }
-
-  public double getG() {
-    return g;
-  }
-
-  public double getForceAdded() {
-    return forceAdded;
-  }
-
-  public void setForceAdded(double forceAdded) {
-    this.forceAdded = forceAdded;
-  }
-  // ---------GETTER SETTER---------
-  
-}
