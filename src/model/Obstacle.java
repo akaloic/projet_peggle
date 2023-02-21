@@ -1,57 +1,55 @@
 package model;
 
-//pouvant potentiellement être utilisé pour des sous-classes à l'aide de l'heritage
-public class Obstacle {
-    private double x;
-    private double y;
-    private double largeur;
-    private double hauteur;
-    private double vitesseX;
-    private double vitesseY;
-    
-    public Obstacle(double x, double y, double largeur, double hauteur, double vitesseX, double vitesseY) {
-      this.x = x;
-      this.y = y;
-      this.largeur = largeur;
-      this.hauteur = hauteur;
-      this.vitesseX = vitesseX;
-      this.vitesseY = vitesseY;
+public class Obstacle extends Objet {
+
+    protected boolean estMort; 
+    protected int vie;
+
+    public Obstacle(double x, double y, double largeur, double hauteur, boolean estMort, int vie) {
+        super(x, y, largeur, hauteur,0);
+        this.estMort = estMort;
+        this.vie = vie;
     }
-    
-    public void bouger(double temps) {
-      x = x + vitesseX * temps;
-      y = y + vitesseY * temps;
+    public void perdDeLaVie(int degats){
+        this.vie-=degats;
+        if(isDead()){
+            this.estMort = false;
+        }
     }
-    
-    public double getX() {
-      return x;
+    public boolean isDead(){
+        return this.vie <= 0;
     }
-    
-    public double getY() {
-      return y;
+    public Obstacle(int v){
+        super();
+        this.estMort=false;
+        this.vie=v;
     }
-    
-    public double getLargeur() {
-      return largeur;
+
+    // ---------GETTER GETTER---------
+    public double getX(){
+        return this.x;
     }
-    
-    public double getHauteur() {
-      return hauteur;
+    public double getY(){
+        return this.y;
     }
-    
-    public double getVitesseX() {
-      return vitesseX;
+    public int getVie(){
+        return this.vie;
     }
-    
-    public double getVitesseY() {
-      return vitesseY;
+    public boolean getEstMort(){
+        return this.estMort;
     }
-    
-    public void setVitesseX(double vitesseX) {
-      this.vitesseX = vitesseX;
+    public double getWidth(){
+        return super.getLargeur();
     }
-    
-    public void setVitesseY(double vitesseY) {
-      this.vitesseY = vitesseY;
+    public double getHeight(){
+        return super.getHauteur();
     }
+    // ---------GETTER SETTER---------
+    public void setVie(int pdv){
+        this.vie+= pdv;
+    }
+    public void setEstMort(boolean mort){
+        this.estMort = mort;
+    }
+
 }
