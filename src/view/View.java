@@ -338,7 +338,7 @@ public class View extends JFrame implements MouseInputListener{
         double x = (partie.getWidth() / 2) - (5 * heightBase / 6) * Math.sin(theta) - 10/* Width balle */;
         double y = (5 * heightBase / 6) * Math.cos(theta) - 10/* Height balle */;
         // Pour calculer nouvelles coordonnées de la balle après rotaion
-        Balle fantome = new Balle(600d,0d,200d);
+        Balle fantome = new Balle((double)(partie.getWidth()/2-controleur.getModele().getBalle().getRayon()/2),0d,200d);
         GeneralPath genPath = new GeneralPath();
         for(int i = 0; i < 80; i++){
             fantome.update(180-controleur.getAngleTir(), 0.03*i);
