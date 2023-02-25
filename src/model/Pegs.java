@@ -1,4 +1,5 @@
 package model;
+import java.awt.*;
 
 public class Pegs extends Obstacle{
     public double rayon;
@@ -13,5 +14,12 @@ public class Pegs extends Obstacle{
 
     public double getRayon(){
         return this.rayon;
+    }
+
+    public void dessine(Graphics2D g, double ratioX,double ratioY){
+        g.fillOval((int) (x*ratioX),
+                    (int) (y*ratioY),
+                    (int) (rayon*ratioX),
+                    (int) (rayon*ratioX));
     }
 }

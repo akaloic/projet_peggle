@@ -340,7 +340,7 @@ public class View extends JFrame implements MouseInputListener{
         // Pour calculer nouvelles coordonnées de la balle après rotaion
         Balle fantome = new Balle((double)(partie.getWidth()/2-controleur.getModele().getBalle().getRayon()/2),0d,200d);
         GeneralPath genPath = new GeneralPath();
-        for(int i = 0; i < 80; i++){
+        for(int i = 0; i < 70; i++){
             fantome.update(180-controleur.getAngleTir(), 0.03*i);
             double a = fantome.getX()+fantome.getRayon()/2;double b = fantome.getY();
             genPath.moveTo(a,b);
@@ -357,10 +357,7 @@ public class View extends JFrame implements MouseInputListener{
 
         controleur.getModele().setNiveau(new Niveau(numNiveau));
         for (int i = 0; i < controleur.getModele().getNiveau().list_peg.size(); i++) {
-            g.fillOval((int) (controleur.getModele().getNiveau().list_peg.get(i).getX()*ratioX),
-                    (int) (controleur.getModele().getNiveau().list_peg.get(i).getY()*ratioY),
-                    (int) (controleur.getModele().getNiveau().list_peg.get(i).rayon*ratioX),
-                    (int) (controleur.getModele().getNiveau().list_peg.get(i).rayon*ratioX));
+            controleur.getModele().getNiveau().list_peg.get(i).dessine(g2d, ratioX, ratioY);
         }
     }
 
