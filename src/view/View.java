@@ -100,9 +100,9 @@ public class View extends JFrame {
         // --------------GAUCHE---------------------
 
         this.add(fond);
-        this.setVisible(true);        
-        ratioX = (width-munition.getWidth())/2000f;
-        ratioY = height/1325f;
+        this.setVisible(true);
+        ratioX = (width - munition.getWidth()) / 2000f;
+        ratioY = height / 1325f;
 
         // --------------ANIMATION----------------------
         timer = new Timer(30, new ActionListener() {
@@ -164,7 +164,7 @@ public class View extends JFrame {
         Arc2D.Double arc2 = new Arc2D.Double(partie.getWidth() / 2 - widthBase / 2, -heightBase / 2, widthBase,
                 heightBase, 180, 180, Arc2D.OPEN);
 
-        BufferedImage img = new BufferedImage(150,150,BufferedImage.TYPE_INT_RGB);
+        BufferedImage img = new BufferedImage(150, 150, BufferedImage.TYPE_INT_RGB);
         try {
             img = ImageIO.read(new File("ressources/roue.png"));
         } catch (IOException e) {
@@ -173,9 +173,9 @@ public class View extends JFrame {
         }
 
         g2d.setClip(arc2);
-        g2d.drawImage(img, partie.getWidth()/2-85, -85,170,170, partie);
-        //g2d.dispose();
-        //g2d.draw(arc2);
+        g2d.drawImage(img, partie.getWidth() / 2 - 85, -85, 170, 170, partie);
+        // g2d.dispose();
+        // g2d.draw(arc2);
 
         try {
             img = ImageIO.read(new File("ressources/canon.png"));
@@ -189,8 +189,8 @@ public class View extends JFrame {
 
         g2d.rotate(Math.toRadians(90 - angle), partie.getWidth() / 2, 0);
         g2d.setClip(null);
-        g2d.drawImage(img, partie.getWidth()/2-85, -55,170,170, partie);
-        //g2d.draw(rect2);
+        g2d.drawImage(img, partie.getWidth() / 2 - 85, -55, 170, 170, partie);
+        // g2d.draw(rect2);
         g2d.rotate(Math.toRadians(angle - 90), partie.getWidth() / 2, 0);
         // On annule la rotation après avoir dessiner le rectangle pour que seule le
         // bout du partie rotate
@@ -201,10 +201,10 @@ public class View extends JFrame {
         // Pour calculer nouvelles coordonnées de la balle après rotaion
 
         for (int i = 0; i < controleur.getModele().getNiveau().list_peg.size(); i++) {
-            g.fillOval((int) (controleur.getModele().getNiveau().list_peg.get(i).getX()*ratioX),
-                    (int) (controleur.getModele().getNiveau().list_peg.get(i).getY()*ratioY),
-                    (int) (controleur.getModele().getNiveau().list_peg.get(i).rayon*ratioX),
-                    (int) (controleur.getModele().getNiveau().list_peg.get(i).rayon*ratioX));
+            g.fillOval((int) (controleur.getModele().getNiveau().list_peg.get(i).getX() * ratioX),
+                    (int) (controleur.getModele().getNiveau().list_peg.get(i).getY() * ratioY),
+                    (int) (controleur.getModele().getNiveau().list_peg.get(i).rayon * ratioX),
+                    (int) (controleur.getModele().getNiveau().list_peg.get(i).rayon * ratioX));
         }
 
         g2d.dispose();
@@ -237,7 +237,8 @@ public class View extends JFrame {
             munition.add(panel);
         }
     }
-    public JPanel getPartie(){
+
+    public JPanel getPartie() {
         return this.partie;
     }
 }
