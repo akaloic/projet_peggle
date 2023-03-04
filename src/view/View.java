@@ -22,7 +22,6 @@ public class View extends JFrame {
     private JPanel partie;
     private JButton leave;
     private boolean enJeu = true;
-    private boolean balleEnJeu = false;
     private int angle;
     private String chemin = System.getProperty("user.dir") + "/ressources/";
     private Timer timer;
@@ -33,6 +32,9 @@ public class View extends JFrame {
     private double mouseY;
     private static int colorX = 25;
     private static int colorY = 15;
+    int seconde = 0;
+    private static float ratioX;
+    private static float ratioY;
 
     public View(Controleur controleur) {
 
@@ -79,7 +81,7 @@ public class View extends JFrame {
         fondGauche = new JPanel();
         fondGauche.setLayout(new BorderLayout());
         fondGauche.setBackground(Color.gray);
-        fondGauche.setPreferredSize(new Dimension(this.getWidth() / 5, this.getHeight()));
+        fondGauche.setPreferredSize(new Dimension(this.getWidth() / 7, this.getHeight()));
 
         munition = new JPanel();
         munition.setLayout(new GridLayout(10, 1));
@@ -99,7 +101,9 @@ public class View extends JFrame {
         // --------------GAUCHE---------------------
 
         this.add(fond);
-        this.setVisible(true);
+        this.setVisible(true);        
+        ratioX = (width-munition.getWidth())/2000f;
+        ratioY = height/1325f;
 
         partie.addMouseListener(new MouseAdapter(){
             public void mouseClicked(MouseEvent e){
@@ -108,23 +112,49 @@ public class View extends JFrame {
         });
 
         
+        // --------------ANIMATION----------------------
         timer = new Timer(30, new ActionListener() {
-            double t = 0;
             public void actionPerformed(ActionEvent e) {
+                seconde++;
+
                 // canon
                 colorX -= 1 % 25;
                 colorY -= 1 % 25;
                 calculeAngle();
-                t+=0.03;
                 // puit
                 placePuit();
 
-                if(controleur.getModele().getBalle()!=null) controleur.getModele().getBalle().update(180-controleur.getAngleTir(),t);
+                if(controleur.getModele().getBalle()!=null){
+                    controleur.getModele().getBalle().update();
+
+                    if(controleur.getModele().getBalle().getY()>partie.getHeight()){
+                        controleur.getModele().setBalle(null);
+                        controleur.balleHorsJeu();
+                    }
+
+                    for(Pegs p : controleur.getModele().getNiveau().getList()){
+                        if(controleur.getModele().getBalle().collision(p)){
+                            
+                        }
+                    }
+                }
+
+                
+                // munition
+                /*
+                 * if (CONDITION) { // si la balle atteri dans le puit
+                 * nbMunition++;
+                 * munition.removeAll();
+                 * afficheMunition();
+                 * munition.revalidate();
+                 * }
+                 */
 
                 repaint();
             }
         });
         timer.start();
+        // --------------ANIMATION----------------------
     }
 
     public void placePuit() {
@@ -167,7 +197,6 @@ public class View extends JFrame {
 
         g2d.setClip(arc2);
         g2d.drawImage(img, partie.getWidth()/2-85, -85,170,170, partie);
-        //g2d.dispose();
         //g2d.draw(arc2);
 
         try {
@@ -194,10 +223,10 @@ public class View extends JFrame {
         // Pour calculer nouvelles coordonnées de la balle après rotaion
 
         for (int i = 0; i < controleur.getModele().getNiveau().list_peg.size(); i++) {
-            g.fillOval((int) controleur.getModele().getNiveau().list_peg.get(i).getX(),
-                    (int) controleur.getModele().getNiveau().list_peg.get(i).getY(),
-                    (int) controleur.getModele().getNiveau().list_peg.get(i).rayon,
-                    (int) controleur.getModele().getNiveau().list_peg.get(i).rayon);
+            g.fillOval((int) (controleur.getModele().getNiveau().list_peg.get(i).getX()*ratioX),
+                    (int) (controleur.getModele().getNiveau().list_peg.get(i).getY()*ratioY),
+                    (int) (controleur.getModele().getNiveau().list_peg.get(i).rayon*ratioX),
+                    (int) (controleur.getModele().getNiveau().list_peg.get(i).rayon*ratioX));
         }
     }
 
@@ -213,13 +242,18 @@ public class View extends JFrame {
     public void afficheMunition() {
         for (int i = 0; i < 10; i++) {
             JPanel panel = new JPanel();
+            if (i > nbMunition + 1) { // il reste i + 1 munition
+                panel = new JPanel() {
+                    @Override
+                    public void paint(Graphics g) {
+                        super.paint(g);
+                        g.fillOval(50, 20, 50, 50);
+                    }
+                };
+            }
+            panel.setBackground(Color.white);
             panel.setLayout(new BorderLayout());
             panel.setBorder(BorderFactory.createLineBorder(Color.black));
-            if (i > nbMunition + 1) {
-                panel.setBackground(Color.blue);
-            } else {
-                panel.setBackground(Color.red);
-            }
             munition.add(panel);
         }
     }
@@ -235,4 +269,7 @@ public class View extends JFrame {
         return this.angle;
     }
 
+    public JPanel getPartie(){
+        return this.partie;
+    }
 }
