@@ -6,7 +6,10 @@ import java.awt.*;
 public class ObstacleRectangulaire extends Obstacle {
     
     public ObstacleRectangulaire(double x, double y) {
-        super(x, y, 75, 50, false, 100);
+        super(x, y, 125, 50, false, 100);
+    }
+    public ObstacleRectangulaire(double x, double y, double largeur, double hauteur) {
+        super(x, y, largeur, hauteur, false, 100);
     }
     public void dessine(Graphics g){
         int gx=(int)(this.x*View.getRatioX());
