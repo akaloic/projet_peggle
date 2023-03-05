@@ -2,6 +2,7 @@ package model;
 
 import java.util.ArrayList;
 
+import model.sousObstacle.ObstacleRebondissant;
 import model.sousObstacle.ObstacleRectangulaire;
 import view.View;
 
@@ -71,36 +72,6 @@ public class Niveau {
             nvy=alenvers==false?nvy+getDiametre():nvy-getDiametre();
         }
     }
-    /*protected void triangleVide(double x, double y, ArrayList<Obstacle> list, int lignes){
-        list.add(new Pegs(x, y, 1));
-        diagonal(x-(p.getDiametre()/2), y+p.getDiametre(), list, lignes-1, p.getDiametre()/2, "gauche");
-        diagonal(x+(p.getDiametre()/2), y+p.getDiametre(), list, lignes-1, p.getDiametre()/2, "droite");
-        //TODO : a finir, essayer une autre approche que 2 diagonals et une ligne en bas
-    }*/
-
-    // Peut-être simplifié ou réutilisé pour le cercle
-    /*protected void losange(double x, double y, ArrayList<Obstacle> list, int pegUsed) {
-        list.add(new Pegs(x, y, 1));
-        double nvx=x+p.getDiametre();
-        double nvy=y+p.getDiametre();
-        double ny=y-p.getDiametre();
-        for (int i=0;i<pegUsed/2;i++){
-            list.add(new Pegs(nvx,nvy,1));
-            list.add(new Pegs(nvx,ny,1));
-            nvx+=p.getDiametre();
-            nvy+=p.getDiametre();
-            ny-=p.getDiametre();
-        }
-        nvy-=p.getDiametre()*2;
-        ny+=p.getDiametre()*2;
-        for (int i=0;i<pegUsed/2;i++){
-            list.add(new Pegs(nvx,nvy,1));
-            list.add(new Pegs(nvx,ny,1));
-            nvx+=p.getDiametre();
-            nvy-=p.getDiametre();
-            ny+=p.getDiametre();
-        }
-    }*/
 
     protected void carresRemplis(double x, double y, ArrayList<Obstacle> list, int pegCote){
         double nvy=y;
@@ -132,11 +103,34 @@ public class Niveau {
     }
 
     protected void niveau_2(){
-        /*diagonal(25, 400, list_peg, 5, "droite");
-        colonne(25+getRayon()*10, 400, list_peg, 5);
-        carres(25+getRayon()*12, 400, list_peg, 5);*/
-        triangle((View.getPartie().getWidth()+getRayon()*(View.getRatioX()*10))/2, 800, list_peg, 5,true);
-        carresRemplis(50, 400, list_peg, 3);
+       lignes(25, 1200, list_peg, 20);
+       //roue de Gauche
+       ObstacleRebondissant roueGauche= new ObstacleRebondissant(25+getRayon()*4.5, 1200-getRayon()*5, 200);
+       colonne(roueGauche.x-getRayon()*2.5, roueGauche.y, list_peg, 2);
+       colonne(roueGauche.x+getRayon()*5.5, roueGauche.y, list_peg, 2);
+       lignes(roueGauche.x-getRayon()*0.5, roueGauche.y-getDiametre(), list_peg, 3);
+       list_peg.add(roueGauche);       
+       //roue de Droite
+       ObstacleRebondissant roueDroite= new ObstacleRebondissant(25+getRayon()*24.5, 1200-getRayon()*5, 200);
+       colonne(roueDroite.x-getRayon()*2.5, roueDroite.y, list_peg, 2);
+       colonne(roueDroite.x+getRayon()*5.5, roueDroite.y, list_peg, 2);
+       lignes(roueDroite.x-getRayon()*0.5, roueDroite.y-getDiametre(), list_peg, 3);
+       list_peg.add(roueDroite);
+       //capot 
+       lignes(25+getDiametre()*6, roueGauche.y+getDiametre(), list_peg, 5);
+       //fenetre
+       for(int i=0; i<3;i++){
+            lignes(25+getDiametre()*5, 550+100*i, list_peg, 7);
+       }
+       //nuages
+       ObstacleRectangulaire nuageGauche1=new ObstacleRectangulaire(200, 201, getDiametre()*2, getRayon());
+       ObstacleRectangulaire nuageGauche2=new ObstacleRectangulaire(150, 250, getDiametre()*3, getRayon());
+       ObstacleRectangulaire nuageGauche3=new ObstacleRectangulaire(200, 299, getRayon()*3, getRayon());
+       list_peg.add(nuageGauche1);list_peg.add(nuageGauche2);list_peg.add(nuageGauche3);
+       ObstacleRectangulaire nuageDroit1=new ObstacleRectangulaire(200+getDiametre()*12, 301, getDiametre()*2, getRayon());
+       ObstacleRectangulaire nuageDroit2=new ObstacleRectangulaire(150+getDiametre()*12, 350, getDiametre()*3, getRayon());
+       ObstacleRectangulaire nuageDroit3=new ObstacleRectangulaire(200+getDiametre()*12, 399, getRayon()*3, getRayon());
+       list_peg.add(nuageDroit1);list_peg.add(nuageDroit2);list_peg.add(nuageDroit3);
     }
     protected void niveau_3(){
         int m1=0;int m2=0;int j=0;
@@ -151,12 +145,9 @@ public class Niveau {
         ObstacleRectangulaire ligneGaucheBas = new ObstacleRectangulaire(325-getDiametre(), 300+getRayon()*16, getDiametre()*6, getRayon());
         ObstacleRectangulaire ligneDroitHaut = new ObstacleRectangulaire(325+getDiametre()*8+getRayon(), 300-getDiametre(), getDiametre()*6, getRayon());
         ObstacleRectangulaire ligneDroitBas = new ObstacleRectangulaire(325+getDiametre()*8+getRayon(), 300+getRayon()*16, getDiametre()*6, getRayon());
-        list_peg.add(colonneGauche);
-        list_peg.add(colonneDroit);
-        list_peg.add(ligneGaucheHaut);
-        list_peg.add(ligneGaucheBas);
-        list_peg.add(ligneDroitHaut);
-        list_peg.add(ligneDroitBas);
+        list_peg.add(colonneGauche);list_peg.add(colonneDroit);
+        list_peg.add(ligneGaucheHaut);list_peg.add(ligneGaucheBas);
+        list_peg.add(ligneDroitHaut);list_peg.add(ligneDroitBas);
     }
 
     public ArrayList<Obstacle> getList() {
