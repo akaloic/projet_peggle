@@ -13,6 +13,6 @@ public class ObstacleRectangulaire extends Obstacle {
         int gy=(int)(this.y*View.getRatioY());
         int gw=(int)(this.largeur*View.getRatioX());
         int gh=(int)(this.hauteur*View.getRatioY());
-        g.fillOval(gx,gy,gw,gh);
+        g.fillRect(gx,gy,gw,gh);
     }
 }
