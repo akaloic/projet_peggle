@@ -21,7 +21,6 @@ public class Obstacle extends Objet {
     }
     public Obstacle(int v){
         super();
-        this.estMort=false;
         this.vie=v;
     }
 

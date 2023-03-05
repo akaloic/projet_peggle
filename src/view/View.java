@@ -27,7 +27,7 @@ public class View extends JFrame implements MouseInputListener{
     private JPanel fond;
     private JPanel munition;
     private JPanel fondGauche;
-    private JPanel partie;
+    private static JPanel partie;
 
     private JButton leave;
     private boolean enJeu = true;
@@ -157,6 +157,8 @@ public class View extends JFrame implements MouseInputListener{
         this.setVisible(true);        
         ratioX = (width-munition.getWidth())/2000f;
         ratioY = height/1325f;
+        System.out.println(ratioX);
+        System.out.println(ratioY);
 
         // --------------ANIMATION----------------------
         timer = new Timer(30, new ActionListener() {
@@ -332,10 +334,7 @@ public class View extends JFrame implements MouseInputListener{
         // Pour calculer nouvelles coordonnées de la balle après rotaion
         controleur.getModele().setNiveau(new Niveau(numNiveau));
         for (int i = 0; i < controleur.getModele().getNiveau().list_peg.size(); i++) {
-            g.fillOval((int) (controleur.getModele().getNiveau().list_peg.get(i).getX()*ratioX),
-                    (int) (controleur.getModele().getNiveau().list_peg.get(i).getY()*ratioY),
-                    (int) (controleur.getModele().getNiveau().list_peg.get(i).getWidth()*ratioX),
-                    (int) (controleur.getModele().getNiveau().list_peg.get(i).getHeight()*ratioX));
+            controleur.getModele().getNiveau().list_peg.get(i).dessine(g);
         }
     }
 
@@ -366,8 +365,8 @@ public class View extends JFrame implements MouseInputListener{
             munition.add(panel);
         }
     }
-    public JPanel getPartie(){
-        return this.partie;
+    public static JPanel getPartie(){
+        return partie;
     }
 
     public static void LancerMusic(String url){
@@ -433,4 +432,6 @@ public class View extends JFrame implements MouseInputListener{
     public int getNumNiveau(){
         return this.numNiveau;
     }
+    public static float getRatioX() {return ratioX;}
+    public static float getRatioY() {return ratioY;}
 }
