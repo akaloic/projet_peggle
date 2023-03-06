@@ -159,6 +159,7 @@ public class View extends JFrame implements MouseInputListener{
 
         // --------------ANIMATION----------------------
         timer = new Timer(30, new ActionListener() {
+            double t = 0;
             public void actionPerformed(ActionEvent e) {
                 // seconde++;
 
@@ -180,11 +181,25 @@ public class View extends JFrame implements MouseInputListener{
                  * }
                  */
 
+                 if(controleur.getModele().getBalle()!=null){ 
+                    controleur.getModele().getBalle().update(180-controleur.getAngleTir(),t);
+                    if(controleur.getModele().getBalle().getY() > partie.getHeight()){
+                        t = 0;
+                    }
+                    t+=0.3;
+                }
+
                 repaint();
             }
         });
         timer.start();
         // --------------ANIMATION----------------------
+        partie.addMouseListener(new MouseAdapter(){
+            public void mouseClicked(MouseEvent e){
+                controleur.tirer(); 
+            }
+        });
+
         return fond;
     }
 
@@ -284,13 +299,7 @@ public class View extends JFrame implements MouseInputListener{
         Path2D.Double ligne2 = new Path2D.Double();
         ligne2.moveTo(partie.getWidth() / 2, 0);
         ligne2.lineTo(mouseX - munition.getWidth(), mouseY);
-        g2d.setStroke(new BasicStroke(5));
-        GradientPaint gp = new GradientPaint(colorX, colorX, Color.yellow, colorY, colorX, Color.cyan, true);
-        g2d.setPaint(gp);
-        g2d.draw(ligne2);
-        g2d.setStroke(new BasicStroke(1));
-        g2d.setPaint(null);
-        g2d.setColor(Color.lightGray);
+
 
         Arc2D.Double arc2 = new Arc2D.Double(partie.getWidth() / 2 - widthBase / 2, -heightBase / 2, widthBase,
                 heightBase, 180, 180, Arc2D.OPEN);
@@ -329,6 +338,23 @@ public class View extends JFrame implements MouseInputListener{
         double x = (partie.getWidth() / 2) - (5 * heightBase / 6) * Math.sin(theta) - 10/* Width balle */;
         double y = (5 * heightBase / 6) * Math.cos(theta) - 10/* Height balle */;
         // Pour calculer nouvelles coordonnées de la balle après rotaion
+        Balle fantome = new Balle(600d,0d,200d);
+        GeneralPath genPath = new GeneralPath();
+        for(int i = 0; i < 80; i++){
+            fantome.update(180-controleur.getAngleTir(), 0.03*i);
+            double a = fantome.getX()+fantome.getRayon()/2;double b = fantome.getY();
+            genPath.moveTo(a,b);
+            genPath.lineTo(a, b);
+        }
+
+        g2d.setStroke(new BasicStroke(5));
+        GradientPaint gp = new GradientPaint(colorX, colorX, Color.yellow, colorY, colorX, Color.cyan, true);
+        g2d.setPaint(gp);
+        g2d.draw(genPath);
+        g2d.setStroke(new BasicStroke(1));
+        g2d.setPaint(null);
+        g2d.setColor(Color.lightGray);
+
         controleur.getModele().setNiveau(new Niveau(numNiveau));
         for (int i = 0; i < controleur.getModele().getNiveau().list_peg.size(); i++) {
             g.fillOval((int) (controleur.getModele().getNiveau().list_peg.get(i).getX()*ratioX),
@@ -367,6 +393,10 @@ public class View extends JFrame implements MouseInputListener{
     }
     public JPanel getPartie(){
         return this.partie;
+    }
+
+    public int getAngle(){
+        return this.angle;
     }
 
     public static void LancerMusic(String url){

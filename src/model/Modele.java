@@ -7,7 +7,7 @@ public class Modele {
     private Niveau niveau;
 
     public Modele() {
-        balle = new Balle(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+        balle = new Balle(600d,0d,200d);
         obstacles = new Obstacle[0];
         niveau = new Niveau(1);
     }
@@ -23,6 +23,10 @@ public class Modele {
 
     public Balle getBalle() {
         return balle;
+    }
+
+    public void setBalle(Balle b){
+        this.balle = b;
     }
 
     
