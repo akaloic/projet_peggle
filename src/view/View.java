@@ -216,14 +216,15 @@ public class View extends JFrame implements MouseInputListener{
     public JPanel pauseJeu(){
         JPanel pane = new JPanel();
         pane.setLayout(null);
-        JButton retour = new JButton("Retour");
-        retour.setBounds(width/3,height/2-50,100,100);
+        JButton retour = new JButton("Retour à l'acceuil");
+        retour.setBounds(width/3,height/2-50,150,100);
         retour.addActionListener(e->{
-            changerPanel(choixNiveauPane(controleur));
+            timer = null;
+            new View(controleur);
         });
 
         JButton resume = new JButton("Resume");
-        resume.setBounds(width/3+200,height/2-50,100,100);
+        resume.setBounds(width/3+200,height/2-50,150,100);
         resume.addActionListener(e->{
             timer.restart();
             changerPanel(JeuPanel(controleur));
