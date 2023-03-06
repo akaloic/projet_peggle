@@ -62,6 +62,9 @@ public class View extends JFrame implements MouseInputListener{
     int speedY = 10;
             /*fin balle */
 
+    /* image background d'acceuil */
+    private BufferedImage image;
+
     public View(Controleur controleur) {
 
         String urlDuSon = "../ressources/SonsWav/Accueil.wav";
@@ -77,7 +80,18 @@ public class View extends JFrame implements MouseInputListener{
         this.setVisible(true);
         this.controleur = controleur;
 
-        JPanel pane = new JPanel();
+        try {
+        image = ImageIO.read(new File("../ressources/image_acceuil.png"));
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        JPanel pane = new JPanel(){
+            @Override
+            public void paint(Graphics g) {
+                super.paint(g);
+                g.drawImage(image, 0, 0, null);
+            }
+        };
         pane.setSize(width, height);
         pane.setLayout(null);
         pane.setBorder(BorderFactory.createTitledBorder("Bienvenue dans notre jeu"));
