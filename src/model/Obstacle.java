@@ -1,5 +1,7 @@
 package model;
 
+import java.awt.Graphics;
+
 public class Obstacle extends Objet {
 
     protected boolean estMort; 
@@ -21,7 +23,6 @@ public class Obstacle extends Objet {
     }
     public Obstacle(int v){
         super();
-        this.estMort=false;
         this.vie=v;
     }
 
@@ -50,6 +51,8 @@ public class Obstacle extends Objet {
     }
     public void setEstMort(boolean mort){
         this.estMort = mort;
+    }
+    public void dessine(Graphics g) {
     }
 
 }
