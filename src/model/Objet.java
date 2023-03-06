@@ -15,12 +15,13 @@ public abstract class Objet {
     this.hauteur = hauteur;
     this.angle = angle;
   }
+
   public Objet() {
-    this.x =0;
-    this.y =0;
-    this.largeur =0;
-    this.hauteur =0;
-    this.angle =0;
+    this.x = 0;
+    this.y = 0;
+    this.largeur = 0;
+    this.hauteur = 0;
+    this.angle = 0;
   }
 
   // ---------GETTER SETTER---------
@@ -46,6 +47,14 @@ public abstract class Objet {
 
   public void setAngle(double angle) {
     this.angle = angle;
+  }
+
+  public void setX(double x) {
+    this.x = x;
+  }
+
+  public void setY(double y) {
+    this.y = y;
   }
 
   // ---------GETTER SETTER---------

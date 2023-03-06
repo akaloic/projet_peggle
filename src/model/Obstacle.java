@@ -10,13 +10,30 @@ public class Obstacle extends Objet {
         this.estMort = estMort;
         this.vie = vie;
     }
-    public Obstacle(int v){
+
+    public Obstacle(int v) {
         super();
-        this.estMort=false;
-        this.vie=v;
+        this.estMort = false;
+        this.vie = v;
     }
 
     // ---------GETTER SETTER---------
+    public boolean isEstMort() {
+        return estMort;
+    }
+
+    public void setEstMort(boolean estMort) {
+        this.estMort = estMort;
+    }
+
+    public int getVie() {
+        return vie;
+    }
+
+    public void setVie(int vie) {
+        this.vie = vie;
+    }
+
     // ---------GETTER SETTER---------
 
 }

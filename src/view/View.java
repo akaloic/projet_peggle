@@ -21,13 +21,14 @@ public class View extends JFrame {
     private JPanel fondGauche;
     private JPanel partie;
     private JButton leave;
+    private Timer timer;
+    private Controleur controleur;
+
     private boolean enJeu = true;
     private boolean balleEnJeu = false;
     private int angle;
     private String chemin = System.getProperty("user.dir") + "/ressources/";
-    private Timer timer;
     private int directionX = 5;
-    private Controleur controleur;
     private int nbMunition;
     private double mouseX;
     private double mouseY;
@@ -136,7 +137,6 @@ public class View extends JFrame {
 
     public void placePuit() {
         // avec la redimension de l'image plus grande
-
         puit.setLocation(puit.getX() + directionX, partie.getHeight() / 2);
         if (puit.getX() > partie.getWidth() / 2)
             directionX = -5;
@@ -200,6 +200,7 @@ public class View extends JFrame {
         double y = (5 * heightBase / 6) * Math.cos(theta) - 10/* Height balle */;
         // Pour calculer nouvelles coordonnées de la balle après rotaion
 
+        controleur.getModele().getNiveau().list_peg.remove(1);
         for (int i = 0; i < controleur.getModele().getNiveau().list_peg.size(); i++) {
             g.fillOval((int) (controleur.getModele().getNiveau().list_peg.get(i).getX() * ratioX),
                     (int) (controleur.getModele().getNiveau().list_peg.get(i).getY() * ratioY),
