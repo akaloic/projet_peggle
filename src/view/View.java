@@ -35,6 +35,8 @@ public class View extends JFrame implements MouseInputListener{
     private int angle;
     private String chemin = System.getProperty("user.dir") + "/ressources/";
     private Timer timer;
+    private boolean NiveauxStop; // pause/resume du jeu
+
     private int directionX = 5;
     private Controleur controleur;
     private int nbMunition;
@@ -62,12 +64,10 @@ public class View extends JFrame implements MouseInputListener{
     int speedY = 10;
             /*fin balle */
 
-    /* image background d'acceuil */
-    private BufferedImage image;
 
     public View(Controleur controleur) {
 
-        String urlDuSon = "../ressources/SonsWav/Accueil.wav";
+        String urlDuSon = "ressources/SonsWav/Accueil.wav";
         LancerMusic(urlDuSon);
         Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
         width = (int) size.getWidth();
@@ -79,17 +79,18 @@ public class View extends JFrame implements MouseInputListener{
         this.setUndecorated(true); // nécessaire sinon this.getHeight et this.getWidth renvoie 0
         this.setVisible(true);
         this.controleur = controleur;
-
-        try {
-        image = ImageIO.read(new File("../ressources/image_acceuil.png"));
-        }catch(Exception e){
-            e.printStackTrace();
-        }
         JPanel pane = new JPanel(){
             @Override
-            public void paint(Graphics g) {
-                super.paint(g);
-                g.drawImage(image, 0, 0, null);
+            public void paintComponent(Graphics g) {
+                try {
+                    BufferedImage image = ImageIO.read(new File("ressources/image_acceuil1.png"));
+                    // BufferedImage img = new BufferedImage(width, height, image.getType());
+                    super.paintComponent(g);
+                    g.drawImage(image,0, 0,width,height, null);
+                }catch(Exception e){
+                    e.printStackTrace();
+                    System.out.println("non frère force a toi");
+                }
             }
         };
         pane.setSize(width, height);
@@ -97,9 +98,9 @@ public class View extends JFrame implements MouseInputListener{
         pane.setBorder(BorderFactory.createTitledBorder("Bienvenue dans notre jeu"));
         this.add(pane);
 
-        JLabel titrePane = new JLabel("HIT THE PEGGLES");
-        titrePane.setBounds(width/2-65,height - height*2/3,400,100);
-        pane.add(titrePane);
+        // JLabel titrePane = new JLabel("HIT THE PEGGLES");
+        // titrePane.setBounds(width/2-65,height - height*2/3,400,100);
+        // pane.add(titrePane);
         JButton start = new JButton("START");
         start.setBounds(width/2-50,height - height/3,100,100);
         pane.add(start);
@@ -153,6 +154,14 @@ public class View extends JFrame implements MouseInputListener{
         munition.setLayout(new GridLayout(10, 1));
         afficheMunition();
 
+        JButton pause = new JButton("pause");
+        pause.setBounds(0,0,50,50);
+        pause.addActionListener(e->{
+            timer.stop();
+            changerPanel(pauseJeu());
+        });
+
+
         leave = new JButton("Fermer");
         leave.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -162,6 +171,7 @@ public class View extends JFrame implements MouseInputListener{
 
         fondGauche.add(munition, BorderLayout.CENTER);
         fondGauche.add(leave, BorderLayout.SOUTH);
+        fondGauche.add(pause, BorderLayout.NORTH);
 
         fond.add(fondGauche, BorderLayout.WEST);
         // --------------GAUCHE---------------------
@@ -198,15 +208,46 @@ public class View extends JFrame implements MouseInputListener{
             }
         });
         timer.start();
+        NiveauxStop = false;
         // --------------ANIMATION----------------------
         return fond;
     }
 
+    public JPanel pauseJeu(){
+        JPanel pane = new JPanel();
+        pane.setLayout(null);
+        JButton retour = new JButton("Retour");
+        retour.setBounds(width/3,height/2-50,100,100);
+        retour.addActionListener(e->{
+            changerPanel(choixNiveauPane(controleur));
+        });
+
+        JButton resume = new JButton("Resume");
+        resume.setBounds(width/3+200,height/2-50,100,100);
+        resume.addActionListener(e->{
+            timer.restart();
+            changerPanel(JeuPanel(controleur));
+        });
+        
+        pane.add(retour);
+        pane.add(resume);
+        return pane;
+    }
     public JPanel choixNiveauPane(Controleur controleur){
-        String url = "../ressources/SonsWav/ChoixNiveau.wav";
+        String url = "ressources/SonsWav/ChoixNiveau.wav";
         LancerMusic(url);
-        JPanel choixNiv = new JPanel();
-        choixNiv.setBackground(Color.BLUE); 
+        JPanel choixNiv = new JPanel(){
+            @Override
+            public void paintComponent(Graphics g) {
+                try {
+                    BufferedImage image = ImageIO.read(new File("ressources/image_niveaux.png"));
+                    super.paintComponent(g);
+                    g.drawImage(image,0, 0,width,height, null);
+                }catch(Exception e){
+                    e.printStackTrace();
+                }
+            }
+        };
         choixNiv.setLayout(null);
         choixNiv.setSize(this.width,this.height);
         JButton precedent = new JButton("Acceuil");
@@ -218,13 +259,13 @@ public class View extends JFrame implements MouseInputListener{
             new View(this.controleur);
         });
         int xNiv = precedent.getWidth()*2;
-        int yNiv = precedent.getHeight()*2;
-        int wNiv = 100;
-        int hNiv = 100;
+        int yNiv = precedent.getHeight()*3;
+        int wNiv = 200;
+        int hNiv = 200;
         for (int i = 1 ; i < 6 ; i++){;
             JButton nameNiv =  new JButton("Niveau "+i);
-            nameNiv.setBounds(xNiv, yNiv, wNiv, yNiv);
-            xNiv += 2*wNiv;
+            nameNiv.setBounds(xNiv, yNiv, wNiv, hNiv);
+            xNiv += wNiv;
             choixNiv.add(nameNiv);
             nameNiv.setName("niveau"+i);
             nameNiv.addActionListener(e->{
@@ -245,7 +286,6 @@ public class View extends JFrame implements MouseInputListener{
 
     public void placePuit() {
         // avec la redimension de l'image plus grande
-
         puit.setLocation(puit.getX() + directionX, partie.getHeight() / 2);
         if (puit.getX() > partie.getWidth() / 2)
             directionX = -5;
@@ -282,11 +322,8 @@ public class View extends JFrame implements MouseInputListener{
         if(y>max_y || y<0){
             speedY = -speedY;
         }
-
-        
         x = x+speedX;
         y = y+speedY;
-
     }
 
     public void dessineCanon(Graphics g) {
@@ -311,7 +348,7 @@ public class View extends JFrame implements MouseInputListener{
 
         BufferedImage img = new BufferedImage(150,150,BufferedImage.TYPE_INT_RGB);
         try {
-            img = ImageIO.read(new File("../ressources/roue.png"));
+            img = ImageIO.read(new File("ressources/roue.png"));
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -322,7 +359,7 @@ public class View extends JFrame implements MouseInputListener{
         //g2d.draw(arc2);
 
         try {
-            img = ImageIO.read(new File("../ressources/canon.png"));
+            img = ImageIO.read(new File("ressources/canon.png"));
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
