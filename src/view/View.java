@@ -90,9 +90,18 @@ public class View extends JFrame implements MouseInputListener{
         start.setBounds(width/2-50,height - height/3,100,100);
         pane.add(start);
 
+        JButton edit = new JButton("edit");
+        edit.setBounds(width/2-50,height - height/3+200,100,100);
+        pane.add(edit);
+
         start.addActionListener(e->{
             son.stop();
             changerPanel(choixNiveauPane(this.controleur));
+        });
+
+        edit.addActionListener(e->{
+            son.stop();
+            changerPanel(new Edit(controleur.getModele().getNiveau(),width,height));
         });
     }
     public JPanel JeuPanel(Controleur controleur){
@@ -390,6 +399,10 @@ public class View extends JFrame implements MouseInputListener{
     }
     public JPanel getPartie(){
         return this.partie;
+    }
+
+    public JPanel getMunition(){
+        return this.munition;
     }
 
     public int getAngle(){
