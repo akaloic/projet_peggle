@@ -1,18 +1,58 @@
 package controller;
 
 import view.*;
+import javax.swing.*;
 import model.*;
 import model.Modele;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 public class Controleur {
 
     protected View view;
     protected Modele modele;
     protected double angleTir;
+    private Timer timer;
 
     public Controleur() {
         modele = new Modele();
         view = new View(this);
+        // --------------ANIMATION----------------------
+        timer = new Timer(30, new ActionListener() {
+            double t = 0;
+            public void actionPerformed(ActionEvent e) {
+                // seconde++;
+
+                // canon
+                view.setColorX();
+                view.setColorX();
+                view.calculeAngle();
+
+                // puit
+                view.placePuit();
+
+                // munition
+                /*
+                 * if (CONDITION) { // si la balle atteri dans le puit
+                 * nbMunition++;
+                 * munition.removeAll();
+                 * afficheMunition();
+                 * munition.revalidate();
+                 * }
+                 */
+
+                 if(getModele().getBalle()!=null){ 
+                    getModele().getBalle().update(180-getAngleTir(),t);
+                    if(getModele().getBalle().getY() > View.getPartie().getHeight()){
+                        t = 0;
+                    }
+                    t+=0.3;
+                }
+
+                view.repaint();
+            }
+        });
+        timer.start();
 
     }
 

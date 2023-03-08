@@ -64,7 +64,7 @@ public class View extends JFrame implements MouseInputListener{
 
     public View(Controleur controleur) {
 
-        String urlDuSon = "../ressources/SonsWav/Accueil.wav";
+        String urlDuSon = "ressources/SonsWav/Accueil.wav";
         LancerMusic(urlDuSon);
         Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
         width = (int) size.getWidth();
@@ -207,7 +207,7 @@ public class View extends JFrame implements MouseInputListener{
     }
 
     public JPanel choixNiveauPane(Controleur controleur){
-        String url = "../ressources/SonsWav/ChoixNiveau.wav";
+        String url = "ressources/SonsWav/ChoixNiveau.wav";
         LancerMusic(url);
         JPanel choixNiv = new JPanel();
         choixNiv.setBackground(Color.BLUE); 
@@ -309,7 +309,7 @@ public class View extends JFrame implements MouseInputListener{
 
         BufferedImage img = new BufferedImage(150,150,BufferedImage.TYPE_INT_RGB);
         try {
-            img = ImageIO.read(new File("../ressources/roue.png"));
+            img = ImageIO.read(new File("ressources/roue.png"));
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -320,7 +320,7 @@ public class View extends JFrame implements MouseInputListener{
         //g2d.draw(arc2);
 
         try {
-            img = ImageIO.read(new File("../ressources/canon.png"));
+            img = ImageIO.read(new File("ressources/canon.png"));
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -341,7 +341,7 @@ public class View extends JFrame implements MouseInputListener{
         double x = (partie.getWidth() / 2) - (5 * heightBase / 6) * Math.sin(theta) - 10/* Width balle */;
         double y = (5 * heightBase / 6) * Math.cos(theta) - 10/* Height balle */;
         // Pour calculer nouvelles coordonnées de la balle après rotaion
-        Balle fantome = new Balle(600d,0d,200d);
+        Balle fantome = new Balle(partie.getWidth()/2-12,0d,200d);
         GeneralPath genPath = new GeneralPath();
         for(int i = 0; i < 80; i++){
             fantome.update(180-controleur.getAngleTir(), 0.03*i);
@@ -397,6 +397,14 @@ public class View extends JFrame implements MouseInputListener{
 
     public int getAngle(){
         return this.angle;
+    }
+
+    public void setColorX(){
+        colorX -= 1 % 25;
+    }
+
+    public void setColorY(){
+        colorY -= 1 % 25;
     }
 
     public static void LancerMusic(String url){
