@@ -3,7 +3,10 @@ package controller;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.border.Border;
 import javax.swing.event.MouseInputListener;
 import javax.swing.undo.AbstractUndoableEdit;
@@ -23,32 +26,107 @@ public class Edit extends JPanel{
     public ArrayList<objetMobile> listPanel = new ArrayList<objetMobile>();
     JPanel principal;
     objetMobile p;
-    objetMobile objetSelec;
+    objetMobile objetSelec = new objetMobile(null, 0);
     int forme;
     JButton save = new JButton("Sauvegarder");
     JButton leave = new JButton("Quitter");
     JButton cancel = new JButton("Annuler");
     JButton redo = new JButton("Redo");
     JButton delete = new JButton("Tout supprimer");
+    JPanel espaceCoords = new JPanel(new BorderLayout());
     int width;
     int height;
     Selection selection = new Selection();
     UndoManager undoManager = new UndoManager();
+    JTextField xSaisie = new JTextField(objetSelec.getX()+"");
+    JTextField ySaisie = new JTextField(objetSelec.getY()+"");
 
     public Edit(Niveau n,int widht, int height){
+        new Sauvegarde();
         this.setBackground(Color.gray);
-        niveau = n.list_peg;
+        niveau = Sauvegarde.charge(0);
 
         this.width = widht;
         this.height = height;
 
         JPanel partieBouton = new JPanel();
-        partieBouton.setLayout(new GridLayout(5,1));
+        partieBouton.setLayout(new GridLayout(6,1));
         partieBouton.add(save);
         partieBouton.add(leave);
         partieBouton.add(cancel);
         partieBouton.add(redo);
         partieBouton.add(delete);
+        partieBouton.add(espaceCoords);
+
+        JPanel espaceX = new JPanel(new BorderLayout());
+        JPanel espaceY = new JPanel(new BorderLayout());
+        JButton xPlus = new JButton("+");
+        JButton xMoins = new JButton("-");
+        JPanel xCase = new JPanel(new GridLayout(2,1));
+        JButton yPlus = new JButton("+");
+        JButton yMoins = new JButton("-");
+        JPanel yCase = new JPanel(new GridLayout(2,1));
+        xSaisie.setHorizontalAlignment(JTextField.CENTER);
+        ySaisie.setHorizontalAlignment(JTextField.CENTER);
+        espaceX.add(xSaisie,BorderLayout.WEST);
+        espaceX.add(xCase,BorderLayout.EAST);
+        xCase.add(xPlus);
+        xCase.add(xMoins);
+        espaceY.add(ySaisie,BorderLayout.WEST);
+        espaceY.add(yCase,BorderLayout.EAST);
+        yCase.add(yPlus);
+        yCase.add(yMoins);
+
+        JLabel xtext = new JLabel("Coordonnées X");
+        JLabel ytext = new JLabel("Coordonnées Y");
+
+        espaceX.setPreferredSize(new Dimension(50,50));
+        espaceY.setPreferredSize(new Dimension(50,50));
+        espaceCoords.add(espaceX,BorderLayout.NORTH);
+        espaceX.add(xtext,BorderLayout.WEST);
+        espaceY.add(ytext,BorderLayout.WEST);
+        espaceX.add(xSaisie,BorderLayout.CENTER);
+        espaceY.add(ySaisie,BorderLayout.CENTER);
+        espaceCoords.add(espaceY,BorderLayout.SOUTH);
+        
+        xPlus.addActionListener(
+            (ActionEvent e) -> {
+                objetSelec.setLocation(objetSelec.getX()+1, objetSelec.getY());
+        });
+        xMoins.addActionListener(
+            (ActionEvent e) -> {
+                objetSelec.setLocation(objetSelec.getX()-1, objetSelec.getY());
+        });
+        yPlus.addActionListener(
+            (ActionEvent e) -> {
+                objetSelec.setLocation(objetSelec.getX(), objetSelec.getY()+1);
+   
+        });
+        yMoins.addActionListener(
+            (ActionEvent e) -> {
+                objetSelec.setLocation(objetSelec.getX(), objetSelec.getY()-1);
+   
+        });
+        xSaisie.addActionListener(
+            (ActionEvent e) -> {
+                objetSelec.setLocation(Integer.parseInt(xSaisie.getText()), objetSelec.getY());
+   
+        });
+
+        ySaisie.addActionListener(
+            (ActionEvent e) -> {
+                objetSelec.setLocation(objetSelec.getX(), Integer.parseInt(ySaisie.getText()));
+   
+        });
+
+        save.addActionListener(
+            (ActionEvent e) -> {
+                Sauvegarde.save(niveau);
+        });
+
+
+
+
         delete.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -106,6 +184,13 @@ public class Edit extends JPanel{
                     super.paint(g);
                     Pegs.dessine(g, 20, 20);
                 }
+                @Override
+                public void setLocation(int x, int y) {
+                    // TODO Auto-generated method stub
+                    super.setLocation(x, y);
+                    xSaisie.setText(this.getX()+"");
+                    ySaisie.setText(this.getY()+"");
+                }
             };
             p.setOpaque(false);
             p.setBounds((int)niveau.get(i).getX(), (int)niveau.get(i).getY(), 20, 20);
@@ -125,6 +210,13 @@ public class Edit extends JPanel{
                 super.paint(g);
                 g.setColor(Color.yellow);
                 Pegs.dessine(g, 20, 20);
+            }
+            @Override
+            public void setLocation(int x, int y) {
+                // TODO Auto-generated method stub
+                super.setLocation(x, y);
+                xSaisie.setText(this.getX()+"");
+                ySaisie.setText(this.getY()+"");
             }
         };
         o.setBounds(50,750,20,20);
@@ -183,9 +275,13 @@ public class Edit extends JPanel{
                 if(!deplacement){
                     deplacement = true;
                     xClick = e.getX()-this.getX();
-                    yClick = e.getY()-this.getY();    
-                    objetSelec = this; 
+                    yClick = e.getY()-this.getY();
+                    if(!decoration){
+                        objetSelec = this;
+                    }    
                     forme = id;
+                    /*xSaisie.setText(this.getX()+"");
+                    ySaisie.setText(this.getY()+"");*/
                 }else{
                     deplacement = false;
                 }
@@ -205,6 +301,13 @@ public class Edit extends JPanel{
                         else{
                             PegsRect.dessine(g, 20, 20);
                         }
+                    }
+                    @Override
+                    public void setLocation(int x, int y) {
+                        // TODO Auto-generated method stub
+                        super.setLocation(x, y);
+                        xSaisie.setText(this.getX()+"");
+                        ySaisie.setText(this.getY()+"");
                     }
                 };
                 om.setOpaque(false);
