@@ -25,6 +25,10 @@ public class Niveau {
                 niveau_3();
                 niveau = 3;
                 break;
+            case 4:
+                niveau_4();
+                niveau = 4;
+                break;
         }
     }
 
@@ -148,6 +152,23 @@ public class Niveau {
         list_peg.add(colonneGauche);list_peg.add(colonneDroit);
         list_peg.add(ligneGaucheHaut);list_peg.add(ligneGaucheBas);
         list_peg.add(ligneDroitHaut);list_peg.add(ligneDroitBas);
+    }
+    protected void niveau_4(){
+        double x4=1000-getRayon()/2;
+        double y4=300;
+        Pegs p = new Pegs(x4,y4, 1);
+        lignes(x4-getDiametre(), y4+getDiametre(), list_peg, 3);
+        lignes(x4-getDiametre()*3, y4+getDiametre()*2, list_peg, 7);
+        lignes(x4-getDiametre()*2, y4+getDiametre()*3, list_peg, 5);
+        lignes(x4-getDiametre(), y4+getDiametre()*4, list_peg, 3);
+        lignes(x4-getDiametre()*2, y4+getDiametre()*5, list_peg, 2);
+        lignes(x4+getDiametre(), y4+getDiametre()*5, list_peg, 2);
+        lignes(x4-getDiametre()*3, y4+getDiametre()*6, list_peg, 3);
+        lignes(x4+getDiametre(), y4+getDiametre()*6, list_peg, 3);
+
+
+
+        list_peg.add(p);
     }
 
     public ArrayList<Obstacle> getList() {
