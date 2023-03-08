@@ -6,9 +6,14 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
 import javax.swing.event.MouseInputListener;
+import javax.swing.undo.AbstractUndoableEdit;
+import javax.swing.undo.UndoManager;
+
 import java.awt.event.MouseAdapter;
 import model.Niveau;
 import model.Pegs;
+import model.PegsRect;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -19,6 +24,7 @@ public class Edit extends JPanel{
     JPanel principal;
     objetMobile p;
     objetMobile objetSelec;
+    int forme;
     JButton save = new JButton("Sauvegarder");
     JButton leave = new JButton("Quitter");
     JButton cancel = new JButton("Annuler");
@@ -27,6 +33,7 @@ public class Edit extends JPanel{
     int width;
     int height;
     Selection selection = new Selection();
+    UndoManager undoManager = new UndoManager();
 
     public Edit(Niveau n,int widht, int height){
         this.setBackground(Color.gray);
@@ -53,14 +60,26 @@ public class Edit extends JPanel{
                         }
                     }
                     for(int j = 0; j < aSupprimer.size();j++){
-                        listPanel.remove(aSupprimer.get(j));
                         niveau.remove(aSupprimer.get(j).pegs);
-                        principal.remove(aSupprimer.get(j));
+                        saveChange(aSupprimer);
 
                     }
                 }
 
             }
+        });
+        cancel.addActionListener(
+            (ActionEvent e) -> {
+                undoManager.undo();
+                repaint();
+                principal.repaint();
+            
+        });
+        redo.addActionListener(
+            (ActionEvent e) -> {
+                undoManager.redo();
+                repaint();
+                principal.repaint();
         });
         this.setLayout(new BorderLayout());
         this.add(partieBouton,BorderLayout.WEST);
@@ -70,16 +89,6 @@ public class Edit extends JPanel{
         this.add(partieDroite,BorderLayout.CENTER);
         partieBouton.setPreferredSize(new Dimension(widht/5,height));
 
-
-        /*principal = new JPanel(){
-            @Override
-            public void paint(Graphics g) {
-                super.paint(g);
-                for(int i = 0; i < niveau.size();i++){
-                    g.fillRect((int)niveau.get(i).getX(), (int)niveau.get(i).getY(), 20, 20);
-                }
-            }
-        };*/
         principal = new JPanel(){
             @Override
             protected void paintComponent(Graphics g) {
@@ -89,13 +98,13 @@ public class Edit extends JPanel{
             }
         };
         for(int i = 0; i < niveau.size();i++){
-            p = new objetMobile(niveau.get(i)){
+            int j =i;
+            p = new objetMobile(niveau.get(i),0){
                 @Override
                 public void paint(Graphics g) {
                     // TODO Auto-generated method stub
                     super.paint(g);
-                    g.fillOval(0, 0, 20, 20);
-                    g.setColor(Color.red);
+                    Pegs.dessine(g, 20, 20);
                 }
             };
             p.setOpaque(false);
@@ -109,10 +118,39 @@ public class Edit extends JPanel{
         principal.setBackground(Color.lightGray);
         partieDroite.add(principal,BorderLayout.CENTER);
 
-        objetMobile o = new objetMobile(null);
+        objetMobile o = new objetMobile(null,1){
+            @Override
+            public void paint(Graphics g) {
+                // TODO Auto-generated method stub
+                super.paint(g);
+                g.setColor(Color.yellow);
+                Pegs.dessine(g, 20, 20);
+            }
+        };
+        o.setBounds(50,750,20,20);
+        o.setOpaque(false);
+        o.decoration = true;
         principal.add(o);
         principal.addMouseListener(o);
         principal.addMouseMotionListener(o);
+        principal.addMouseListener(selection);
+        principal.addMouseMotionListener(selection);
+
+        objetMobile rect = new objetMobile(null,2){
+            @Override
+            public void paint(Graphics g) {
+                // TODO Auto-generated method stub
+                super.paint(g);
+                g.setColor(Color.yellow);
+                PegsRect.dessine(g, 20, 20);
+            }
+        };
+        rect.setBounds(80,750,20,20);
+        rect.setOpaque(false);
+        rect.decoration = true;
+        principal.add(rect);
+        principal.addMouseListener(rect);
+        principal.addMouseMotionListener(rect);
         principal.addMouseListener(selection);
         principal.addMouseMotionListener(selection);
     }
@@ -122,17 +160,20 @@ public class Edit extends JPanel{
         Rectangle r = selection.getRectangle();
         return p.getX() > r.getX() && p.getX() < r.getX()+r.getWidth() && p.getY() > r.getY() && p.getY() < r.getY()+r.getHeight();
     }
+    
 
     public class objetMobile extends JPanel implements MouseInputListener{
         Pegs pegs;
+        int id;
         boolean deplacement = false;
-        boolean nouveau = false;
+        boolean decoration = false;
         int xClick;
         int yClick;
 
-        public objetMobile(Pegs p){
-            setBounds(50,750,50,50);
+        public objetMobile(Pegs p,int n){
             this.pegs = p;
+            this.id = n;
+
         }
 
         @Override
@@ -144,13 +185,36 @@ public class Edit extends JPanel{
                     xClick = e.getX()-this.getX();
                     yClick = e.getY()-this.getY();    
                     objetSelec = this; 
+                    forme = id;
                 }else{
                     deplacement = false;
                 }
             }
-            /*if(deplacement && e.getY() < height-100){
-                niveau.add(new Pegs(e.getX()-xClick, e.getY()-yClick, 20, 20));
-            }*/
+            if(deplacement && e.getY() < height-150 && decoration){
+                System.out.println(forme+"   "+id);
+                Pegs p = new Pegs(e.getX()-xClick, e.getY()-yClick, 20, 20);
+                this.id = forme;
+                objetMobile om = new objetMobile(p,id){
+                    @Override
+                    public void paint(Graphics g) {
+                        // TODO Auto-generated method stub
+                        super.paint(g);
+                        if (id == 1){
+                            Pegs.dessine(g, 20, 20);
+                        }
+                        else{
+                            PegsRect.dessine(g, 20, 20);
+                        }
+                    }
+                };
+                om.setOpaque(false);
+                om.setBounds(e.getX()-xClick, e.getY()-yClick, 20, 20);
+                principal.add(om);
+                listPanel.add(om);
+                principal.addMouseListener(om);
+                principal.addMouseMotionListener(om);
+                niveau.add(p);
+            }
 
         }
 
@@ -208,6 +272,47 @@ public class Edit extends JPanel{
         public void mouseMouved(MouseEvent event){
         }
     }
+
+    public void saveChange(ArrayList<objetMobile> l){
+        Coupe c = new Coupe(l);
+        c.doit();
+        CutEdit cE = new CutEdit(c);
+        undoManager.addEdit(cE);
+    }
+
+    public class Coupe{
+        ArrayList<objetMobile> liste;
+
+        public Coupe(ArrayList<objetMobile> l){
+            this.liste = l;
+        }
+
+        public void undo(){
+            for(int i = 0; i < liste.size();i++){
+                listPanel.add(liste.get(i));
+                principal.add(liste.get(i));
+            }
+        }
+
+        public void doit(){
+            for(int i = 0; i < liste.size();i++){
+                listPanel.remove(liste.get(i));
+                principal.remove(liste.get(i));
+            }
+
+        }
+    }
+    
+    public class CutEdit extends AbstractUndoableEdit{
+        Coupe c;
+
+        public CutEdit(Coupe coupe){
+            this.c = coupe;
+        }
+        public void undo(){c.undo();}
+
+        public void redo(){c.doit();}
+        }
 }
 
 

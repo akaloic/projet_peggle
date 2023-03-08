@@ -22,4 +22,10 @@ public class Pegs extends Obstacle{
                     (int) (rayon*ratioX),
                     (int) (rayon*ratioX));
     }
+
+    public static void dessine(Graphics g, int widht, int weight){
+        g.fillOval(0, 0, widht, weight);
+    }
+
 }
+
