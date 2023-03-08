@@ -96,10 +96,6 @@ public class View extends JFrame implements MouseInputListener {
     }
 
     public JPanel JeuPanel(Controleur controleur) {
-        Modele m = controleur.getModele();
-        Balle b = m.getBalle();
-        Obstacle[] o = m.getObstacles();
-        Niveau n = m.getNiveau();
         nbMunition = 4; // Pour le moment on met 10 munitions
 
         fond = new JPanel();
