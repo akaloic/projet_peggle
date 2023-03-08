@@ -63,7 +63,6 @@ public class View extends JFrame implements MouseInputListener{
             /*fin balle */
 
     public View(Controleur controleur) {
-
         String urlDuSon = "ressources/SonsWav/Accueil.wav";
         LancerMusic(urlDuSon);
         Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
@@ -89,11 +88,11 @@ public class View extends JFrame implements MouseInputListener{
         JButton start = new JButton("START");
         start.setBounds(width/2-50,height - height/3,100,100);
         pane.add(start);
-
         start.addActionListener(e->{
             son.stop();
             changerPanel(choixNiveauPane(this.controleur));
         });
+        JeuPanel(controleur);
     }
     public JPanel JeuPanel(Controleur controleur){
         Modele m = controleur.getModele();
@@ -157,52 +156,13 @@ public class View extends JFrame implements MouseInputListener{
         this.setVisible(true);        
         ratioX = (width-munition.getWidth())/2000f;
         ratioY = height/1325f;
-        System.out.println(ratioX);
-        System.out.println(ratioY);
 
-        // --------------ANIMATION----------------------
-        timer = new Timer(30, new ActionListener() {
-            double t = 0;
-            public void actionPerformed(ActionEvent e) {
-                // seconde++;
-
-                // canon
-                colorX -= 1 % 25;
-                colorY -= 1 % 25;
-                calculeAngle();
-
-                // puit
-                placePuit();
-
-                // munition
-                /*
-                 * if (CONDITION) { // si la balle atteri dans le puit
-                 * nbMunition++;
-                 * munition.removeAll();
-                 * afficheMunition();
-                 * munition.revalidate();
-                 * }
-                 */
-
-                 if(controleur.getModele().getBalle()!=null){ 
-                    controleur.getModele().getBalle().update(180-controleur.getAngleTir(),t);
-                    if(controleur.getModele().getBalle().getY() > partie.getHeight()){
-                        t = 0;
-                    }
-                    t+=0.3;
-                }
-
-                repaint();
-            }
-        });
-        timer.start();
         // --------------ANIMATION----------------------
         partie.addMouseListener(new MouseAdapter(){
             public void mouseClicked(MouseEvent e){
                 controleur.tirer(); 
             }
         });
-
         return fond;
     }
 
