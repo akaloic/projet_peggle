@@ -7,11 +7,12 @@ import model.Modele;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 public class Controleur {
 
-    protected View view;
-    protected Modele modele;
-    protected double angleTir;
+    public View view;
+    public Modele modele;
+    public double angleTir;
     private Timer timer;
 
     public Controleur() {
@@ -20,6 +21,7 @@ public class Controleur {
         // --------------ANIMATION----------------------
         timer = new Timer(30, new ActionListener() {
             double t = 0;
+
             public void actionPerformed(ActionEvent e) {
                 // seconde++;
 
@@ -41,12 +43,12 @@ public class Controleur {
                  * }
                  */
 
-                 if(getModele().getBalle()!=null){ 
-                    getModele().getBalle().update(180-getAngleTir(),t);
-                    if(getModele().getBalle().getY() > View.getPartie().getHeight()){
+                if (modele.balle != null) {
+                    modele.balle.update(180 - getAngleTir(), t);
+                    if (modele.balle.y > view.getPartie().getHeight()) {
                         t = 0;
                     }
-                    t+=0.3;
+                    t += 0.3;
                 }
 
                 view.repaint();
@@ -74,13 +76,13 @@ public class Controleur {
     }
     // ---------GETTER SETTER---------
 
-    public void tirer(){
+    public void tirer() {
         this.modele.setBalle(null);
-        this.angleTir=this.view.getAngle();
-        this.modele.setBalle(new Balle(600d,0d,200d));
+        this.angleTir = this.view.getAngle();
+        this.modele.setBalle(new Balle(600d, 0d, 200d));
     }
 
-    public double getAngleTir(){
+    public double getAngleTir() {
         return this.angleTir;
     }
 }
