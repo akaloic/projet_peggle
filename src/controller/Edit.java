@@ -2,22 +2,22 @@ package controller;
 
 import java.util.ArrayList;
 
+import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.border.Border;
+import javax.swing.KeyStroke;
 import javax.swing.event.MouseInputListener;
 import javax.swing.undo.AbstractUndoableEdit;
 import javax.swing.undo.UndoManager;
-
 import java.awt.event.MouseAdapter;
 import model.Niveau;
 import model.Pegs;
 import model.PegsRect;
 import view.View;
-
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -47,7 +47,6 @@ public class Edit extends JPanel{
         this.setBackground(Color.gray);
         niveau = Sauvegarde.charge(idSauvegarde);
         this.view = v;
-
         this.width = widht;
         this.height = height;
 
@@ -102,23 +101,19 @@ public class Edit extends JPanel{
         yPlus.addActionListener(
             (ActionEvent e) -> {
                 objetSelec.setLocation(objetSelec.getX(), objetSelec.getY()+1);
-   
         });
         yMoins.addActionListener(
             (ActionEvent e) -> {
                 objetSelec.setLocation(objetSelec.getX(), objetSelec.getY()-1);
-   
         });
         xSaisie.addActionListener(
             (ActionEvent e) -> {
                 objetSelec.setLocation(Integer.parseInt(xSaisie.getText()), objetSelec.getY());
-   
         });
 
         ySaisie.addActionListener(
             (ActionEvent e) -> {
                 objetSelec.setLocation(objetSelec.getX(), Integer.parseInt(ySaisie.getText()));
-   
         });
 
         save.addActionListener(
@@ -127,6 +122,7 @@ public class Edit extends JPanel{
         });
         leave.addActionListener(
             (ActionEvent e) -> {
+                Sauvegarde.save(niveau,idSauvegarde);
                 view.changerPanel(view.choixEdit());
         });
 
@@ -179,7 +175,6 @@ public class Edit extends JPanel{
             }
         };
         for(int i = 0; i < niveau.size();i++){
-            int j =i;
             p = new objetMobile(niveau.get(i)){
                 @Override
                 public void paint(Graphics g) {
@@ -197,7 +192,9 @@ public class Edit extends JPanel{
                 }
             };
             p.setOpaque(false);
-            p.setBounds((int)niveau.get(i).getX(), (int)niveau.get(i).getY(), 20, 20);
+            if(niveau.size() != 0){
+                p.setBounds((int)niveau.get(i).getX(), (int)niveau.get(i).getY(), 20, 20);
+            }
             principal.add(p);
             listPanel.add(p);
             principal.addMouseListener(p);
@@ -207,7 +204,7 @@ public class Edit extends JPanel{
         principal.setBackground(Color.lightGray);
         partieDroite.add(principal,BorderLayout.CENTER);
 
-        objetMobile o = new objetMobile(new Pegs(0, 0,20,20)){
+        objetMobile o = new objetMobile(new Pegs(0, 0,0,0)){
             @Override
             public void paint(Graphics g) {
                 // TODO Auto-generated method stub
@@ -232,7 +229,7 @@ public class Edit extends JPanel{
         principal.addMouseListener(selection);
         principal.addMouseMotionListener(selection);
 
-        objetMobile rect = new objetMobile(new PegsRect(0, 0, 20, 20)){
+        objetMobile rect = new objetMobile(new PegsRect(0, 0, 0, 0)){
             @Override
             public void paint(Graphics g) {
                 // TODO Auto-generated method stub
@@ -249,6 +246,33 @@ public class Edit extends JPanel{
         principal.addMouseMotionListener(rect);
         principal.addMouseListener(selection);
         principal.addMouseMotionListener(selection);
+        principal.setFocusable(true);
+        principal.requestFocus();
+        principal.addKeyListener(new KeyAdapter() {
+            public void keyPressed(KeyEvent e) {
+              int keyCode = e.getKeyCode();
+              if (keyCode == KeyEvent.VK_Q) {
+                if(objetSelec!=null){
+                    objetSelec.setLocation(objetSelec.getX()-5, objetSelec.getY());
+                }
+              }
+              if (keyCode == KeyEvent.VK_D) {
+                if(objetSelec!=null){
+                    objetSelec.setLocation(objetSelec.getX()+5, objetSelec.getY());
+                }
+              }
+              if (keyCode == KeyEvent.VK_Z) {
+                if(objetSelec!=null){
+                    objetSelec.setLocation(objetSelec.getX(), objetSelec.getY()-5);
+                }
+              }
+              if (keyCode == KeyEvent.VK_S) {
+                if(objetSelec!=null){
+                    objetSelec.setLocation(objetSelec.getX(), objetSelec.getY()+5);
+                }
+              }
+            }
+        });
     }
 
     public boolean appartient(Component p){
@@ -260,6 +284,7 @@ public class Edit extends JPanel{
 
     public class objetMobile extends JPanel implements MouseInputListener{
         Pegs pegs;
+        int id;
         boolean deplacement = false;
         boolean decoration = false;
         int xClick;
@@ -267,7 +292,6 @@ public class Edit extends JPanel{
 
         public objetMobile(Pegs p){
             this.pegs = p;
-
         }
 
         @Override
@@ -279,12 +303,19 @@ public class Edit extends JPanel{
                     xClick = e.getX()-this.getX();
                     yClick = e.getY()-this.getY();
                     if(!decoration){
+                        objetSelec.setForeground(Color.BLACK);
                         objetSelec = this;
+                        objetSelec.setForeground(Color.red);
                     }    
-                    /*xSaisie.setText(this.getX()+"");
-                    ySaisie.setText(this.getY()+"");*/
                 }else{
-                    deplacement = false;
+                    if(decoration){
+                        if(e.getY() > height-150){
+                            deplacement = false;
+                        }
+                    }
+                    else{
+                        deplacement = false;
+                    }
                 }
             }
             if(deplacement && e.getY() < height-150 && decoration){
@@ -305,6 +336,7 @@ public class Edit extends JPanel{
                         ySaisie.setText(this.getY()+"");
                     }
                 };
+                om.setLocation(xClick, yClick);
                 om.setOpaque(false);
                 om.setBounds(e.getX()-xClick, e.getY()-yClick, 20, 20);
                 principal.add(om);
@@ -313,6 +345,7 @@ public class Edit extends JPanel{
                 principal.addMouseMotionListener(om);
 
             }
+            principal.requestFocus();
 
         }
 
@@ -342,7 +375,6 @@ public class Edit extends JPanel{
                 this.setLocation(e.getXOnScreen()-Edit.this.getInsets().left-Edit.this.getX()-xClick-width/5,e.getYOnScreen()- Edit.this.getInsets().top-Edit.this.getY()-yClick);
             }
             principal.repaint();
-            p.repaint();
         }
     }
     public class Selection extends MouseAdapter{

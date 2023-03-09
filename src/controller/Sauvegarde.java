@@ -42,7 +42,6 @@ public class Sauvegarde {
         }
         if(n >= liste.size()){
             ArrayList<Pegs> a = new ArrayList<>();
-            a.add(new Pegs(0, 0, 0, 0));
             liste.add(a);
         }
         return liste.get(n);
