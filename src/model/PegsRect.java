@@ -14,8 +14,12 @@ public class PegsRect extends Pegs {
                     (int) (rayon*ratioX));
     }
 
-    public static void dessine(Graphics g, int widht, int weight){
+    public void dessine(Graphics g, int widht, int weight){
         g.fillRect(0, 0, widht, weight);
+    }
+
+    public PegsRect clone(double x, double y, int v, double rayon){
+        return new PegsRect(x, y, v, rayon);
     }
     
 }

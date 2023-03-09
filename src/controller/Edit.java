@@ -16,6 +16,7 @@ import java.awt.event.MouseAdapter;
 import model.Niveau;
 import model.Pegs;
 import model.PegsRect;
+import view.View;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -26,8 +27,7 @@ public class Edit extends JPanel{
     public ArrayList<objetMobile> listPanel = new ArrayList<objetMobile>();
     JPanel principal;
     objetMobile p;
-    objetMobile objetSelec = new objetMobile(null, 0);
-    int forme;
+    objetMobile objetSelec = new objetMobile(null);
     JButton save = new JButton("Sauvegarder");
     JButton leave = new JButton("Quitter");
     JButton cancel = new JButton("Annuler");
@@ -40,11 +40,13 @@ public class Edit extends JPanel{
     UndoManager undoManager = new UndoManager();
     JTextField xSaisie = new JTextField(objetSelec.getX()+"");
     JTextField ySaisie = new JTextField(objetSelec.getY()+"");
+    View view;
 
-    public Edit(Niveau n,int widht, int height){
+    public Edit(Niveau n,int widht, int height,int idSauvegarde,View v){
         new Sauvegarde();
         this.setBackground(Color.gray);
-        niveau = Sauvegarde.charge(0);
+        niveau = Sauvegarde.charge(idSauvegarde);
+        this.view = v;
 
         this.width = widht;
         this.height = height;
@@ -121,11 +123,12 @@ public class Edit extends JPanel{
 
         save.addActionListener(
             (ActionEvent e) -> {
-                Sauvegarde.save(niveau);
+                Sauvegarde.save(niveau,idSauvegarde);
         });
-
-
-
+        leave.addActionListener(
+            (ActionEvent e) -> {
+                view.changerPanel(view.choixEdit());
+        });
 
         delete.addActionListener(new ActionListener() {
             @Override
@@ -177,12 +180,13 @@ public class Edit extends JPanel{
         };
         for(int i = 0; i < niveau.size();i++){
             int j =i;
-            p = new objetMobile(niveau.get(i),0){
+            p = new objetMobile(niveau.get(i)){
                 @Override
                 public void paint(Graphics g) {
                     // TODO Auto-generated method stub
                     super.paint(g);
-                    Pegs.dessine(g, 20, 20);
+                    pegs.dessine(g, 20, 20);
+                    
                 }
                 @Override
                 public void setLocation(int x, int y) {
@@ -203,13 +207,13 @@ public class Edit extends JPanel{
         principal.setBackground(Color.lightGray);
         partieDroite.add(principal,BorderLayout.CENTER);
 
-        objetMobile o = new objetMobile(null,1){
+        objetMobile o = new objetMobile(new Pegs(0, 0,20,20)){
             @Override
             public void paint(Graphics g) {
                 // TODO Auto-generated method stub
                 super.paint(g);
                 g.setColor(Color.yellow);
-                Pegs.dessine(g, 20, 20);
+                pegs.dessine(g, 20, 20);
             }
             @Override
             public void setLocation(int x, int y) {
@@ -228,13 +232,13 @@ public class Edit extends JPanel{
         principal.addMouseListener(selection);
         principal.addMouseMotionListener(selection);
 
-        objetMobile rect = new objetMobile(null,2){
+        objetMobile rect = new objetMobile(new PegsRect(0, 0, 20, 20)){
             @Override
             public void paint(Graphics g) {
                 // TODO Auto-generated method stub
                 super.paint(g);
                 g.setColor(Color.yellow);
-                PegsRect.dessine(g, 20, 20);
+                pegs.dessine(g, 20, 20);
             }
         };
         rect.setBounds(80,750,20,20);
@@ -256,15 +260,13 @@ public class Edit extends JPanel{
 
     public class objetMobile extends JPanel implements MouseInputListener{
         Pegs pegs;
-        int id;
         boolean deplacement = false;
         boolean decoration = false;
         int xClick;
         int yClick;
 
-        public objetMobile(Pegs p,int n){
+        public objetMobile(Pegs p){
             this.pegs = p;
-            this.id = n;
 
         }
 
@@ -279,7 +281,6 @@ public class Edit extends JPanel{
                     if(!decoration){
                         objetSelec = this;
                     }    
-                    forme = id;
                     /*xSaisie.setText(this.getX()+"");
                     ySaisie.setText(this.getY()+"");*/
                 }else{
@@ -287,20 +288,14 @@ public class Edit extends JPanel{
                 }
             }
             if(deplacement && e.getY() < height-150 && decoration){
-                System.out.println(forme+"   "+id);
-                Pegs p = new Pegs(e.getX()-xClick, e.getY()-yClick, 20, 20);
-                this.id = forme;
-                objetMobile om = new objetMobile(p,id){
+                Pegs p = pegs.clone(e.getX()-xClick, e.getY()-yClick, 20, 20);
+                niveau.add(p);
+                objetMobile om = new objetMobile(p){
                     @Override
                     public void paint(Graphics g) {
                         // TODO Auto-generated method stub
                         super.paint(g);
-                        if (id == 1){
-                            Pegs.dessine(g, 20, 20);
-                        }
-                        else{
-                            PegsRect.dessine(g, 20, 20);
-                        }
+                        pegs.dessine(g, 20, 20);
                     }
                     @Override
                     public void setLocation(int x, int y) {
@@ -316,7 +311,7 @@ public class Edit extends JPanel{
                 listPanel.add(om);
                 principal.addMouseListener(om);
                 principal.addMouseMotionListener(om);
-                niveau.add(p);
+
             }
 
         }

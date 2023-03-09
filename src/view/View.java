@@ -101,7 +101,7 @@ public class View extends JFrame implements MouseInputListener{
 
         edit.addActionListener(e->{
             son.stop();
-            changerPanel(new Edit(controleur.getModele().getNiveau(),width,height));
+            changerPanel(choixEdit());
         });
     }
     public JPanel JeuPanel(Controleur controleur){
@@ -251,6 +251,20 @@ public class View extends JFrame implements MouseInputListener{
         this.setContentPane(pane);
         this.repaint();
         this.revalidate();
+    }
+
+    public JPanel choixEdit(){
+        JPanel choix = new JPanel(new GridLayout(1,5));
+        for(int i= 0; i < 5; i++){
+            JButton j = new JButton(i+"");
+            int k = i;
+            j.addActionListener(
+                (ActionEvent e) -> {
+                   changerPanel(new Edit(null, width, height,k,this)); 
+            });
+            choix.add(j);
+        }
+        return choix;
     }
 
     public void placePuit() {

@@ -23,8 +23,12 @@ public class Pegs extends Obstacle{
                     (int) (rayon*ratioX));
     }
 
-    public static void dessine(Graphics g, int widht, int weight){
+    public void dessine(Graphics g, int widht, int weight){
         g.fillOval(0, 0, widht, weight);
+    }
+
+    public Pegs clone(double x, double y, int v, double rayon){
+        return new Pegs(x, y, v, rayon);
     }
 
 }
