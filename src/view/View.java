@@ -37,7 +37,7 @@ public class View extends JFrame implements MouseInputListener{
     private Timer timer;
     private int directionX = 5;
     private Controleur controleur;
-    private int nbMunition;
+    //private int nbMunition;
     private double mouseX;
     private double mouseY;
     private static int colorX = 25;
@@ -100,7 +100,8 @@ public class View extends JFrame implements MouseInputListener{
         Balle b = m.getBalle();
         Obstacle[] o = m.getObstacles();
         Niveau n = m.getNiveau();
-        nbMunition = 4; // Pour le moment on met 10 munitions
+        //nbMunition = 4; // Pour le moment on met 10 munitions
+        controleur.getModele().getPlayer().setMunitions(4);
 
         fond = new JPanel();
         fond.setLayout(new BorderLayout());
@@ -125,6 +126,18 @@ public class View extends JFrame implements MouseInputListener{
 
         puit = new JLabel(new ImageIcon(chemin + "puit.png"));
 
+        JLabel scoreLabel=new JLabel("Score : " + controleur.getModele().getPlayer().getScore());
+        scoreLabel.setBounds(300, 0, 100, 100);
+        scoreLabel.setForeground(Color.RED);
+        scoreLabel.setFont(new Font("Serif", Font.PLAIN, 20));
+
+        JLabel pseudoLabel=new JLabel(controleur.getModele().getPlayer().getPseudo());
+        pseudoLabel.setBounds(1200,0,100,100);
+        pseudoLabel.setForeground(Color.RED);
+        pseudoLabel.setFont(new Font("Serif", Font.PLAIN, 20));
+
+        partie.add(pseudoLabel);
+        partie.add(scoreLabel);
         partie.add(puit);
         fond.add(partie, BorderLayout.CENTER);
         // --------------DROITE---------------------
@@ -198,6 +211,9 @@ public class View extends JFrame implements MouseInputListener{
         JButton precedent = new JButton("Acceuil");
         precedent.setBounds(0,0,100,100);
         choixNiv.add(precedent);
+        JTextField name=new JTextField("");
+        name.setBounds(600, 500, 100, 30);
+        choixNiv.add(name);
         precedent.addActionListener(e->{
             this.invalidate();
             son.stop();
@@ -214,11 +230,14 @@ public class View extends JFrame implements MouseInputListener{
             choixNiv.add(nameNiv);
             nameNiv.setName("niveau"+i);
             nameNiv.addActionListener(e->{
+                this.controleur.getModele().setPlayer(new Player(4, name.getText()));
                 char lettre = nameNiv.getName().charAt(nameNiv.getName().length()-1);
                 numNiveau = Integer.parseInt(""+lettre);
                 changerPanel(JeuPanel(this.controleur));
                 son.stop();
             });
+
+
         }
         return choixNiv;
     }
@@ -350,7 +369,7 @@ public class View extends JFrame implements MouseInputListener{
     public void afficheMunition() {
         for (int i = 0; i < 10; i++) {
             JPanel panel = new JPanel();
-            if (i > nbMunition + 1) { // il reste i + 1 munition
+            if (i > controleur.getModele().getPlayer().getMunitions() + 1) { // il reste i + 1 munition
                 panel = new JPanel() {
                     @Override
                     public void paint(Graphics g) {
