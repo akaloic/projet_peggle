@@ -43,8 +43,8 @@ public class View extends JFrame implements MouseInputListener{
     private static int colorX = 25;
     private static int colorY = 15;
     int seconde = 0;
-    private static float ratioX;
-    private static float ratioY;
+    private static double ratioX;
+    private static double ratioY;
 
     static Clip son;
 
@@ -129,6 +129,7 @@ public class View extends JFrame implements MouseInputListener{
                 dessineBalle(g); //temporaire à effacer plus tard
             }
         };
+        partie.setSize(new Dimension(800,600));
         partie.setLayout(new BorderLayout());
         partie.setBackground(Color.darkGray);
 
@@ -160,11 +161,11 @@ public class View extends JFrame implements MouseInputListener{
 
         fond.add(fondGauche, BorderLayout.WEST);
         // --------------GAUCHE---------------------
-
+        ratioX = (float)width/partie.getWidth();
+        ratioY = (float)height/partie.getHeight();
         this.add(fond);
-        this.setVisible(true);        
-        ratioX = (width-munition.getWidth())/2000f;
-        ratioY = height/1325f;
+        this.setVisible(true);       
+
 
         // --------------ANIMATION----------------------
         timer = new Timer(30, new ActionListener() {
@@ -197,7 +198,6 @@ public class View extends JFrame implements MouseInputListener{
                     }
                     t+=0.3;
                 }
-
                 repaint();
             }
         });
@@ -208,7 +208,6 @@ public class View extends JFrame implements MouseInputListener{
                 controleur.tirer(); 
             }
         });
-
         return fond;
     }
 
