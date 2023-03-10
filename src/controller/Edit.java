@@ -1,13 +1,10 @@
 package controller;
 
 import java.util.ArrayList;
-
-import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.KeyStroke;
 import javax.swing.event.MouseInputListener;
 import javax.swing.undo.AbstractUndoableEdit;
 import javax.swing.undo.UndoManager;
@@ -24,10 +21,10 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 public class Edit extends JPanel{
     public ArrayList<Pegs> niveau;
-    public ArrayList<objetMobile> listPanel = new ArrayList<objetMobile>();
+    public ArrayList<objetMobile> listPanel = new ArrayList<objetMobile>();//Liste pour garder compte des JPanel sur la page
     JPanel principal;
-    objetMobile p;
-    objetMobile objetSelec = new objetMobile(null);
+    objetMobile pegsEcran;
+    objetMobile objetSelectionner = new objetMobile(null);//Le dernière objet sur lequel on a cliqué
     JButton save = new JButton("Sauvegarder");
     JButton leave = new JButton("Quitter");
     JButton cancel = new JButton("Annuler");
@@ -38,8 +35,8 @@ public class Edit extends JPanel{
     int height;
     Selection selection = new Selection();
     UndoManager undoManager = new UndoManager();
-    JTextField xSaisie = new JTextField(objetSelec.getX()+"");
-    JTextField ySaisie = new JTextField(objetSelec.getY()+"");
+    JTextField xSaisie = new JTextField(objetSelectionner.getX()+"");
+    JTextField ySaisie = new JTextField(objetSelectionner.getY()+"");
     View view;
 
     public Edit(Niveau n,int widht, int height,int idSauvegarde,View v){
@@ -60,62 +57,60 @@ public class Edit extends JPanel{
         partieBouton.add(espaceCoords);
 
         JPanel espaceX = new JPanel(new BorderLayout());
-        JPanel espaceY = new JPanel(new BorderLayout());
         JButton xPlus = new JButton("+");
         JButton xMoins = new JButton("-");
         JPanel xCase = new JPanel(new GridLayout(2,1));
-        JButton yPlus = new JButton("+");
-        JButton yMoins = new JButton("-");
-        JPanel yCase = new JPanel(new GridLayout(2,1));
         xSaisie.setHorizontalAlignment(JTextField.CENTER);
-        ySaisie.setHorizontalAlignment(JTextField.CENTER);
         espaceX.add(xSaisie,BorderLayout.WEST);
         espaceX.add(xCase,BorderLayout.EAST);
         xCase.add(xPlus);
         xCase.add(xMoins);
+        JLabel xtext = new JLabel("Coordonnées X");
+        espaceX.setPreferredSize(new Dimension(50,75));
+        espaceX.add(xtext,BorderLayout.WEST);
+        espaceX.add(xSaisie,BorderLayout.CENTER);
+        espaceCoords.add(espaceX,BorderLayout.NORTH);
+
+
+        JPanel espaceY = new JPanel(new BorderLayout());
+        JButton yPlus = new JButton("+");
+        JButton yMoins = new JButton("-");
+        JPanel yCase = new JPanel(new GridLayout(2,1));
+        ySaisie.setHorizontalAlignment(JTextField.CENTER);
         espaceY.add(ySaisie,BorderLayout.WEST);
         espaceY.add(yCase,BorderLayout.EAST);
         yCase.add(yPlus);
         yCase.add(yMoins);
-
-        JLabel xtext = new JLabel("Coordonnées X");
         JLabel ytext = new JLabel("Coordonnées Y");
-
-        espaceX.setPreferredSize(new Dimension(50,50));
-        espaceY.setPreferredSize(new Dimension(50,50));
-        espaceCoords.add(espaceX,BorderLayout.NORTH);
-        espaceX.add(xtext,BorderLayout.WEST);
+        espaceY.setPreferredSize(new Dimension(50,75));
         espaceY.add(ytext,BorderLayout.WEST);
-        espaceX.add(xSaisie,BorderLayout.CENTER);
         espaceY.add(ySaisie,BorderLayout.CENTER);
         espaceCoords.add(espaceY,BorderLayout.SOUTH);
         
         xPlus.addActionListener(
             (ActionEvent e) -> {
-                objetSelec.setLocation(objetSelec.getX()+1, objetSelec.getY());
+                objetSelectionner.setLocation(objetSelectionner.getX()+1, objetSelectionner.getY());
         });
         xMoins.addActionListener(
             (ActionEvent e) -> {
-                objetSelec.setLocation(objetSelec.getX()-1, objetSelec.getY());
+                objetSelectionner.setLocation(objetSelectionner.getX()-1, objetSelectionner.getY());
         });
         yPlus.addActionListener(
             (ActionEvent e) -> {
-                objetSelec.setLocation(objetSelec.getX(), objetSelec.getY()+1);
+                objetSelectionner.setLocation(objetSelectionner.getX(), objetSelectionner.getY()+1);
         });
         yMoins.addActionListener(
             (ActionEvent e) -> {
-                objetSelec.setLocation(objetSelec.getX(), objetSelec.getY()-1);
+                objetSelectionner.setLocation(objetSelectionner.getX(), objetSelectionner.getY()-1);
         });
         xSaisie.addActionListener(
             (ActionEvent e) -> {
-                objetSelec.setLocation(Integer.parseInt(xSaisie.getText()), objetSelec.getY());
+                objetSelectionner.setLocation(Integer.parseInt(xSaisie.getText()), objetSelectionner.getY());
         });
-
         ySaisie.addActionListener(
             (ActionEvent e) -> {
-                objetSelec.setLocation(objetSelec.getX(), Integer.parseInt(ySaisie.getText()));
+                objetSelectionner.setLocation(objetSelectionner.getX(), Integer.parseInt(ySaisie.getText()));
         });
-
         save.addActionListener(
             (ActionEvent e) -> {
                 Sauvegarde.save(niveau,idSauvegarde);
@@ -131,6 +126,7 @@ public class Edit extends JPanel{
             public void actionPerformed(ActionEvent e) {
                 if(selection != null){
                     ArrayList<objetMobile> aSupprimer = new ArrayList<objetMobile>();
+                    //Liste pour garder les objet a supprimer, car supprimer des éléments d'un liste qu'on est en train de parcourir est pas très opti
                     for(int i = 0; i < listPanel.size();i++){
                         if(appartient(listPanel.get(i))){
                             aSupprimer.add(listPanel.get(i));
@@ -138,8 +134,7 @@ public class Edit extends JPanel{
                     }
                     for(int j = 0; j < aSupprimer.size();j++){
                         niveau.remove(aSupprimer.get(j).pegs);
-                        saveChange(aSupprimer);
-
+                        saveChange(aSupprimer);//Va aussi remove de listePanel et principal
                     }
                 }
 
@@ -150,7 +145,6 @@ public class Edit extends JPanel{
                 undoManager.undo();
                 repaint();
                 principal.repaint();
-            
         });
         redo.addActionListener(
             (ActionEvent e) -> {
@@ -164,10 +158,11 @@ public class Edit extends JPanel{
         JPanel partieDroite = new JPanel();
         partieDroite.setLayout(new BorderLayout());
         this.add(partieDroite,BorderLayout.CENTER);
-        partieBouton.setPreferredSize(new Dimension(widht/5,height));
+        partieBouton.setPreferredSize(new Dimension(widht/7,height));
 
         principal = new JPanel(){
             @Override
+            //Dessine le rectangle quand on maintient la souris
             protected void paintComponent(Graphics g) {
                 // TODO Auto-generated method stub
                 super.paintComponent(g);
@@ -175,7 +170,7 @@ public class Edit extends JPanel{
             }
         };
         for(int i = 0; i < niveau.size();i++){
-            p = new objetMobile(niveau.get(i)){
+            pegsEcran = new objetMobile(niveau.get(i)){
                 @Override
                 public void paint(Graphics g) {
                     // TODO Auto-generated method stub
@@ -183,6 +178,7 @@ public class Edit extends JPanel{
                     pegs.dessine(g, 20, 20);
                     
                 }
+                //Astuce ultime pour mettre à jour les textes dès qu'une coordonnée bouge
                 @Override
                 public void setLocation(int x, int y) {
                     // TODO Auto-generated method stub
@@ -191,20 +187,21 @@ public class Edit extends JPanel{
                     ySaisie.setText(this.getY()+"");
                 }
             };
-            p.setOpaque(false);
             if(niveau.size() != 0){
-                p.setBounds((int)niveau.get(i).getX(), (int)niveau.get(i).getY(), 20, 20);
+                pegsEcran.setBounds((int)(niveau.get(i).getX()*view.ratioX), (int)(niveau.get(i).getY()*view.ratioY), 20, 20);
             }
-            principal.add(p);
-            listPanel.add(p);
-            principal.addMouseListener(p);
-            principal.addMouseMotionListener(p);
+            pegsEcran.setOpaque(false);
+            principal.add(pegsEcran);
+            listPanel.add(pegsEcran);
+            principal.addMouseListener(pegsEcran);
+            principal.addMouseMotionListener(pegsEcran);
         }
         principal.setLayout(null);
         principal.setBackground(Color.lightGray);
         partieDroite.add(principal,BorderLayout.CENTER);
 
-        objetMobile o = new objetMobile(new Pegs(0, 0,0,0)){
+        //Peg qui servira à créer d'autre peg rond
+        objetMobile pegRond = new objetMobile(new Pegs(0, 0,0,0)){
             @Override
             public void paint(Graphics g) {
                 // TODO Auto-generated method stub
@@ -220,16 +217,17 @@ public class Edit extends JPanel{
                 ySaisie.setText(this.getY()+"");
             }
         };
-        o.setBounds(50,750,20,20);
-        o.setOpaque(false);
-        o.decoration = true;
-        principal.add(o);
-        principal.addMouseListener(o);
-        principal.addMouseMotionListener(o);
+        pegRond.setBounds(50,750,20,20);
+        pegRond.setOpaque(false);
+        pegRond.decoration = true;
+        principal.add(pegRond);
+        principal.addMouseListener(pegRond);
+        principal.addMouseMotionListener(pegRond);
         principal.addMouseListener(selection);
         principal.addMouseMotionListener(selection);
 
-        objetMobile rect = new objetMobile(new PegsRect(0, 0, 0, 0)){
+        //Peg qui servira à créer d'autre peg carré
+        objetMobile pegRect = new objetMobile(new PegsRect(0, 0, 0, 0)){
             @Override
             public void paint(Graphics g) {
                 // TODO Auto-generated method stub
@@ -238,12 +236,12 @@ public class Edit extends JPanel{
                 pegs.dessine(g, 20, 20);
             }
         };
-        rect.setBounds(80,750,20,20);
-        rect.setOpaque(false);
-        rect.decoration = true;
-        principal.add(rect);
-        principal.addMouseListener(rect);
-        principal.addMouseMotionListener(rect);
+        pegRect.setBounds(80,750,20,20);
+        pegRect.setOpaque(false);
+        pegRect.decoration = true;
+        principal.add(pegRect);
+        principal.addMouseListener(pegRect);
+        principal.addMouseMotionListener(pegRect);
         principal.addMouseListener(selection);
         principal.addMouseMotionListener(selection);
         principal.setFocusable(true);
@@ -252,23 +250,23 @@ public class Edit extends JPanel{
             public void keyPressed(KeyEvent e) {
               int keyCode = e.getKeyCode();
               if (keyCode == KeyEvent.VK_Q) {
-                if(objetSelec!=null){
-                    objetSelec.setLocation(objetSelec.getX()-5, objetSelec.getY());
+                if(objetSelectionner!=null){
+                    objetSelectionner.setLocation(objetSelectionner.getX()-10, objetSelectionner.getY());
                 }
               }
               if (keyCode == KeyEvent.VK_D) {
-                if(objetSelec!=null){
-                    objetSelec.setLocation(objetSelec.getX()+5, objetSelec.getY());
+                if(objetSelectionner!=null){
+                    objetSelectionner.setLocation(objetSelectionner.getX()+10, objetSelectionner.getY());
                 }
               }
               if (keyCode == KeyEvent.VK_Z) {
-                if(objetSelec!=null){
-                    objetSelec.setLocation(objetSelec.getX(), objetSelec.getY()-5);
+                if(objetSelectionner!=null){
+                    objetSelectionner.setLocation(objetSelectionner.getX(), objetSelectionner.getY()-10);
                 }
               }
               if (keyCode == KeyEvent.VK_S) {
-                if(objetSelec!=null){
-                    objetSelec.setLocation(objetSelec.getX(), objetSelec.getY()+5);
+                if(objetSelectionner!=null){
+                    objetSelectionner.setLocation(objetSelectionner.getX(), objetSelectionner.getY()+10);
                 }
               }
             }
@@ -276,7 +274,6 @@ public class Edit extends JPanel{
     }
 
     public boolean appartient(Component p){
-        //System.out.println(selection.x1+"  "+selection.y1+"  "+selection.x2+"   "+selection.y2);
         Rectangle r = selection.getRectangle();
         return p.getX() > r.getX() && p.getX() < r.getX()+r.getWidth() && p.getY() > r.getY() && p.getY() < r.getY()+r.getHeight();
     }
@@ -284,9 +281,8 @@ public class Edit extends JPanel{
 
     public class objetMobile extends JPanel implements MouseInputListener{
         Pegs pegs;
-        int id;
         boolean deplacement = false;
-        boolean decoration = false;
+        boolean decoration = false;//Pour différence les pegs pour éditer et les pegs des niveaux
         int xClick;
         int yClick;
 
@@ -302,14 +298,14 @@ public class Edit extends JPanel{
                     deplacement = true;
                     xClick = e.getX()-this.getX();
                     yClick = e.getY()-this.getY();
-                    if(!decoration){
-                        objetSelec.setForeground(Color.BLACK);
-                        objetSelec = this;
-                        objetSelec.setForeground(Color.red);
+                    if(!decoration){//Pour highlight objetSelectionner
+                        objetSelectionner.setForeground(Color.BLACK);
+                        objetSelectionner = this;
+                        objetSelectionner.setForeground(Color.red);
                     }    
                 }else{
                     if(decoration){
-                        if(e.getY() > height-150){
+                        if(e.getY() > height-150){//Pour redéposer le peg d'edit dans la zone du bas
                             deplacement = false;
                         }
                     }
@@ -319,7 +315,7 @@ public class Edit extends JPanel{
                 }
             }
             if(deplacement && e.getY() < height-150 && decoration){
-                Pegs p = pegs.clone(e.getX()-xClick, e.getY()-yClick, 20, 20);
+                Pegs p = pegs.clone((e.getX()-xClick)/view.ratioX, (e.getY()-yClick)/view.ratioY, 20, 20);
                 niveau.add(p);
                 objetMobile om = new objetMobile(p){
                     @Override
@@ -336,14 +332,12 @@ public class Edit extends JPanel{
                         ySaisie.setText(this.getY()+"");
                     }
                 };
-                om.setLocation(xClick, yClick);
                 om.setOpaque(false);
-                om.setBounds(e.getX()-xClick, e.getY()-yClick, 20, 20);
+                om.setBounds(((e.getX()-xClick)), (e.getY()-yClick), 20, 20);
                 principal.add(om);
                 listPanel.add(om);
                 principal.addMouseListener(om);
                 principal.addMouseMotionListener(om);
-
             }
             principal.requestFocus();
 
@@ -372,7 +366,7 @@ public class Edit extends JPanel{
         @Override
         public void mouseMoved(MouseEvent e) {
             if(deplacement){
-                this.setLocation(e.getXOnScreen()-Edit.this.getInsets().left-Edit.this.getX()-xClick-width/5,e.getYOnScreen()- Edit.this.getInsets().top-Edit.this.getY()-yClick);
+                this.setLocation(e.getXOnScreen()-Edit.this.getInsets().left-Edit.this.getX()-xClick-width/7,e.getYOnScreen()- Edit.this.getInsets().top-Edit.this.getY()-yClick);
             }
             principal.repaint();
         }
@@ -460,3 +454,15 @@ public class Edit extends JPanel{
  */
 
  
+
+ /*
+  * 800 600    / 1800 1000   2,25     1,66
+    800 600      1200 800    1,5      1,33
+    50 50
+    112.5  83   75  65
+
+
+
+
+
+  */

@@ -43,8 +43,8 @@ public class View extends JFrame implements MouseInputListener{
     private static int colorX = 25;
     private static int colorY = 15;
     int seconde = 0;
-    private static double ratioX;
-    private static double ratioY;
+    public double ratioX;
+    public double ratioY;
 
     static Clip son;
 
@@ -103,6 +103,8 @@ public class View extends JFrame implements MouseInputListener{
             son.stop();
             changerPanel(choixEdit());
         });
+        ratioX = (float)width/800;
+        ratioY = (float)height/600;
     }
     public JPanel JeuPanel(Controleur controleur){
         Modele m = controleur.getModele();
@@ -136,7 +138,9 @@ public class View extends JFrame implements MouseInputListener{
         puit = new JLabel(new ImageIcon(chemin + "puit.png"));
 
         partie.add(puit);
-        fond.add(partie, BorderLayout.CENTER);
+        JPanel bis = new JPanel(null);
+        bis.add(partie);
+        fond.add(bis, BorderLayout.CENTER);
         // --------------DROITE---------------------
 
         // --------------GAUCHE---------------------
@@ -161,8 +165,6 @@ public class View extends JFrame implements MouseInputListener{
 
         fond.add(fondGauche, BorderLayout.WEST);
         // --------------GAUCHE---------------------
-        ratioX = (float)width/partie.getWidth();
-        ratioY = (float)height/partie.getHeight();
         this.add(fond);
         this.setVisible(true);       
 
@@ -208,6 +210,7 @@ public class View extends JFrame implements MouseInputListener{
                 controleur.tirer(); 
             }
         });
+        partie.setSize(new Dimension((int)(partie.getWidth()*ratioX),(int)(partie.getHeight()*ratioY)));
         return fond;
     }
 

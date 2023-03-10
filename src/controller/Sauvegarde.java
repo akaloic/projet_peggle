@@ -11,8 +11,6 @@ import model.Pegs;
 
 public class Sauvegarde {
     public static ArrayList<ArrayList<Pegs>> liste = new ArrayList<ArrayList<Pegs>>();
-    public Sauvegarde(){ 
-    }
 
     public static void save(ArrayList<Pegs> a,int n){
         liste.set(n, a);

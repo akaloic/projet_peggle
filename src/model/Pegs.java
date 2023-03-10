@@ -17,10 +17,10 @@ public class Pegs extends Obstacle{
     }
 
     public void dessine(Graphics2D g, double ratioX,double ratioY){
-        g.fillOval((int) (x*ratioX),
-                    (int) (y*ratioY),
-                    (int) (rayon*ratioX),
-                    (int) (rayon*ratioX));
+        g.fillOval((int) (x/ratioX),
+                    (int) (y/ratioY),
+                    (int) (rayon/ratioX),
+                    (int) (rayon/ratioX));
     }
 
     public void dessine(Graphics g, int widht, int weight){
