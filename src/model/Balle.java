@@ -38,8 +38,8 @@ public class Balle {
       return this.rayon;
     }
     
-    public boolean collision(Pegs o){
-      return (o.getRayon() + this.rayon)*(o.getRayon()+this.rayon) == (this.x-o.getX())*(this.x-o.getX()) + (this.y - o.getY())*(this.y - o.getY());
+    public boolean collision(Pegs o,double ratioX, double ratioY){
+      return Math.hypot(x-(o.getX()*ratioX), y-(o.getY())*ratioY) <= (rayon + 50);
     }
 
   }

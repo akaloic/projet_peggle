@@ -390,7 +390,6 @@ public class Edit extends JPanel{
             this.y2 = event.getY();
             //cutButton.setEnabled(true);
             repaint();
-            
         }
 
         public void mouseMouved(MouseEvent event){

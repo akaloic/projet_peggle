@@ -17,8 +17,11 @@ import java.awt.event.*;
 import java.awt.geom.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.lang.ModuleLayer.Controller;
 import java.nio.file.FileSystem;
+import java.util.ArrayList;
 
+import javax.sound.midi.Synthesizer;
 import javax.sound.sampled.*;
 
 public class View extends JFrame implements MouseInputListener{
@@ -37,7 +40,7 @@ public class View extends JFrame implements MouseInputListener{
     private Timer timer;
     private int directionX = 5;
     private Controleur controleur;
-    private int nbMunition;
+    //private int nbMunition;
     private double mouseX;
     private double mouseY;
     private static int colorX = 25;
@@ -62,8 +65,8 @@ public class View extends JFrame implements MouseInputListener{
     int speedY = 10;
             /*fin balle */
 
-    public View(Controleur controleur) {
 
+    public View(Controleur controleur) {
         String urlDuSon = "ressources/SonsWav/Accueil.wav";
         LancerMusic(urlDuSon);
         Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
@@ -111,7 +114,8 @@ public class View extends JFrame implements MouseInputListener{
         Balle b = m.getBalle();
         Obstacle[] o = m.getObstacles();
         Niveau n = m.getNiveau();
-        nbMunition = 4; // Pour le moment on met 10 munitions
+        //nbMunition = 4; // Pour le moment on met 10 munitions
+        controleur.getModele().getPlayer().setMunitions(4);
 
         fond = new JPanel();
         fond.setLayout(new BorderLayout());
@@ -121,14 +125,6 @@ public class View extends JFrame implements MouseInputListener{
             public void paint(Graphics g) {
                 super.paint(g);
                 dessineCanon(g);
-                PegRond pRond= new PegRond(0,0);
-                dessinePegRond(g,pRond); // ca marche
-                ObstacleRebondissant  oRebond = new ObstacleRebondissant(100, 100);
-                dessineObstacleRebond(g,oRebond); // ca marche
-                ObstacleRectangulaire oR = new ObstacleRectangulaire(50,50);
-                dessineObstacleRect(g,oR); // ca  marche
-
-                dessineBalle(g); //temporaire à effacer plus tard
             }
         };
         partie.setSize(new Dimension(800,600));
@@ -136,6 +132,20 @@ public class View extends JFrame implements MouseInputListener{
         partie.setBackground(Color.darkGray);
 
         puit = new JLabel(new ImageIcon(chemin + "puit.png"));
+
+        JLabel scoreLabel=new JLabel("Score : " + controleur.getModele().getPlayer().getScore());
+        scoreLabel.setBounds(300, 0, 100, 100);
+        scoreLabel.setForeground(Color.RED);
+        scoreLabel.setFont(new Font("Serif", Font.PLAIN, 20));
+
+        JLabel pseudoLabel=new JLabel(controleur.getModele().getPlayer().getPseudo());
+        pseudoLabel.setBounds(1200,0,100,100);
+        pseudoLabel.setForeground(Color.RED);
+        pseudoLabel.setFont(new Font("Serif", Font.PLAIN, 20));
+
+        partie.add(pseudoLabel);
+        partie.add(scoreLabel);
+
 
         partie.add(puit);
         JPanel bis = new JPanel(null);
@@ -170,40 +180,7 @@ public class View extends JFrame implements MouseInputListener{
 
 
         // --------------ANIMATION----------------------
-        timer = new Timer(30, new ActionListener() {
-            double t = 0;
-            public void actionPerformed(ActionEvent e) {
-                // seconde++;
 
-                // canon
-                colorX -= 1 % 25;
-                colorY -= 1 % 25;
-                calculeAngle();
-
-                // puit
-                placePuit();
-
-                // munition
-                /*
-                 * if (CONDITION) { // si la balle atteri dans le puit
-                 * nbMunition++;
-                 * munition.removeAll();
-                 * afficheMunition();
-                 * munition.revalidate();
-                 * }
-                 */
-
-                 if(controleur.getModele().getBalle()!=null){ 
-                    controleur.getModele().getBalle().update(180-controleur.getAngleTir(),t);
-                    if(controleur.getModele().getBalle().getY() > partie.getHeight()){
-                        t = 0;
-                    }
-                    t+=0.3;
-                }
-                repaint();
-            }
-        });
-        timer.start();
         // --------------ANIMATION----------------------
         partie.addMouseListener(new MouseAdapter(){
             public void mouseClicked(MouseEvent e){
@@ -224,6 +201,10 @@ public class View extends JFrame implements MouseInputListener{
         JButton precedent = new JButton("Acceuil");
         precedent.setBounds(0,0,100,100);
         choixNiv.add(precedent);
+        JTextField name=new JTextField("");
+        name.setBounds(600, 500, 100, 30);
+        choixNiv.add(name);
+
         precedent.addActionListener(e->{
             this.invalidate();
             son.stop();
@@ -236,12 +217,24 @@ public class View extends JFrame implements MouseInputListener{
         for (int i = 1 ; i < 6 ; i++){;
             JButton nameNiv =  new JButton("Niveau "+i);
             nameNiv.setBounds(xNiv, yNiv, wNiv, yNiv);
+
+            JButton editI = new JButton("Edit "+i);
+            editI.setBounds(xNiv, yNiv+400, wNiv, yNiv);
+
             xNiv += 2*wNiv;
             choixNiv.add(nameNiv);
             nameNiv.setName("niveau"+i);
+            choixNiv.add(editI);
+            this.controleur.getModele().setPlayer(new Player(4, name.getText()));
             nameNiv.addActionListener(e->{
                 char lettre = nameNiv.getName().charAt(nameNiv.getName().length()-1);
                 numNiveau = Integer.parseInt(""+lettre);
+                changerPanel(JeuPanel(this.controleur));
+                son.stop();
+            });
+            int j = i-1;
+            editI.addActionListener(e->{
+                this.controleur.getModele().getNiveau().setList(Sauvegarde.charge(j));
                 changerPanel(JeuPanel(this.controleur));
                 son.stop();
             });
@@ -250,13 +243,21 @@ public class View extends JFrame implements MouseInputListener{
     }
     public void changerPanel(JPanel pane){
         this.invalidate();
+        this.getContentPane().removeAll();
         this.setContentPane(pane);
         this.repaint();
         this.revalidate();
     }
 
     public JPanel choixEdit(){
-        JPanel choix = new JPanel(new GridLayout(1,5));
+        JPanel choix = new JPanel(new GridLayout(1,6));
+        JButton acceuil = new JButton("acceuil");
+        acceuil.addActionListener(
+            (ActionEvent e) -> {
+                this.invalidate();
+                new View(this.controleur);
+        });
+        choix.add(acceuil);
         for(int i= 0; i < 5; i++){
             JButton j = new JButton(i+"");
             int k = i;
@@ -293,26 +294,6 @@ public class View extends JFrame implements MouseInputListener{
         Graphics2D g2d = (Graphics2D) g;
         g2d.setColor(Color.PINK);
         g2d.fillRect((int)oReb.getX(),(int)oReb.getY(), (int)oReb.getWidth(),(int)oReb.getHeight());
-    }
-    public void dessineBalle(Graphics g){ //temporaire à effacer plus tard
-        Graphics2D g2d = (Graphics2D) g;
-
-        max_x = partie.getWidth()-ballWidth;
-        max_y = partie.getHeight()-ballHeight;
-
-        g2d.setColor(Color.RED);
-        g.fillOval(x,y,ballWidth,ballHeight);
-        if(x>max_x || x<0){
-            speedX = -speedX;
-        }
-        if(y>max_y || y<0){
-            speedY = -speedY;
-        }
-
-        
-        x = x+speedX;
-        y = y+speedY;
-
     }
 
     public void dessineCanon(Graphics g) {
@@ -380,10 +361,13 @@ public class View extends JFrame implements MouseInputListener{
         g2d.setPaint(null);
         g2d.setColor(Color.lightGray);
 
-        controleur.getModele().setNiveau(new Niveau(numNiveau));
+        g.fillOval((int)controleur.getModele().getBalle().getX(), (int)controleur.getModele().getBalle().getY(), 30, 30);
+
+        //controleur.getModele().setNiveau(new Niveau(numNiveau));
         for (int i = 0; i < controleur.getModele().getNiveau().list_peg.size(); i++) {
-            controleur.getModele().getNiveau().list_peg.get(i).dessine(g2d, ratioX, ratioY);
+            controleur.getModele().getNiveau().list_peg.get(i).dessine(g2d,ratioX,ratioY);
         }
+
     }
 
     public void calculeAngle() {
@@ -398,7 +382,7 @@ public class View extends JFrame implements MouseInputListener{
     public void afficheMunition() {
         for (int i = 0; i < 10; i++) {
             JPanel panel = new JPanel();
-            if (i > nbMunition + 1) { // il reste i + 1 munition
+            if (i > controleur.getModele().getPlayer().getMunitions() + 1) { // il reste i + 1 munitio
                 panel = new JPanel() {
                     @Override
                     public void paint(Graphics g) {
@@ -424,6 +408,15 @@ public class View extends JFrame implements MouseInputListener{
     public int getAngle(){
         return this.angle;
     }
+
+    public void setColorX(){
+        colorX -= 1 % 25;
+    }
+
+    public void setColorY(){
+        colorY -= 1 % 25;
+    }
+
 
     public static void LancerMusic(String url){
         try {

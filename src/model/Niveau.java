@@ -175,6 +175,10 @@ public class Niveau {
         return list_peg;
     }
 
+    public void setList(ArrayList<Pegs> a){
+        this.list_peg = a;
+    }
+
     public int getNiveau() {
         return niveau;
     }

@@ -8,7 +8,7 @@ public class PegsRect extends Pegs {
     }
 
     public void dessine(Graphics2D g, double ratioX,double ratioY){
-        g.drawRect((int) (x*ratioX),
+        g.fillRect((int) (x*ratioX),
                     (int) (y*ratioY),
                     (int) (rayon*ratioX),
                     (int) (rayon*ratioX));
