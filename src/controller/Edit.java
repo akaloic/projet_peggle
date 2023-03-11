@@ -25,6 +25,8 @@ public class Edit extends JPanel{
     JPanel principal;
     objetMobile pegsEcran;
     objetMobile objetSelectionner = new objetMobile(null);//Le dernière objet sur lequel on a cliqué
+    objetMobile suivant = new objetMobile(null);
+    boolean peutBouger = false;
     JButton save = new JButton("Sauvegarder");
     JButton leave = new JButton("Quitter");
     JButton cancel = new JButton("Annuler");
@@ -250,24 +252,66 @@ public class Edit extends JPanel{
             public void keyPressed(KeyEvent e) {
               int keyCode = e.getKeyCode();
               if (keyCode == KeyEvent.VK_Q) {
-                if(objetSelectionner!=null){
+                if(objetSelectionner != null && (peutBouger || objetSelectionner.decoration)){
                     objetSelectionner.setLocation(objetSelectionner.getX()-10, objetSelectionner.getY());
+                }else{
+                    suivant = plusProche(3);//Gauche
+                    objetSelectionner.setForeground(Color.black);
+                    objetSelectionner = suivant;
+                    objetSelectionner.setForeground(Color.red);
                 }
               }
               if (keyCode == KeyEvent.VK_D) {
-                if(objetSelectionner!=null){
+                if(objetSelectionner != null && (peutBouger || objetSelectionner.decoration)){
                     objetSelectionner.setLocation(objetSelectionner.getX()+10, objetSelectionner.getY());
+                }else{
+                    suivant = plusProche(1);//Droite
+                    objetSelectionner.setForeground(Color.black);
+                    objetSelectionner = suivant;
+                    objetSelectionner.setForeground(Color.red);
                 }
               }
               if (keyCode == KeyEvent.VK_Z) {
-                if(objetSelectionner!=null){
+                if(objetSelectionner != null && (peutBouger || objetSelectionner.decoration)){
                     objetSelectionner.setLocation(objetSelectionner.getX(), objetSelectionner.getY()-10);
+                }else{
+                    suivant = plusProche(0);//Haut
+                    objetSelectionner.setForeground(Color.black);
+                    objetSelectionner = suivant;
+                    objetSelectionner.setForeground(Color.red);
                 }
               }
               if (keyCode == KeyEvent.VK_S) {
-                if(objetSelectionner!=null){
+                if(objetSelectionner != null && (peutBouger || objetSelectionner.decoration)){
                     objetSelectionner.setLocation(objetSelectionner.getX(), objetSelectionner.getY()+10);
                 }
+                else{
+                    suivant = plusProche(2);//Bas
+                    objetSelectionner.setForeground(Color.black);
+                    objetSelectionner = suivant;
+                    objetSelectionner.setForeground(Color.red);
+                }
+              }
+              if (keyCode == KeyEvent.VK_ENTER) {
+                if(objetSelectionner != null){
+                    peutBouger = !peutBouger;
+                    objetSelectionner.setForeground(Color.cyan);
+                    if(!peutBouger){
+                        objetSelectionner.setForeground(Color.red);
+                    }
+                }
+                if(objetSelectionner.decoration){
+                    Pegs p = objetSelectionner.pegs.clone(objetSelectionner.getX()/view.ratioX, objetSelectionner.getY()/view.ratioY, 20, 20);
+                    creePegs(p, objetSelectionner.getX(), objetSelectionner.getY(), 0, 0);
+                }
+              }
+              if (keyCode == KeyEvent.VK_W) {
+                objetSelectionner.setForeground(Color.black);
+                objetSelectionner = pegRond;
+              }
+              if (keyCode == KeyEvent.VK_X) {
+                objetSelectionner.setForeground(Color.black);
+                objetSelectionner = pegRect;
               }
             }
         });
@@ -277,6 +321,69 @@ public class Edit extends JPanel{
         Rectangle r = selection.getRectangle();
         return p.getX() > r.getX() && p.getX() < r.getX()+r.getWidth() && p.getY() > r.getY() && p.getY() < r.getY()+r.getHeight();
     }
+
+    public objetMobile plusProche(int direction){
+        objetMobile voisin = listPanel.get(0);
+        for(int i = 0; i < listPanel.size();i++){
+            if((distance(listPanel.get(i)) <= distance(voisin)  || distance(voisin) == 0 )&& objetSelectionner != listPanel.get(i)){
+                switch(direction){
+                    case 0://Haut
+                        if(listPanel.get(i).getY() < objetSelectionner.getY()){
+                            voisin = listPanel.get(i);
+                        }
+                        break;
+                    case 1://Droite
+                        if(listPanel.get(i).getX() > objetSelectionner.getX()){
+                            voisin = listPanel.get(i);
+                        }
+                        break;
+
+                    case 2://Bas
+                        if(listPanel.get(i).getY() > objetSelectionner.getY()){
+                            voisin = listPanel.get(i);
+                        }
+                        break;
+
+                    case 3://Gauche
+                        if(listPanel.get(i).getX() < objetSelectionner.getX()){
+                            voisin = listPanel.get(i);
+                        }
+                        break;
+                }
+            }
+        }
+        return voisin;
+    }
+
+    public double distance(objetMobile om){
+        return Math.hypot(objetSelectionner.getX()-om.getX(), objetSelectionner.getY()-om.getY());
+    }
+
+    public void creePegs(Pegs p, int eX, int eY, int xClick, int yClick){
+        niveau.add(p);
+        objetMobile om = new objetMobile(p){
+            @Override
+            public void paint(Graphics g) {
+                // TODO Auto-generated method stub
+                super.paint(g);
+                pegs.dessine(g, 20, 20);
+            }
+            @Override
+            public void setLocation(int x, int y) {
+                // TODO Auto-generated method stub
+                super.setLocation(x, y);
+                xSaisie.setText(this.getX()+"");
+                ySaisie.setText(this.getY()+"");
+            }
+        };
+        om.setOpaque(false);
+        om.setBounds(((eX-xClick)), (eY-yClick), 20, 20);
+        principal.add(om);
+        listPanel.add(om);
+        principal.addMouseListener(om);
+        principal.addMouseMotionListener(om);
+    }
+    
     
 
     public class objetMobile extends JPanel implements MouseInputListener{
@@ -300,9 +407,12 @@ public class Edit extends JPanel{
                     yClick = e.getY()-this.getY();
                     if(!decoration){//Pour highlight objetSelectionner
                         objetSelectionner.setForeground(Color.BLACK);
+                        suivant.setForeground(Color.black);
                         objetSelectionner = this;
                         objetSelectionner.setForeground(Color.red);
-                    }    
+                        /*suivant = plusProche(0);
+                        suivant.setForeground(Color.green);*/
+                    }  
                 }else{
                     if(decoration){
                         if(e.getY() > height-150){//Pour redéposer le peg d'edit dans la zone du bas
@@ -316,28 +426,7 @@ public class Edit extends JPanel{
             }
             if(deplacement && e.getY() < height-150 && decoration){
                 Pegs p = pegs.clone((e.getX()-xClick)/view.ratioX, (e.getY()-yClick)/view.ratioY, 20, 20);
-                niveau.add(p);
-                objetMobile om = new objetMobile(p){
-                    @Override
-                    public void paint(Graphics g) {
-                        // TODO Auto-generated method stub
-                        super.paint(g);
-                        pegs.dessine(g, 20, 20);
-                    }
-                    @Override
-                    public void setLocation(int x, int y) {
-                        // TODO Auto-generated method stub
-                        super.setLocation(x, y);
-                        xSaisie.setText(this.getX()+"");
-                        ySaisie.setText(this.getY()+"");
-                    }
-                };
-                om.setOpaque(false);
-                om.setBounds(((e.getX()-xClick)), (e.getY()-yClick), 20, 20);
-                principal.add(om);
-                listPanel.add(om);
-                principal.addMouseListener(om);
-                principal.addMouseMotionListener(om);
+                creePegs(p, e.getX(), e.getY(), xClick, yClick);
             }
             principal.requestFocus();
 
@@ -440,28 +529,11 @@ public class Edit extends JPanel{
 
 
 
-/*
- * Zone rectangulaire pour sélectionner
- * Undo
- * Redo
- * Choix plusieurs niveaux
- * Finir sauvegarde proprement
- * 
- * Autre:
- * -Alignement
- * ??
- */
-
- 
-
- /*
-  * 800 600    / 1800 1000   2,25     1,66
-    800 600      1200 800    1,5      1,33
-    50 50
-    112.5  83   75  65
-
-
-
-
-
-  */
+/*Emploie*
+ * Maintenir souris -> espace rectangulaire. Bouton "tout supprimer" supprime tous les pegs qui sont dans le rectangle.
+ * Bouton annuler -> annule la suppression des pegs. Bouton redo -> resupprime les pegs
+ * Pegs selectionner couleur rouge. Appuyé sur entré pour changer la couleur du peg en rouge ou en bleu
+ * Deplacement (Z :Haut, D :Droite, S:Bas, Q: Gauche): -Quand peg rouge, déplace vers le pegs le plus proche dans la direction
+ *                                                     -Quand cyan, déplace le pegs dans la direction choisie
+ * Pegs jaune: (W :sélectionne le peg rond, X:sélectionne le peg carré): appuyé sur entré pour crée un peg à l'emplacement du peg jaune
+ */ 
