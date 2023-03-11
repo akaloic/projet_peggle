@@ -53,7 +53,7 @@ public class Niveau {
     protected void lignes(double x, double y, ArrayList<Pegs> list, int pegUsed, int distance) {
         double nvx = x;
         for (int i = 0; i < pegUsed; i++) {
-            Pegs p = new Pegs(nvx, y, 1, 25);
+            Pegs p = new Pegs((int)(nvx/1.92), (int)(y/1.44), 1, 25);
             list.add(p);
             nvx += distance;
         }

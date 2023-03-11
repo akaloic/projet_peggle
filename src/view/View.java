@@ -26,11 +26,11 @@ import javax.sound.sampled.*;
 
 public class View extends JFrame implements MouseInputListener{
 
-    private JLabel puit;
-    private JPanel fond;
-    private JPanel munition;
-    private JPanel fondGauche;
-    private JPanel partie;
+    private JLabel puit = new JLabel();
+    private JPanel fond = new JPanel();
+    private JPanel munition = new JPanel();
+    private JPanel fondGauche = new JPanel();
+    private JPanel partie = new JPanel();
 
     private JButton leave;
     private boolean enJeu = true;
@@ -67,18 +67,23 @@ public class View extends JFrame implements MouseInputListener{
 
 
     public View(Controleur controleur) {
-        String urlDuSon = "ressources/SonsWav/Accueil.wav";
-        LancerMusic(urlDuSon);
+        this.controleur = controleur;
         Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
         width = (int) size.getWidth();
         height = (int) size.getHeight();
-
         this.setSize(width, height);
         this.setTitle("Hit the Peggles");
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setUndecorated(true); // nécessaire sinon this.getHeight et this.getWidth renvoie 0
         this.setVisible(true);
-        this.controleur = controleur;
+
+        changerPanel(menuPrincipal());
+    }
+
+    public JPanel menuPrincipal(){
+
+        String urlDuSon = "ressources/SonsWav/Accueil.wav";
+        LancerMusic(urlDuSon);
 
         JPanel pane = new JPanel();
         pane.setSize(width, height);
@@ -108,7 +113,11 @@ public class View extends JFrame implements MouseInputListener{
         });
         ratioX = (float)width/800;
         ratioY = (float)height/600;
+
+        return pane;
+
     }
+
     public JPanel JeuPanel(Controleur controleur){
         Modele m = controleur.getModele();
         Balle b = m.getBalle();
@@ -178,10 +187,6 @@ public class View extends JFrame implements MouseInputListener{
         this.add(fond);
         this.setVisible(true);       
 
-
-        // --------------ANIMATION----------------------
-
-        // --------------ANIMATION----------------------
         partie.addMouseListener(new MouseAdapter(){
             public void mouseClicked(MouseEvent e){
                 controleur.tirer(); 
@@ -208,7 +213,7 @@ public class View extends JFrame implements MouseInputListener{
         precedent.addActionListener(e->{
             this.invalidate();
             son.stop();
-            new View(this.controleur);
+            changerPanel(menuPrincipal());
         });
         int xNiv = precedent.getWidth()*2;
         int yNiv = precedent.getHeight()*2;
@@ -229,12 +234,13 @@ public class View extends JFrame implements MouseInputListener{
             nameNiv.addActionListener(e->{
                 char lettre = nameNiv.getName().charAt(nameNiv.getName().length()-1);
                 numNiveau = Integer.parseInt(""+lettre);
+                controleur.getModele().setNiveau(new Niveau(numNiveau));
                 changerPanel(JeuPanel(this.controleur));
                 son.stop();
             });
             int j = i-1;
             editI.addActionListener(e->{
-                this.controleur.getModele().getNiveau().setList(Sauvegarde.charge(j));
+                controleur.getModele().getNiveau().setList(Sauvegarde.charge(j));
                 changerPanel(JeuPanel(this.controleur));
                 son.stop();
             });
@@ -255,7 +261,7 @@ public class View extends JFrame implements MouseInputListener{
         acceuil.addActionListener(
             (ActionEvent e) -> {
                 this.invalidate();
-                new View(this.controleur);
+                changerPanel(menuPrincipal());
         });
         choix.add(acceuil);
         for(int i= 0; i < 5; i++){
@@ -363,7 +369,6 @@ public class View extends JFrame implements MouseInputListener{
 
         g.fillOval((int)controleur.getModele().getBalle().getX(), (int)controleur.getModele().getBalle().getY(), 30, 30);
 
-        //controleur.getModele().setNiveau(new Niveau(numNiveau));
         for (int i = 0; i < controleur.getModele().getNiveau().list_peg.size(); i++) {
             controleur.getModele().getNiveau().list_peg.get(i).dessine(g2d,ratioX,ratioY);
         }

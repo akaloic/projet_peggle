@@ -18,7 +18,6 @@ public class Controleur {
     public Controleur() {
         modele = new Modele();
         view = new View(this);
-        view.JeuPanel(this);
         modele.setBalle(new Balle(view.getPartie().getWidth()/2, 0d, 200d));
         // --------------ANIMATION----------------------
         timer = new Timer(30, new ActionListener() {
@@ -43,10 +42,9 @@ public class Controleur {
                  * munition.revalidate();
                  * }
                  */
-
-                 if(getModele().getBalle()!=null){ 
-                    getModele().getBalle().update(180-getAngleTir(),t);
-                    if(getModele().getBalle().getY() > view.getPartie().getHeight()){
+                 if(modele.getBalle()!=null){ 
+                    modele.getBalle().update(180-getAngleTir(),t);
+                    if(modele.getBalle().getY() > view.getPartie().getHeight()){
                         t = 0;
                     }
                     t+=0.3;
@@ -87,7 +85,7 @@ public class Controleur {
     public void tirer(){
         this.modele.setBalle(null);
         this.angleTir=this.view.getAngle();
-        this.modele.setBalle(new Balle(600d,0d,200d));
+        this.modele.setBalle(new Balle(view.getPartie().getWidth()/2,0d,200d));
     }
 
     public double getAngleTir(){
