@@ -139,9 +139,6 @@ public class Niveau {
         carres(400, 600, list_peg, 3);
         carres(200, 650, list_peg, 2);
         carres(50, 700, list_peg, 1);
-
-        
-
     }
 
     protected void niveau_3() {

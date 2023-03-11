@@ -7,11 +7,11 @@ public class Pegs extends Obstacle{
         this.rayon=r;
     }
     public Pegs(double x, double y, int v, double rayon){
-        super(x, y, rayon,rayon, rayon, false, v);
+        super(x, y, rayon,rayon, false, v);
         this.rayon=rayon;
     }
 
-    double getRayon(){
+    public double getRayon(){
         return this.rayon;
     }
 }

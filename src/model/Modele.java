@@ -9,7 +9,7 @@ public class Modele {
     public Modele() {
         balle = null;
         obstacles = new Obstacle[0];
-        niveau = new Niveau(2);
+        niveau = new Niveau(1);
     }
 
     // ---------GETTER SETTER---------
@@ -25,10 +25,11 @@ public class Modele {
         return balle;
     }
 
-    public void setBalle(Balle balle) {
-        this.balle = balle;
+    public void setBalle(Balle b){
+        this.balle = b;
     }
 
+    
     public Obstacle[] getObstacles() {
         return obstacles;
     }
@@ -37,4 +38,5 @@ public class Modele {
         this.obstacles = obstacles;
     }
     // ---------GETTER SETTER---------
+    
 }
