@@ -38,9 +38,15 @@ public class Balle {
     public double getRayon(){
       return this.rayon;
     }
-    
+  
     public boolean collision(Pegs o){
-      return (o.getRayon() + this.rayon)*(o.getRayon()+this.rayon) == (this.x-o.getX())*(this.x-o.getX()) + (this.y - o.getY())*(this.y - o.getY());
+      return (o.getRayon() + this.rayon) >= Math.sqrt((this.x-o.getX())*(this.x-o.getX()) + (this.y - o.getY())*(this.y - o.getY()));
     }
 
+    public void rebond(Pegs o){
+      if(collision(o)){
+        this.vX = this.vX - (2*(this.vX*(this.x-o.getX()) + this.vY*((this.y - o.getY())))/(o.getRayon()*o.getRayon()))*(this.x-o.getX());
+        this.vY = this.vY - (2*(this.vX*(this.x-o.getX()) + this.vY*((this.y - o.getY())))/(o.getRayon()*o.getRayon()))*(this.y-o.getY());
+      }
+    }
   }

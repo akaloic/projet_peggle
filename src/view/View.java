@@ -127,16 +127,20 @@ public class View extends JFrame {
                 if(controleur.getModele().getBalle()!=null){
                     controleur.getModele().getBalle().update();
 
+                    for(int i =0; i<controleur.getModele().getNiveau().getList().size();i++){
+                        //controleur.getModele().getBalle().rebond(controleur.getModele().getNiveau().getList().get(i));
+                        
+                        if(controleur.getModele().getBalle().collision(controleur.getModele().getNiveau().getList().get(i))){
+                             System.out.println("COLLISION DETECTEE AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+                             controleur.getModele().getNiveau().getList().remove(controleur.getModele().getNiveau().getList().get(i));
+                        }
+                    }
+
                     if(controleur.getModele().getBalle().getY()>partie.getHeight()){
                         controleur.getModele().setBalle(null);
                         controleur.balleHorsJeu();
                     }
 
-                    for(Pegs p : controleur.getModele().getNiveau().getList()){
-                        if(controleur.getModele().getBalle().collision(p)){
-                            
-                        }
-                    }
                 }
 
                 
