@@ -1,15 +1,20 @@
 package controller;
 
 import view.*;
+import javax.swing.*;
 import model.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 public class Controleur {
 
-    protected View view;
-    protected Modele modele;
-    protected double angleTir;
+    public View view;
+    public Modele modele;
+    public double angleTir;
+    private Timer timer;
     protected double t;
     protected boolean balleEnJeu;
 
@@ -17,18 +22,57 @@ public class Controleur {
         this.balleEnJeu = false;
         modele = new Modele();
         view = new View(this);
-        view.getPartie().requestFocus();//Pour empecher que le bouton leave le prenne
-        view.getPartie().addKeyListener(new KeyAdapter() {
-            public void keyPressed(KeyEvent e) {
-              int keyCode = e.getKeyCode();
-              if (keyCode == KeyEvent.VK_ENTER) {
-                System.out.println("kaboom");
-              }
+        // --------------ANIMATION----------------------
+        timer = new Timer(30, new ActionListener() {
+            double t = 0;
+
+            public void actionPerformed(ActionEvent e) {
+                // seconde++;
+
+                // canon
+                view.setColorX();
+                view.setColorX();
+                view.calculeAngle();
+
+                // puit
+                view.placePuit();
+
+                // munition
+                /*
+                 * if (CONDITION) { // si la balle atteri dans le puit
+                 * nbMunition++;
+                 * munition.removeAll();
+                 * afficheMunition();
+                 * munition.revalidate();
+                 * }
+                 */
+
+                 if(modele.getBalle()!=null){
+                    modele.getBalle().update();
+    
+                    for(int i =0; i< modele.getNiveau().getList().size();i++){
+                        if(modele.getNiveau().getList().get(i) instanceof Pegs){
+                            if(modele.getBalle().collision((Pegs)modele.getNiveau().getList().get(i))){
+                                //controleur.getModele().getBalle().rebond(controleur.getModele().getNiveau().getList().get(i));
+                                System.out.println("COLLISION DETECTEE AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+                                modele.getNiveau().getList().remove(modele.getNiveau().getList().get(i));
+                            }
+                        }
+                    }
+    
+                    if(modele.getBalle().getY()>view.getPartie().getHeight()){
+                        modele.setBalle(null);
+                        balleHorsJeu();
+                    }
+    
+                }
+
+                view.repaint();
             }
         });
+        timer.start();
 
     }
-
     // ---------GETTER SETTER---------
     public View getView() {
         return view;
@@ -57,7 +101,7 @@ public class Controleur {
         }
     }
 
-    public double getAngleTir(){
+    public double getAngleTir() {
         return this.angleTir;
     }
 

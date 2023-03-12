@@ -2,9 +2,9 @@ package model;
 
 public class Modele {
 
-    private Balle balle;
-    private Obstacle[] obstacles;
-    private Niveau niveau;
+    public Balle balle;
+    public Obstacle[] obstacles;
+    public Niveau niveau;
 
     public Modele() {
         balle = null;
@@ -25,11 +25,10 @@ public class Modele {
         return balle;
     }
 
-    public void setBalle(Balle b){
+    public void setBalle(Balle b) {
         this.balle = b;
     }
 
-    
     public Obstacle[] getObstacles() {
         return obstacles;
     }
@@ -38,5 +37,5 @@ public class Modele {
         this.obstacles = obstacles;
     }
     // ---------GETTER SETTER---------
-    
+
 }

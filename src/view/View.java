@@ -23,82 +23,79 @@ import javax.sound.sampled.*;
 
 public class View extends JFrame {
 
-    private JLabel puit;
-    private JPanel fond;
-    private JPanel munition;
-    private JPanel fondGauche;
-    private JPanel partie;
+    public JLabel puit;
+    public JPanel fond;
+    public JPanel munition;
+    public JPanel fondGauche;
+    public static JPanel partie;
 
-    private JButton leave;
-    private boolean enJeu = true;
-    private int angle;
-    private String chemin = System.getProperty("user.dir") + "/ressources/";
-    private Timer timer;
-    private int directionX = 5;
-    private Controleur controleur;
-    private int nbMunition;
-    private double mouseX;
-    private double mouseY;
-    private static int colorX = 25;
-    private static int colorY = 15;
+    public JButton leave;
+    public boolean enJeu = true;
+    public boolean balleEnJeu = false;
+    public int angle;
+    public String chemin = System.getProperty("user.dir") + "/ressources/";
+    public Timer timer;
+    public int directionX = 5;
+    public Controleur controleur;
+    public int nbMunition;
+    public double mouseX;
+    public double mouseY;
+    public static int colorX = 25;
+    public static int colorY = 15;
     int seconde = 0;
-    private static float ratioX;
-    private static float ratioY;
+    public static float ratioX;
+    public static float ratioY;
 
     static Clip son;
 
-    private int width;
-    private int height;
-    private int numNiveau;
+    public int width;
+    public int height;
+    public int numNiveau;
 
-         /*Pour la balle à effacer plus tard */
+    /* Pour la balle à effacer plus tard */
     int x = 0;
     int y = 0;
-    int ballWidth =20;
+    int ballWidth = 20;
     int ballHeight = 20;
-    int max_x,max_y;
+    int max_x, max_y;
     int speedX = 10;
     int speedY = 10;
-            /*fin balle */
+    /* fin balle */
 
-    public View(Controleur controleur) {
-
+    public View(Controleur c) {
         String urlDuSon = "ressources/SonsWav/Accueil.wav";
         LancerMusic(urlDuSon);
         Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
         width = (int) size.getWidth();
         height = (int) size.getHeight();
 
-        this.setSize(width, height);
-        this.setTitle("Hit the Peggles");
-        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        this.setUndecorated(true); // nécessaire sinon this.getHeight et this.getWidth renvoie 0
-        this.setVisible(true);
-        this.controleur = controleur;
+        setSize(width, height);
+        setTitle("Hit the Peggles");
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setUndecorated(true); // nécessaire sinon getHeight et getWidth renvoie 0
+        setVisible(true);
+        controleur = c;
 
         JPanel pane = new JPanel();
         pane.setSize(width, height);
         pane.setLayout(null);
         pane.setBorder(BorderFactory.createTitledBorder("Bienvenue dans notre jeu"));
-        this.add(pane);
+        add(pane);
 
         JLabel titrePane = new JLabel("HIT THE PEGGLES");
-        titrePane.setBounds(width/2-65,height - height*2/3,400,100);
+        titrePane.setBounds(width / 2 - 65, height - height * 2 / 3, 400, 100);
         pane.add(titrePane);
         JButton start = new JButton("START");
-        start.setBounds(width/2-50,height - height/3,100,100);
+        start.setBounds(width / 2 - 50, height - height / 3, 100, 100);
         pane.add(start);
-
-        start.addActionListener(e->{
+        start.addActionListener(e -> {
             son.stop();
-            changerPanel(choixNiveauPane(this.controleur));
+            changerPanel(choixNiveauPane(controleur));
         });
+        JeuPanel(controleur);
     }
-    public JPanel JeuPanel(Controleur controleur){
-        Modele m = controleur.getModele();
-        Balle b = m.getBalle();
-        Obstacle[] o = m.getObstacles();
-        Niveau n = m.getNiveau();
+
+    public JPanel JeuPanel(Controleur controleur) {
         nbMunition = 4; // Pour le moment on met 10 munitions
 
         fond = new JPanel();
@@ -133,7 +130,7 @@ public class View extends JFrame {
         fondGauche = new JPanel();
         fondGauche.setLayout(new BorderLayout());
         fondGauche.setBackground(Color.gray);
-        fondGauche.setPreferredSize(new Dimension(this.getWidth() / 7, this.getHeight()));
+        fondGauche.setPreferredSize(new Dimension(getWidth() / 7, getHeight()));
 
         munition = new JPanel();
         munition.setLayout(new GridLayout(10, 1));
@@ -152,10 +149,10 @@ public class View extends JFrame {
         fond.add(fondGauche, BorderLayout.WEST);
         // --------------GAUCHE---------------------
 
-        this.add(fond);
-        this.setVisible(true);        
-        ratioX = (width-munition.getWidth())/2000f;
-        ratioY = height/1325f;
+        add(fond);
+        setVisible(true);
+        ratioX = (width - munition.getWidth()) / 2000f;
+        ratioY = height / 1325f;
 
         partie.addMouseListener(new MouseAdapter(){
             public void mouseClicked(MouseEvent e){
@@ -165,101 +162,55 @@ public class View extends JFrame {
 
         
         // --------------ANIMATION----------------------
-        timer = new Timer(30, new ActionListener() {
-            double t = 0;
-            public void actionPerformed(ActionEvent e) {
-                // seconde++;
-
-                // canon
-                colorX -= 1 % 25;
-                colorY -= 1 % 25;
-                calculeAngle();
-                // puit
-                placePuit();
-
-                if(controleur.getModele().getBalle()!=null){
-                    controleur.getModele().getBalle().update();
-
-                    for(int i =0; i<controleur.getModele().getNiveau().getList().size();i++){
-                        //controleur.getModele().getBalle().rebond(controleur.getModele().getNiveau().getList().get(i));
-                        
-                        if(controleur.getModele().getBalle().collision(controleur.getModele().getNiveau().getList().get(i))){
-                             System.out.println("COLLISION DETECTEE AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-                             controleur.getModele().getNiveau().getList().remove(controleur.getModele().getNiveau().getList().get(i));
-                        }
-                    }
-
-                    if(controleur.getModele().getBalle().getY()>partie.getHeight()){
-                        controleur.getModele().setBalle(null);
-                        controleur.balleHorsJeu();
-                    }
-
-                }
-
-                
-                // munition
-                /*
-                 * if (CONDITION) { // si la balle atteri dans le puit
-                 * nbMunition++;
-                 * munition.removeAll();
-                 * afficheMunition();
-                 * munition.revalidate();
-                 * }
-                 */
-
-                repaint();
+        partie.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                controleur.tirer();
             }
         });
-        timer.start();
-        // --------------ANIMATION----------------------
-        partie.addMouseListener(new MouseAdapter(){
-            public void mouseClicked(MouseEvent e){
-                controleur.tirer(); 
-            }
-        });
-
         return fond;
     }
 
-    public JPanel choixNiveauPane(Controleur controleur){
+    public JPanel choixNiveauPane(Controleur controleur) {
         String url = "ressources/SonsWav/ChoixNiveau.wav";
         LancerMusic(url);
         JPanel choixNiv = new JPanel();
-        choixNiv.setBackground(Color.BLUE); 
+        choixNiv.setBackground(Color.BLUE);
         choixNiv.setLayout(null);
-        choixNiv.setSize(this.width,this.height);
+        choixNiv.setSize(width, height);
         JButton precedent = new JButton("Acceuil");
-        precedent.setBounds(0,0,100,100);
+        precedent.setBounds(0, 0, 100, 100);
         choixNiv.add(precedent);
-        precedent.addActionListener(e->{
-            this.invalidate();
+        precedent.addActionListener(e -> {
+            invalidate();
             son.stop();
-            new View(this.controleur);
+            new View(controleur);
         });
-        int xNiv = precedent.getWidth()*2;
-        int yNiv = precedent.getHeight()*2;
+        int xNiv = precedent.getWidth() * 2;
+        int yNiv = precedent.getHeight() * 2;
         int wNiv = 100;
         int hNiv = 100;
-        for (int i = 1 ; i < 6 ; i++){;
-            JButton nameNiv =  new JButton("Niveau "+i);
+        for (int i = 1; i < 6; i++) {
+            ;
+            JButton nameNiv = new JButton("Niveau " + i);
             nameNiv.setBounds(xNiv, yNiv, wNiv, yNiv);
-            xNiv += 2*wNiv;
+            xNiv += 2 * wNiv;
             choixNiv.add(nameNiv);
-            nameNiv.setName("niveau"+i);
-            nameNiv.addActionListener(e->{
-                char lettre = nameNiv.getName().charAt(nameNiv.getName().length()-1);
-                numNiveau = Integer.parseInt(""+lettre);
-                changerPanel(JeuPanel(this.controleur));
+            nameNiv.setName("niveau" + i);
+            nameNiv.addActionListener(e -> {
+                char lettre = nameNiv.getName().charAt(nameNiv.getName().length() - 1);
+                numNiveau = Integer.parseInt("" + lettre);
+                changerPanel(JeuPanel(controleur));
                 son.stop();
             });
         }
         return choixNiv;
     }
-    public void changerPanel(JPanel pane){
-        this.invalidate();
-        this.setContentPane(pane);
-        this.repaint();
-        this.revalidate();
+
+    public void changerPanel(JPanel pane) {
+        invalidate();
+        setContentPane(pane);
+        repaint();
+        revalidate();
     }
 
     public void placePuit() {
@@ -271,40 +222,42 @@ public class View extends JFrame {
         if (puit.getX() < -partie.getWidth() / 2)
             directionX = 5;
     }
-    public void dessinePegRond(Graphics g,PegRond peg){
+
+    public void dessinePegRond(Graphics g, PegRond peg) {
         Graphics2D g2d = (Graphics2D) g;
         g2d.setColor(Color.PINK);
-        g2d.fillOval((int)peg.getX(),(int)peg.getY(), (int)peg.getWidth(),(int)peg.getHeight());
+        g2d.fillOval((int) peg.getX(), (int) peg.getY(), (int) peg.getWidth(), (int) peg.getHeight());
     }
 
-    public void dessineObstacleRect(Graphics g,ObstacleRectangulaire oR){
+    public void dessineObstacleRect(Graphics g, ObstacleRectangulaire oR) {
         Graphics2D g2d = (Graphics2D) g;
         g2d.setColor(Color.PINK);
-        g2d.fillRect((int)oR.getX(),(int)oR.getY(), (int)oR.getWidth(),(int)oR.getHeight());
+        g2d.fillRect((int) oR.getX(), (int) oR.getY(), (int) oR.getWidth(), (int) oR.getHeight());
     }
-    public void dessineObstacleRebond(Graphics g, ObstacleRebondissant oReb){
+
+    public void dessineObstacleRebond(Graphics g, ObstacleRebondissant oReb) {
         Graphics2D g2d = (Graphics2D) g;
         g2d.setColor(Color.PINK);
-        g2d.fillRect((int)oReb.getX(),(int)oReb.getY(), (int)oReb.getWidth(),(int)oReb.getHeight());
+        g2d.fillRect((int) oReb.getX(), (int) oReb.getY(), (int) oReb.getWidth(), (int) oReb.getHeight());
     }
-    public void dessineBalle(Graphics g){ //temporaire à effacer plus tard
+
+    public void dessineBalle(Graphics g) { // temporaire à effacer plus tard
         Graphics2D g2d = (Graphics2D) g;
 
-        max_x = partie.getWidth()-ballWidth;
-        max_y = partie.getHeight()-ballHeight;
+        max_x = partie.getWidth() - ballWidth;
+        max_y = partie.getHeight() - ballHeight;
 
         g2d.setColor(Color.RED);
-        g.fillOval(x,y,ballWidth,ballHeight);
-        if(x>max_x || x<0){
+        g.fillOval(x, y, ballWidth, ballHeight);
+        if (x > max_x || x < 0) {
             speedX = -speedX;
         }
-        if(y>max_y || y<0){
+        if (y > max_y || y < 0) {
             speedY = -speedY;
         }
 
-        
-        x = x+speedX;
-        y = y+speedY;
+        x = x + speedX;
+        y = y + speedY;
 
     }
 
@@ -318,11 +271,10 @@ public class View extends JFrame {
         ligne2.moveTo(partie.getWidth() / 2, 0);
         ligne2.lineTo(mouseX - munition.getWidth(), mouseY);
 
-
         Arc2D.Double arc2 = new Arc2D.Double(partie.getWidth() / 2 - widthBase / 2, -heightBase / 2, widthBase,
                 heightBase, 180, 180, Arc2D.OPEN);
 
-        BufferedImage img = new BufferedImage(150,150,BufferedImage.TYPE_INT_RGB);
+        BufferedImage img = new BufferedImage(150, 150, BufferedImage.TYPE_INT_RGB);
         try {
             img = ImageIO.read(new File("ressources/roue.png"));
         } catch (IOException e) {
@@ -331,8 +283,8 @@ public class View extends JFrame {
         }
 
         g2d.setClip(arc2);
-        g2d.drawImage(img, partie.getWidth()/2-85, -85,170,170, partie);
-        //g2d.draw(arc2);
+        g2d.drawImage(img, partie.getWidth() / 2 - 85, -85, 170, 170, partie);
+        // g2d.draw(arc2);
 
         try {
             img = ImageIO.read(new File("ressources/canon.png"));
@@ -346,8 +298,8 @@ public class View extends JFrame {
 
         g2d.rotate(Math.toRadians(90 - angle), partie.getWidth() / 2, 0);
         g2d.setClip(null);
-        g2d.drawImage(img, partie.getWidth()/2-85, -55,170,170, partie);
-        //g2d.draw(rect2);
+        g2d.drawImage(img, partie.getWidth() / 2 - 85, -55, 170, 170, partie);
+        // g2d.draw(rect2);
         g2d.rotate(Math.toRadians(angle - 90), partie.getWidth() / 2, 0);
         // On annule la rotation après avoir dessiner le rectangle pour que seule le
         // bout du partie rotate
@@ -360,7 +312,8 @@ public class View extends JFrame {
         GeneralPath genPath = new GeneralPath();
         for(int i = 0; i < 80; i++){
             fantome.update();
-            double a = fantome.getX()+fantome.getRayon()/2;double b = fantome.getY();
+            double a = fantome.getX()+fantome.getRayon()/2;
+            double b = fantome.getY();
             genPath.moveTo(a,b);
             genPath.lineTo(a, b);
         }
@@ -375,10 +328,7 @@ public class View extends JFrame {
 
         controleur.getModele().setNiveau(new Niveau(numNiveau));
         for (int i = 0; i < controleur.getModele().getNiveau().list_peg.size(); i++) {
-            g.fillOval((int) (controleur.getModele().getNiveau().list_peg.get(i).getX()*ratioX),
-                    (int) (controleur.getModele().getNiveau().list_peg.get(i).getY()*ratioY),
-                    (int) (controleur.getModele().getNiveau().list_peg.get(i).rayon*ratioX),
-                    (int) (controleur.getModele().getNiveau().list_peg.get(i).rayon*ratioX));
+            controleur.getModele().getNiveau().list_peg.get(i).dessine(g);
         }
     }
 
@@ -422,22 +372,30 @@ public class View extends JFrame {
         return this.partie;
     }
 
-    public int getAngle(){
-        return this.angle;
+    public int getAngle() {
+        return angle;
     }
 
-    public static void LancerMusic(String url){
+    public void setColorX() {
+        colorX -= 1 % 25;
+    }
+
+    public void setColorY() {
+        colorY -= 1 % 25;
+    }
+
+    public static void LancerMusic(String url) {
         try {
-            
+
             File ficSon = new File(url);
 
-            if(ficSon.exists()){
+            if (ficSon.exists()) {
                 AudioInputStream audio = AudioSystem.getAudioInputStream(ficSon);
                 son = AudioSystem.getClip();
                 son.open(audio);
                 son.start();
                 son.loop(Clip.LOOP_CONTINUOUSLY);
-            }else{
+            } else {
                 System.out.println("fichier introuvable");
             }
 
