@@ -15,10 +15,10 @@ public class ObstacleRebondissant extends Obstacle{ // Obstacle ayant une vie in
         super(x, y, rayon, rayon, estMort, 10000000);
     }
     public void dessine(Graphics g){
-        int gx=(int)(this.x*View.getRatioX());
-        int gy=(int)(this.y*View.getRatioY());
-        int gw=(int)(this.largeur*View.getRatioX());
-        int gh=(int)(this.hauteur*View.getRatioY());
+        int gx=(int)(this.x*View.ratioX);
+        int gy=(int)(this.y*View.ratioY);
+        int gw=(int)(this.largeur*View.ratioX);
+        int gh=(int)(this.hauteur*View.ratioY);
         g.fillOval(gx,gy,gw,gh);
     }
 }
