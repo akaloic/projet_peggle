@@ -98,9 +98,6 @@ public class View extends JFrame implements MouseInputListener {
         pane.setBorder(BorderFactory.createTitledBorder("Bienvenue dans notre jeu"));
         this.add(pane);
 
-        // JLabel titrePane = new JLabel("HIT THE PEGGLES");
-        // titrePane.setBounds(width/2-65,height - height*2/3,400,100);
-        // pane.add(titrePane);
         JButton start = new JButton("START");
         start.setBounds(width/2-50,height - height/3,100,100);
         pane.add(start);
