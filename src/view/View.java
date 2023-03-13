@@ -21,7 +21,7 @@ import java.nio.file.FileSystem;
 
 import javax.sound.sampled.*;
 
-public class View extends JFrame implements MouseInputListener{
+public class View extends JFrame implements MouseInputListener {
 
     private JLabel puit;
     private JPanel fond;
