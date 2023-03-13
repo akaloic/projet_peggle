@@ -8,6 +8,7 @@ import model.Modele;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+
 public class Controleur {
 
     protected View view;
@@ -18,10 +19,11 @@ public class Controleur {
     public Controleur() {
         modele = new Modele();
         view = new View(this);
-        modele.setBalle(new Balle(view.getPartie().getWidth()/2, 0d, 200d));
+        modele.setBalle(new Balle(view.getPartie().getWidth() / 2, 0d, 200d));
         // --------------ANIMATION----------------------
         timer = new Timer(30, new ActionListener() {
             double t = 0;
+
             public void actionPerformed(ActionEvent e) {
                 // seconde++;
 
@@ -42,18 +44,17 @@ public class Controleur {
                  * munition.revalidate();
                  * }
                  */
-                 if(modele.getBalle()!=null){ 
-                    modele.getBalle().update(180-getAngleTir(),t);
-                    if(modele.getBalle().getY() > view.getPartie().getHeight()){
+                if (modele.getBalle() != null) {
+                    modele.getBalle().update(180 - getAngleTir(), t);
+                    if (modele.getBalle().getY() > view.getPartie().getHeight()) {
                         t = 0;
                     }
-                    t+=0.3;
+                    t += 0.3;
                     ArrayList<Pegs> a = modele.getNiveau().getList();
-                    for(int i = 0; i < a.size();i++){
-                        if(modele.getBalle().collision(a.get(i), view.ratioX, view.ratioY)){
+                    for (int i = 0; i < a.size(); i++) {
+                        if (modele.getBalle().collision(a.get(i), view.ratioX, view.ratioY)) {
                             a.get(i).couleur = true;
                         }
-                       
                     }
                 }
 
@@ -82,13 +83,13 @@ public class Controleur {
     }
     // ---------GETTER SETTER---------
 
-    public void tirer(){
+    public void tirer() {
         this.modele.setBalle(null);
-        this.angleTir=this.view.getAngle();
-        this.modele.setBalle(new Balle(view.getPartie().getWidth()/2,0d,200d));
+        this.angleTir = this.view.getAngle();
+        this.modele.setBalle(new Balle(view.getPartie().getWidth() / 2, 0d, 200d));
     }
 
-    public double getAngleTir(){
+    public double getAngleTir() {
         return this.angleTir;
     }
 }
