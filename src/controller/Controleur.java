@@ -50,12 +50,7 @@ public class Controleur {
                         t = 0;
                     }
                     t += 0.3;
-                    ArrayList<Pegs> a = modele.getNiveau().getList();
-                    for (int i = 0; i < a.size(); i++) {
-                        if (modele.getBalle().collision(a.get(i), view.ratioX, view.ratioY)) {
-                            a.get(i).couleur = true;
-                        }
-                    }
+                    ArrayList<Obstacle> a = modele.getNiveau().getList();
                 }
 
                 view.repaint();

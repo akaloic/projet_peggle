@@ -3,15 +3,15 @@ import java.awt.*;
 public class PegsRect extends Pegs {
 
     public PegsRect(double x, double y, int v, double rayon) {
-        super(x, y, v, rayon);
+        super(x, y, v, (int)rayon);
         //TODO Auto-generated constructor stub
     }
 
     public void dessine(Graphics2D g, double ratioX,double ratioY){
         g.fillRect((int) (x*ratioX),
                     (int) (y*ratioY),
-                    (int) (rayon*ratioX),
-                    (int) (rayon*ratioX));
+                    (int) (super.getRayon()*ratioX),
+                    (int) (super.getRayon()*ratioX));
     }
 
     public void dessine(Graphics g, int widht, int weight){

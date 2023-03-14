@@ -177,7 +177,7 @@ public class Edit extends JPanel{
                 public void paint(Graphics g) {
                     // TODO Auto-generated method stub
                     super.paint(g);
-                    pegs.dessine(g, 20, 20);
+                    pegs.dessine(g);
                     
                 }
                 //Astuce ultime pour mettre à jour les textes dès qu'une coordonnée bouge
@@ -209,7 +209,7 @@ public class Edit extends JPanel{
                 // TODO Auto-generated method stub
                 super.paint(g);
                 g.setColor(Color.yellow);
-                pegs.dessine(g, 20, 20);
+                pegs.dessine(g);
             }
             @Override
             public void setLocation(int x, int y) {
@@ -235,7 +235,7 @@ public class Edit extends JPanel{
                 // TODO Auto-generated method stub
                 super.paint(g);
                 g.setColor(Color.yellow);
-                pegs.dessine(g, 20, 20);
+                pegs.dessine(g);
             }
         };
         pegRect.setBounds(80,750,20,20);
@@ -366,7 +366,7 @@ public class Edit extends JPanel{
             public void paint(Graphics g) {
                 // TODO Auto-generated method stub
                 super.paint(g);
-                pegs.dessine(g, 20, 20);
+                pegs.dessine(g);
             }
             @Override
             public void setLocation(int x, int y) {

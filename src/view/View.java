@@ -7,7 +7,6 @@ import java.awt.event.ActionEvent;
 import model.*;
 import model.sousObstacle.ObstacleRebondissant;
 import model.sousObstacle.ObstacleRectangulaire;
-import model.sousObstacle.PegRond;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -30,7 +29,7 @@ public class View extends JFrame implements MouseInputListener{
     private JPanel fond = new JPanel();
     private JPanel munition = new JPanel();
     private JPanel fondGauche = new JPanel();
-    private JPanel partie = new JPanel();
+    private static JPanel partie = new JPanel();
 
     private JButton leave;
     private boolean enJeu = true;
@@ -46,8 +45,8 @@ public class View extends JFrame implements MouseInputListener{
     private static int colorX = 25;
     private static int colorY = 15;
     int seconde = 0;
-    public double ratioX;
-    public double ratioY;
+    public static double ratioX;
+    public static double ratioY;
 
     static Clip son;
 
@@ -402,14 +401,6 @@ public class View extends JFrame implements MouseInputListener{
         return partie;
     }
 
-    public int getAngle() {
-        return angle;
-    }
-
-    public void setColorX() {
-        colorX -= 1 % 25;
-    }
-
     public JPanel getMunition(){
         return this.munition;
     }
@@ -493,11 +484,11 @@ public class View extends JFrame implements MouseInputListener{
         return numNiveau;
     }
 
-    public static float getRatioX() {
+    public static double getRatioX() {
         return ratioX;
     }
 
-    public static float getRatioY() {
+    public static double getRatioY() {
         return ratioY;
     }
 }

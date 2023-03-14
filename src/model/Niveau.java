@@ -192,4 +192,7 @@ public class Niveau {
         Pegs p = new Pegs();
         return p.getDiametre();
     }
+
+    public void setList(ArrayList<Pegs> charge) {
+    }
 }

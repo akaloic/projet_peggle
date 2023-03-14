@@ -18,11 +18,4 @@ public class ObstacleRectangulaire extends Obstacle {
         int gh=(int)(this.hauteur*View.getRatioY());
         g.fillRect(gx,gy,gw,gh);
     }
-    
-    public void dessine(Graphics2D g, double ratioX,double ratioY){
-        g.fillRect((int) (x*ratioX),
-                    (int) (y*ratioY),
-                    (int) (largeur*ratioX),
-                    (int) (hauteur*ratioX));
-    }
 }
