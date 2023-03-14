@@ -217,24 +217,6 @@ public class View extends JFrame implements MouseInputListener {
             directionX = 5;
     }
 
-    public void dessinePegRond(Graphics g, PegRond peg) {
-        Graphics2D g2d = (Graphics2D) g;
-        g2d.setColor(Color.PINK);
-        g2d.fillOval((int) peg.getX(), (int) peg.getY(), (int) peg.getWidth(), (int) peg.getHeight());
-    }
-
-    public void dessineObstacleRect(Graphics g, ObstacleRectangulaire oR) {
-        Graphics2D g2d = (Graphics2D) g;
-        g2d.setColor(Color.PINK);
-        g2d.fillRect((int) oR.getX(), (int) oR.getY(), (int) oR.getWidth(), (int) oR.getHeight());
-    }
-
-    public void dessineObstacleRebond(Graphics g, ObstacleRebondissant oReb) {
-        Graphics2D g2d = (Graphics2D) g;
-        g2d.setColor(Color.PINK);
-        g2d.fillRect((int) oReb.getX(), (int) oReb.getY(), (int) oReb.getWidth(), (int) oReb.getHeight());
-    }
-
     public void dessineBalle(Graphics g) { // temporaire à effacer plus tard
         Graphics2D g2d = (Graphics2D) g;
 
