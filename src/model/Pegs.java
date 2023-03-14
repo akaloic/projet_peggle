@@ -1,5 +1,4 @@
 package model;
-import java.awt.*;
 
 import view.View;
 import java.awt.*;
@@ -24,28 +23,4 @@ public class Pegs extends Obstacle{
         int gh=(int)(this.rayon*View.getRatioY());
         g.fillOval(gx,gy,gw,gh);
     }
-
-    public void dessine(Graphics2D g, double ratioX,double ratioY){
-        if(couleur){
-            g.setColor(Color.blue);
-        }
-        else{
-            g.setColor(Color.red);
-        }   
-        g.fillOval((int) (x*ratioX),
-                    (int) (y*ratioY),
-                    (int) (rayon*ratioX),
-                    (int) (rayon*ratioX));       
-    }
-
-    public void dessine(Graphics g, int widht, int weight){
-        g.fillOval(0, 0, widht, weight);
-    }
-
-    public Pegs clone(double x, double y, int v, double rayon){
-        return new Pegs(x, y, v, rayon);
-    }
-
-
 }
-

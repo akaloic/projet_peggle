@@ -17,37 +17,34 @@ import java.awt.event.*;
 import java.awt.geom.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
-import java.lang.ModuleLayer.Controller;
 import java.nio.file.FileSystem;
-import java.util.ArrayList;
 
-import javax.sound.midi.Synthesizer;
 import javax.sound.sampled.*;
 
-public class View extends JFrame implements MouseInputListener{
+public class View extends JFrame implements MouseInputListener {
 
-    private JLabel puit = new JLabel();
-    private JPanel fond = new JPanel();
-    private JPanel munition = new JPanel();
-    private JPanel fondGauche = new JPanel();
-    private JPanel partie = new JPanel();
+    public JLabel puit;
+    public JPanel fond;
+    public JPanel munition;
+    public JPanel fondGauche;
+    public static JPanel partie;
 
-    private JButton leave;
-    private boolean enJeu = true;
-    private boolean balleEnJeu = false;
-    private int angle;
-    private String chemin = System.getProperty("user.dir") + "/ressources/";
-    private Timer timer;
-    private int directionX = 5;
-    private Controleur controleur;
-    //private int nbMunition;
-    private double mouseX;
-    private double mouseY;
-    private static int colorX = 25;
-    private static int colorY = 15;
+    public JButton leave;
+    public boolean enJeu = true;
+    public boolean balleEnJeu = false;
+    public int angle;
+    public String chemin = System.getProperty("user.dir") + "/ressources/";
+    public Timer timer;
+    public int directionX = 5;
+    public Controleur controleur;
+    public int nbMunition;
+    public double mouseX;
+    public double mouseY;
+    public static int colorX = 25;
+    public static int colorY = 15;
     int seconde = 0;
-    public double ratioX;
-    public double ratioY;
+    public static float ratioX;
+    public static float ratioY;
 
     static Clip son;
 
@@ -63,27 +60,21 @@ public class View extends JFrame implements MouseInputListener{
     int max_x, max_y;
     int speedX = 10;
     int speedY = 10;
-            /*fin balle */
+    /* fin balle */
 
-
-    public View(Controleur controleur) {
-        this.controleur = controleur;
+    public View(Controleur c) {
+        String urlDuSon = "ressources/SonsWav/Accueil.wav";
+        LancerMusic(urlDuSon);
         Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
         width = (int) size.getWidth();
         height = (int) size.getHeight();
-        this.setSize(width, height);
-        this.setTitle("Hit the Peggles");
-        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        this.setUndecorated(true); // nécessaire sinon this.getHeight et this.getWidth renvoie 0
-        this.setVisible(true);
 
-        changerPanel(menuPrincipal());
-    }
-
-    public JPanel menuPrincipal(){
-
-        String urlDuSon = "ressources/SonsWav/Accueil.wav";
-        LancerMusic(urlDuSon);
+        setSize(width, height);
+        setTitle("Hit the Peggles");
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setUndecorated(true); // nécessaire sinon getHeight et getWidth renvoie 0
+        setVisible(true);
+        controleur = c;
 
         JPanel pane = new JPanel();
         pane.setSize(width, height);
@@ -97,34 +88,15 @@ public class View extends JFrame implements MouseInputListener{
         JButton start = new JButton("START");
         start.setBounds(width / 2 - 50, height - height / 3, 100, 100);
         pane.add(start);
-
-        JButton edit = new JButton("edit");
-        edit.setBounds(width/2-50,height - height/3+200,100,100);
-        pane.add(edit);
-
-        start.addActionListener(e->{
+        start.addActionListener(e -> {
             son.stop();
             changerPanel(choixNiveauPane(controleur));
         });
-
-        edit.addActionListener(e->{
-            son.stop();
-            changerPanel(choixEdit());
-        });
-        ratioX = (float)width/800;
-        ratioY = (float)height/600;
-
-        return pane;
-
+        JeuPanel(controleur);
     }
 
-    public JPanel JeuPanel(Controleur controleur){
-        Modele m = controleur.getModele();
-        Balle b = m.getBalle();
-        Obstacle[] o = m.getObstacles();
-        Niveau n = m.getNiveau();
-        //nbMunition = 4; // Pour le moment on met 10 munitions
-        controleur.getModele().getPlayer().setMunitions(4);
+    public JPanel JeuPanel(Controleur controleur) {
+        nbMunition = 4; // Pour le moment on met 10 munitions
 
         fond = new JPanel();
         fond.setLayout(new BorderLayout());
@@ -134,32 +106,25 @@ public class View extends JFrame implements MouseInputListener{
             public void paint(Graphics g) {
                 super.paint(g);
                 dessineCanon(g);
+                PegRond pRond = new PegRond(0, 0);
+                /*
+                 * dessinePegRond(g,pRond); // ca marche
+                 * ObstacleRebondissant oRebond = new ObstacleRebondissant(100, 100);
+                 * dessineObstacleRebond(g,oRebond); // ca marche
+                 * ObstacleRectangulaire oR = new ObstacleRectangulaire(50,50);
+                 * dessineObstacleRect(g,oR); // ca marche
+                 */
+                dessineBalle(g); // temporaire à effacer plus tard
+
             }
         };
-        partie.setSize(new Dimension(800,600));
         partie.setLayout(new BorderLayout());
         partie.setBackground(Color.darkGray);
 
         puit = new JLabel(new ImageIcon(chemin + "puit.png"));
 
-        JLabel scoreLabel=new JLabel("Score : " + controleur.getModele().getPlayer().getScore());
-        scoreLabel.setBounds(300, 0, 100, 100);
-        scoreLabel.setForeground(Color.RED);
-        scoreLabel.setFont(new Font("Serif", Font.PLAIN, 20));
-
-        JLabel pseudoLabel=new JLabel(controleur.getModele().getPlayer().getPseudo());
-        pseudoLabel.setBounds(1200,0,100,100);
-        pseudoLabel.setForeground(Color.RED);
-        pseudoLabel.setFont(new Font("Serif", Font.PLAIN, 20));
-
-        partie.add(pseudoLabel);
-        partie.add(scoreLabel);
-
-
         partie.add(puit);
-        JPanel bis = new JPanel(null);
-        bis.add(partie);
-        fond.add(bis, BorderLayout.CENTER);
+        fond.add(partie, BorderLayout.CENTER);
         // --------------DROITE---------------------
 
         // --------------GAUCHE---------------------
@@ -184,15 +149,18 @@ public class View extends JFrame implements MouseInputListener{
 
         fond.add(fondGauche, BorderLayout.WEST);
         // --------------GAUCHE---------------------
-        this.add(fond);
-        this.setVisible(true);       
 
-        partie.addMouseListener(new MouseAdapter(){
-            public void mouseClicked(MouseEvent e){
-                controleur.tirer(); 
+        add(fond);
+        setVisible(true);
+        ratioX = (width - munition.getWidth()) / 2000f;
+        ratioY = height / 1325f;
+
+        // --------------ANIMATION----------------------
+        partie.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                controleur.tirer();
             }
         });
-        partie.setSize(new Dimension((int)(partie.getWidth()*ratioX),(int)(partie.getHeight()*ratioY)));
         return fond;
     }
 
@@ -206,14 +174,10 @@ public class View extends JFrame implements MouseInputListener{
         JButton precedent = new JButton("Acceuil");
         precedent.setBounds(0, 0, 100, 100);
         choixNiv.add(precedent);
-        JTextField name=new JTextField("");
-        name.setBounds(600, 500, 100, 30);
-        choixNiv.add(name);
-
-        precedent.addActionListener(e->{
-            this.invalidate();
+        precedent.addActionListener(e -> {
+            invalidate();
             son.stop();
-            changerPanel(menuPrincipal());
+            new View(controleur);
         });
         int xNiv = precedent.getWidth() * 2;
         int yNiv = precedent.getHeight() * 2;
@@ -223,58 +187,24 @@ public class View extends JFrame implements MouseInputListener{
             ;
             JButton nameNiv = new JButton("Niveau " + i);
             nameNiv.setBounds(xNiv, yNiv, wNiv, yNiv);
-
-            JButton editI = new JButton("Edit "+i);
-            editI.setBounds(xNiv, yNiv+400, wNiv, yNiv);
-
-            xNiv += 2*wNiv;
+            xNiv += 2 * wNiv;
             choixNiv.add(nameNiv);
-            nameNiv.setName("niveau"+i);
-            choixNiv.add(editI);
-            this.controleur.getModele().setPlayer(new Player(4, name.getText()));
-            nameNiv.addActionListener(e->{
-                char lettre = nameNiv.getName().charAt(nameNiv.getName().length()-1);
-                numNiveau = Integer.parseInt(""+lettre);
-                controleur.getModele().setNiveau(new Niveau(numNiveau));
-                changerPanel(JeuPanel(this.controleur));
-                son.stop();
-            });
-            int j = i-1;
-            editI.addActionListener(e->{
-                controleur.getModele().getNiveau().setList(Sauvegarde.charge(j));
-                changerPanel(JeuPanel(this.controleur));
+            nameNiv.setName("niveau" + i);
+            nameNiv.addActionListener(e -> {
+                char lettre = nameNiv.getName().charAt(nameNiv.getName().length() - 1);
+                numNiveau = Integer.parseInt("" + lettre);
+                changerPanel(JeuPanel(controleur));
                 son.stop();
             });
         }
         return choixNiv;
     }
-    public void changerPanel(JPanel pane){
-        this.invalidate();
-        this.getContentPane().removeAll();
-        this.setContentPane(pane);
-        this.repaint();
-        this.revalidate();
-    }
 
-    public JPanel choixEdit(){
-        JPanel choix = new JPanel(new GridLayout(1,6));
-        JButton acceuil = new JButton("acceuil");
-        acceuil.addActionListener(
-            (ActionEvent e) -> {
-                this.invalidate();
-                changerPanel(menuPrincipal());
-        });
-        choix.add(acceuil);
-        for(int i= 0; i < 5; i++){
-            JButton j = new JButton(i+"");
-            int k = i;
-            j.addActionListener(
-                (ActionEvent e) -> {
-                   changerPanel(new Edit(null, width, height,k,this)); 
-            });
-            choix.add(j);
-        }
-        return choix;
+    public void changerPanel(JPanel pane) {
+        invalidate();
+        setContentPane(pane);
+        repaint();
+        revalidate();
     }
 
     public void placePuit() {
@@ -287,15 +217,24 @@ public class View extends JFrame implements MouseInputListener{
             directionX = 5;
     }
 
-    public void dessineObstacleRect(Graphics g,ObstacleRectangulaire oR){
+    public void dessineBalle(Graphics g) { // temporaire à effacer plus tard
         Graphics2D g2d = (Graphics2D) g;
-        g2d.setColor(Color.PINK);
-        g2d.fillRect((int)oR.getX(),(int)oR.getY(), (int)oR.getWidth(),(int)oR.getHeight());
-    }
-    public void dessineObstacleRebond(Graphics g, ObstacleRebondissant oReb){
-        Graphics2D g2d = (Graphics2D) g;
-        g2d.setColor(Color.PINK);
-        g2d.fillRect((int)oReb.getX(),(int)oReb.getY(), (int)oReb.getWidth(),(int)oReb.getHeight());
+
+        max_x = partie.getWidth() - ballWidth;
+        max_y = partie.getHeight() - ballHeight;
+
+        g2d.setColor(Color.RED);
+        g.fillOval(x, y, ballWidth, ballHeight);
+        if (x > max_x || x < 0) {
+            speedX = -speedX;
+        }
+        if (y > max_y || y < 0) {
+            speedY = -speedY;
+        }
+
+        x = x + speedX;
+        y = y + speedY;
+
     }
 
     public void dessineCanon(Graphics g) {
@@ -345,12 +284,13 @@ public class View extends JFrame implements MouseInputListener{
         double x = (partie.getWidth() / 2) - (5 * heightBase / 6) * Math.sin(theta) - 10/* Width balle */;
         double y = (5 * heightBase / 6) * Math.cos(theta) - 10/* Height balle */;
         // Pour calculer nouvelles coordonnées de la balle après rotaion
-        Balle fantome = new Balle((double)(partie.getWidth()/2-controleur.getModele().getBalle().getRayon()/2),0d,200d);
+        Balle fantome = new Balle(partie.getWidth() / 2 - 12, 0d, 200d);
         GeneralPath genPath = new GeneralPath();
-        for(int i = 0; i < 70; i++){
-            fantome.update(180-controleur.getAngleTir(), 0.03*i);
-            double a = fantome.getX()+fantome.getRayon()/2;double b = fantome.getY();
-            genPath.moveTo(a,b);
+        for (int i = 0; i < 80; i++) {
+            fantome.update(180 - controleur.getAngleTir(), 0.03 * i);
+            double a = fantome.getX() + fantome.getRayon() / 2;
+            double b = fantome.getY();
+            genPath.moveTo(a, b);
             genPath.lineTo(a, b);
         }
 
@@ -362,12 +302,10 @@ public class View extends JFrame implements MouseInputListener{
         g2d.setPaint(null);
         g2d.setColor(Color.lightGray);
 
-        g.fillOval((int)controleur.getModele().getBalle().getX(), (int)controleur.getModele().getBalle().getY(), 30, 30);
-
+        controleur.getModele().setNiveau(new Niveau(numNiveau));
         for (int i = 0; i < controleur.getModele().getNiveau().list_peg.size(); i++) {
             controleur.getModele().getNiveau().list_peg.get(i).dessine(g);
         }
-
     }
 
     public void calculeAngle() {
@@ -382,7 +320,7 @@ public class View extends JFrame implements MouseInputListener{
     public void afficheMunition() {
         for (int i = 0; i < 10; i++) {
             JPanel panel = new JPanel();
-            if (i > controleur.getModele().getPlayer().getMunitions() + 1) { // il reste i + 1 munitio
+            if (i > nbMunition + 1) { // il reste i + 1 munition
                 panel = new JPanel() {
                     @Override
                     public void paint(Graphics g) {
@@ -410,24 +348,11 @@ public class View extends JFrame implements MouseInputListener{
         colorX -= 1 % 25;
     }
 
-    public JPanel getMunition(){
-        return this.munition;
-    }
-
-    public int getAngle(){
-        return this.angle;
-    }
-
-    public void setColorX(){
-        colorX -= 1 % 25;
-    }
-
-    public void setColorY(){
+    public void setColorY() {
         colorY -= 1 % 25;
     }
 
-
-    public static void LancerMusic(String url){
+    public static void LancerMusic(String url) {
         try {
 
             File ficSon = new File(url);

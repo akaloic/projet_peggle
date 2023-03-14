@@ -1,8 +1,6 @@
 package model;
 
-import java.io.Serializable;
-
-public abstract class Objet implements Serializable{
+public abstract class Objet {
 
   protected double x;
   protected double y;
