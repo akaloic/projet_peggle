@@ -7,19 +7,17 @@ import model.Modele;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 
 public class Controleur {
 
-    protected View view;
-    protected Modele modele;
-    protected double angleTir;
+    public View view;
+    public Modele modele;
+    public double angleTir;
     private Timer timer;
 
     public Controleur() {
         modele = new Modele();
         view = new View(this);
-        modele.setBalle(new Balle(view.getPartie().getWidth() / 2, 0d, 200d));
         // --------------ANIMATION----------------------
         timer = new Timer(30, new ActionListener() {
             double t = 0;
@@ -44,18 +42,13 @@ public class Controleur {
                  * munition.revalidate();
                  * }
                  */
-                if (modele.getBalle() != null) {
-                    modele.getBalle().update(180 - getAngleTir(), t);
-                    if (modele.getBalle().getY() > view.getPartie().getHeight()) {
+
+                if (modele.balle != null) {
+                    modele.balle.update(180 - getAngleTir(), t);
+                    if (modele.balle.y > view.getPartie().getHeight()) {
                         t = 0;
                     }
                     t += 0.3;
-                    ArrayList<Pegs> a = modele.getNiveau().getList();
-                    for (int i = 0; i < a.size(); i++) {
-                        if (modele.getBalle().collision(a.get(i), view.ratioX, view.ratioY)) {
-                            a.get(i).couleur = true;
-                        }
-                    }
                 }
 
                 view.repaint();
@@ -86,7 +79,7 @@ public class Controleur {
     public void tirer() {
         this.modele.setBalle(null);
         this.angleTir = this.view.getAngle();
-        this.modele.setBalle(new Balle(view.getPartie().getWidth() / 2, 0d, 200d));
+        this.modele.setBalle(new Balle(600d, 0d, 200d));
     }
 
     public double getAngleTir() {
