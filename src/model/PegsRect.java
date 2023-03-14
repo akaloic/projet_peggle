@@ -7,19 +7,15 @@ public class PegsRect extends Pegs {
         //TODO Auto-generated constructor stub
     }
 
-    public void dessine(Graphics2D g, double ratioX,double ratioY){
-        g.fillRect((int) (x*ratioX),
-                    (int) (y*ratioY),
-                    (int) (super.getRayon()*ratioX),
-                    (int) (super.getRayon()*ratioX));
-    }
 
-    public void dessine(Graphics g, int widht, int weight){
-        g.fillRect(0, 0, widht, weight);
+    public void dessine(Graphics g){
+        g.fillRect(0, 0, (int)this.getRayon(), (int)this.getRayon());
     }
 
     public PegsRect clone(double x, double y, int v, double rayon){
         return new PegsRect(x, y, v, rayon);
     }
+
+
     
 }

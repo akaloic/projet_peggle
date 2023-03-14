@@ -7,12 +7,12 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
-import model.Pegs;
+import model.Obstacle;
 
 public class Sauvegarde {
-    public static ArrayList<ArrayList<Pegs>> liste = new ArrayList<ArrayList<Pegs>>();
+    public static ArrayList<ArrayList<Obstacle>> liste = new ArrayList<ArrayList<Obstacle>>();
 
-    public static void save(ArrayList<Pegs> a,int n){
+    public static void save(ArrayList<Obstacle> a,int n){
         liste.set(n, a);
         try {
             FileOutputStream fileOut = new FileOutputStream("save.ser");
@@ -26,11 +26,11 @@ public class Sauvegarde {
         }
     }
 
-    public static ArrayList<Pegs> charge(int n){
+    public static ArrayList<Obstacle> charge(int n){
         try {
            FileInputStream fileIn = new FileInputStream("save.ser");
            ObjectInputStream in = new ObjectInputStream(fileIn);
-            liste = (ArrayList<ArrayList<Pegs>>) in.readObject();
+            liste = (ArrayList<ArrayList<Obstacle>>) in.readObject();
            in.close();
            fileIn.close();
         } catch (IOException i) {
@@ -39,7 +39,7 @@ public class Sauvegarde {
            c.printStackTrace();
         }
         if(n >= liste.size()){
-            ArrayList<Pegs> a = new ArrayList<>();
+            ArrayList<Obstacle> a = new ArrayList<>();
             liste.add(a);
         }
         return liste.get(n);

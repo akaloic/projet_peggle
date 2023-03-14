@@ -18,16 +18,18 @@ public class Pegs extends Obstacle{
     public double getRayon(){return this.rayon;}
     public double getDiametre(){return this.rayon*2;}
     public void dessine(Graphics g){
-        int gx=(int)(this.x*View.getRatioX());
-        int gy=(int)(this.y*View.getRatioY());
-        int gw=(int)(this.rayon*View.getRatioX());
-        int gh=(int)(this.rayon*View.getRatioY());
+        int gx=(int)(this.x);
+        int gy=(int)(this.y);
+        int gw=(int)(this.rayon);
+        int gh=(int)(this.rayon);
         g.fillOval(gx,gy,gw,gh);
     }
 
     public Pegs clone(double x, double y, int v, double rayon){
         return new Pegs(x, y, v, (int)rayon);
     }
+
+
 
 
 }

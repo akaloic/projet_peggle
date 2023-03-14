@@ -10,6 +10,7 @@ import javax.swing.undo.AbstractUndoableEdit;
 import javax.swing.undo.UndoManager;
 import java.awt.event.MouseAdapter;
 import model.Niveau;
+import model.Obstacle;
 import model.Pegs;
 import model.PegsRect;
 import view.View;
@@ -20,7 +21,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 public class Edit extends JPanel{
-    public ArrayList<Pegs> niveau;
+    public ArrayList<Obstacle> niveau;
     public ArrayList<objetMobile> listPanel = new ArrayList<objetMobile>();//Liste pour garder compte des JPanel sur la page
     JPanel principal;
     objetMobile pegsEcran;
@@ -48,7 +49,7 @@ public class Edit extends JPanel{
         this.view = v;
         this.width = widht;
         this.height = height;
-
+        
         JPanel partieBouton = new JPanel();
         partieBouton.setLayout(new GridLayout(6,1));
         partieBouton.add(save);
@@ -135,7 +136,7 @@ public class Edit extends JPanel{
                         }
                     }
                     for(int j = 0; j < aSupprimer.size();j++){
-                        niveau.remove(aSupprimer.get(j).pegs);
+                        niveau.remove(aSupprimer.get(j).obstacle);
                         saveChange(aSupprimer);//Va aussi remove de listePanel et principal
                     }
                 }
@@ -172,12 +173,13 @@ public class Edit extends JPanel{
             }
         };
         for(int i = 0; i < niveau.size();i++){
+            int j = i;
             pegsEcran = new objetMobile(niveau.get(i)){
                 @Override
                 public void paint(Graphics g) {
                     // TODO Auto-generated method stub
                     super.paint(g);
-                    pegs.dessine(g);
+                    niveau.get(j).clone(0, 0, 0, 20).dessine(g);
                     
                 }
                 //Astuce ultime pour mettre à jour les textes dès qu'une coordonnée bouge
@@ -203,13 +205,14 @@ public class Edit extends JPanel{
         partieDroite.add(principal,BorderLayout.CENTER);
 
         //Peg qui servira à créer d'autre peg rond
-        objetMobile pegRond = new objetMobile(new Pegs(0, 0,0,0)){
+        objetMobile pegRond = new objetMobile(new Pegs(0, 0,0,20)){
             @Override
             public void paint(Graphics g) {
                 // TODO Auto-generated method stub
                 super.paint(g);
                 g.setColor(Color.yellow);
-                pegs.dessine(g);
+                Pegs p = (Pegs)obstacle;
+                p.dessine(g);
             }
             @Override
             public void setLocation(int x, int y) {
@@ -229,13 +232,14 @@ public class Edit extends JPanel{
         principal.addMouseMotionListener(selection);
 
         //Peg qui servira à créer d'autre peg carré
-        objetMobile pegRect = new objetMobile(new PegsRect(0, 0, 0, 0)){
+        objetMobile pegRect = new objetMobile(new PegsRect(0, 0, 0, 20)){
             @Override
             public void paint(Graphics g) {
                 // TODO Auto-generated method stub
                 super.paint(g);
                 g.setColor(Color.yellow);
-                pegs.dessine(g);
+                PegsRect p = (PegsRect)obstacle;
+                p.dessine(g);
             }
         };
         pegRect.setBounds(80,750,20,20);
@@ -301,8 +305,8 @@ public class Edit extends JPanel{
                     }
                 }
                 if(objetSelectionner.decoration){
-                    Pegs p = objetSelectionner.pegs.clone(objetSelectionner.getX()/view.ratioX, objetSelectionner.getY()/view.ratioY, 20, 20);
-                    creePegs(p, objetSelectionner.getX(), objetSelectionner.getY(), 0, 0);
+                    Obstacle o = objetSelectionner.obstacle.clone(objetSelectionner.getX()/view.ratioX, objetSelectionner.getY()/view.ratioY, 20, 20);
+                    creeObstacle(o, objetSelectionner.getX(), objetSelectionner.getY(), 0, 0);
                 }
               }
               if (keyCode == KeyEvent.VK_W) {
@@ -359,14 +363,15 @@ public class Edit extends JPanel{
         return Math.hypot(objetSelectionner.getX()-om.getX(), objetSelectionner.getY()-om.getY());
     }
 
-    public void creePegs(Pegs p, int eX, int eY, int xClick, int yClick){
-        niveau.add(p);
-        objetMobile om = new objetMobile(p){
+    public void creeObstacle(Obstacle o, int eX, int eY, int xClick, int yClick){
+        System.out.println(o.getX() +"    "+o.getY());
+        niveau.add(o);
+        objetMobile om = new objetMobile(o){
             @Override
             public void paint(Graphics g) {
                 // TODO Auto-generated method stub
                 super.paint(g);
-                pegs.dessine(g);
+                obstacle.clone(0, 0, 0, 20).dessine(g);
             }
             @Override
             public void setLocation(int x, int y) {
@@ -387,14 +392,14 @@ public class Edit extends JPanel{
     
 
     public class objetMobile extends JPanel implements MouseInputListener{
-        Pegs pegs;
+        Obstacle obstacle;        
         boolean deplacement = false;
         boolean decoration = false;//Pour différence les pegs pour éditer et les pegs des niveaux
         int xClick;
         int yClick;
 
-        public objetMobile(Pegs p){
-            this.pegs = p;
+        public objetMobile(Obstacle o){
+            this.obstacle = o;
         }
 
         @Override
@@ -425,8 +430,8 @@ public class Edit extends JPanel{
                 }
             }
             if(deplacement && e.getY() < height-150 && decoration){
-                Pegs p = pegs.clone((e.getX()-xClick)/view.ratioX, (e.getY()-yClick)/view.ratioY, 20, 20);
-                creePegs(p, e.getX(), e.getY(), xClick, yClick);
+                Obstacle o = obstacle.clone((e.getX()-xClick)/view.ratioX, (e.getY()-yClick)/view.ratioY, 20, 20);
+                creeObstacle(o, e.getX(), e.getY(), xClick, yClick);
             }
             principal.requestFocus();
 
