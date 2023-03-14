@@ -2,14 +2,16 @@ package model;
 
 public class Modele {
 
-    public Balle balle;
-    public Obstacle[] obstacles;
-    public Niveau niveau;
+    private Balle balle;
+    private Obstacle[] obstacles;
+    private Niveau niveau;
+    private Player player;
 
     public Modele() {
         balle = new Balle(600d, 0d, 200d);
         obstacles = new Obstacle[0];
         niveau = new Niveau(1);
+        player = new Player(10, "Paul");
     }
 
     // ---------GETTER SETTER---------
@@ -36,6 +38,15 @@ public class Modele {
     public void setObstacles(Obstacle[] obstacles) {
         this.obstacles = obstacles;
     }
+
+    public Player getPlayer(){
+        return player;
+    }
+
+    public void setPlayer(Player p){
+        player=p;
+    }
+
     // ---------GETTER SETTER---------
 
 }

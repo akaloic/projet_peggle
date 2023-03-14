@@ -1,16 +1,14 @@
 package model;
 
-import java.util.Timer;
-
 public class Balle {
 
-  public double x;
-  public double x0;
-  public double y;
-  public double y0;
-  public double v0;
-  public final double rayon = 25;
-  public final double g = 150;
+  protected double x;
+  protected double x0;
+  protected double y;
+  protected double y0;
+  protected double v0;
+  protected final double rayon = 25;
+  protected final double g = 150;
 
   public Balle(double x0, double y0, double v0) {
     this.x0 = x0;
@@ -37,9 +35,7 @@ public class Balle {
     return this.rayon;
   }
 
-  public boolean collision(Pegs o) {
-    return (o.getRayon() + this.rayon) * (o.getRayon() + this.rayon) == (this.x - o.getX()) * (this.x - o.getX())
-        + (this.y - o.getY()) * (this.y - o.getY());
+  public boolean collision(Pegs o, double ratioX, double ratioY) {
+    return Math.hypot(x - (o.getX() * ratioX), y - (o.getY()) * ratioY) <= (rayon + 50);
   }
-
 }
