@@ -51,16 +51,16 @@ public class View extends JFrame implements MouseInputListener{
 
     static Clip son;
 
-    private int width;
-    private int height;
-    private int numNiveau;
+    public int width;
+    public int height;
+    public int numNiveau;
 
-         /*Pour la balle à effacer plus tard */
+    /* Pour la balle à effacer plus tard */
     int x = 0;
     int y = 0;
-    int ballWidth =20;
+    int ballWidth = 20;
     int ballHeight = 20;
-    int max_x,max_y;
+    int max_x, max_y;
     int speedX = 10;
     int speedY = 10;
             /*fin balle */
@@ -89,13 +89,13 @@ public class View extends JFrame implements MouseInputListener{
         pane.setSize(width, height);
         pane.setLayout(null);
         pane.setBorder(BorderFactory.createTitledBorder("Bienvenue dans notre jeu"));
-        this.add(pane);
+        add(pane);
 
         JLabel titrePane = new JLabel("HIT THE PEGGLES");
-        titrePane.setBounds(width/2-65,height - height*2/3,400,100);
+        titrePane.setBounds(width / 2 - 65, height - height * 2 / 3, 400, 100);
         pane.add(titrePane);
         JButton start = new JButton("START");
-        start.setBounds(width/2-50,height - height/3,100,100);
+        start.setBounds(width / 2 - 50, height - height / 3, 100, 100);
         pane.add(start);
 
         JButton edit = new JButton("edit");
@@ -104,7 +104,7 @@ public class View extends JFrame implements MouseInputListener{
 
         start.addActionListener(e->{
             son.stop();
-            changerPanel(choixNiveauPane(this.controleur));
+            changerPanel(choixNiveauPane(controleur));
         });
 
         edit.addActionListener(e->{
@@ -166,7 +166,7 @@ public class View extends JFrame implements MouseInputListener{
         fondGauche = new JPanel();
         fondGauche.setLayout(new BorderLayout());
         fondGauche.setBackground(Color.gray);
-        fondGauche.setPreferredSize(new Dimension(this.getWidth() / 7, this.getHeight()));
+        fondGauche.setPreferredSize(new Dimension(getWidth() / 7, getHeight()));
 
         munition = new JPanel();
         munition.setLayout(new GridLayout(10, 1));
@@ -196,15 +196,15 @@ public class View extends JFrame implements MouseInputListener{
         return fond;
     }
 
-    public JPanel choixNiveauPane(Controleur controleur){
+    public JPanel choixNiveauPane(Controleur controleur) {
         String url = "ressources/SonsWav/ChoixNiveau.wav";
         LancerMusic(url);
         JPanel choixNiv = new JPanel();
-        choixNiv.setBackground(Color.BLUE); 
+        choixNiv.setBackground(Color.BLUE);
         choixNiv.setLayout(null);
-        choixNiv.setSize(this.width,this.height);
+        choixNiv.setSize(width, height);
         JButton precedent = new JButton("Acceuil");
-        precedent.setBounds(0,0,100,100);
+        precedent.setBounds(0, 0, 100, 100);
         choixNiv.add(precedent);
         JTextField name=new JTextField("");
         name.setBounds(600, 500, 100, 30);
@@ -215,12 +215,13 @@ public class View extends JFrame implements MouseInputListener{
             son.stop();
             changerPanel(menuPrincipal());
         });
-        int xNiv = precedent.getWidth()*2;
-        int yNiv = precedent.getHeight()*2;
+        int xNiv = precedent.getWidth() * 2;
+        int yNiv = precedent.getHeight() * 2;
         int wNiv = 100;
         int hNiv = 100;
-        for (int i = 1 ; i < 6 ; i++){;
-            JButton nameNiv =  new JButton("Niveau "+i);
+        for (int i = 1; i < 6; i++) {
+            ;
+            JButton nameNiv = new JButton("Niveau " + i);
             nameNiv.setBounds(xNiv, yNiv, wNiv, yNiv);
 
             JButton editI = new JButton("Edit "+i);
@@ -285,11 +286,6 @@ public class View extends JFrame implements MouseInputListener{
         if (puit.getX() < -partie.getWidth() / 2)
             directionX = 5;
     }
-    public void dessinePegRond(Graphics g,PegRond peg){
-        Graphics2D g2d = (Graphics2D) g;
-        g2d.setColor(Color.PINK);
-        g2d.fillOval((int)peg.getX(),(int)peg.getY(), (int)peg.getWidth(),(int)peg.getHeight());
-    }
 
     public void dessineObstacleRect(Graphics g,ObstacleRectangulaire oR){
         Graphics2D g2d = (Graphics2D) g;
@@ -312,11 +308,10 @@ public class View extends JFrame implements MouseInputListener{
         ligne2.moveTo(partie.getWidth() / 2, 0);
         ligne2.lineTo(mouseX - munition.getWidth(), mouseY);
 
-
         Arc2D.Double arc2 = new Arc2D.Double(partie.getWidth() / 2 - widthBase / 2, -heightBase / 2, widthBase,
                 heightBase, 180, 180, Arc2D.OPEN);
 
-        BufferedImage img = new BufferedImage(150,150,BufferedImage.TYPE_INT_RGB);
+        BufferedImage img = new BufferedImage(150, 150, BufferedImage.TYPE_INT_RGB);
         try {
             img = ImageIO.read(new File("ressources/roue.png"));
         } catch (IOException e) {
@@ -325,8 +320,8 @@ public class View extends JFrame implements MouseInputListener{
         }
 
         g2d.setClip(arc2);
-        g2d.drawImage(img, partie.getWidth()/2-85, -85,170,170, partie);
-        //g2d.draw(arc2);
+        g2d.drawImage(img, partie.getWidth() / 2 - 85, -85, 170, 170, partie);
+        // g2d.draw(arc2);
 
         try {
             img = ImageIO.read(new File("ressources/canon.png"));
@@ -340,8 +335,8 @@ public class View extends JFrame implements MouseInputListener{
 
         g2d.rotate(Math.toRadians(90 - angle), partie.getWidth() / 2, 0);
         g2d.setClip(null);
-        g2d.drawImage(img, partie.getWidth()/2-85, -55,170,170, partie);
-        //g2d.draw(rect2);
+        g2d.drawImage(img, partie.getWidth() / 2 - 85, -55, 170, 170, partie);
+        // g2d.draw(rect2);
         g2d.rotate(Math.toRadians(angle - 90), partie.getWidth() / 2, 0);
         // On annule la rotation après avoir dessiner le rectangle pour que seule le
         // bout du partie rotate
@@ -370,7 +365,7 @@ public class View extends JFrame implements MouseInputListener{
         g.fillOval((int)controleur.getModele().getBalle().getX(), (int)controleur.getModele().getBalle().getY(), 30, 30);
 
         for (int i = 0; i < controleur.getModele().getNiveau().list_peg.size(); i++) {
-            controleur.getModele().getNiveau().list_peg.get(i).dessine(g2d,ratioX,ratioY);
+            controleur.getModele().getNiveau().list_peg.get(i).dessine(g);
         }
 
     }
@@ -402,8 +397,17 @@ public class View extends JFrame implements MouseInputListener{
             munition.add(panel);
         }
     }
-    public JPanel getPartie(){
-        return this.partie;
+
+    public static JPanel getPartie() {
+        return partie;
+    }
+
+    public int getAngle() {
+        return angle;
+    }
+
+    public void setColorX() {
+        colorX -= 1 % 25;
     }
 
     public JPanel getMunition(){
@@ -425,16 +429,16 @@ public class View extends JFrame implements MouseInputListener{
 
     public static void LancerMusic(String url){
         try {
-            
+
             File ficSon = new File(url);
 
-            if(ficSon.exists()){
+            if (ficSon.exists()) {
                 AudioInputStream audio = AudioSystem.getAudioInputStream(ficSon);
                 son = AudioSystem.getClip();
                 son.open(audio);
                 son.start();
                 son.loop(Clip.LOOP_CONTINUOUSLY);
-            }else{
+            } else {
                 System.out.println("fichier introuvable");
             }
 
@@ -442,48 +446,58 @@ public class View extends JFrame implements MouseInputListener{
             e.printStackTrace();
         }
     }
+
     @Override
     public void mouseClicked(MouseEvent e) {
         // TODO Auto-generated method stub
-        
+
     }
 
     @Override
     public void mousePressed(MouseEvent e) {
         // TODO Auto-generated method stub
-        
+
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
         // TODO Auto-generated method stub
-        
+
     }
 
     @Override
     public void mouseEntered(MouseEvent e) {
         // TODO Auto-generated method stub
-        
+
     }
 
     @Override
     public void mouseExited(MouseEvent e) {
         // TODO Auto-generated method stub
-        
+
     }
 
     @Override
     public void mouseDragged(MouseEvent e) {
         // TODO Auto-generated method stub
-        
+
     }
 
     @Override
     public void mouseMoved(MouseEvent e) {
         // TODO Auto-generated method stub
-        
+
     }
-    public int getNumNiveau(){
-        return this.numNiveau;
+
+    public int getNumNiveau() {
+        return numNiveau;
+    }
+
+    public static float getRatioX() {
+        return ratioX;
+    }
+
+    public static float getRatioY() {
+        return ratioY;
     }
 }

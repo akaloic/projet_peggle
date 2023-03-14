@@ -8,7 +8,7 @@ public class Modele {
     private Player player;
 
     public Modele() {
-        balle = new Balle(600d,0d,200d);
+        balle = new Balle(600d, 0d, 200d);
         obstacles = new Obstacle[0];
         niveau = new Niveau(1);
         player = new Player(10, "Paul");
@@ -27,11 +27,10 @@ public class Modele {
         return balle;
     }
 
-    public void setBalle(Balle b){
+    public void setBalle(Balle b) {
         this.balle = b;
     }
 
-    
     public Obstacle[] getObstacles() {
         return obstacles;
     }
@@ -49,5 +48,5 @@ public class Modele {
     }
 
     // ---------GETTER SETTER---------
-    
+
 }
