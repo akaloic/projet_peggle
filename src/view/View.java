@@ -285,18 +285,6 @@ public class View extends JFrame implements MouseInputListener{
         if (puit.getX() < -partie.getWidth() / 2)
             directionX = 5;
     }
-
-    public void dessineObstacleRect(Graphics g,Quadrilatere oR){
-        Graphics2D g2d = (Graphics2D) g;
-        g2d.setColor(Color.PINK);
-        g2d.fillRect((int)oR.getX(),(int)oR.getY(), (int)oR.getWidth(),(int)oR.getHeight());
-    }
-    public void dessineObstacleRebond(Graphics g, ObstacleRebondissant oReb){
-        Graphics2D g2d = (Graphics2D) g;
-        g2d.setColor(Color.PINK);
-        g2d.fillRect((int)oReb.getX(),(int)oReb.getY(), (int)oReb.getWidth(),(int)oReb.getHeight());
-    }
-
     public void dessineCanon(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
         int widthBase = 150;
@@ -439,56 +427,21 @@ public class View extends JFrame implements MouseInputListener{
     }
 
     @Override
-    public void mouseClicked(MouseEvent e) {
-        // TODO Auto-generated method stub
-
-    }
-
+    public void mouseClicked(MouseEvent e) {}
     @Override
-    public void mousePressed(MouseEvent e) {
-        // TODO Auto-generated method stub
-
-    }
-
+    public void mousePressed(MouseEvent e) {}
     @Override
-    public void mouseReleased(MouseEvent e) {
-        // TODO Auto-generated method stub
-
-    }
-
+    public void mouseReleased(MouseEvent e) {}
     @Override
-    public void mouseEntered(MouseEvent e) {
-        // TODO Auto-generated method stub
-
-    }
-
+    public void mouseEntered(MouseEvent e) {}
     @Override
-    public void mouseExited(MouseEvent e) {
-        // TODO Auto-generated method stub
-
-    }
-
+    public void mouseExited(MouseEvent e) {}
     @Override
-    public void mouseDragged(MouseEvent e) {
-        // TODO Auto-generated method stub
-
-    }
-
+    public void mouseDragged(MouseEvent e) {}
     @Override
-    public void mouseMoved(MouseEvent e) {
-        // TODO Auto-generated method stub
-
-    }
-
-    public int getNumNiveau() {
-        return numNiveau;
-    }
-
-    public static double getRatioX() {
-        return ratioX;
-    }
-
-    public static double getRatioY() {
-        return ratioY;
-    }
+    public void mouseMoved(MouseEvent e) {}
+    public int getNumNiveau() {return numNiveau;}
+    public static double getRatioX() {return ratioX;}
+    public static double getRatioY() {return ratioY;}
+    public static double getRatio(){return (ratioX+ratioX)/2;}
 }

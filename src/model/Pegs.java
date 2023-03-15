@@ -7,7 +7,6 @@ import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 
 import view.View;
-import java.awt.*;
 public class Pegs extends Obstacle{
     public BufferedImage image;
     private int rayon = 25;
