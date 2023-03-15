@@ -3,7 +3,6 @@ import java.awt.*;
 
 import view.View;
 public class PegsRect extends Pegs {
-
     public PegsRect(double x, double y, int v, double rayon) {
         super(x, y, v, (int)rayon);
         //TODO Auto-generated constructor stub

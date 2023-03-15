@@ -27,17 +27,20 @@ public class Pegs extends Obstacle{
     public double getRayon(){return this.rayon;}
     public double getDiametre(){return this.rayon*2;}
     public void dessine(Graphics g){
-        /*int gx=(int)(this.x*View.ratioX);
+        int gx=(int)(this.x*View.ratioX);
         int gy=(int)(this.y*View.ratioY);
-        int gw=(int)(this.rayon);
-        int gh=(int)(this.rayon);
-        g.fillOval(gx,gy,gw,gh);*/
-        Graphics2D g2d = (Graphics2D)g;
-        g2d.drawImage(image,(int)(this.x*View.ratioX), (int)(this.y*View.ratioY),(int)this.rayon,(int)this.rayon,null);
+        int gw=(int)(this.rayon*View.getRatio());
+        int gh=(int)(this.rayon*View.getRatio());
+        g.fillOval(gx,gy,gw,gh);
+        //Graphics2D g2d = (Graphics2D)g;
+        //g2d.drawImage(image,gx, gy,gw,gh,null);
     }
 
     public Pegs clone(double x, double y, int v, double rayon){
         return new Pegs(x, y, v, (int)rayon);
+    }
+    public void setRayon(double i){
+        this.rayon = (int)i;
     }
 
 

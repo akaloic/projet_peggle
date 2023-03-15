@@ -1,12 +1,28 @@
 package model;
 
 import java.util.ArrayList;
+import java.io.File;
+import java.io.IOException;
+import java.nio.Buffer;
+import java.awt.image.BufferedImage;
+import javax.imageio.ImageIO;
+
 public class Niveau {
 
     public ArrayList<Obstacle> list_peg = new ArrayList<Obstacle>();
     protected int niveau;
+    public BufferedImage image;
+
 
     public Niveau(int i) {
+        BufferedImage img = new BufferedImage(20, 20, BufferedImage.TYPE_INT_RGB);
+        try {
+            img = ImageIO.read(new File("ressources/peg.png"));
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        this.image = img;
         switch (i) {
             case 1:
                 niveau_1();//liste de lignes
@@ -31,7 +47,7 @@ public class Niveau {
         double nvx = x;
         double nvy = y;
         for (int i = 0; i < pegUsed; i++) {
-            Pegs p = new Pegs(nvx, nvy, 1);
+            Pegs p = new Pegs(nvx, nvy, 1,image);
             list.add(p);
             nvx = direction? nvx + p.getDiametre() : nvx - p.getDiametre();//true pour droite, false pour gauche
             nvy = sens? nvy - p.getRayon() : nvy + p.getRayon();//true pour haut, false pour bas
@@ -48,7 +64,7 @@ public class Niveau {
     protected void lignes(double x, double y, ArrayList<Obstacle> list, int pegUsed) {
         double nvx = x;
         for (int i = 0; i < pegUsed; i++) {
-            Pegs p = new Pegs(nvx, y, 1);
+            Pegs p = new Pegs(nvx, y, 1,image);
             list.add(p);
             nvx += p.getDiametre();
         }
@@ -57,7 +73,7 @@ public class Niveau {
     protected void colonne(double x, double y, ArrayList<Obstacle> list, int pegUsed) {
         double nvy = y;
         for (int i = 0; i < pegUsed; i++) {
-            Pegs p = new Pegs(x, nvy, 1);
+            Pegs p = new Pegs(x, nvy, 1,image);
             list.add(p);
             nvy += p.getDiametre();
         }
