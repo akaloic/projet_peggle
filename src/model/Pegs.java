@@ -1,8 +1,6 @@
 package model;
 import java.awt.*;
-
 import view.View;
-import java.awt.*;
 public class Pegs extends Obstacle{
     private double rayon=50;
     public Pegs(){
@@ -18,10 +16,10 @@ public class Pegs extends Obstacle{
     public double getRayon(){return this.rayon;}
     public double getDiametre(){return this.rayon*2;}
     public void dessine(Graphics g){
-        int gx=(int)(this.x);
-        int gy=(int)(this.y);
-        int gw=(int)(this.rayon);
-        int gh=(int)(this.rayon);
+        int gx=(int)(this.x*View.getRatioX());
+        int gy=(int)(this.y*View.getRatioY());
+        int gw=(int)(this.rayon*View.getRatioX());
+        int gh=(int)(this.rayon*View.getRatioY());
         g.fillOval(gx,gy,gw,gh);
     }
 

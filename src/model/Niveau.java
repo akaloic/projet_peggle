@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import model.sousObstacle.ObstacleRebondissant;
 import model.sousObstacle.ObstacleRectangulaire;
-import view.View;
 
 public class Niveau {
 
