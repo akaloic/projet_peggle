@@ -1,14 +1,12 @@
-package model.sousObstacle;
+package model;
 import java.awt.*;
-import model.Obstacle;
 import view.View;
-import java.awt.*;
-public class ObstacleRectangulaire extends Obstacle {
+public class Quadrilatere extends Obstacle {//peut etre un carré comme un rectangle
     
-    public ObstacleRectangulaire(double x, double y) {
+    public Quadrilatere(double x, double y) {
         super(x, y, 125, 50, false, 100);
     }
-    public ObstacleRectangulaire(double x, double y, double largeur, double hauteur) {
+    public Quadrilatere(double x, double y, double largeur, double hauteur) {
         super(x, y, largeur, hauteur, false, 100);
     }
     public void dessine(Graphics g){

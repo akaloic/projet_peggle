@@ -5,8 +5,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.ActionEvent;
 import model.*;
-import model.sousObstacle.ObstacleRebondissant;
-import model.sousObstacle.ObstacleRectangulaire;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -288,7 +286,7 @@ public class View extends JFrame implements MouseInputListener{
             directionX = 5;
     }
 
-    public void dessineObstacleRect(Graphics g,ObstacleRectangulaire oR){
+    public void dessineObstacleRect(Graphics g,Quadrilatere oR){
         Graphics2D g2d = (Graphics2D) g;
         g2d.setColor(Color.PINK);
         g2d.fillRect((int)oR.getX(),(int)oR.getY(), (int)oR.getWidth(),(int)oR.getHeight());
