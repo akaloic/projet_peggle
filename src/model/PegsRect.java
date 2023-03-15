@@ -1,5 +1,7 @@
 package model;
 import java.awt.*;
+
+import view.View;
 public class PegsRect extends Pegs {
 
     public PegsRect(double x, double y, int v, double rayon) {
@@ -9,7 +11,7 @@ public class PegsRect extends Pegs {
 
 
     public void dessine(Graphics g){
-        g.fillRect(0, 0, (int)this.getRayon(), (int)this.getRayon());
+        g.fillRect((int)(this.x*View.ratioX), (int)(this.y*View.ratioY), (int)this.getRayon(), (int)this.getRayon());
     }
 
     public PegsRect clone(double x, double y, int v, double rayon){

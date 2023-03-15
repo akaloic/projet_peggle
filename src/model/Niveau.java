@@ -5,13 +5,26 @@ import java.util.ArrayList;
 import model.sousObstacle.ObstacleRebondissant;
 import model.sousObstacle.ObstacleRectangulaire;
 import view.View;
+import java.io.File;
+import java.io.IOException;
+import java.awt.image.BufferedImage;
+import javax.imageio.ImageIO;
 
 public class Niveau {
 
     public ArrayList<Obstacle> list_peg = new ArrayList<Obstacle>();
     protected int niveau;
+    public BufferedImage image;
 
     public Niveau(int i) {
+        BufferedImage img = new BufferedImage(20, 20, BufferedImage.TYPE_INT_RGB);
+        try {
+            img = ImageIO.read(new File("ressources/peg.png"));
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        this.image = img;
         switch (i) {
             case 1:
                 niveau_1();//liste de lignes
@@ -36,7 +49,7 @@ public class Niveau {
         double nvx = x;
         double nvy = y;
         for (int i = 0; i < pegUsed; i++) {
-            Pegs p = new Pegs(nvx, nvy, 1);
+            Pegs p = new Pegs(nvx, nvy, 1,image);
             list.add(p);
             nvx = direction? nvx + p.getDiametre() : nvx - p.getDiametre();//true pour droite, false pour gauche
             nvy = sens? nvy - p.getRayon() : nvy + p.getRayon();//true pour haut, false pour bas
@@ -53,16 +66,16 @@ public class Niveau {
     protected void lignes(double x, double y, ArrayList<Obstacle> list, int pegUsed) {
         double nvx = x;
         for (int i = 0; i < pegUsed; i++) {
-            Pegs p = new Pegs(nvx, y, 1);
+            Pegs p = new Pegs(nvx, y, 1,image);
             list.add(p);
-            nvx += p.getDiametre();
+            nvx += p.getDiametre()/View.getRatioX()/2;
         }
     }
 
     protected void colonne(double x, double y, ArrayList<Obstacle> list, int pegUsed) {
         double nvy = y;
         for (int i = 0; i < pegUsed; i++) {
-            Pegs p = new Pegs(x, nvy, 1);
+            Pegs p = new Pegs(x, nvy, 1,image);
             list.add(p);
             nvy += p.getDiametre();
         }
@@ -88,21 +101,20 @@ public class Niveau {
     protected void niveau_1() {
         for(int i=0;i<6;i++){
             if(i%2==0){
-                lignes(25, 400+(getDiametre()*i), list_peg, 20);
+                lignes(25*View.getRatioX(), (150+(getDiametre()*i))*View.ratioY, list_peg, 20);
             }
             else{
-                ObstacleRectangulaire obr = new ObstacleRectangulaire(25, 400+(getDiametre()*i));
-                ObstacleRectangulaire obr2 = new ObstacleRectangulaire(150+(50*17*2), 400+(getDiametre()*i));
-                lignes(175, 400+(getDiametre()*i), list_peg, 17);
+                ObstacleRectangulaire obr = new ObstacleRectangulaire(25, 200+(getDiametre()*i));
+                ObstacleRectangulaire obr2 = new ObstacleRectangulaire(600, 200+(getDiametre()*i));
+                lignes(175, 200+(getDiametre()*i), list_peg, 17);
                 list_peg.add(obr);
                 list_peg.add(obr2);
             }
-            ObstacleRectangulaire barriereGauche= new ObstacleRectangulaire(getDiametre()*3 - 25, 1025,400,50);
-            ObstacleRectangulaire barriereDroit= new ObstacleRectangulaire(25 + getDiametre()*17 - getDiametre()*4, 1025 ,400,50);
-            list_peg.add(barriereGauche);
-            list_peg.add(barriereDroit);
-            
         }
+        ObstacleRectangulaire barriereGauche= new ObstacleRectangulaire(getDiametre()*View.ratioX*4, 525,100*View.ratioY,50);
+        ObstacleRectangulaire barriereDroit= new ObstacleRectangulaire(getDiametre()*View.ratioX*9, 525 ,100*View.ratioY,50);
+        list_peg.add(barriereGauche);
+        list_peg.add(barriereDroit);
         
     }
 

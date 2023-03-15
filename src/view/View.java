@@ -113,6 +113,8 @@ public class View extends JFrame implements MouseInputListener{
         ratioX = (float)width/800;
         ratioY = (float)height/600;
 
+        /*ratioX = 1;
+        ratioY = 1;*/
         return pane;
 
     }
