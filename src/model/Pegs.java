@@ -18,8 +18,8 @@ public class Pegs extends Obstacle{
     public void dessine(Graphics g){
         int gx=(int)(this.x*View.getRatioX());
         int gy=(int)(this.y*View.getRatioY());
-        int gw=(int)(this.rayon*View.getRatioX());
-        int gh=(int)(this.rayon*View.getRatioY());
+        int gw=(int)(this.rayon*View.getRatio());
+        int gh=(int)(this.rayon*View.getRatio());
         g.fillOval(gx,gy,gw,gh);
     }
 

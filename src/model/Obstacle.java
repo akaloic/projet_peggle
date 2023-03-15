@@ -52,8 +52,7 @@ public class Obstacle extends Objet {
     public void setEstMort(boolean mort){
         this.estMort = mort;
     }
-    public void dessine(Graphics g) {
-    }
+    public void dessine(Graphics g) {}
 
     public Obstacle clone(double x, double y, int v, double rayon){
         return new Obstacle(0);
