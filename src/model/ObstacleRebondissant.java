@@ -1,9 +1,6 @@
-package model.sousObstacle;
-
-import model.Obstacle;
+package model;
 import java.awt.*;
 import view.View;
-
 public class ObstacleRebondissant extends Obstacle{ // Obstacle ayant une vie infinie, ne fera qu'en sorte que la balle rebondit sur l'obstacle
 
     protected final static boolean estMort = false;
