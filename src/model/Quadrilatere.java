@@ -4,7 +4,7 @@ import view.View;
 public class Quadrilatere extends Obstacle {//peut etre un carré comme un rectangle
     
     public Quadrilatere(double x, double y) {
-        super(x, y, 125, 50, false, 100);
+        super(x, y, 125, 25, false, 100);
     }
     public Quadrilatere(double x, double y, double largeur, double hauteur) {
         super(x, y, largeur, hauteur, false, 100);

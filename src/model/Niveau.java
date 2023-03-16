@@ -3,7 +3,6 @@ package model;
 import java.util.ArrayList;
 import java.io.File;
 import java.io.IOException;
-import java.nio.Buffer;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 
@@ -97,19 +96,20 @@ public class Niveau {
     }
 
     protected void niveau_1() {
+        int y1=200; int x1=5;
         for(int i=0;i<6;i++){
             if(i%2==0){
-                lignes(25, 400+(getDiametre()*i), list_peg, 20);
+                lignes(x1+getRayon(), y1+(getDiametre()*i), list_peg, 13);
             }
             else{
-                Quadrilatere obr = new Quadrilatere(25, 400+(getDiametre()*i));
-                Quadrilatere obr2 = new Quadrilatere(150+(50*17*2), 400+(getDiametre()*i));
-                lignes(175, 400+(getDiametre()*i), list_peg, 17);
+                Quadrilatere obr = new Quadrilatere(x1, y1+(getDiametre()*i));
+                Quadrilatere obr2 = new Quadrilatere(x1+getDiametre()*11, y1+(getDiametre()*i));
+                lignes(x1+getRayon()*6, y1+(getDiametre()*i), list_peg, 8);
                 list_peg.add(obr);
                 list_peg.add(obr2);
             }
-            Quadrilatere barriereGauche= new Quadrilatere(getDiametre()*3 - 25, 1025,400,50);
-            Quadrilatere barriereDroit= new Quadrilatere(25 + getDiametre()*17 - getDiametre()*4, 1025 ,400,50);
+            Quadrilatere barriereGauche= new Quadrilatere(x1+getRayon()*3, y1+getDiametre()*6+getRayon(),getDiametre()*3,getRayon());
+            Quadrilatere barriereDroit= new Quadrilatere(x1+getDiametre()*9, y1+getDiametre()*6+getRayon(),getDiametre()*3,getRayon());
             list_peg.add(barriereGauche);
             list_peg.add(barriereDroit);
             
