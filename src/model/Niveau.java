@@ -117,7 +117,7 @@ public class Niveau {
         
     }
 
-    protected void niveau_2(){
+    protected void niveau_2(){//voiture
        lignes(25, 1200, list_peg, 20);
        //roue de Gauche
        ObstacleRebondissant roueGauche= new ObstacleRebondissant(25+getRayon()*4.5, 1200-getRayon()*5, 200);
@@ -147,19 +147,20 @@ public class Niveau {
        Quadrilatere nuageDroit3=new Quadrilatere(200+getDiametre()*12, 399, getRayon()*3, getRayon());
        list_peg.add(nuageDroit1);list_peg.add(nuageDroit2);list_peg.add(nuageDroit3);
     }
-    protected void niveau_3(){
+    protected void niveau_3(){//series de carrés
+        double x3=getDiametre()+getRayon()/2; double y3=getDiametre()*3;
         int m1=0;int m2=0;int j=0;
         for(int i=3; i>-1;i--){
-            carres(325+getDiametre()*m1, 300, list_peg, i);
-            carres(325+getDiametre()*m2, 300+getDiametre()*(6-j), list_peg, j);
+            carres(x3+getDiametre()*m1, y3, list_peg, i);
+            carres(x3+getDiametre()*m2, y3+getDiametre()*(6-j), list_peg, j);
             m1+=i+2;m2+=j+2;j++;
         }
-        Quadrilatere colonneGauche = new Quadrilatere(325-getDiametre(), 300-getRayon(), getRayon(), getRayon()*17+1);
-        Quadrilatere colonneDroit = new Quadrilatere(325+getDiametre()*14, 300-getRayon(), getRayon(), getRayon()*17+1);
-        Quadrilatere ligneGaucheHaut = new Quadrilatere(325-getDiametre(), 300-getDiametre(), getDiametre()*6, getRayon());
-        Quadrilatere ligneGaucheBas = new Quadrilatere(325-getDiametre(), 300+getRayon()*16, getDiametre()*6, getRayon());
-        Quadrilatere ligneDroitHaut = new Quadrilatere(325+getDiametre()*8+getRayon(), 300-getDiametre(), getDiametre()*6, getRayon());
-        Quadrilatere ligneDroitBas = new Quadrilatere(325+getDiametre()*8+getRayon(), 300+getRayon()*16, getDiametre()*6, getRayon());
+        Quadrilatere colonneGauche = new Quadrilatere(x3-getDiametre(), y3-getRayon(), getRayon(), getRayon()*15+1);
+        Quadrilatere colonneDroit = new Quadrilatere(x3+getDiametre()*14+0.5, y3-getRayon(), getRayon(), getRayon()*15+1);
+        Quadrilatere ligneGaucheHaut = new Quadrilatere(x3-getDiametre(), y3-getDiametre(), getDiametre()*6, getRayon());
+        Quadrilatere ligneGaucheBas = new Quadrilatere(x3-getDiametre(), y3+getRayon()*16, getDiametre()*6, getRayon());
+        Quadrilatere ligneDroitHaut = new Quadrilatere(x3+getDiametre()*8+getRayon(), y3-getDiametre(), getDiametre()*6, getRayon());
+        Quadrilatere ligneDroitBas = new Quadrilatere(x3+getDiametre()*8+getRayon(), y3+getRayon()*16, getDiametre()*6, getRayon());
         list_peg.add(colonneGauche);list_peg.add(colonneDroit);
         list_peg.add(ligneGaucheHaut);list_peg.add(ligneGaucheBas);
         list_peg.add(ligneDroitHaut);list_peg.add(ligneDroitBas);
