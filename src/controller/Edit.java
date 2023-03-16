@@ -473,9 +473,20 @@ public class Edit extends JPanel{
                         suivant.setForeground(Color.green);*/
                     }  
                 }else if(decoration){
-                    Obstacle o = obstacle.clone((e.getX()-xClick)/View.ratioX, (e.getY()-yClick)/View.ratioY, 20, obstacle.getRayon());
-                    objetSelectionner = creeObstacle(o, e.getX(), e.getY(), xClick, yClick);
-                    objetSelectionner.deplacement = true;
+                    boolean utile = false;
+                    if(utile){
+                        Obstacle o = obstacle.clone((e.getX()-xClick)/View.ratioX, (e.getY()-yClick)/View.ratioY, 20, obstacle.getRayon());
+                        objetSelectionner = creeObstacle(o, e.getX(), e.getY(), xClick, yClick);
+                        objetSelectionner.deplacement = true;
+                    }else{
+                        niveau.remove(objetSelectionner.obstacle);
+                        listPanel.remove(objetSelectionner);
+                        principal.remove(objetSelectionner);
+                        Obstacle o = obstacle.clone(objetSelectionner.getX()/View.getRatioX(), objetSelectionner.getY()/View.getRatioY(), 20, obstacle.getRayon());
+                        objetSelectionner = creeObstacle(o,(int)(objetSelectionner.obstacle.getX()*View.getRatioX()), (int)(objetSelectionner.obstacle.getY()*View.getRatioY()), 0, 0);
+                        objetSelectionner.deplacement = false;
+                    }
+
                 }else{
                     deplacement = false;
                     obstacle.setX((e.getX()-xClick)/View.ratioX);obstacle.setY((e.getY()-yClick)/View.ratioY);
