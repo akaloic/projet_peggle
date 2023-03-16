@@ -36,7 +36,7 @@ public class Niveau {
                 niveau = 3;
                 break;
             case 4:
-                niveau_4();
+                niveau_4();//sardine
                 niveau = 4;
                 break;
         }
@@ -164,33 +164,33 @@ public class Niveau {
         list_peg.add(ligneGaucheHaut);list_peg.add(ligneGaucheBas);
         list_peg.add(ligneDroitHaut);list_peg.add(ligneDroitBas);
     }
-    protected void niveau_4(){
-        int x4=150; int y4=600;
+    protected void niveau_4(){//sardine
+        double x4=getRayon()/2; double y4=getDiametre()*5;
         //bouche et tete
         diagonal(x4, y4, list_peg, 4, true, true);
         diagonal(x4+getDiametre(), y4+getRayon(), list_peg, 2, true, false);
         diagonal(x4+getDiametre(), y4+getRayon()*3, list_peg, 2, false, false);
         diagonal(x4+getDiametre(), y4+getRayon()*5, list_peg, 3, true, false);
         //aile haute
-        lignes(x4+getDiametre()*4, y4-getRayon()*3, list_peg, 4);
+        lignes(x4+getDiametre()*4, y4-getRayon()*3, list_peg, 3);
         lignes(x4+getDiametre()*5, y4-getRayon()*5, list_peg, 3);
         lignes(x4+getDiametre()*6, y4-getRayon()*7, list_peg, 3);
         //aile basse
-        lignes(x4+getDiametre()*4, y4+getRayon()*7, list_peg, 4);
+        lignes(x4+getDiametre()*4, y4+getRayon()*7, list_peg, 3);
         lignes(x4+getDiametre()*5, y4+getRayon()*9, list_peg, 3);
         lignes(x4+getDiametre()*6, y4+getRayon()*11, list_peg, 3);
         //arriere
-        diagonal(x4+getDiametre()*8, y4-getRayon()*3, list_peg, 5, true, false);
-        diagonal(x4+getDiametre()*8, y4+getRayon()*7, list_peg, 5, true, true);
+        diagonal(x4+getDiametre()*7, y4-getRayon()*3, list_peg, 5, true, false);
+        diagonal(x4+getDiametre()*7, y4+getRayon()*7, list_peg, 5, true, true);
         //queue
-        diagonal(x4+getDiametre()*13, y4, list_peg, 4, true, true);
-        diagonal(x4+getDiametre()*13, y4+getDiametre()*2, list_peg, 4, true, false);
-        colonne(x4+getDiametre()*17, y4+getDiametre()*2, list_peg, 2);
-        colonne(x4+getDiametre()*17, y4-getDiametre(), list_peg, 2);
-        colonne(x4+getDiametre()*16, y4+getDiametre(), list_peg, 1);
+        diagonal(x4+getDiametre()*12, y4, list_peg, 3, true, true);
+        diagonal(x4+getDiametre()*12, y4+getDiametre()*2, list_peg, 3, true, false);
+        colonne(x4+getDiametre()*15, y4+getDiametre()*2, list_peg, 2);
+        colonne(x4+getDiametre()*15, y4-getDiametre(), list_peg, 2);
+        colonne(x4+getDiametre()*14, y4+getDiametre(), list_peg, 1);
         //visage
         lignes(x4+getRayon()*7, y4-getRayon(), list_peg, 1);
-        Quadrilatere ligne = new Quadrilatere(x4+getRayon()*9, y4-getRayon(), getRayon(), getRayon()*7);
+        Quadrilatere ligne = new Quadrilatere(x4+getRayon()*9, y4-getRayon(), getRayon(), getRayon()*6);
         list_peg.add(ligne);
     }
     public ArrayList<Obstacle> getList() {return list_peg;}
