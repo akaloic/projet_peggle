@@ -108,7 +108,7 @@ public class View extends JFrame implements MouseInputListener{
             son.stop();
             changerPanel(choixEdit());
         });
-        ratioX = (float)width/800;
+        ratioX = (float)(width-width/7)/800;
         ratioY = (float)height/600;
 
         /*ratioX = 1;
