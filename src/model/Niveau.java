@@ -96,20 +96,20 @@ public class Niveau {
     }
 
     protected void niveau_1() {
-        int y1=200; int x1=5;
+        double y1=200; double x1=getRayon()/2;
         for(int i=0;i<6;i++){
             if(i%2==0){
-                lignes(x1+getRayon(), y1+(getDiametre()*i), list_peg, 13);
+                lignes(x1+getRayon(), y1+(getDiametre()*i), list_peg, 15);
             }
             else{
                 Quadrilatere obr = new Quadrilatere(x1, y1+(getDiametre()*i));
-                Quadrilatere obr2 = new Quadrilatere(x1+getDiametre()*11, y1+(getDiametre()*i));
-                lignes(x1+getRayon()*6, y1+(getDiametre()*i), list_peg, 8);
+                Quadrilatere obr2 = new Quadrilatere(x1+getDiametre()*13, y1+(getDiametre()*i));
+                lignes(x1+getRayon()*6, y1+(getDiametre()*i), list_peg, 10);
                 list_peg.add(obr);
                 list_peg.add(obr2);
             }
-            Quadrilatere barriereGauche= new Quadrilatere(x1+getRayon()*3, y1+getDiametre()*6+getRayon(),getDiametre()*3,getRayon());
-            Quadrilatere barriereDroit= new Quadrilatere(x1+getDiametre()*9, y1+getDiametre()*6+getRayon(),getDiametre()*3,getRayon());
+            Quadrilatere barriereGauche= new Quadrilatere(x1+getDiametre()*3, y1+getDiametre()*6+getRayon(),getDiametre()*3,getRayon());
+            Quadrilatere barriereDroit= new Quadrilatere(x1+getDiametre()*9+getRayon(), y1+getDiametre()*6+getRayon(),getDiametre()*3,getRayon());
             list_peg.add(barriereGauche);
             list_peg.add(barriereDroit);
             
