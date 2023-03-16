@@ -1,6 +1,8 @@
 package controller;
 
 import java.util.ArrayList;
+
+import javax.sound.midi.Synthesizer;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -27,7 +29,7 @@ public class Edit extends JPanel{
     public ArrayList<objetMobile> listPanel = new ArrayList<objetMobile>();//Liste pour garder compte des JPanel sur la page
     JPanel principal;
     objetMobile pegsEcran;
-    objetMobile objetSelectionner = new objetMobile(null);//Le dernière objet sur lequel on a cliqué
+    objetMobile objetSelectionner;//Le dernière objet sur lequel on a cliqué
     objetMobile suivant = new objetMobile(null);
     boolean peutBouger = false;
     JButton save = new JButton("Sauvegarder");
@@ -43,8 +45,8 @@ public class Edit extends JPanel{
     int height;
     Selection selection = new Selection();
     UndoManager undoManager = new UndoManager();
-    JTextField xSaisie = new JTextField(objetSelectionner.getX()+"");
-    JTextField ySaisie = new JTextField(objetSelectionner.getY()+"");
+    JTextField xSaisie = new JTextField();
+    JTextField ySaisie = new JTextField();
     View view;
 
     public Edit(Niveau n,int widht, int height,int idSauvegarde,View v){
@@ -353,18 +355,36 @@ public class Edit extends JPanel{
                 }
               }
               if (keyCode == KeyEvent.VK_W) {
-                objetSelectionner.setForeground(Color.black);
-                Obstacle o = pegRond.obstacle.clone(pegRond.getX()/View.ratioX, pegRond.getY()/View.ratioY, (int)pegRond.obstacle.getRayon(), (int)pegRond.obstacle.getRayon());
-                objetSelectionner = creeObstacle(o, pegRond.getX(), pegRond.getY()-100, 0, 0);
-                peutBouger = true;
-                objetSelectionner.setForeground(Color.red);
+                if(peutBouger){
+                    niveau.remove(objetSelectionner.obstacle);
+                    listPanel.remove(objetSelectionner);
+                    principal.remove(objetSelectionner);
+                    Obstacle o = pegRond.obstacle.clone(objetSelectionner.getX()/View.getRatioX(), objetSelectionner.getY()/View.getRatioY(), 20, pegRond.obstacle.getRayon());
+                    objetSelectionner = creeObstacle(o,(int)(objetSelectionner.obstacle.getX()*View.getRatioX()), (int)(objetSelectionner.obstacle.getY()*View.getRatioY()), 0, 0);
+                    objetSelectionner.deplacement = false;
+                }else{
+                    objetSelectionner.setForeground(Color.black);
+                    Obstacle o = pegRond.obstacle.clone(pegRond.getX()/View.ratioX, pegRond.getY()/View.ratioY, (int)pegRond.obstacle.getRayon(), (int)pegRond.obstacle.getRayon());
+                    objetSelectionner = creeObstacle(o, pegRond.getX(), pegRond.getY()-100, 0, 0);
+                    peutBouger = true;
+                    objetSelectionner.setForeground(Color.red);
+                }
               }
               if (keyCode == KeyEvent.VK_X) {
-                objetSelectionner.setForeground(Color.black);
-                Obstacle o = pegRect.obstacle.clone(pegRect.getX()/View.ratioX, pegRect.getY()/View.ratioY, (int)pegRect.obstacle.getRayon(), (int)pegRect.obstacle.getRayon());
-                objetSelectionner = creeObstacle(o, pegRect.getX(), pegRect.getY()-100, 0, 0);
-                peutBouger = true;
-                objetSelectionner.setForeground(Color.red);
+                if(peutBouger){
+                    niveau.remove(objetSelectionner.obstacle);
+                    listPanel.remove(objetSelectionner);
+                    principal.remove(objetSelectionner);
+                    Obstacle o = pegRect.obstacle.clone(objetSelectionner.getX()/View.getRatioX(), objetSelectionner.getY()/View.getRatioY(), 20, pegRect.obstacle.getRayon());
+                    objetSelectionner = creeObstacle(o,(int)(objetSelectionner.obstacle.getX()*View.getRatioX()), (int)(objetSelectionner.obstacle.getY()*View.getRatioY()), 0, 0);
+                    objetSelectionner.deplacement = false;
+                }else{
+                    objetSelectionner.setForeground(Color.black);
+                    Obstacle o = pegRect.obstacle.clone(pegRect.getX()/View.ratioX, pegRect.getY()/View.ratioY, (int)pegRect.obstacle.getRayon(), (int)pegRect.obstacle.getRayon());
+                    objetSelectionner = creeObstacle(o, pegRect.getX(), pegRect.getY()-100, 0, 0);
+                    peutBouger = true;
+                    objetSelectionner.setForeground(Color.red);
+                }
               }
             }
         });
@@ -437,6 +457,7 @@ public class Edit extends JPanel{
         principal.addMouseMotionListener(om);
         om.xClick = xClick;
         om.yClick = yClick;
+        om.setForeground(Color.cyan);
         return om;
 
     }
@@ -463,7 +484,9 @@ public class Edit extends JPanel{
                 if(!deplacement && !decoration){
                     deplacement = true;
                     if(!decoration){//Pour highlight objetSelectionner
-                        objetSelectionner.setForeground(Color.BLACK);
+                        if(objetSelectionner != null){
+                            objetSelectionner.setForeground(Color.BLACK);
+                        } 
                         suivant.setForeground(Color.black);
                         objetSelectionner = this;
                         taille.setEnabled(true);
@@ -473,18 +496,17 @@ public class Edit extends JPanel{
                         suivant.setForeground(Color.green);*/
                     }  
                 }else if(decoration){
-                    boolean utile = false;
-                    if(utile){
-                        Obstacle o = obstacle.clone((e.getX()-xClick)/View.ratioX, (e.getY()-yClick)/View.ratioY, 20, obstacle.getRayon());
-                        objetSelectionner = creeObstacle(o, e.getX(), e.getY(), xClick, yClick);
-                        objetSelectionner.deplacement = true;
-                    }else{
+                    if (peutBouger){
                         niveau.remove(objetSelectionner.obstacle);
                         listPanel.remove(objetSelectionner);
                         principal.remove(objetSelectionner);
                         Obstacle o = obstacle.clone(objetSelectionner.getX()/View.getRatioX(), objetSelectionner.getY()/View.getRatioY(), 20, obstacle.getRayon());
                         objetSelectionner = creeObstacle(o,(int)(objetSelectionner.obstacle.getX()*View.getRatioX()), (int)(objetSelectionner.obstacle.getY()*View.getRatioY()), 0, 0);
                         objetSelectionner.deplacement = false;
+                    }else{
+                        Obstacle o = obstacle.clone((e.getX()-xClick)/View.ratioX, (e.getY()-yClick)/View.ratioY, 20, obstacle.getRayon());
+                        objetSelectionner = creeObstacle(o, e.getX(), e.getY(), xClick, yClick);
+                        objetSelectionner.deplacement = true;
                     }
 
                 }else{

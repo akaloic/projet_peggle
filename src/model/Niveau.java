@@ -10,7 +10,7 @@ public class Niveau {
 
     public ArrayList<Obstacle> list_peg = new ArrayList<Obstacle>();
     protected int niveau;
-    public BufferedImage image;
+    public static BufferedImage image;
 
 
     public Niveau(int i) {

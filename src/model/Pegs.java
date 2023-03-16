@@ -29,7 +29,7 @@ public class Pegs extends Obstacle{
         int gh=(int)(rayon*View.getRatio());
         g.fillOval(gx,gy,gw,gh);
         //Graphics2D g2d = (Graphics2D)g;
-        //g2d.drawImage(image,gx, gy,gw,gh,null);
+        //g2d.drawImage(Niveau.image,gx, gy,gw,gh,null);
     }
 
     public Pegs clone(double x, double y, int v, double rayon){
