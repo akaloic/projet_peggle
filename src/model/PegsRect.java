@@ -10,7 +10,7 @@ public class PegsRect extends Pegs {
 
 
     public void dessine(Graphics g){
-        g.fillRect((int)(this.x*View.ratioX), (int)(this.y*View.ratioY), (int)this.getRayon(), (int)this.getRayon());
+        g.fillRect((int)(this.x*View.ratioX), (int)(this.y*View.ratioY), (int)(this.getRayon()*View.getRatio()), (int)(this.getRayon()*View.getRatio()));
     }
 
     public PegsRect clone(double x, double y, int v, double rayon){

@@ -83,7 +83,7 @@ public class Edit extends JPanel{
         taille.addChangeListener (( event ) -> { 
             if(objetSelectionner != null && !objetSelectionner.decoration){
                 objetSelectionner.obstacle.setRayon(taille.getValue());
-                objetSelectionner.setSize(new Dimension(taille.getValue(),taille.getValue()));
+                objetSelectionner.setSize(new Dimension((int)(tailleGeneral.getValue()*View.getRatio()),(int)(tailleGeneral.getValue()*View.getRatio())));
             }
             
          });
@@ -98,7 +98,7 @@ public class Edit extends JPanel{
         tailleGeneral.addChangeListener (( event ) -> { 
             for(int i = 0; i < listPanel.size();i++){
                 listPanel.get(i).obstacle.setRayon(tailleGeneral.getValue());
-                listPanel.get(i).setSize(new Dimension(tailleGeneral.getValue(),tailleGeneral.getValue()));
+                listPanel.get(i).setSize(new Dimension((int)(tailleGeneral.getValue()*View.getRatio()),(int)(tailleGeneral.getValue()*View.getRatio())));
             }
           });
 
@@ -235,7 +235,7 @@ public class Edit extends JPanel{
                 }
             };
             if(niveau.size() != 0){
-                pegsEcran.setBounds((int)(niveau.get(i).getX()*View.ratioX), (int)(niveau.get(i).getY()*View.ratioY), (int)pegsEcran.obstacle.getRayon(), (int)pegsEcran.obstacle.getRayon());
+                pegsEcran.setBounds((int)(niveau.get(i).getX()*View.ratioX), (int)(niveau.get(i).getY()*View.ratioY), (int)(pegsEcran.obstacle.getRayon()*View.getRatio()), (int)(pegsEcran.obstacle.getRayon()*View.getRatio()));
             }
             pegsEcran.setOpaque(false);
             principal.add(pegsEcran);
@@ -265,7 +265,7 @@ public class Edit extends JPanel{
                 ySaisie.setText(this.getY()+"");
             }
         };
-        pegRond.setBounds(50,750,20,20);
+        pegRond.setBounds(50,750,(int)(20*View.getRatio()),(int)(20*View.getRatio()));
         pegRond.setOpaque(false);
         pegRond.decoration = true;
         principal.add(pegRond);
@@ -285,7 +285,7 @@ public class Edit extends JPanel{
                 p.dessine(g);
             }
         };
-        pegRect.setBounds(80,750,20,20);
+        pegRect.setBounds(80,750,(int)(20*View.getRatio()),(int)(20*View.getRatio()));
         pegRect.setOpaque(false);
         pegRect.decoration = true;
         principal.add(pegRect);
@@ -430,7 +430,7 @@ public class Edit extends JPanel{
             }
         };
         om.setOpaque(false);
-        om.setBounds(((eX-xClick)), (eY-yClick), (int)om.obstacle.getRayon(), (int)om.obstacle.getRayon());
+        om.setBounds(((eX-xClick)), (eY-yClick), (int)(om.obstacle.getRayon()*View.getRatio()), (int)(om.obstacle.getRayon()*View.getRatio()));
         principal.add(om);
         listPanel.add(om);
         principal.addMouseListener(om);
@@ -475,7 +475,7 @@ public class Edit extends JPanel{
                 }else if(decoration){
                     Obstacle o = obstacle.clone((e.getX()-xClick)/View.ratioX, (e.getY()-yClick)/View.ratioY, 20, obstacle.getRayon());
                     objetSelectionner = creeObstacle(o, e.getX(), e.getY(), xClick, yClick);
-                    deplacement = true;
+                    objetSelectionner.deplacement = true;
                 }else{
                     deplacement = false;
                     obstacle.setX((e.getX()-xClick)/View.ratioX);obstacle.setY((e.getY()-yClick)/View.ratioY);
