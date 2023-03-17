@@ -2,14 +2,12 @@ package controller;
 
 import java.util.ArrayList;
 
-import javax.sound.midi.Synthesizer;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.JTextField;
 import javax.swing.event.MouseInputListener;
-import javax.swing.plaf.TextUI;
 import javax.swing.undo.AbstractUndoableEdit;
 import javax.swing.undo.UndoManager;
 import java.awt.event.MouseAdapter;
@@ -29,8 +27,10 @@ public class Edit extends JPanel{
     public ArrayList<objetMobile> listPanel = new ArrayList<objetMobile>();//Liste pour garder compte des JPanel sur la page
     JPanel principal;
     objetMobile pegsEcran;
-    objetMobile objetSelectionner;//Le dernière objet sur lequel on a cliqué
+    objetMobile objetSelectionner = new objetMobile(null);//Le dernière objet sur lequel on a cliqué
     objetMobile suivant = new objetMobile(null);
+    boolean choixMultiple = true;
+    public ArrayList<objetMobile> listeSelection = new ArrayList<objetMobile>();
     boolean peutBouger = false;
     JButton save = new JButton("Sauvegarder");
     JButton leave = new JButton("Quitter");
@@ -56,7 +56,6 @@ public class Edit extends JPanel{
         this.view = v;
         this.width = widht;
         this.height = height;
-        
         JPanel partieBouton = new JPanel();
         partieBouton.setLayout(new GridLayout(6,1));
         partieBouton.add(save);
@@ -85,9 +84,8 @@ public class Edit extends JPanel{
         taille.addChangeListener (( event ) -> { 
             if(objetSelectionner != null && !objetSelectionner.decoration){
                 objetSelectionner.obstacle.setRayon(taille.getValue());
-                objetSelectionner.setSize(new Dimension((int)(tailleGeneral.getValue()*View.getRatio()),(int)(tailleGeneral.getValue()*View.getRatio())));
+                objetSelectionner.setSize(new Dimension((int)(taille.getValue()*View.getRatio()),(int)(taille.getValue()*View.getRatio())));
             }
-            
          });
 
         tailleGeneral.setMinimum(20);
@@ -172,20 +170,19 @@ public class Edit extends JPanel{
         delete.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(selection != null){
-                    ArrayList<objetMobile> aSupprimer = new ArrayList<objetMobile>();
+                if(selection != null){    
                     //Liste pour garder les objet a supprimer, car supprimer des éléments d'un liste qu'on est en train de parcourir est pas très opti
                     for(int i = 0; i < listPanel.size();i++){
                         if(appartient(listPanel.get(i))){
-                            aSupprimer.add(listPanel.get(i));
+                            listeSelection.add(listPanel.get(i));
                         }
                     }
-                    for(int j = 0; j < aSupprimer.size();j++){
-                        niveau.remove(aSupprimer.get(j).obstacle);
-                        saveChange(aSupprimer);//Va aussi remove de listePanel et principal
-                    }
+                    saveChange(listeSelection);//Va aussi remove de niveau, listePanel et principal
+                    listeSelection = new ArrayList<objetMobile>();
+                       
+                    
                 }
-
+            System.out.println(niveau.size()+"    "+listPanel.size()+"    "+principal.getComponentCount());
             }
         });
         cancel.addActionListener(
@@ -218,14 +215,13 @@ public class Edit extends JPanel{
             }
         };
         for(int i = 0; i < niveau.size();i++){
-            int j = i;
+            Obstacle o = niveau.get(i);
             pegsEcran = new objetMobile(niveau.get(i)){
                 @Override
                 public void paint(Graphics g) {
                     // TODO Auto-generated method stub
                     super.paint(g);
-                    niveau.get(j).clone(0, 0, 0, obstacle.getRayon()).dessine(g);
-                    
+                    o.clone(0, 0, 0, obstacle.getRayon()).dessine(g);
                 }
                 //Astuce ultime pour mettre à jour les textes dès qu'une coordonnée bouge
                 @Override
@@ -237,13 +233,14 @@ public class Edit extends JPanel{
                 }
             };
             if(niveau.size() != 0){
-                pegsEcran.setBounds((int)(niveau.get(i).getX()*View.ratioX), (int)(niveau.get(i).getY()*View.ratioY), (int)(pegsEcran.obstacle.getRayon()*View.getRatio()), (int)(pegsEcran.obstacle.getRayon()*View.getRatio()));
+                pegsEcran.setBounds((int)(o.getX()*View.ratioX), (int)(o.getY()*View.ratioY), (int)(o.getRayon()*View.getRatio()), (int)(o.getRayon()*View.getRatio()));
             }
             pegsEcran.setOpaque(false);
             principal.add(pegsEcran);
             listPanel.add(pegsEcran);
             principal.addMouseListener(pegsEcran);
             principal.addMouseMotionListener(pegsEcran);
+            pegsEcran = null;
         }
         principal.setLayout(null);
         principal.setBackground(Color.lightGray);
@@ -256,8 +253,7 @@ public class Edit extends JPanel{
                 // TODO Auto-generated method stub
                 super.paint(g);
                 g.setColor(Color.yellow);
-                Pegs p = (Pegs)obstacle;
-                p.dessine(g);
+                obstacle.dessine(g);
             }
             @Override
             public void setLocation(int x, int y) {
@@ -283,8 +279,7 @@ public class Edit extends JPanel{
                 // TODO Auto-generated method stub
                 super.paint(g);
                 g.setColor(Color.yellow);
-                PegsRect p = (PegsRect)obstacle;
-                p.dessine(g);
+                obstacle.dessine(g);
             }
         };
         pegRect.setBounds(80,750,(int)(20*View.getRatio()),(int)(20*View.getRatio()));
@@ -307,6 +302,9 @@ public class Edit extends JPanel{
                 }else{
                     suivant = plusProche(3);//Gauche
                     objetSelectionner.setForeground(Color.black);
+                    if(listeSelection.contains(objetSelectionner)){
+                        objetSelectionner.setForeground(Color.green);
+                    }
                     objetSelectionner = suivant;
                     objetSelectionner.setForeground(Color.red);
                 }
@@ -318,6 +316,9 @@ public class Edit extends JPanel{
                 }else{
                     suivant = plusProche(1);//Droite
                     objetSelectionner.setForeground(Color.black);
+                    if(listeSelection.contains(objetSelectionner)){
+                        objetSelectionner.setForeground(Color.green);
+                    }
                     objetSelectionner = suivant;
                     objetSelectionner.setForeground(Color.red);
                 }
@@ -329,6 +330,9 @@ public class Edit extends JPanel{
                 }else{
                     suivant = plusProche(0);//Haut
                     objetSelectionner.setForeground(Color.black);
+                    if(listeSelection.contains(objetSelectionner)){
+                        objetSelectionner.setForeground(Color.green);
+                    }
                     objetSelectionner = suivant;
                     objetSelectionner.setForeground(Color.red);
                 }
@@ -341,6 +345,9 @@ public class Edit extends JPanel{
                 else{
                     suivant = plusProche(2);//Bas
                     objetSelectionner.setForeground(Color.black);
+                    if(listeSelection.contains(objetSelectionner)){
+                        objetSelectionner.setForeground(Color.green);
+                    }
                     objetSelectionner = suivant;
                     objetSelectionner.setForeground(Color.red);
                 }
@@ -362,12 +369,13 @@ public class Edit extends JPanel{
                     Obstacle o = pegRond.obstacle.clone(objetSelectionner.getX()/View.getRatioX(), objetSelectionner.getY()/View.getRatioY(), 20, pegRond.obstacle.getRayon());
                     objetSelectionner = creeObstacle(o,(int)(objetSelectionner.obstacle.getX()*View.getRatioX()), (int)(objetSelectionner.obstacle.getY()*View.getRatioY()), 0, 0);
                     objetSelectionner.deplacement = false;
+                    objetSelectionner.setForeground(Color.cyan);
                 }else{
                     objetSelectionner.setForeground(Color.black);
                     Obstacle o = pegRond.obstacle.clone(pegRond.getX()/View.ratioX, pegRond.getY()/View.ratioY, (int)pegRond.obstacle.getRayon(), (int)pegRond.obstacle.getRayon());
                     objetSelectionner = creeObstacle(o, pegRond.getX(), pegRond.getY()-100, 0, 0);
                     peutBouger = true;
-                    objetSelectionner.setForeground(Color.red);
+                    objetSelectionner.setForeground(Color.cyan);
                 }
               }
               if (keyCode == KeyEvent.VK_X) {
@@ -378,13 +386,23 @@ public class Edit extends JPanel{
                     Obstacle o = pegRect.obstacle.clone(objetSelectionner.getX()/View.getRatioX(), objetSelectionner.getY()/View.getRatioY(), 20, pegRect.obstacle.getRayon());
                     objetSelectionner = creeObstacle(o,(int)(objetSelectionner.obstacle.getX()*View.getRatioX()), (int)(objetSelectionner.obstacle.getY()*View.getRatioY()), 0, 0);
                     objetSelectionner.deplacement = false;
+                    objetSelectionner.setForeground(Color.cyan);
                 }else{
                     objetSelectionner.setForeground(Color.black);
                     Obstacle o = pegRect.obstacle.clone(pegRect.getX()/View.ratioX, pegRect.getY()/View.ratioY, (int)pegRect.obstacle.getRayon(), (int)pegRect.obstacle.getRayon());
                     objetSelectionner = creeObstacle(o, pegRect.getX(), pegRect.getY()-100, 0, 0);
                     peutBouger = true;
-                    objetSelectionner.setForeground(Color.red);
+                    objetSelectionner.setForeground(Color.cyan);
                 }
+              }
+              if (keyCode == KeyEvent.VK_N) {
+                if(choixMultiple){
+                    listeSelection.add(objetSelectionner);
+                }
+              }
+              if (keyCode == KeyEvent.VK_M) {
+                choixMultiple = !choixMultiple;
+                System.out.println(choixMultiple);
               }
             }
         });
@@ -457,7 +475,6 @@ public class Edit extends JPanel{
         principal.addMouseMotionListener(om);
         om.xClick = xClick;
         om.yClick = yClick;
-        om.setForeground(Color.cyan);
         return om;
 
     }
@@ -484,16 +501,19 @@ public class Edit extends JPanel{
                 if(!deplacement && !decoration){
                     deplacement = true;
                     if(!decoration){//Pour highlight objetSelectionner
-                        if(objetSelectionner != null){
-                            objetSelectionner.setForeground(Color.BLACK);
-                        } 
-                        suivant.setForeground(Color.black);
-                        objetSelectionner = this;
+                        if(choixMultiple){
+                            listeSelection.add(this);
+                            objetSelectionner = this;
+                            objetSelectionner.setForeground(Color.red);
+                        }else{
+                            if(objetSelectionner != null){
+                                objetSelectionner.setForeground(Color.BLACK);
+                            } 
+                            objetSelectionner = this;
+                            objetSelectionner.setForeground(Color.red);
+                        }
                         taille.setEnabled(true);
                         taille.setValue((int)objetSelectionner.obstacle.getRayon());
-                        objetSelectionner.setForeground(Color.red);
-                        /*suivant = plusProche(0);
-                        suivant.setForeground(Color.green);*/
                     }  
                 }else if(decoration){
                     if (peutBouger){
@@ -503,10 +523,13 @@ public class Edit extends JPanel{
                         Obstacle o = obstacle.clone(objetSelectionner.getX()/View.getRatioX(), objetSelectionner.getY()/View.getRatioY(), 20, obstacle.getRayon());
                         objetSelectionner = creeObstacle(o,(int)(objetSelectionner.obstacle.getX()*View.getRatioX()), (int)(objetSelectionner.obstacle.getY()*View.getRatioY()), 0, 0);
                         objetSelectionner.deplacement = false;
+                        objetSelectionner.setForeground(Color.cyan);
                     }else{
+                        objetSelectionner.setForeground(Color.black);
                         Obstacle o = obstacle.clone((e.getX()-xClick)/View.ratioX, (e.getY()-yClick)/View.ratioY, 20, obstacle.getRayon());
                         objetSelectionner = creeObstacle(o, e.getX(), e.getY(), xClick, yClick);
                         objetSelectionner.deplacement = true;
+                        objetSelectionner.setForeground(Color.red);
                     }
 
                 }else{
@@ -587,15 +610,18 @@ public class Edit extends JPanel{
 
         public void undo(){
             for(int i = 0; i < liste.size();i++){
+                liste.get(i).setForeground(Color.black);
                 listPanel.add(liste.get(i));
                 principal.add(liste.get(i));
+                niveau.add(liste.get(i).obstacle);
             }
         }
 
         public void doit(){
             for(int i = 0; i < liste.size();i++){
-                listPanel.remove(liste.get(i));
                 principal.remove(liste.get(i));
+                listPanel.remove(liste.get(i));
+                niveau.remove(liste.get(i).obstacle);
             }
 
         }
