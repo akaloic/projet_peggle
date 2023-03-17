@@ -397,7 +397,11 @@ public class Edit extends JPanel{
               }
               if (keyCode == KeyEvent.VK_N) {
                 if(choixMultiple){
-                    listeSelection.add(objetSelectionner);
+                    if(!listeSelection.contains(objetSelectionner)){
+                        listeSelection.add(objetSelectionner);
+                    }else{
+                        listeSelection.remove(objetSelectionner);
+                    }
                 }
               }
               if (keyCode == KeyEvent.VK_M) {
@@ -502,7 +506,11 @@ public class Edit extends JPanel{
                     deplacement = true;
                     if(!decoration){//Pour highlight objetSelectionner
                         if(choixMultiple){
-                            listeSelection.add(this);
+                            if(!listeSelection.contains(this)){
+                                listeSelection.add(this);
+                            }else{
+                                listeSelection.remove(this);
+                            }
                             objetSelectionner = this;
                             objetSelectionner.setForeground(Color.red);
                         }else{
