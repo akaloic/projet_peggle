@@ -19,7 +19,8 @@ public class Controleur {
     public Controleur() {
         modele = new Modele();
         view = new View(this);
-        modele.setBalle(new Balle(view.getPartie().getWidth() / 2, 0d, 200d));
+        new Image();
+        modele.setBalle(new Balle(View.getPartie().getWidth() / 2, 0d, 200d));
         // --------------ANIMATION----------------------
         timer = new Timer(30, new ActionListener() {
             double t = 0;

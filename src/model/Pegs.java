@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.nio.Buffer;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
-
+import view.Image;
 import view.View;
 public class Pegs extends Obstacle{
     public BufferedImage image;
@@ -32,8 +32,8 @@ public class Pegs extends Obstacle{
         int gw=(int)(this.rayon*View.getRatio());
         int gh=(int)(this.rayon*View.getRatio());
         g.fillOval(gx,gy,gw,gh);
-        //Graphics2D g2d = (Graphics2D)g;
-        //g2d.drawImage(image,gx, gy,gw,gh,null);
+        Graphics2D g2d = (Graphics2D)g;
+        g2d.drawImage(image,gx, gy,gw,gh,null);
     }
 
     public Pegs clone(double x, double y, int v, double rayon){
