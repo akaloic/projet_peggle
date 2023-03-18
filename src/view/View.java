@@ -110,9 +110,6 @@ public class View extends JFrame implements MouseInputListener{
         });
         ratioX = (float)(width-width/7)/800;
         ratioY = (float)height/600;
-
-        /*ratioX = 1;
-        ratioY = 1;*/
         return pane;
 
     }
@@ -124,6 +121,9 @@ public class View extends JFrame implements MouseInputListener{
         Niveau n = m.getNiveau();
         //nbMunition = 4; // Pour le moment on met 10 munitions
         controleur.getModele().getPlayer().setMunitions(4);
+
+        ratioX = (float)(width-width/7)/800;
+        ratioY = (float)height/600;
 
         fond = new JPanel();
         fond.setLayout(new BorderLayout());
@@ -199,7 +199,7 @@ public class View extends JFrame implements MouseInputListener{
         String url = "ressources/SonsWav/ChoixNiveau.wav";
         LancerMusic(url);
         JPanel choixNiv = new JPanel();
-        choixNiv.setBackground(Color.BLUE);
+        choixNiv.setBackground(Color.lightGray);
         choixNiv.setLayout(null);
         choixNiv.setSize(width, height);
         JButton precedent = new JButton("Acceuil");
@@ -208,6 +208,8 @@ public class View extends JFrame implements MouseInputListener{
         JTextField name=new JTextField("");
         name.setBounds(600, 500, 100, 30);
         choixNiv.add(name);
+        ratioX = ratioX/10;
+        ratioY = ratioX;
 
         precedent.addActionListener(e->{
             this.invalidate();
@@ -216,20 +218,44 @@ public class View extends JFrame implements MouseInputListener{
         });
         int xNiv = precedent.getWidth() * 2;
         int yNiv = precedent.getHeight() * 2;
-        int wNiv = 100;
-        int hNiv = 100;
+        int wNiv = width/9;
+        int hNiv = height/6;
         for (int i = 1; i < 6; i++) {
-            ;
+            JPanel diviseur = new JPanel(new BorderLayout());
+            int k = i;
+            JPanel vueMiniature = new JPanel(){
+                @Override
+                public void paint(Graphics g) {
+                    // TODO Auto-generated method stub
+                    super.paint(g);
+                    controleur.getModele().setNiveau(new Niveau(k));
+                    dessineNiveau(g,controleur.getModele().getNiveau().getList());
+                }
+            };
             JButton nameNiv = new JButton("Niveau " + i);
-            nameNiv.setBounds(xNiv, yNiv, wNiv, yNiv);
+            diviseur.add(vueMiniature,BorderLayout.CENTER);
+            diviseur.add(nameNiv,BorderLayout.SOUTH);
+            diviseur.setBounds(xNiv, yNiv, wNiv, hNiv);
 
+
+            JPanel diviseurEdit = new JPanel(new BorderLayout());
+            JPanel editMinature = new JPanel(){
+                @Override
+                public void paint(Graphics g) {
+                    // TODO Auto-generated method stub
+                    super.paint(g);
+                    dessineNiveau(g,Sauvegarde.charge(k-1));
+                }   
+            };
             JButton editI = new JButton("Edit "+i);
-            editI.setBounds(xNiv, yNiv+400, wNiv, yNiv);
+            diviseurEdit.add(editMinature,BorderLayout.CENTER);
+            diviseurEdit.add(editI,BorderLayout.SOUTH);
+            diviseurEdit.setBounds(xNiv, yNiv+400, wNiv, hNiv);
 
-            xNiv += 2*wNiv;
-            choixNiv.add(nameNiv);
+            xNiv += 1.5*wNiv;
+            choixNiv.add(diviseur);
             nameNiv.setName("niveau"+i);
-            choixNiv.add(editI);
+            choixNiv.add(diviseurEdit);
             this.controleur.getModele().setPlayer(new Player(4, name.getText()));
             nameNiv.addActionListener(e->{
                 char lettre = nameNiv.getName().charAt(nameNiv.getName().length()-1);
@@ -351,10 +377,14 @@ public class View extends JFrame implements MouseInputListener{
 
         g.fillOval((int)controleur.getModele().getBalle().getX(), (int)controleur.getModele().getBalle().getY(), 30, 30);
 
-        for (int i = 0; i < controleur.getModele().getNiveau().list_peg.size(); i++) {
-            controleur.getModele().getNiveau().list_peg.get(i).dessine(g);
-        }
+        dessineNiveau(g,controleur.getModele().getNiveau().list_peg);
 
+    }
+
+    public void dessineNiveau(Graphics g,ArrayList<Obstacle> l){
+        for (int i = 0; i < l.size(); i++) {
+            l.get(i).dessine(g);
+        }
     }
 
     public void calculeAngle() {
