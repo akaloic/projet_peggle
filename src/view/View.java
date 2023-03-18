@@ -208,8 +208,8 @@ public class View extends JFrame implements MouseInputListener{
         JTextField name=new JTextField("");
         name.setBounds(600, 500, 100, 30);
         choixNiv.add(name);
-        ratioX = ratioX/10;
-        ratioY = ratioX;
+        ratioX = ratioX/8;
+        ratioY = ratioY/8;
 
         precedent.addActionListener(e->{
             this.invalidate();
