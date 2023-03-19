@@ -60,7 +60,7 @@ public class Controleur {
                         }
                     }
     
-                    if(modele.getBalle().getY()>view.getPartie().getHeight()){
+                    if(modele.getBalle().getY()*View.ratioY>view.getPartie().getHeight()){
                         modele.setBalle(null);
                         balleHorsJeu();
                     }
@@ -97,7 +97,7 @@ public class Controleur {
             this.modele.setBalle(null);
             t=0;
             this.angleTir=this.view.getAngle();
-            this.modele.setBalle(new Balle(600d,0d,200d, 180-this.angleTir));
+            this.modele.setBalle(new Balle(2000/2,0d,300d, 180-this.angleTir));
         }
     }
 

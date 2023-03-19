@@ -52,15 +52,6 @@ public class View extends JFrame {
     public int height;
     public int numNiveau;
 
-    /* Pour la balle à effacer plus tard */
-    int x = 0;
-    int y = 0;
-    int ballWidth = 20;
-    int ballHeight = 20;
-    int max_x, max_y;
-    int speedX = 10;
-    int speedY = 10;
-    /* fin balle */
 
     public View(Controleur c) {
         String urlDuSon = "ressources/SonsWav/Accueil.wav";
@@ -160,13 +151,6 @@ public class View extends JFrame {
             }
         });
 
-        
-        // --------------ANIMATION----------------------
-        partie.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) {
-                controleur.tirer();
-            }
-        });
         return fond;
     }
 
@@ -241,25 +225,6 @@ public class View extends JFrame {
         g2d.fillRect((int) oReb.getX(), (int) oReb.getY(), (int) oReb.getWidth(), (int) oReb.getHeight());
     }
 
-    public void dessineBalle(Graphics g) { // temporaire à effacer plus tard
-        Graphics2D g2d = (Graphics2D) g;
-
-        max_x = partie.getWidth() - ballWidth;
-        max_y = partie.getHeight() - ballHeight;
-
-        g2d.setColor(Color.RED);
-        g.fillOval(x, y, ballWidth, ballHeight);
-        if (x > max_x || x < 0) {
-            speedX = -speedX;
-        }
-        if (y > max_y || y < 0) {
-            speedY = -speedY;
-        }
-
-        x = x + speedX;
-        y = y + speedY;
-
-    }
 
     public void dessineCanon(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
@@ -363,7 +328,7 @@ public class View extends JFrame {
     public void drawBall(Graphics g){
         Graphics g2d = g;
         if(this.controleur.getModele().getBalle()!=null){
-            g2d.fillOval((int)controleur.getModele().getBalle().getX(), (int)controleur.getModele().getBalle().getY(), (int) controleur.getModele().getBalle().getRayon(), (int) controleur.getModele().getBalle().getRayon());
+            g2d.fillOval((int)(controleur.getModele().getBalle().getX()*ratioX), (int)(controleur.getModele().getBalle().getY()*ratioY), (int)(controleur.getModele().getBalle().getRayon()*ratioX), (int)(controleur.getModele().getBalle().getRayon()*ratioY));
         }
     }
 

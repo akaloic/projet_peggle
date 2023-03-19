@@ -19,7 +19,7 @@ public class Pegs extends Obstacle{
     public void dessine(Graphics g){
         int gx=(int)(this.x*View.ratioX);
         int gy=(int)(this.y*View.ratioY);
-        int gw=(int)(this.rayon*View.ratioY);
+        int gw=(int)(this.rayon*View.ratioX);
         int gh=(int)(this.rayon*View.ratioY);
         g.fillOval(gx,gy,gw,gh);
     }

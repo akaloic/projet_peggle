@@ -9,8 +9,8 @@ public class Balle {
     protected double y;
     protected double vX;
     protected double v0;
-    protected final double rayon = 25;
-    protected final double g = 150;
+    protected final double rayon = 40;
+    protected final double g = 400;
 
     
     public Balle(double x0, double y0, double v0, double angle) {
@@ -45,8 +45,8 @@ public class Balle {
 
     public void rebond(Pegs o){
       if(collision(o)){
-        this.vX = this.vX - (2*(this.vX*(this.x-o.getX()) + this.vY*((this.y - o.getY())))/(o.getRayon()*o.getRayon()))*(this.x-o.getX());
-        this.vY = this.vY - (2*(this.vX*(this.x-o.getX()) + this.vY*((this.y - o.getY())))/(o.getRayon()*o.getRayon()))*(this.y-o.getY());
+        this.vX = this.vX - (2*(this.vX*(this.x-o.getX()) + this.vY*((this.y - o.getY())))/((this.x-o.getX())*(this.x-o.getX())+(this.y - o.getY())*(this.y - o.getY())))*(this.x-o.getX());
+        this.vY = this.vY - (2*(this.vX*(this.x-o.getX()) + this.vY*((this.y - o.getY())))/((this.x-o.getX())*(this.x-o.getX())+(this.y - o.getY())*(this.y - o.getY())))*(this.y-o.getY());
       }
     }
   }
