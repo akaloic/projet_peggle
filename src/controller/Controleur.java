@@ -7,7 +7,7 @@ import model.Modele;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
+//import java.util.ArrayList;
 
 public class Controleur {
 
@@ -47,11 +47,11 @@ public class Controleur {
                  */
                 if (modele.getBalle() != null) {
                     modele.getBalle().update(180 - getAngleTir(), t);
-                    if (modele.getBalle().getY() > view.getPartie().getHeight()) {
+                    if (modele.getBalle().getY() > View.getPartie().getHeight()) {
                         t = 0;
                     }
                     t += 0.3;
-                    ArrayList<Obstacle> a = modele.getNiveau().getList();
+                    //ArrayList<Obstacle> a = modele.getNiveau().getList();//TODO : a quoi ça sert ??
                 }
 
                 view.repaint();
@@ -82,7 +82,7 @@ public class Controleur {
     public void tirer() {
         this.modele.setBalle(null);
         this.angleTir = this.view.getAngle();
-        this.modele.setBalle(new Balle(view.getPartie().getWidth() / 2, 0d, 200d));
+        this.modele.setBalle(new Balle(View.getPartie().getWidth() / 2, 0d, 200d));
     }
 
     public double getAngleTir() {

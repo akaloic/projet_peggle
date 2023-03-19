@@ -1,11 +1,6 @@
 package model;
 import java.awt.*;
-import java.io.File;
-import java.io.IOException;
-import java.nio.Buffer;
 import java.awt.image.BufferedImage;
-import javax.imageio.ImageIO;
-import view.Image;
 import view.View;
 public class Pegs extends Obstacle{
     public BufferedImage image;
@@ -14,11 +9,11 @@ public class Pegs extends Obstacle{
         super(1);
     }
     public Pegs(double x, double y, int v,BufferedImage img){
-        super(x, y, 50,50, false, v);
+        super(x, y, 25,25, false, v);
         this.image = img;
     }
     public Pegs(double x, double y, int v){
-        super(x, y, 50,50, false, v);
+        super(x, y, 25,25, false, v);
     }
     public Pegs(double x, double y, int v,int rayon){
         super(x, y, rayon,rayon, false, v);
