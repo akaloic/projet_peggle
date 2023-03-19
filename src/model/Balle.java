@@ -1,7 +1,6 @@
 package model;
 
-import java.util.Timer;
-
+import view.View;
 public class Balle {
     
     protected double x;
@@ -9,7 +8,7 @@ public class Balle {
     protected double y;
     protected double vX;
     protected double v0;
-    protected final double rayon = 40;
+    protected final double rayon = 50;
     protected final double g = 400;
 
     
@@ -40,7 +39,7 @@ public class Balle {
     }
   
     public boolean collision(Pegs o){
-      return (o.getRayon() + this.rayon) >= Math.sqrt((this.x-o.getX())*(this.x-o.getX()) + (this.y - o.getY())*(this.y - o.getY()));
+      return (o.getRayon() + this.rayon) >= Math.sqrt((this.x-o.getX())* (this.x-o.getX()) + (this.y - o.getY())*(this.y - o.getY()));
     }
 
     public void rebond(Pegs o){
