@@ -14,7 +14,7 @@ import java.awt.event.MouseAdapter;
 import model.Niveau;
 import model.Obstacle;
 import model.Pegs;
-import model.PegsRect;
+import model.Quadrilatere;
 import view.View;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -273,7 +273,7 @@ public class Edit extends JPanel{
         principal.addMouseMotionListener(selection);
 
         //Peg qui servira à créer d'autre peg carré
-        objetMobile pegRect = new objetMobile(new PegsRect(0, 0, 0, 20)){
+        objetMobile pegRect = new objetMobile(new Quadrilatere(0, 0, 20, 20)){
             @Override
             public void paint(Graphics g) {
                 // TODO Auto-generated method stub

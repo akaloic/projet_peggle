@@ -96,8 +96,8 @@ public class Niveau {
                 lignes(x1+getRayon(), y1+(getDiametre()*i), 15);
             }
             else{
-                Quadrilatere obr = new Quadrilatere(x1, y1+(getDiametre()*i));
-                Quadrilatere obr2 = new Quadrilatere(x1+getDiametre()*13, y1+(getDiametre()*i));
+                Quadrilatere obr = new Quadrilatere(x1, y1+(getDiametre()*i),getRayon()*5,getRayon());
+                Quadrilatere obr2 = new Quadrilatere(x1+getDiametre()*13, y1+(getDiametre()*i),getRayon()*5,getRayon());
                 lignes(x1+getRayon()*6, y1+(getDiametre()*i), 10);
                 list.add(obr);
                 list.add(obr2);
