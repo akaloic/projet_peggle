@@ -189,8 +189,21 @@ public class Niveau {
         list.add(ligne);
     }
     protected void niveau_5(){//triforce de zelda
-        double x5=400; double y5=100;
+        double x5=(View.getRatioX()*800)*2; double y5=100;
         triangle(x5, y5, 4, false);
+        for(int i=1;i<9;i++){
+            Quadrilatere ligneGauche = new Quadrilatere(0, y5+getDiametre()*i, getDiametre()*8-(getRayon()*i), getRayon());
+            Quadrilatere ligneDroite = new Quadrilatere(getDiametre()*8+getRayon()*i, y5+getDiametre()*i, getDiametre()*8-(getRayon()*i), getRayon());
+            list.add(ligneGauche);
+            list.add(ligneDroite);
+        }
+        triangle(x5-getDiametre()*2, y5+getDiametre()*4, 4, false);
+        triangle(x5+getDiametre()*2, y5+getDiametre()*4, 4, false);
+        for(int i=0;i<3;i++){
+            Quadrilatere ligneMilieu = new Quadrilatere(x5-getRayon()*3.5+getRayon()*i, y5+getDiametre()*5+getDiametre()*i, getDiametre()*3-getDiametre()*i, getRayon());
+            list.add(ligneMilieu);
+        }
+        
     }
     public ArrayList<Obstacle> getList() {return list;}
     public int getNiveau() {return niveau;}
