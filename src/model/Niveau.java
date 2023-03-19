@@ -18,7 +18,7 @@ public class Niveau {
                 niveau = 1;
                 break;
             case 2:
-                niveau_2();//voiture et nuages
+                niveau_2();
                 niveau = 2;
                 break;
             case 3:
@@ -111,35 +111,24 @@ public class Niveau {
         
     }
 
-    protected void niveau_2(){//voiture
-       lignes(25, 1200, 20);
-       //roue de Gauche
-       ObstacleRebondissant roueGauche= new ObstacleRebondissant(25+getRayon()*4.5, 1200-getRayon()*5, 200);
-       colonne(roueGauche.x-getRayon()*2.5, roueGauche.y, 2);
-       colonne(roueGauche.x+getRayon()*5.5, roueGauche.y, 2);
-       lignes(roueGauche.x-getRayon()*0.5, roueGauche.y-getDiametre(), 3);
-       list.add(roueGauche);       
-       //roue de Droite
-       ObstacleRebondissant roueDroite= new ObstacleRebondissant(25+getRayon()*24.5, 1200-getRayon()*5, 200);
-       colonne(roueDroite.x-getRayon()*2.5, roueDroite.y, 2);
-       colonne(roueDroite.x+getRayon()*5.5, roueDroite.y, 2);
-       lignes(roueDroite.x-getRayon()*0.5, roueDroite.y-getDiametre(), 3);
-       list.add(roueDroite);
-       //capot 
-       lignes(25+getDiametre()*6, roueGauche.y+getDiametre(), 5);
-       //fenetre
-       for(int i=0; i<3;i++){
-            lignes(25+getDiametre()*5, 550+100*i, 7);
-       }
-       //nuages
-       Quadrilatere nuageGauche1=new Quadrilatere(200, 201, getDiametre()*2, getRayon());
-       Quadrilatere nuageGauche2=new Quadrilatere(150, 250, getDiametre()*3, getRayon());
-       Quadrilatere nuageGauche3=new Quadrilatere(200, 299, getRayon()*3, getRayon());
-       list.add(nuageGauche1);list.add(nuageGauche2);list.add(nuageGauche3);
-       Quadrilatere nuageDroit1=new Quadrilatere(200+getDiametre()*12, 301, getDiametre()*2, getRayon());
-       Quadrilatere nuageDroit2=new Quadrilatere(150+getDiametre()*12, 350, getDiametre()*3, getRayon());
-       Quadrilatere nuageDroit3=new Quadrilatere(200+getDiametre()*12, 399, getRayon()*3, getRayon());
-       list.add(nuageDroit1);list.add(nuageDroit2);list.add(nuageDroit3);
+    protected void niveau_2(){
+        double x2=(View.getRatioX()*800)*2;double y2=300;
+        colonne(x2, y2, 6);
+        //coté droit du dé
+        diagonal(x2+getDiametre(), y2-getRayon(),4, true, true);
+        colonne(x2+getDiametre()*4, y2-getDiametre(), 4);
+        diagonal(x2+getDiametre(), y2+getRayon()*9, 4, true, true);
+        lignes(x2+getDiametre(), y2+getRayon()*7, 1);
+        lignes(x2+getDiametre()*3, y2-getRayon(), 1);
+        //coté gauche du dé
+        diagonal(x2-getDiametre(), y2-getRayon(), 4, false, true);
+        colonne(x2-getDiametre()*4, y2-getDiametre(), 4);
+        diagonal(x2-getDiametre(), y2+getRayon()*9, 4, false, true);
+        lignes(x2-getDiametre()*2, y2+getRayon()*3, 1);
+        //face du dé
+        diagonal(x2+getDiametre(), y2-getRayon()*7, 3, true, false);
+        diagonal(x2-getDiametre(), y2-getRayon()*7, 3, false, false);
+        colonne(x2, y2-getDiametre()*4, 4);
     }
     protected void niveau_3(){//series de carrés
         double x3=getDiametre()+getRayon()/2; double y3=getDiametre()*3;
@@ -203,7 +192,6 @@ public class Niveau {
             Quadrilatere ligneMilieu = new Quadrilatere(x5-getRayon()*3.5+getRayon()*i, y5+getDiametre()*5+getDiametre()*i, getDiametre()*3-getDiametre()*i, getRayon());
             list.add(ligneMilieu);
         }
-        
     }
     public ArrayList<Obstacle> getList() {return list;}
     public int getNiveau() {return niveau;}
