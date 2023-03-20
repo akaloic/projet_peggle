@@ -305,7 +305,6 @@ public class View extends JFrame {
         g2d.setPaint(null);
         g2d.setColor(Color.lightGray);
 
-        controleur.getModele().setNiveau(new Niveau(numNiveau));
         for (int i = 0; i < controleur.getModele().getNiveau().list_peg.size(); i++) {
             controleur.getModele().getNiveau().list_peg.get(i).dessine(g);
         }

@@ -188,4 +188,8 @@ public class Niveau {
         Pegs p = new Pegs();
         return p.getDiametre();
     }
+
+    public void retirePeg(Pegs pegs) {
+        list_peg.remove(pegs);
+    }
 }

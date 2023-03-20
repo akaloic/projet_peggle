@@ -40,10 +40,8 @@ public class Controleur {
                     for (int i = 0; i < modele.getNiveau().getList().size(); i++) {
                         if (modele.getNiveau().getList().get(i) instanceof Pegs) {
                             modele.getBalle().rebond((Pegs) modele.getNiveau().getList().get(i));
-                            // retirer les pegs
                             if (modele.getBalle().collision((Pegs) modele.getNiveau().getList().get(i))) {
-                                modele.getNiveau().getList().remove(i);
-                                view.partie.repaint();
+                                modele.niveau.retirePeg((Pegs) modele.getNiveau().getList().get(i));
                             }
                         }
                     }
@@ -64,7 +62,6 @@ public class Controleur {
                     }
 
                 }
-
                 view.repaint();
             }
         });
