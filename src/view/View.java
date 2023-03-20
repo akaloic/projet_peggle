@@ -11,13 +11,11 @@ import model.sousObstacle.PegRond;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import javax.swing.event.MouseInputListener;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
-import java.nio.file.FileSystem;
 
 import javax.sound.sampled.*;
 
@@ -27,7 +25,7 @@ public class View extends JFrame {
     public JPanel fond;
     public JPanel munition;
     public JPanel fondGauche;
-    public static JPanel partie;
+    public JPanel partie;
 
     public JButton leave;
     public boolean enJeu = true;

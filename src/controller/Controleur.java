@@ -3,8 +3,6 @@ package controller;
 import view.*;
 import javax.swing.*;
 import model.*;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -42,8 +40,10 @@ public class Controleur {
                     for (int i = 0; i < modele.getNiveau().getList().size(); i++) {
                         if (modele.getNiveau().getList().get(i) instanceof Pegs) {
                             modele.getBalle().rebond((Pegs) modele.getNiveau().getList().get(i));
+                            // retirer les pegs
                             if (modele.getBalle().collision((Pegs) modele.getNiveau().getList().get(i))) {
                                 modele.getNiveau().getList().remove(i);
+                                view.partie.repaint();
                             }
                         }
                     }
