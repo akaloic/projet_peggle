@@ -38,14 +38,14 @@ public class Controleur {
                 view.placePuit();
 
                 // munition
-                /*
-                 * if (CONDITION) { // si la balle atteri dans le puit
-                 * nbMunition++;
-                 * munition.removeAll();
-                 * afficheMunition();
-                 * munition.revalidate();
-                 * }
-                 */
+                if (modele.balle.getY() >= view.puit.getY() && (modele.balle.getX() >= view.puit.getX()
+                        && modele.balle.getX() <= view.puit.getWidth())) {
+                    view.nbMunition++;
+                    view.munition.removeAll();
+                    view.afficheMunition();
+                    view.munition.revalidate();
+                    // System.out.println("CA MARCHEEEEEEEEEEE");
+                }
 
                 if (modele.getBalle() != null) {
                     modele.getBalle().update();
@@ -54,10 +54,7 @@ public class Controleur {
                         if (modele.getNiveau().getList().get(i) instanceof Pegs) {
                             modele.getBalle().rebond((Pegs) modele.getNiveau().getList().get(i));
                             if (modele.getBalle().collision((Pegs) modele.getNiveau().getList().get(i))) {
-                                Pegs p = (Pegs) modele.getNiveau().getList().get(i);
-                                System.out.println("avant: " + modele.getNiveau().getList().contains(p));
                                 modele.getNiveau().getList().remove(i);
-                                System.out.println("apres: " + modele.getNiveau().getList().contains(p));
                             }
                         }
                     }
