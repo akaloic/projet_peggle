@@ -83,6 +83,13 @@ public class View extends JFrame implements MouseInputListener{
         pane.setBorder(BorderFactory.createTitledBorder("Bienvenue dans notre jeu"));
         this.add(pane);
 
+        JLabel nameLabel=new JLabel("Pseudo : ");
+        nameLabel.setBounds(width/2-60, height-height/2, 50, 30);
+        pane.add(nameLabel);
+        JTextField nameField=new JTextField("test");
+        nameField.setBounds(width/2, height - height/2, 50, 30);
+        pane.add(nameField);
+
         JLabel titrePane = new JLabel("HIT THE PEGGLES");
         titrePane.setBounds(width/2-65,height - height*2/3,400,100);
         pane.add(titrePane);
@@ -92,6 +99,7 @@ public class View extends JFrame implements MouseInputListener{
 
         start.addActionListener(e->{
             son.stop();
+            controleur.getModele().setPlayer(new Player(4, nameField.getText()));
             changerPanel(choixNiveauPane(this.controleur));
         });
     }
@@ -211,9 +219,6 @@ public class View extends JFrame implements MouseInputListener{
         JButton precedent = new JButton("Acceuil");
         precedent.setBounds(0,0,100,100);
         choixNiv.add(precedent);
-        JTextField name=new JTextField("");
-        name.setBounds(600, 500, 100, 30);
-        choixNiv.add(name);
         precedent.addActionListener(e->{
             this.invalidate();
             son.stop();
@@ -230,14 +235,11 @@ public class View extends JFrame implements MouseInputListener{
             choixNiv.add(nameNiv);
             nameNiv.setName("niveau"+i);
             nameNiv.addActionListener(e->{
-                this.controleur.getModele().setPlayer(new Player(4, name.getText()));
                 char lettre = nameNiv.getName().charAt(nameNiv.getName().length()-1);
                 numNiveau = Integer.parseInt(""+lettre);
                 changerPanel(JeuPanel(this.controleur));
                 son.stop();
             });
-
-
         }
         return choixNiv;
     }
