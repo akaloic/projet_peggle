@@ -24,10 +24,8 @@ public class Controleur {
         view = new View(this);
         // --------------ANIMATION----------------------
         timer = new Timer(30, new ActionListener() {
-            double t = 0;
 
             public void actionPerformed(ActionEvent e) {
-                // seconde++;
 
                 // canon
                 view.setColorX();
@@ -37,19 +35,10 @@ public class Controleur {
                 // puit
                 view.placePuit();
 
-                // munition
-                if (modele.balle.getY() >= view.puit.getY() && (modele.balle.getX() >= view.puit.getX()
-                        && modele.balle.getX() <= view.puit.getWidth())) {
-                    view.nbMunition++;
-                    view.munition.removeAll();
-                    view.afficheMunition();
-                    view.munition.revalidate();
-                    // System.out.println("CA MARCHEEEEEEEEEEE");
-                }
-
                 if (modele.getBalle() != null) {
                     modele.getBalle().update();
 
+                    // rebond
                     for (int i = 0; i < modele.getNiveau().getList().size(); i++) {
                         if (modele.getNiveau().getList().get(i) instanceof Pegs) {
                             modele.getBalle().rebond((Pegs) modele.getNiveau().getList().get(i));
@@ -57,6 +46,16 @@ public class Controleur {
                                 modele.getNiveau().getList().remove(i);
                             }
                         }
+                    }
+
+                    // munition
+                    if (modele.balle.getY() >= view.puit.getY() && (modele.balle.getX() >= view.puit.getX()
+                            && modele.balle.getX() <= view.puit.getWidth())) {
+                        view.nbMunition++;
+                        view.munition.removeAll();
+                        view.afficheMunition();
+                        view.munition.revalidate();
+                        // System.out.println("CA MARCHEEEEEEEEEEE");
                     }
 
                     if (modele.getBalle().getY() * View.ratioY > view.getPartie().getHeight()) {
