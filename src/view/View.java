@@ -119,8 +119,6 @@ public class View extends JFrame {
                 Image.SCALE_SMOOTH);
         ImageIcon nouvelleIcone = new ImageIcon(nouvelleImage);
         puit = new JLabel(nouvelleIcone);
-        puit.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
-        // puit.setSize(new Dimension(150, 150));
         puit.setSize(new Dimension(partie.getWidth() / 8, partie.getHeight() / 3));
         puit.setLocation(0, partie.getHeight() + partie.getHeight() / 3);
 
