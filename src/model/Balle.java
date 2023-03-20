@@ -39,13 +39,14 @@ public class Balle {
     }
   
     public boolean collision(Pegs o){
-      return (o.getRayon() + this.rayon) >= Math.sqrt((this.x-o.getX())* (this.x-o.getX()) + (this.y - o.getY())*(this.y - o.getY()));
+      return ((o.getRayon() + this.rayon)/2) >= Math.sqrt((this.x-o.getX())* (this.x-o.getX()) + (this.y - o.getY())*(this.y - o.getY()));
     }
 
     public void rebond(Pegs o){
       if(collision(o)){
+        double n = this.vX;//Variable auxiliaire pour garder vX avant qu'on modifie sa valeur
         this.vX = this.vX - (2*(this.vX*(this.x-o.getX()) + this.vY*((this.y - o.getY())))/((this.x-o.getX())*(this.x-o.getX())+(this.y - o.getY())*(this.y - o.getY())))*(this.x-o.getX());
-        this.vY = this.vY - (2*(this.vX*(this.x-o.getX()) + this.vY*((this.y - o.getY())))/((this.x-o.getX())*(this.x-o.getX())+(this.y - o.getY())*(this.y - o.getY())))*(this.y-o.getY());
+        this.vY = this.vY - (2*(n*(this.x-o.getX()) + this.vY*((this.y - o.getY())))/((this.x-o.getX())*(this.x-o.getX())+(this.y - o.getY())*(this.y - o.getY())))*(this.y-o.getY());
       }
     }
   }

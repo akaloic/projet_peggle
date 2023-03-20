@@ -53,10 +53,6 @@ public class Controleur {
                     for(int i =0; i< modele.getNiveau().getList().size();i++){
                         if(modele.getNiveau().getList().get(i) instanceof Pegs){
                             modele.getBalle().rebond((Pegs)modele.getNiveau().getList().get(i));
-                            if(modele.getBalle().collision((Pegs)modele.getNiveau().getList().get(i))){
-                                System.out.println("COLLISION DETECTEE AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-                                //modele.getNiveau().getList().remove(modele.getNiveau().getList().get(i));
-                            }
                         }
                     }
     
