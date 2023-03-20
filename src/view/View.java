@@ -322,7 +322,7 @@ public class View extends JFrame {
     public void afficheMunition() {
         for (int i = 0; i < 10; i++) {
             JPanel panel = new JPanel();
-            if (i > nbMunition + 1) { // il reste i + 1 munition
+            if (i > nbMunition) { // il reste i + 1 munition
                 panel = new JPanel() {
                     @Override
                     public void paint(Graphics g) {

@@ -9,7 +9,7 @@ public class Modele {
     public Modele() {
         balle = null;
         obstacles = new Obstacle[0];
-        niveau = new Niveau(1);
+        niveau = new Niveau(4);
     }
 
     // ---------GETTER SETTER---------

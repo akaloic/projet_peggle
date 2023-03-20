@@ -4,6 +4,7 @@ import view.*;
 import javax.swing.*;
 import model.*;
 
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -47,13 +48,20 @@ public class Controleur {
                     }
 
                     // munition
-                    if (modele.balle.getY() >= view.puit.getY() && (modele.balle.getX() >= view.puit.getX()
-                            && modele.balle.getX() <= view.puit.getWidth())) {
-                        view.nbMunition++;
-                        view.munition.removeAll();
-                        view.afficheMunition();
-                        view.munition.revalidate();
-                        // System.out.println("CA MARCHEEEEEEEEEEE");
+                    Point p = view.puit.getLocationOnScreen();
+                    System.out
+                            .println("balle x : " + (modele.balle.getX() - 140) + " balle y : " + modele.balle.getY());
+                    System.out.println(p.x + view.puit.getWidth());
+                    System.out.println("puit xonScreen : " + p.x + " puit yonScreen : " + p.y);
+                    if (modele.balle.getY() >= view.puit.getY() && ((modele.balle.getX() - 140) >= p.x
+                            && (modele.balle.getX() - 140) <= p.x + view.puit.getWidth())) {
+                        if (balleEnJeu) {
+                            view.nbMunition--;
+                            view.munition.removeAll();
+                            view.afficheMunition();
+                            view.munition.revalidate();
+                            balleEnJeu = false;
+                        }
                     }
 
                     if (modele.getBalle().getY() * View.ratioY > view.getPartie().getHeight()) {
@@ -89,6 +97,11 @@ public class Controleur {
 
     public void tirer() {
         if (!this.balleEnJeu) {
+            view.nbMunition++;
+            view.munition.removeAll();
+            view.afficheMunition();
+            view.munition.revalidate();
+
             this.balleEnJeu = true;
             this.modele.setBalle(null);
             t = 0;
