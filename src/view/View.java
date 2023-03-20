@@ -178,8 +178,18 @@ public class View extends JFrame implements MouseInputListener{
             }
         });
 
+        JButton retour = new JButton("Revenir menu");
+        retour.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                changerPanel(choixNiveauPane(controleur));
+            }
+        });
+
+        JPanel partieBas = new JPanel(new BorderLayout());
+        partieBas.add(leave,BorderLayout.WEST);
+        partieBas.add(retour,BorderLayout.EAST);
         fondGauche.add(munition, BorderLayout.CENTER);
-        fondGauche.add(leave, BorderLayout.SOUTH);
+        fondGauche.add(partieBas, BorderLayout.SOUTH);
 
         fond.add(fondGauche, BorderLayout.WEST);
         // --------------GAUCHE---------------------
