@@ -4,6 +4,7 @@ import view.View;
 public class Quadrilatere extends Obstacle {//peut etre un carré comme un rectangle
     public Quadrilatere(double x, double y, double largeur, double hauteur) {
         super(x, y, largeur, hauteur, false, 100);
+        rayon = (largeur + hauteur)/2;
     }
     public void dessine(Graphics g){
         int gx=(int)(this.x*View.getRatioX());
@@ -12,7 +13,9 @@ public class Quadrilatere extends Obstacle {//peut etre un carré comme un recta
         int gh=(int)(this.hauteur*View.getRatio());
         g.fillRect(gx,gy,gw,gh);
     }
-    public Quadrilatere clone(double x, double y, double largeur, double hauteur){
-        return new Quadrilatere(x, y, largeur, hauteur);
+
+    public Quadrilatere clone(double x, double y, int v, double rayon){
+        return new Quadrilatere(x, y, 20, rayon);
     }
+
 }
