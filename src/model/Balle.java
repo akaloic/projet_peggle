@@ -9,7 +9,7 @@ public class Balle {
     protected double vX;
     protected double v0;
     protected final double rayon = 50;
-    protected final double g = 400;
+    protected final double g = 500;
 
     
     public Balle(double x0, double y0, double v0, double angle) {
@@ -48,5 +48,9 @@ public class Balle {
         this.vX = this.vX - (2*(this.vX*(this.x-o.getX()) + this.vY*((this.y - o.getY())))/((this.x-o.getX())*(this.x-o.getX())+(this.y - o.getY())*(this.y - o.getY())))*(this.x-o.getX());
         this.vY = this.vY - (2*(n*(this.x-o.getX()) + this.vY*((this.y - o.getY())))/((this.x-o.getX())*(this.x-o.getX())+(this.y - o.getY())*(this.y - o.getY())))*(this.y-o.getY());
       }
+    }
+
+    public void rebondMur(){
+      this.vX = this.vX *-1;
     }
   }

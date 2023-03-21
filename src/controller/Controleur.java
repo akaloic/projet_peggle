@@ -55,11 +55,16 @@ public class Controleur {
                             modele.getBalle().rebond((Pegs)modele.getNiveau().getList().get(i));
                         }
                     }
+
+                    if(modele.getBalle().getX()-modele.getBalle().getRayon()/2 <= 0 || modele.getBalle().getX()+modele.getBalle().getRayon()/2 >= 2000){
+                        modele.balle.rebondMur();
+                    }
     
                     if(modele.getBalle().getY()*View.ratioY>view.getPartie().getHeight()){
                         modele.setBalle(null);
                         balleHorsJeu();
                     }
+
     
                 }
 
@@ -93,7 +98,7 @@ public class Controleur {
             this.modele.setBalle(null);
             t=0;
             this.angleTir=this.view.getAngle();
-            this.modele.setBalle(new Balle(2000/2,0d,300d, 180-this.angleTir));
+            this.modele.setBalle(new Balle(2000/2,0d,600d, 180-this.angleTir));
         }
     }
 
