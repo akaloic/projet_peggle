@@ -3,9 +3,8 @@ package controller;
 import view.*;
 import javax.swing.*;
 import model.*;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -24,10 +23,8 @@ public class Controleur {
         view = new View(this);
         // --------------ANIMATION----------------------
         timer = new Timer(30, new ActionListener() {
-            double t = 0;
 
             public void actionPerformed(ActionEvent e) {
-                // seconde++;
 
                 // canon
                 view.setColorX();
@@ -37,43 +34,51 @@ public class Controleur {
                 // puit
                 view.placePuit();
 
-                // munition
-                /*
-                 * if (CONDITION) { // si la balle atteri dans le puit
-                 * nbMunition++;
-                 * munition.removeAll();
-                 * afficheMunition();
-                 * munition.revalidate();
-                 * }
-                 */
-
-                 if(modele.getBalle()!=null){
+                if (modele.getBalle() != null) {
                     modele.getBalle().update();
-    
-                    for(int i =0; i< modele.getNiveau().getList().size();i++){
-                        if(modele.getNiveau().getList().get(i) instanceof Pegs){
-                            modele.getBalle().rebond((Pegs)modele.getNiveau().getList().get(i));
+
+                    // rebond
+                    for (int i = 0; i < modele.getNiveau().getList().size(); i++) {
+                        if (modele.getNiveau().getList().get(i) instanceof Pegs) {
+                            modele.getBalle().rebond((Pegs) modele.getNiveau().getList().get(i));
+                            if (modele.getBalle().collision((Pegs) modele.getNiveau().getList().get(i))) {
+                                modele.niveau.retirePeg((Pegs) modele.getNiveau().getList().get(i));
+                            }
                         }
                     }
 
                     if(modele.getBalle().getX()-modele.getBalle().getRayon()/2 <= 0 || modele.getBalle().getX()+modele.getBalle().getRayon()/2 >= 2000){
                         modele.balle.rebondMur();
+                    }    
+                
+                    // munition
+                    Point p = view.puit.getLocationOnScreen();
+                    //System.out.println("balle x : " + (modele.balle.getX() - 140) + " balle y : " + modele.balle.getY());
+                    //System.out.println(p.x + view.puit.getWidth());
+                    //System.out.println("puit xonScreen : " + p.x + " puit yonScreen : " + p.y);
+                    if (modele.balle.getY() >= view.puit.getY() && ((modele.balle.getX() - 140) >= p.x
+                            && (modele.balle.getX() - 140) <= p.x + view.puit.getWidth())) {
+                        if (balleEnJeu) {
+                            view.nbMunition--;
+                            view.munition.removeAll();
+                            view.afficheMunition();
+                            view.munition.revalidate();
+                            balleEnJeu = false;
+                        }
                     }
-    
-                    if(modele.getBalle().getY()*View.ratioY>view.getPartie().getHeight()){
+
+                    if (modele.getBalle().getY() * View.ratioY > view.getPartie().getHeight()) {
                         modele.setBalle(null);
                         balleHorsJeu();
                     }
-
-    
+                    view.repaint();
                 }
-
-                view.repaint();
             }
         });
         timer.start();
 
     }
+
     // ---------GETTER SETTER---------
     public View getView() {
         return view;
@@ -92,9 +97,14 @@ public class Controleur {
     }
     // ---------GETTER SETTER---------
 
-    public void tirer(){
-        if(!this.balleEnJeu){
-            this.balleEnJeu=true;
+    public void tirer() {
+        if (!this.balleEnJeu) {
+            view.nbMunition++;
+            view.munition.removeAll();
+            view.afficheMunition();
+            view.munition.revalidate();
+
+            this.balleEnJeu = true;
             this.modele.setBalle(null);
             t=0;
             this.angleTir=this.view.getAngle();
@@ -106,12 +116,11 @@ public class Controleur {
         return this.angleTir;
     }
 
-
-    public double getT(){
+    public double getT() {
         return this.t;
     }
 
-    public void balleHorsJeu(){
-        this.balleEnJeu=false;
+    public void balleHorsJeu() {
+        this.balleEnJeu = false;
     }
 }

@@ -11,13 +11,11 @@ import model.sousObstacle.PegRond;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import javax.swing.event.MouseInputListener;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
-import java.nio.file.FileSystem;
 
 import javax.sound.sampled.*;
 
@@ -27,7 +25,7 @@ public class View extends JFrame {
     public JPanel fond;
     public JPanel munition;
     public JPanel fondGauche;
-    public static JPanel partie;
+    public JPanel partie;
 
     public JButton leave;
     public boolean enJeu = true;
@@ -52,6 +50,7 @@ public class View extends JFrame {
     public int height;
     public int numNiveau;
 
+    public boolean versDroite = true;
 
     public View(Controleur c) {
         String urlDuSon = "ressources/SonsWav/Accueil.wav";
@@ -99,19 +98,27 @@ public class View extends JFrame {
                 dessineCanon(g);
                 drawBall(g);
 
-                PegRond pRond= new PegRond(0,0);
-                dessinePegRond(g,pRond); // ca marche
-                ObstacleRebondissant  oRebond = new ObstacleRebondissant(100, 100);
-                dessineObstacleRebond(g,oRebond); // ca marche
-                ObstacleRectangulaire oR = new ObstacleRectangulaire(50,50);
-                dessineObstacleRect(g,oR); // ca  marche
+                PegRond pRond = new PegRond(0, 0);
+                dessinePegRond(g, pRond); // ca marche
+                ObstacleRebondissant oRebond = new ObstacleRebondissant(100, 100);
+                dessineObstacleRebond(g, oRebond); // ca marche
+                ObstacleRectangulaire oR = new ObstacleRectangulaire(50, 50);
+                dessineObstacleRect(g, oR); // ca marche
 
             }
         };
-        partie.setLayout(new BorderLayout());
+        partie.setSize(new Dimension(800, 600));
+        partie.setLayout(null);
         partie.setBackground(Color.darkGray);
 
-        puit = new JLabel(new ImageIcon(chemin + "puit.png"));
+        ImageIcon icon = new ImageIcon(chemin + "puit.png");
+        Image image = icon.getImage();
+        Image nouvelleImage = image.getScaledInstance(icon.getIconWidth() * 2, icon.getIconHeight() * 2,
+                Image.SCALE_SMOOTH);
+        ImageIcon nouvelleIcone = new ImageIcon(nouvelleImage);
+        puit = new JLabel(nouvelleIcone);
+        puit.setSize(new Dimension(partie.getWidth() / 8, partie.getHeight() / 3));
+        puit.setLocation(0, partie.getHeight() + partie.getHeight() / 3);
 
         partie.add(puit);
         fond.add(partie, BorderLayout.CENTER);
@@ -145,9 +152,9 @@ public class View extends JFrame {
         ratioX = (width - munition.getWidth()) / 2000f;
         ratioY = height / 1325f;
 
-        partie.addMouseListener(new MouseAdapter(){
-            public void mouseClicked(MouseEvent e){
-                controleur.tirer(); 
+        partie.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                controleur.tirer();
             }
         });
 
@@ -198,13 +205,21 @@ public class View extends JFrame {
     }
 
     public void placePuit() {
-        // avec la redimension de l'image plus grande
-
-        puit.setLocation(puit.getX() + directionX, partie.getHeight() / 2);
-        if (puit.getX() > partie.getWidth() / 2)
-            directionX = -5;
-        if (puit.getX() < -partie.getWidth() / 2)
-            directionX = 5;
+        if (versDroite) {
+            if (puit.getX() + puit.getWidth() >= partie.getWidth()) {
+                puit.setLocation(puit.getX() - 5, puit.getY());
+                versDroite = false;
+            } else {
+                puit.setLocation(puit.getX() + 5, puit.getY());
+            }
+        } else {
+            if (puit.getX() <= 0) {
+                puit.setLocation(puit.getX() + 5, puit.getY());
+                versDroite = true;
+            } else {
+                puit.setLocation(puit.getX() - 5, puit.getY());
+            }
+        }
     }
 
     public void dessinePegRond(Graphics g, PegRond peg) {
@@ -224,7 +239,6 @@ public class View extends JFrame {
         g2d.setColor(Color.PINK);
         g2d.fillRect((int) oReb.getX(), (int) oReb.getY(), (int) oReb.getWidth(), (int) oReb.getHeight());
     }
-
 
     public void dessineCanon(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
@@ -273,13 +287,13 @@ public class View extends JFrame {
         double x = (partie.getWidth() / 2) - (5 * heightBase / 6) * Math.sin(theta) - 10/* Width balle */;
         double y = (5 * heightBase / 6) * Math.cos(theta) - 10/* Height balle */;
         // Pour calculer nouvelles coordonnées de la balle après rotaion
-        Balle fantome = new Balle(600d,0d,200d,180-controleur.getAngleTir());
+        Balle fantome = new Balle(600d, 0d, 200d, 180 - controleur.getAngleTir());
         GeneralPath genPath = new GeneralPath();
-        for(int i = 0; i < 80; i++){
+        for (int i = 0; i < 80; i++) {
             fantome.update();
-            double a = fantome.getX()+fantome.getRayon()/2;
+            double a = fantome.getX() + fantome.getRayon() / 2;
             double b = fantome.getY();
-            genPath.moveTo(a,b);
+            genPath.moveTo(a, b);
             genPath.lineTo(a, b);
         }
 
@@ -291,7 +305,6 @@ public class View extends JFrame {
         g2d.setPaint(null);
         g2d.setColor(Color.lightGray);
 
-        controleur.getModele().setNiveau(new Niveau(numNiveau));
         for (int i = 0; i < controleur.getModele().getNiveau().list_peg.size(); i++) {
             controleur.getModele().getNiveau().list_peg.get(i).dessine(g);
         }
@@ -309,7 +322,7 @@ public class View extends JFrame {
     public void afficheMunition() {
         for (int i = 0; i < 10; i++) {
             JPanel panel = new JPanel();
-            if (i > nbMunition + 1) { // il reste i + 1 munition
+            if (i > nbMunition) { // il reste i + 1 munition
                 panel = new JPanel() {
                     @Override
                     public void paint(Graphics g) {
@@ -325,15 +338,17 @@ public class View extends JFrame {
         }
     }
 
-    public void drawBall(Graphics g){
+    public void drawBall(Graphics g) {
         Graphics g2d = g;
-        if(this.controleur.getModele().getBalle()!=null){
-            g2d.fillOval((int)(controleur.getModele().getBalle().getX()*ratioX), (int)(controleur.getModele().getBalle().getY()*ratioY), (int)(controleur.getModele().getBalle().getRayon()*ratioX), (int)(controleur.getModele().getBalle().getRayon()*ratioY));
+        if (this.controleur.getModele().getBalle() != null) {
+            g2d.fillOval((int) (controleur.getModele().getBalle().getX() * ratioX),
+                    (int) (controleur.getModele().getBalle().getY() * ratioY),
+                    (int) (controleur.getModele().getBalle().getRayon() * ratioX),
+                    (int) (controleur.getModele().getBalle().getRayon() * ratioY));
         }
     }
 
-   
-    public JPanel getPartie(){
+    public JPanel getPartie() {
         return this.partie;
     }
 
@@ -368,8 +383,8 @@ public class View extends JFrame {
             e.printStackTrace();
         }
     }
-    
-    public int getNumNiveau(){
+
+    public int getNumNiveau() {
         return this.numNiveau;
     }
 }
