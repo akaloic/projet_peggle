@@ -23,7 +23,7 @@ import javax.sound.sampled.*;
 
 public class View extends JFrame implements MouseInputListener{
 
-    private JLabel puit = new JLabel();
+    public JLabel puit = new JLabel();
     private JPanel fond = new JPanel();
     private JPanel munition = new JPanel();
     private JPanel fondGauche = new JPanel();
@@ -51,6 +51,8 @@ public class View extends JFrame implements MouseInputListener{
     public int width;
     public int height;
     public int numNiveau;
+
+    public boolean versDroite = true;
 
     /* Pour la balle à effacer plus tard */
     int x = 0;
@@ -313,14 +315,23 @@ public class View extends JFrame implements MouseInputListener{
     }
 
     public void placePuit() {
-        // avec la redimension de l'image plus grande
-
-        puit.setLocation(puit.getX() + directionX, partie.getHeight() / 2);
-        if (puit.getX() > partie.getWidth() / 2)
-            directionX = -5;
-        if (puit.getX() < -partie.getWidth() / 2)
-            directionX = 5;
+        if (versDroite) {;
+            if (puit.getX() + puit.getWidth() >= partie.getWidth()) {
+                puit.setLocation(puit.getX() - 5, puit.getY());
+                versDroite = false;
+            } else {
+                puit.setLocation(puit.getX() + 5, puit.getY());
+            }
+        } else {
+            if (puit.getX() <= 0) {
+                puit.setLocation(puit.getX() + 5, puit.getY());
+                versDroite = true;
+            } else {
+                puit.setLocation(puit.getX() - 5, puit.getY());
+            }
+        }
     }
+
     public void dessineCanon(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
         int widthBase = 150;
@@ -368,11 +379,27 @@ public class View extends JFrame implements MouseInputListener{
         double x = (partie.getWidth() / 2) - (5 * heightBase / 6) * Math.sin(theta) - 10/* Width balle */;
         double y = (5 * heightBase / 6) * Math.cos(theta) - 10/* Height balle */;
         // Pour calculer nouvelles coordonnées de la balle après rotaion
-        Balle fantome = new Balle((double)(partie.getWidth()/2-controleur.getModele().getBalle().getRayon()/2),0d,200d);
+        Balle fantome = new Balle(partie.getWidth()/2-25, 0d, 300d, 180 - this.angle);
         GeneralPath genPath = new GeneralPath();
-        for(int i = 0; i < 70; i++){
-            fantome.update(180-controleur.getAngleTir(), 0.03*i);
+        boolean premierRebond = false;
+        while(!premierRebond){
+            fantome.update();
             double a = fantome.getX()+fantome.getRayon()/2;double b = fantome.getY();
+            for (Obstacle o : controleur.getModele().getNiveau().list) {
+                if(fantome.collision(o)){
+                    fantome.rebond(o);
+                    premierRebond = true;
+                }
+            }
+            genPath.moveTo(a,b);
+            genPath.lineTo(a, b);
+        }
+        for(int i = 0; i < 10; i++){
+            fantome.update();
+            double a = fantome.getX()+fantome.getRayon()/2;double b = fantome.getY();
+            for (Obstacle o : controleur.getModele().getNiveau().list) {
+                fantome.rebond(o);
+            }
             genPath.moveTo(a,b);
             genPath.lineTo(a, b);
         }
@@ -384,7 +411,7 @@ public class View extends JFrame implements MouseInputListener{
         g2d.setStroke(new BasicStroke(1));
         g2d.setPaint(null);
         g2d.setColor(Color.lightGray);
-
+        if(controleur.getModele().balle != null)
         g.fillOval((int)controleur.getModele().getBalle().getX(), (int)controleur.getModele().getBalle().getY(), 30, 30);
 
         dessineNiveau(g,controleur.getModele().getNiveau().list);

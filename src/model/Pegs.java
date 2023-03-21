@@ -3,7 +3,6 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import view.View;
 public class Pegs extends Obstacle{
-    public BufferedImage image;
     private int rayon = 25;
     public Pegs(){
         super(1);
@@ -28,7 +27,7 @@ public class Pegs extends Obstacle{
         int gh=(int)(this.rayon*View.getRatio());
         g.fillOval(gx,gy,gw,gh);
         Graphics2D g2d = (Graphics2D)g;
-        g2d.drawImage(image,gx, gy,gw,gh,null);
+        g2d.drawImage(this.image,gx, gy,gw,gh,null);
     }
 
     public Pegs clone(double x, double y, int v, double rayon){

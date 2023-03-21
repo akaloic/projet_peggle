@@ -1,12 +1,15 @@
 package model;
 
 import java.awt.Graphics;
+import java.awt.image.BufferedImage;
 
+import view.Image;
 public class Obstacle extends Objet {
 
     protected boolean estMort; 
     protected int vie;
     protected double rayon;
+    public BufferedImage image;
 
     public Obstacle(double x, double y, double largeur, double hauteur, boolean estMort, int vie) {
         super(x, y, largeur, hauteur,0);
@@ -55,6 +58,13 @@ public class Obstacle extends Objet {
     // ---------GETTER SETTER---------
     public void setVie(int pdv){
         this.vie+= pdv;
+        if(this.vie == 0){
+            image = Image.pegRondBleu;
+        }
+        if(this.vie == -1
+        ){
+            image = Image.pegRondRouge;
+        }
     }
     public void setEstMort(boolean mort){
         this.estMort = mort;

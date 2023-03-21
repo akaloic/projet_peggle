@@ -2,13 +2,13 @@ package model;
 
 public class Modele {
 
-    private Balle balle;
-    private Obstacle[] obstacles;
-    private Niveau niveau;
-    private Player player;
+    public Balle balle;
+    public Obstacle[] obstacles;
+    public Niveau niveau;
+    public Player player;
 
     public Modele() {
-        balle = new Balle(600d, 0d, 200d);
+        balle = null;
         obstacles = new Obstacle[0];
         niveau = new Niveau(1);
         player = new Player(10, "Paul");

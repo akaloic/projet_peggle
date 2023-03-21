@@ -3,30 +3,30 @@ package controller;
 import view.*;
 import javax.swing.*;
 import model.*;
-import model.Modele;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-//import java.util.ArrayList;
 
 public class Controleur {
 
-    protected View view;
-    protected Modele modele;
-    protected double angleTir;
+    public View view;
+    public Modele modele;
+    public double angleTir;
     private Timer timer;
+    protected double t;
+    protected boolean balleEnJeu;
 
     public Controleur() {
+        this.balleEnJeu = false;
         modele = new Modele();
-        view = new View(this);
         new Image();
-        modele.setBalle(new Balle(View.getPartie().getWidth() / 2, 0d, 200d));
+        view = new View(this);
         // --------------ANIMATION----------------------
         timer = new Timer(30, new ActionListener() {
-            double t = 0;
 
             public void actionPerformed(ActionEvent e) {
-                // seconde++;
 
                 // canon
                 view.setColorX();
@@ -36,22 +36,34 @@ public class Controleur {
                 // puit
                 view.placePuit();
 
-                // munition
-                /*
-                 * if (CONDITION) { // si la balle atteri dans le puit
-                 * nbMunition++;
-                 * munition.removeAll();
-                 * afficheMunition();
-                 * munition.revalidate();
-                 * }
-                 */
                 if (modele.getBalle() != null) {
-                    modele.getBalle().update(180 - getAngleTir(), t);
-                    if (modele.getBalle().getY() > View.getPartie().getHeight()) {
-                        t = 0;
+                    modele.getBalle().update();
+
+                    // rebond
+                    for (int i = 0; i < modele.getNiveau().getList().size(); i++) {
+                        if (modele.getNiveau().getList().get(i) instanceof Pegs) {
+                            modele.getBalle().rebond((Pegs) modele.getNiveau().getList().get(i));
+                            if (modele.getBalle().collision((Pegs) modele.getNiveau().getList().get(i))) {
+                                modele.getNiveau().getList().get(i).setVie(-1);
+                            }
+                        }
                     }
-                    t += 0.3;
-                    //ArrayList<Obstacle> a = modele.getNiveau().getList();//TODO : a quoi ça sert ??
+
+                    // munition
+                    /*if (modele.balle.getY() >= view.puit.getY() && (modele.balle.getX() >= view.puit.getX()
+                            && modele.balle.getX() <= view.puit.getWidth())) {
+                        view.nbMunition++;
+                        view.munition.removeAll();
+                        view.afficheMunition();
+                        view.munition.revalidate();
+                        // System.out.println("CA MARCHEEEEEEEEEEE");
+                    }*/
+
+                    if (modele.getBalle().getY()  > view.getPartie().getHeight()) {
+                        modele.setBalle(null);
+                        balleHorsJeu();
+                    }
+
                 }
 
                 view.repaint();
@@ -80,12 +92,24 @@ public class Controleur {
     // ---------GETTER SETTER---------
 
     public void tirer() {
-        this.modele.setBalle(null);
-        this.angleTir = this.view.getAngle();
-        this.modele.setBalle(new Balle(View.getPartie().getWidth() / 2, 0d, 200d));
+        if (!this.balleEnJeu) {
+            this.balleEnJeu = true;
+            this.modele.setBalle(null);
+            t = 0;
+            this.angleTir = this.view.getAngle();
+            this.modele.setBalle(new Balle(View.getPartie().getWidth()/2-25, 0d, 300d, 180 - this.angleTir));
+        }
     }
 
     public double getAngleTir() {
         return this.angleTir;
+    }
+
+    public double getT() {
+        return this.t;
+    }
+
+    public void balleHorsJeu() {
+        this.balleEnJeu = false;
     }
 }
