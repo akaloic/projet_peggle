@@ -190,6 +190,10 @@ public class Niveau {
     }
 
     public void retirePeg(int i) {
-        list_peg.remove(i);
+        Obstacle o = list_peg.get(i);
+        if (o.vie - 1 == 0)
+            list_peg.remove(i);
+        else
+            o.vie--;
     }
 }

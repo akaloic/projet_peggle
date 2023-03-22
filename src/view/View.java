@@ -100,11 +100,11 @@ public class View extends JFrame {
                 drawBall(g);
 
                 PegRond pRond = new PegRond(0, 0);
-                dessinePegRond(g, pRond); // ca marche
+                // dessinePegRond(g, pRond); // ca marche
                 ObstacleRebondissant oRebond = new ObstacleRebondissant(100, 100);
-                dessineObstacleRebond(g, oRebond); // ca marche
+                // dessineObstacleRebond(g, oRebond); // ca marche
                 ObstacleRectangulaire oR = new ObstacleRectangulaire(50, 50);
-                dessineObstacleRect(g, oR); // ca marche
+                // dessineObstacleRect(g, oR); // ca marche
 
                 for (int i = 0; i < controleur.getModele().getNiveau().list_peg.size(); i++) {
                     controleur.getModele().getNiveau().list_peg.get(i).dessine(g);
