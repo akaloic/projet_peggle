@@ -86,7 +86,8 @@ public class View extends JFrame {
     }
 
     public JPanel JeuPanel(Controleur controleur) {
-        nbMunition = 4; // Pour le moment on met 10 munitions
+        nbMunition = 4; // provisoire
+        controleur.modele.niveau = new Niveau(numNiveau);
 
         fond = new JPanel();
         fond.setLayout(new BorderLayout());
@@ -105,6 +106,9 @@ public class View extends JFrame {
                 ObstacleRectangulaire oR = new ObstacleRectangulaire(50, 50);
                 dessineObstacleRect(g, oR); // ca marche
 
+                for (int i = 0; i < controleur.getModele().getNiveau().list_peg.size(); i++) {
+                    controleur.getModele().getNiveau().list_peg.get(i).dessine(g);
+                }
             }
         };
         partie.setSize(new Dimension(800, 600));
@@ -304,10 +308,6 @@ public class View extends JFrame {
         g2d.setStroke(new BasicStroke(1));
         g2d.setPaint(null);
         g2d.setColor(Color.lightGray);
-
-        for (int i = 0; i < controleur.getModele().getNiveau().list_peg.size(); i++) {
-            controleur.getModele().getNiveau().list_peg.get(i).dessine(g);
-        }
     }
 
     public void calculeAngle() {

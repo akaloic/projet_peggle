@@ -42,19 +42,17 @@ public class Controleur {
                         if (modele.getNiveau().getList().get(i) instanceof Pegs) {
                             modele.getBalle().rebond((Pegs) modele.getNiveau().getList().get(i));
                             if (modele.getBalle().collision((Pegs) modele.getNiveau().getList().get(i))) {
-                                modele.niveau.retirePeg((Pegs) modele.getNiveau().getList().get(i));
+                                // modele.niveau.retirePeg((Pegs) modele.getNiveau().getList().get(i));
+                                modele.niveau.retirePeg(i);
                             }
                         }
                     }
 
                     // munition
                     Point p = view.puit.getLocationOnScreen();
-                    System.out
-                            .println("balle x : " + (modele.balle.getX() - 140) + " balle y : " + modele.balle.getY());
-                    System.out.println(p.x + view.puit.getWidth());
-                    System.out.println("puit xonScreen : " + p.x + " puit yonScreen : " + p.y);
-                    if (modele.balle.getY() >= view.puit.getY() && ((modele.balle.getX() - 140) >= p.x
-                            && (modele.balle.getX() - 140) <= p.x + view.puit.getWidth())) {
+                    if (modele.balle.getY() + (view.partie.HEIGHT / 2) >= view.puit.getY() + (view.partie.HEIGHT / 2)
+                            && ((modele.balle.getX() - 140) >= p.x
+                                    && (modele.balle.getX() - 140) <= p.x + view.puit.getWidth())) {
                         if (balleEnJeu) {
                             view.nbMunition--;
                             view.munition.removeAll();

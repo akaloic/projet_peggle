@@ -8,7 +8,7 @@ import model.sousObstacle.ObstacleRectangulaire;
 public class Niveau {
 
     public ArrayList<Obstacle> list_peg = new ArrayList<Obstacle>();
-    protected int niveau;
+    public int niveau;
 
     public Niveau(int i) {
         switch (i) {
@@ -189,7 +189,7 @@ public class Niveau {
         return p.getDiametre();
     }
 
-    public void retirePeg(Pegs pegs) {
-        list_peg.remove(pegs);
+    public void retirePeg(int i) {
+        list_peg.remove(i);
     }
 }
