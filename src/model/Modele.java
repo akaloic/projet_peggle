@@ -5,10 +5,12 @@ public class Modele {
     public Balle balle;
     public Obstacle[] obstacles;
     public Niveau niveau;
+    public Player player;
 
     public Modele() {
         balle = null;
         obstacles = new Obstacle[0];
+        player = new Player("Joueur", 4);
         // niveau initié dans la view
     }
 

@@ -189,11 +189,14 @@ public class Niveau {
         return p.getDiametre();
     }
 
-    public void retirePeg(int i) {
+    public boolean retirePeg(int i) {
         Obstacle o = list_peg.get(i);
-        if (o.vie - 1 == 0)
+        if (o.vie - 1 == 0) {
             list_peg.remove(i);
-        else
+            return true;
+        } else {
             o.vie--;
+            return false;
+        }
     }
 }

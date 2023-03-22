@@ -13,14 +13,16 @@ public class Controleur {
     public View view;
     public Modele modele;
     public double angleTir;
-    private Timer timer;
-    protected double t;
-    protected boolean balleEnJeu;
+    public Timer timer;
+    public double t;
+    public boolean balleEnJeu;
+    public static int facteur;
 
     public Controleur() {
         this.balleEnJeu = false;
         modele = new Modele();
         view = new View(this);
+        facteur = 1;
         // --------------ANIMATION----------------------
         timer = new Timer(30, new ActionListener() {
 
@@ -42,8 +44,8 @@ public class Controleur {
                         if (modele.getNiveau().getList().get(i) instanceof Pegs) {
                             modele.getBalle().rebond((Pegs) modele.getNiveau().getList().get(i));
                             if (modele.getBalle().collision((Pegs) modele.getNiveau().getList().get(i))) {
-                                // modele.niveau.retirePeg((Pegs) modele.getNiveau().getList().get(i));
-                                modele.niveau.retirePeg(i);
+                                boolean detruit = modele.niveau.retirePeg(i);
+                                modele.player.calculScore(detruit, i++);
                             }
                         }
                     }
@@ -58,7 +60,7 @@ public class Controleur {
                             view.munition.removeAll();
                             view.afficheMunition();
                             view.munition.revalidate();
-                            balleEnJeu = false;
+                            balleHorsJeu();
                         }
                     }
 
@@ -73,6 +75,35 @@ public class Controleur {
         });
         timer.start();
 
+    }
+
+    public void balleHorsJeu() {
+        this.balleEnJeu = false;
+        facteur = 1;
+    }
+
+    public void tirer() {
+        if (!this.balleEnJeu) {
+            view.nbMunition++;
+            view.munition.removeAll();
+            view.afficheMunition();
+            view.munition.revalidate();
+
+            this.balleEnJeu = true;
+            this.modele.setBalle(null);
+            t = 0;
+            this.angleTir = this.view.getAngle();
+            this.modele.setBalle(new Balle(2000 / 2, 0d, 300d, 180 - this.angleTir));
+        }
+    }
+
+    public void finTour() {
+        this.modele.setBalle(null);
+        this.balleEnJeu = false;
+        this.modele.niveau = new Niveau(this.modele.niveau.getNiveau() + 1);
+        this.view.partie.removeAll();
+        this.view.changerPanel(view.choixNiveauPane(this));
+        this.view.partie.revalidate();
     }
 
     // ---------GETTER SETTER---------
@@ -91,22 +122,6 @@ public class Controleur {
     public void setModele(Modele modele) {
         this.modele = modele;
     }
-    // ---------GETTER SETTER---------
-
-    public void tirer() {
-        if (!this.balleEnJeu) {
-            view.nbMunition++;
-            view.munition.removeAll();
-            view.afficheMunition();
-            view.munition.revalidate();
-
-            this.balleEnJeu = true;
-            this.modele.setBalle(null);
-            t = 0;
-            this.angleTir = this.view.getAngle();
-            this.modele.setBalle(new Balle(2000 / 2, 0d, 300d, 180 - this.angleTir));
-        }
-    }
 
     public double getAngleTir() {
         return this.angleTir;
@@ -115,8 +130,6 @@ public class Controleur {
     public double getT() {
         return this.t;
     }
+    // ---------GETTER SETTER---------
 
-    public void balleHorsJeu() {
-        this.balleEnJeu = false;
-    }
 }
