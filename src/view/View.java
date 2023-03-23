@@ -32,7 +32,7 @@ public class View extends JFrame implements MouseInputListener{
     private JButton leave;
     private boolean enJeu = true;
     private boolean balleEnJeu = false;
-    private int angle;
+    private double angle;
     private String chemin = System.getProperty("user.dir") + "/ressources/";
     private Timer timer;
     private int directionX = 5;
@@ -433,7 +433,7 @@ public class View extends JFrame implements MouseInputListener{
         int pointX = munition.getWidth() + partie.getWidth() / 2;
         double angle1 = Math.atan2(mouseY - 0, mouseX - pointX);
         double angle2 = Math.atan2(0, -pointX);
-        angle = (int) Math.toDegrees(angle2 - angle1);
+        angle = Math.toDegrees(angle2 - angle1);
     }
 
     public void afficheMunition() {
@@ -463,7 +463,7 @@ public class View extends JFrame implements MouseInputListener{
         return this.munition;
     }
 
-    public int getAngle(){
+    public double getAngle(){
         return this.angle;
     }
 

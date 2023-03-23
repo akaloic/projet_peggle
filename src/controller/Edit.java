@@ -539,29 +539,29 @@ public class Edit extends JPanel{
                 && e.getY() >= this.getY() && e.getY() <= this.getY()+this.getHeight()){
                 xClick = e.getX()-this.getX();
                 yClick = e.getY()-this.getY();
-                if(!deplacement){
-                    deplacement = true;
-                    if(choixMultiple){
-                        if(!listeSelection.contains(this)){
-                            listeSelection.add(this);
-                        }else{
-                            listeSelection.remove(this);
-                        }
-                        objetSelectionner = this;
-                        objetSelectionner.setForeground(Color.red);
-                    }else{
+                if(e.getButton() == 1){
+                    if(!deplacement){
+                        deplacement = true;
                         if(objetSelectionner != null){
                             objetSelectionner.setForeground(Color.BLACK);
                         } 
                         objetSelectionner = this;
-                         objetSelectionner.setForeground(Color.red);
+                        objetSelectionner.setForeground(Color.red);
+                        taille.setEnabled(true);
+                        taille.setValue((int)objetSelectionner.obstacle.getRayon());
+                    }else{
+                        deplacement = false;
+                        obstacle.setX((e.getX()-xClick)/View.ratioX);obstacle.setY((e.getY()-yClick)/View.ratioY);
+                    }  
+                }else if(e.getButton() == 3){
+                    if(!listeSelection.contains(this)){
+                        listeSelection.add(this);
+                        this.setForeground(Color.green);
+                    }else{
+                        listeSelection.remove(this);
+                        this.setForeground(Color.black);
                     }
-                    taille.setEnabled(true);
-                    taille.setValue((int)objetSelectionner.obstacle.getRayon());
-                }else{
-                    deplacement = false;
-                    obstacle.setX((e.getX()-xClick)/View.ratioX);obstacle.setY((e.getY()-yClick)/View.ratioY);
-                }   
+                }
             }
             principal.requestFocus();
 
