@@ -14,6 +14,6 @@ public class Player {
     public void calculScore(boolean detruit, int facteur) {
         score += facteur;
         if (detruit)
-            score += 10;
+            score += 5;
     }
 }

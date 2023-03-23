@@ -16,7 +16,7 @@ public class Controleur {
     public Timer timer;
     public double t;
     public boolean balleEnJeu;
-    public static int facteur;
+    public int facteur;
 
     public Controleur() {
         this.balleEnJeu = false;
@@ -45,14 +45,15 @@ public class Controleur {
                             modele.getBalle().rebond((Pegs) modele.getNiveau().getList().get(i));
                             if (modele.getBalle().collision((Pegs) modele.getNiveau().getList().get(i))) {
                                 boolean detruit = modele.niveau.retirePeg(i);
-                                modele.player.calculScore(detruit, i++);
+                                modele.player.calculScore(detruit, facteur++);
                             }
                         }
                     }
 
                     // munition
                     Point p = view.puit.getLocationOnScreen();
-                    if (modele.balle.getY() + (view.partie.HEIGHT / 2) >= view.puit.getY() + (view.partie.HEIGHT / 2)
+                    if (modele.balle.getY() + (view.partie.getHeight() / 2) >= view.puit.getY()
+                            + (view.partie.getHeight() / 2)
                             && ((modele.balle.getX() - 140) >= p.x
                                     && (modele.balle.getX() - 140) <= p.x + view.puit.getWidth())) {
                         if (balleEnJeu) {

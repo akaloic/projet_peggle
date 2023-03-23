@@ -25,6 +25,7 @@ public class View extends JFrame {
     public JPanel fond;
     public JPanel munition;
     public JPanel fondGauche;
+    public JPanel fondDroite;
     public JPanel partie;
 
     public JButton leave;
@@ -91,7 +92,7 @@ public class View extends JFrame {
 
         fond = new JPanel();
         fond.setLayout(new BorderLayout());
-        // --------------DROITE---------------------
+        // --------------CENTRE---------------------
         partie = new JPanel() {
             @Override
             public void paint(Graphics g) {
@@ -126,7 +127,7 @@ public class View extends JFrame {
 
         partie.add(puit);
         fond.add(partie, BorderLayout.CENTER);
-        // --------------DROITE---------------------
+        // --------------CENTRE---------------------
 
         // --------------GAUCHE---------------------
         fondGauche = new JPanel();
@@ -150,6 +151,15 @@ public class View extends JFrame {
 
         fond.add(fondGauche, BorderLayout.WEST);
         // --------------GAUCHE---------------------
+
+        // --------------DROITE---------------------
+        fondDroite = new JPanel();
+        fondDroite.setLayout(new BorderLayout());
+        fondDroite.setBackground(Color.gray);
+        fondDroite.setPreferredSize(new Dimension(getWidth() / 11, getHeight()));
+
+        fond.add(fondDroite, BorderLayout.EAST);
+        // --------------DROITE---------------------
 
         add(fond);
         setVisible(true);
