@@ -391,6 +391,9 @@ public class View extends JFrame implements MouseInputListener{
                     premierRebond = true;
                 }
             }
+            if(fantome.getY() > height){
+                premierRebond = true;
+            }
             genPath.moveTo(a,b);
             genPath.lineTo(a, b);
         }

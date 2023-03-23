@@ -27,7 +27,7 @@ public class Edit extends JPanel{
     public ArrayList<objetMobile> listPanel = new ArrayList<objetMobile>();//Liste pour garder compte des JPanel sur la page
     JPanel principal;
     objetMobile pegsEcran;
-    objetMobile objetSelectionner = new objetMobile(null);//Le dernière objet sur lequel on a cliqué
+    objetMobile objetSelectionner;//Le dernière objet sur lequel on a cliqué
     objetMobile suivant = new objetMobile(null);
     boolean choixMultiple = true;
     public ArrayList<objetMobile> listeSelection = new ArrayList<objetMobile>();
@@ -132,7 +132,7 @@ public class Edit extends JPanel{
         espaceY.add(ytext,BorderLayout.WEST);
         espaceY.add(ySaisie,BorderLayout.CENTER);
         espaceCoords.add(espaceY,BorderLayout.SOUTH);
-        
+
         xPlus.addActionListener(
             (ActionEvent e) -> {
                 objetSelectionner.setLocation(objetSelectionner.getX()+1, objetSelectionner.getY());
@@ -245,7 +245,7 @@ public class Edit extends JPanel{
         principal.setLayout(null);
         principal.setBackground(Color.lightGray);
         partieDroite.add(principal,BorderLayout.CENTER);
-
+        
         //Peg qui servira à créer d'autre peg rond
         objetMobile pegRond = new objetMobile(new Pegs(0, 0,0,20)){
             @Override
@@ -382,8 +382,8 @@ public class Edit extends JPanel{
                     objetSelectionner.setForeground(Color.cyan);
                 }else{
                     objetSelectionner.setForeground(Color.black);
-                    Obstacle o = pegRond.obstacle.clone(pegRond.getX()/View.ratioX, pegRond.getY()/View.ratioY, (int)pegRond.obstacle.getRayon(), (int)pegRond.obstacle.getRayon());
-                    objetSelectionner = creeObstacle(o, pegRond.getX(), pegRond.getY()-100, 0, 0);
+                    Obstacle o = pegRond.obstacle.clone(objetSelectionner.getX()/View.ratioX, objetSelectionner.getY()/View.ratioY, (int)pegRond.obstacle.getRayon(), (int)pegRond.obstacle.getRayon());
+                    objetSelectionner = creeObstacle(o, (int)(objetSelectionner.obstacle.getX()*View.getRatioX()), (int)(objetSelectionner.obstacle.getY()*View.getRatioY()), 0, 0);
                     peutBouger = true;
                     objetSelectionner.setForeground(Color.cyan);
                 }
@@ -399,8 +399,8 @@ public class Edit extends JPanel{
                     objetSelectionner.setForeground(Color.cyan);
                 }else{
                     objetSelectionner.setForeground(Color.black);
-                    Obstacle o = pegRect.obstacle.clone(pegRect.getX()/View.ratioX, pegRect.getY()/View.ratioY, (int)pegRect.obstacle.getRayon(), (int)pegRect.obstacle.getRayon());
-                    objetSelectionner = creeObstacle(o, pegRect.getX(), pegRect.getY()-100, 0, 0);
+                    Obstacle o = pegRect.obstacle.clone(objetSelectionner.getX()/View.ratioX, objetSelectionner.getY()/View.ratioY, (int)pegRect.obstacle.getRayon(), (int)pegRect.obstacle.getRayon());
+                    objetSelectionner = creeObstacle(o, (int)(objetSelectionner.obstacle.getX()*View.getRatioX()), (int)(objetSelectionner.obstacle.getY()*View.getRatioY()), 0, 0);
                     peutBouger = true;
                     objetSelectionner.setForeground(Color.cyan);
                 }
@@ -420,6 +420,10 @@ public class Edit extends JPanel{
               }
             }
         });
+        System.out.println(principal.getWidth()+"   "+principal.getHeight());
+        objetSelectionner = new objetMobile(new Obstacle(0));
+
+        
     }
 
     public boolean appartient(Component p){
