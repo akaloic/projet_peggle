@@ -22,6 +22,7 @@ public class Controleur {
         this.balleEnJeu = false;
         modele = new Modele();
         new Image();
+        new Sauvegarde();
         view = new View(this);
         // --------------ANIMATION----------------------
         timer = new Timer(30, new ActionListener() {

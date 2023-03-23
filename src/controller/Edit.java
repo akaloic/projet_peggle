@@ -50,7 +50,6 @@ public class Edit extends JPanel{
     View view;
 
     public Edit(Niveau n,int widht, int height,int idSauvegarde,View v){
-        new Sauvegarde();
         this.setBackground(Color.gray);
         niveau = Sauvegarde.charge(idSauvegarde);
         this.view = v;

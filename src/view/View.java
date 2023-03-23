@@ -249,25 +249,9 @@ public class View extends JFrame implements MouseInputListener{
             diviseur.add(nameNiv,BorderLayout.SOUTH);
             diviseur.setBounds(xNiv, yNiv, wNiv, hNiv);
 
-
-            JPanel diviseurEdit = new JPanel(new BorderLayout());
-            JPanel editMinature = new JPanel(){
-                @Override
-                public void paint(Graphics g) {
-                    // TODO Auto-generated method stub
-                    super.paint(g);
-                    dessineNiveau(g,Sauvegarde.charge(k-1));
-                }   
-            };
-            JButton editI = new JButton("Edit "+i);
-            diviseurEdit.add(editMinature,BorderLayout.CENTER);
-            diviseurEdit.add(editI,BorderLayout.SOUTH);
-            diviseurEdit.setBounds(xNiv, yNiv+400, wNiv, hNiv);
-
             xNiv += 1.5*wNiv;
             choixNiv.add(diviseur);
             nameNiv.setName("niveau"+i);
-            choixNiv.add(diviseurEdit);
             this.controleur.getModele().setPlayer(new Player(4, name.getText()));
             nameNiv.addActionListener(e->{
                 char lettre = nameNiv.getName().charAt(nameNiv.getName().length()-1);
@@ -276,12 +260,33 @@ public class View extends JFrame implements MouseInputListener{
                 changerPanel(JeuPanel(this.controleur));
                 son.stop();
             });
-            int j = i-1;
+
+        }
+        System.out.println(Sauvegarde.liste.size());
+        xNiv = precedent.getWidth() * 2;
+        for(int i = 0; i < Sauvegarde.liste.size(); i++){
+            JPanel diviseurEdit = new JPanel(new BorderLayout());
+            int k = i;
+            JPanel editMinature = new JPanel(){
+                @Override
+                public void paint(Graphics g) {
+                    // TODO Auto-generated method stub
+                    super.paint(g);
+                    dessineNiveau(g,Sauvegarde.charge(k));
+                }   
+            };
+
+            JButton editI = new JButton("Edit "+i);
+            diviseurEdit.add(editMinature,BorderLayout.CENTER);
+            diviseurEdit.add(editI,BorderLayout.SOUTH);
+            diviseurEdit.setBounds(xNiv, yNiv+400, wNiv, hNiv);
+            choixNiv.add(diviseurEdit);
             editI.addActionListener(e->{
-                controleur.getModele().getNiveau().setList(Sauvegarde.charge(j));
+                controleur.getModele().getNiveau().setList(Sauvegarde.charge(k));
                 changerPanel(JeuPanel(this.controleur));
                 son.stop();
             });
+            xNiv += 1.5*wNiv;
         }
         return choixNiv;
     }
@@ -302,7 +307,7 @@ public class View extends JFrame implements MouseInputListener{
                 changerPanel(menuPrincipal());
         });
         choix.add(acceuil);
-        for(int i= 0; i < 5; i++){
+        for(int i= 0; i < Sauvegarde.liste.size()+1; i++){
             JButton j = new JButton(i+"");
             int k = i;
             j.addActionListener(

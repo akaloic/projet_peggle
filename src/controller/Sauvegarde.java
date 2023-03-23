@@ -12,6 +12,20 @@ import model.Obstacle;
 public class Sauvegarde {
     public static ArrayList<ArrayList<Obstacle>> liste = new ArrayList<ArrayList<Obstacle>>();
 
+    public Sauvegarde(){
+        try {
+            FileInputStream fileIn = new FileInputStream("save.ser");
+            ObjectInputStream in = new ObjectInputStream(fileIn);
+             liste = (ArrayList<ArrayList<Obstacle>>) in.readObject();
+            in.close();
+            fileIn.close();
+         } catch (IOException i) {
+            i.printStackTrace();
+         } catch (ClassNotFoundException c) {
+            c.printStackTrace();
+         }
+    }
+
     public static void save(ArrayList<Obstacle> a,int n){
         liste.set(n, a);
         try {
