@@ -14,15 +14,15 @@ public class Niveau {
     public Niveau(int i) {
         switch (i) {
             case 1:
-                niveau_1();//liste de lignes
+                niveau_1();// liste de lignes
                 niveau = 1;
                 break;
             case 2:
-                niveau_2();//voiture et nuages
+                niveau_2();// voiture et nuages
                 niveau = 2;
                 break;
             case 3:
-                niveau_3();//plusieurs carrés 
+                niveau_3();// plusieurs carrés
                 niveau = 3;
                 break;
             case 4:
@@ -32,14 +32,15 @@ public class Niveau {
         }
     }
 
-    protected void diagonal(double x, double y, ArrayList<Obstacle> list, int pegUsed, boolean direction, boolean sens) {
+    protected void diagonal(double x, double y, ArrayList<Obstacle> list, int pegUsed, boolean direction,
+            boolean sens) {
         double nvx = x;
         double nvy = y;
         for (int i = 0; i < pegUsed; i++) {
             Pegs p = new Pegs(nvx, nvy, 1);
             list.add(p);
-            nvx = direction? nvx + p.getDiametre() : nvx - p.getDiametre();//true pour droite, false pour gauche
-            nvy = sens? nvy - p.getRayon() : nvy + p.getRayon();//true pour haut, false pour bas
+            nvx = direction ? nvx + p.getDiametre() : nvx - p.getDiametre();// true pour droite, false pour gauche
+            nvy = sens ? nvy - p.rayon : nvy + p.rayon;// true pour haut, false pour bas
         }
     }
 
@@ -94,8 +95,8 @@ public class Niveau {
                 ObstacleRectangulaire obr = new ObstacleRectangulaire(25, 400 + (getDiametre() * i));
                 ObstacleRectangulaire obr2 = new ObstacleRectangulaire(150 + (50 * 17 * 2), 400 + (getDiametre() * i));
                 lignes(175, 400 + (getDiametre() * i), list_peg, 17);
-                list_peg.add(obr);
-                list_peg.add(obr2);
+                list_peg.add((Obstacle) obr);
+                list_peg.add((Obstacle) obr2);
             }
             ObstacleRectangulaire barriereGauche = new ObstacleRectangulaire(getDiametre() * 3 - 25, 1025, 400, 50);
             ObstacleRectangulaire barriereDroit = new ObstacleRectangulaire(25 + getDiametre() * 17 - getDiametre() * 4,
@@ -175,43 +176,48 @@ public class Niveau {
         list_peg.add(ligneDroitHaut);
         list_peg.add(ligneDroitBas);
     }
-    protected void niveau_4(){
-        int x4=150; int y4=600;
-        //bouche et tete
+
+    protected void niveau_4() {
+        int x4 = 150;
+        int y4 = 600;
+        // bouche et tete
         diagonal(x4, y4, list_peg, 4, true, true);
-        diagonal(x4+getDiametre(), y4+getRayon(), list_peg, 2, true, false);
-        diagonal(x4+getDiametre(), y4+getRayon()*3, list_peg, 2, false, false);
-        diagonal(x4+getDiametre(), y4+getRayon()*5, list_peg, 3, true, false);
-        //aile haute
-        lignes(x4+getDiametre()*4, y4-getRayon()*3, list_peg, 4);
-        lignes(x4+getDiametre()*5, y4-getRayon()*5, list_peg, 3);
-        lignes(x4+getDiametre()*6, y4-getRayon()*7, list_peg, 3);
-        //aile basse
-        lignes(x4+getDiametre()*4, y4+getRayon()*7, list_peg, 4);
-        lignes(x4+getDiametre()*5, y4+getRayon()*9, list_peg, 3);
-        lignes(x4+getDiametre()*6, y4+getRayon()*11, list_peg, 3);
-        //arriere
-        diagonal(x4+getDiametre()*8, y4-getRayon()*3, list_peg, 5, true, false);
-        diagonal(x4+getDiametre()*8, y4+getRayon()*7, list_peg, 5, true, true);
-        //queue
-        diagonal(x4+getDiametre()*13, y4, list_peg, 4, true, true);
-        diagonal(x4+getDiametre()*13, y4+getDiametre()*2, list_peg, 4, true, false);
-        colonne(x4+getDiametre()*17, y4+getDiametre()*2, list_peg, 2);
-        colonne(x4+getDiametre()*17, y4-getDiametre(), list_peg, 2);
-        colonne(x4+getDiametre()*16, y4+getDiametre(), list_peg, 1);
-        //visage
-        lignes(x4+getRayon()*7, y4-getRayon(), list_peg, 1);
-        ObstacleRectangulaire ligne = new ObstacleRectangulaire(x4+getRayon()*9, y4-getRayon(), getRayon(), getRayon()*7);
+        diagonal(x4 + getDiametre(), y4 + getRayon(), list_peg, 2, true, false);
+        diagonal(x4 + getDiametre(), y4 + getRayon() * 3, list_peg, 2, false, false);
+        diagonal(x4 + getDiametre(), y4 + getRayon() * 5, list_peg, 3, true, false);
+        // aile haute
+        lignes(x4 + getDiametre() * 4, y4 - getRayon() * 3, list_peg, 4);
+        lignes(x4 + getDiametre() * 5, y4 - getRayon() * 5, list_peg, 3);
+        lignes(x4 + getDiametre() * 6, y4 - getRayon() * 7, list_peg, 3);
+        // aile basse
+        lignes(x4 + getDiametre() * 4, y4 + getRayon() * 7, list_peg, 4);
+        lignes(x4 + getDiametre() * 5, y4 + getRayon() * 9, list_peg, 3);
+        lignes(x4 + getDiametre() * 6, y4 + getRayon() * 11, list_peg, 3);
+        // arriere
+        diagonal(x4 + getDiametre() * 8, y4 - getRayon() * 3, list_peg, 5, true, false);
+        diagonal(x4 + getDiametre() * 8, y4 + getRayon() * 7, list_peg, 5, true, true);
+        // queue
+        diagonal(x4 + getDiametre() * 13, y4, list_peg, 4, true, true);
+        diagonal(x4 + getDiametre() * 13, y4 + getDiametre() * 2, list_peg, 4, true, false);
+        colonne(x4 + getDiametre() * 17, y4 + getDiametre() * 2, list_peg, 2);
+        colonne(x4 + getDiametre() * 17, y4 - getDiametre(), list_peg, 2);
+        colonne(x4 + getDiametre() * 16, y4 + getDiametre(), list_peg, 1);
+        // visage
+        lignes(x4 + getRayon() * 7, y4 - getRayon(), list_peg, 1);
+        ObstacleRectangulaire ligne = new ObstacleRectangulaire(x4 + getRayon() * 9, y4 - getRayon(), getRayon(),
+                getRayon() * 7);
         list_peg.add(ligne);
     }
-<<<<<<< HEAD
+
+    public ArrayList<Obstacle> getList() {
+        return list_peg;
+    }
+
+    public int getNiveau() {
+        return niveau;
+    }
 
     public double getRayon() {
-=======
-    public ArrayList<Obstacle> getList() {return list_peg;}
-    public int getNiveau() {return niveau;}
-    public double getRayon(){
->>>>>>> 4d2437ec25995dd1e62391fea3f34f55e6f78e21
         Pegs p = new Pegs();
         return p.rayon;
     }
