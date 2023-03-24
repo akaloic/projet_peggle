@@ -7,7 +7,6 @@ import java.awt.event.ActionEvent;
 import model.*;
 import model.sousObstacle.ObstacleRebondissant;
 import model.sousObstacle.ObstacleRectangulaire;
-import model.sousObstacle.PegRond;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -110,7 +109,7 @@ public class View extends JFrame implements MouseInputListener {
             public void paint(Graphics g) {
                 super.paint(g);
                 dessineCanon(g);
-                PegRond pRond = new PegRond(0, 0);
+                // PegRond pRond = new PegRond(0, 0);
                 /*
                  * dessinePegRond(g,pRond); // ca marche
                  * ObstacleRebondissant oRebond = new ObstacleRebondissant(100, 100);
@@ -219,24 +218,6 @@ public class View extends JFrame implements MouseInputListener {
             directionX = -5;
         if (puit.getX() < -partie.getWidth() / 2)
             directionX = 5;
-    }
-
-    public void dessinePegRond(Graphics g, PegRond peg) {
-        Graphics2D g2d = (Graphics2D) g;
-        g2d.setColor(Color.PINK);
-        g2d.fillOval((int) peg.getX(), (int) peg.getY(), (int) peg.getWidth(), (int) peg.getHeight());
-    }
-
-    public void dessineObstacleRect(Graphics g, ObstacleRectangulaire oR) {
-        Graphics2D g2d = (Graphics2D) g;
-        g2d.setColor(Color.PINK);
-        g2d.fillRect((int) oR.getX(), (int) oR.getY(), (int) oR.getWidth(), (int) oR.getHeight());
-    }
-
-    public void dessineObstacleRebond(Graphics g, ObstacleRebondissant oReb) {
-        Graphics2D g2d = (Graphics2D) g;
-        g2d.setColor(Color.PINK);
-        g2d.fillRect((int) oReb.getX(), (int) oReb.getY(), (int) oReb.getWidth(), (int) oReb.getHeight());
     }
 
     public void dessineBalle(Graphics g) { // temporaire à effacer plus tard
