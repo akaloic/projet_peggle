@@ -27,7 +27,7 @@ public class Niveau {
         }
     }
 
-    protected void diagonal(double x, double y, ArrayList<Obstacle> list, int pegUsed, String direction) {
+    public void diagonal(double x, double y, ArrayList<Obstacle> list, int pegUsed, String direction) {
         double nvx = x;
         double nvy = y;
         for (int i = 0; i < pegUsed; i++) {
@@ -38,14 +38,14 @@ public class Niveau {
         }
     }
 
-    protected void carres(double x, double y, ArrayList<Obstacle> list, int pegCote) {
+    public void carres(double x, double y, ArrayList<Obstacle> list, int pegCote) {
         lignes(x, y, list, pegCote + 2);
         colonne(x, y + getDiametre(), list, pegCote);
         colonne(x + ((pegCote + 1) * getDiametre()), y + getDiametre(), list, pegCote);
         lignes(x, y + ((pegCote + 1) * getDiametre()), list, pegCote + 2);
     }
 
-    protected void lignes(double x, double y, ArrayList<Obstacle> list, int pegUsed) {
+    public void lignes(double x, double y, ArrayList<Obstacle> list, int pegUsed) {
         double nvx = x;
         for (int i = 0; i < pegUsed; i++) {
             Pegs p = new Pegs(nvx, y, 1);
@@ -54,7 +54,7 @@ public class Niveau {
         }
     }
 
-    protected void colonne(double x, double y, ArrayList<Obstacle> list, int pegUsed) {
+    public void colonne(double x, double y, ArrayList<Obstacle> list, int pegUsed) {
         double nvy = y;
         for (int i = 0; i < pegUsed; i++) {
             Pegs p = new Pegs(x, nvy, 1);
@@ -63,7 +63,7 @@ public class Niveau {
         }
     }
 
-    protected void triangle(double x, double y, ArrayList<Obstacle> list, int lignes, Boolean alenvers) {
+    public void triangle(double x, double y, ArrayList<Obstacle> list, int lignes, Boolean alenvers) {
         double nvx = x;
         double nvy = y;
         for (int i = 0; i <= lignes; i++) {
@@ -73,7 +73,7 @@ public class Niveau {
         }
     }
 
-    protected void carresRemplis(double x, double y, ArrayList<Obstacle> list, int pegCote) {
+    public void carresRemplis(double x, double y, ArrayList<Obstacle> list, int pegCote) {
         double nvy = y;
         for (int i = 0; i < pegCote; i++) {
             lignes(x, nvy, list, pegCote);
@@ -81,7 +81,7 @@ public class Niveau {
         }
     }
 
-    protected void niveau_1() {
+    public void niveau_1() {
         for (int i = 0; i < 6; i++) {
             if (i % 2 == 0) {
                 lignes(25, 400 + (getDiametre() * i), list_peg, 20);
@@ -97,12 +97,10 @@ public class Niveau {
                     1025, 400, 50);
             list_peg.add(barriereGauche);
             list_peg.add(barriereDroit);
-
         }
-
     }
 
-    protected void niveau_2() {
+    public void niveau_2() {
         lignes(25, 1200, list_peg, 20);
         // roue de Gauche
         ObstacleRebondissant roueGauche = new ObstacleRebondissant(25 + getRayon() * 4.5, 1200 - getRayon() * 5, 200);
@@ -140,7 +138,7 @@ public class Niveau {
         list_peg.add(nuageDroit3);
     }
 
-    protected void niveau_3() {
+    public void niveau_3() {
         int m1 = 0;
         int m2 = 0;
         int j = 0;
@@ -171,12 +169,13 @@ public class Niveau {
         list_peg.add(ligneDroitBas);
     }
 
-    public ArrayList<Obstacle> getList() {
-        return list_peg;
-    }
-
-    public int getNiveau() {
-        return niveau;
+    public boolean detruit(int i) {
+        if (list_peg.get(i).vie - 1 == 0) {
+            return true;
+        } else {
+            list_peg.get(i).vie--;
+            return false;
+        }
     }
 
     public double getRayon() {
@@ -187,16 +186,5 @@ public class Niveau {
     public double getDiametre() {
         Pegs p = new Pegs();
         return p.getDiametre();
-    }
-
-    public boolean retirePeg(int i) {
-        Obstacle o = list_peg.get(i);
-        if (o.vie - 1 == 0) {
-            list_peg.remove(i);
-            return true;
-        } else {
-            o.vie--;
-            return false;
-        }
     }
 }

@@ -16,6 +16,7 @@ import java.awt.event.*;
 import java.awt.geom.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.util.Timer;
 
 import javax.sound.sampled.*;
 
@@ -87,7 +88,7 @@ public class View extends JFrame {
     }
 
     public JPanel JeuPanel(Controleur controleur) {
-        nbMunition = 4; // provisoire
+        nbMunition = 4; // provisoire a remplacer par munition joueur
         controleur.modele.niveau = new Niveau(numNiveau);
 
         fond = new JPanel();
@@ -301,11 +302,11 @@ public class View extends JFrame {
         double x = (partie.getWidth() / 2) - (5 * heightBase / 6) * Math.sin(theta) - 10/* Width balle */;
         double y = (5 * heightBase / 6) * Math.cos(theta) - 10/* Height balle */;
         // Pour calculer nouvelles coordonnées de la balle après rotaion
-        Balle fantome = new Balle(600d, 0d, 200d, 180 - controleur.getAngleTir());
+        Balle fantome = new Balle(partie.getWidth() / 2, 0d, 200d, 180 - controleur.getAngleTir());
         GeneralPath genPath = new GeneralPath();
         for (int i = 0; i < 80; i++) {
             fantome.update();
-            double a = fantome.getX() + fantome.getRayon() / 2;
+            double a = fantome.getX() + fantome.rayon / 2;
             double b = fantome.getY();
             genPath.moveTo(a, b);
             genPath.lineTo(a, b);
@@ -353,8 +354,8 @@ public class View extends JFrame {
         if (this.controleur.modele.balle != null) {
             g2d.fillOval((int) (controleur.modele.balle.getX() * ratioX),
                     (int) (controleur.modele.balle.getY() * ratioY),
-                    (int) (controleur.modele.balle.getRayon() * ratioX),
-                    (int) (controleur.modele.balle.getRayon() * ratioY));
+                    (int) (controleur.modele.balle.rayon * ratioX),
+                    (int) (controleur.modele.balle.rayon * ratioY));
         }
     }
 
@@ -394,7 +395,7 @@ public class View extends JFrame {
         }
     }
 
-    public int getNumNiveau() {
-        return this.numNiveau;
+    public void addExplosion(double x, double y) {
+        partie.add(new Explosion(x * ratioX, y * ratioY));
     }
 }

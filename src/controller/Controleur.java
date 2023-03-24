@@ -40,11 +40,17 @@ public class Controleur {
                     modele.getBalle().update();
 
                     // rebond
-                    for (int i = 0; i < modele.getNiveau().getList().size(); i++) {
-                        if (modele.getNiveau().getList().get(i) instanceof Pegs) {
-                            modele.getBalle().rebond((Pegs) modele.getNiveau().getList().get(i));
-                            if (modele.getBalle().collision((Pegs) modele.getNiveau().getList().get(i))) {
-                                boolean detruit = modele.niveau.retirePeg(i);
+                    for (int i = 0; i < modele.niveau.list_peg.size(); i++) {
+                        if (modele.niveau.list_peg.get(i) instanceof Pegs) {
+                            modele.getBalle().rebond((Pegs) modele.niveau.list_peg.get(i));
+                            if (modele.getBalle().collision((Pegs) modele.niveau.list_peg.get(i))) {
+                                boolean detruit = modele.niveau.detruit(i);
+                                if (detruit) {
+                                    double x = modele.niveau.list_peg.get(i).getX();
+                                    double y = modele.niveau.list_peg.get(i).getY();
+                                    view.addExplosion(x, y);
+                                    modele.niveau.list_peg.remove(i);
+                                }
                                 modele.player.calculScore(detruit, facteur++);
                             }
                         }
@@ -75,7 +81,6 @@ public class Controleur {
             }
         });
         timer.start();
-
     }
 
     public void balleHorsJeu() {
@@ -101,18 +106,15 @@ public class Controleur {
     public void finTour() {
         this.modele.setBalle(null);
         this.balleEnJeu = false;
-        this.modele.niveau = new Niveau(this.modele.niveau.getNiveau() + 1);
+        this.modele.niveau = new Niveau(this.modele.niveau.niveau + 1);
         this.view.partie.removeAll();
         this.view.changerPanel(view.choixNiveauPane(this));
         this.view.partie.revalidate();
     }
 
     // ---------GETTER SETTER---------
-    public View getView() {
-        return view;
-    }
-
     public double getAngleTir() {
         return angleTir;
     }
+    // ---------GETTER SETTER---------
 }
