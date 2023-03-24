@@ -302,7 +302,7 @@ public class View extends JFrame {
         double x = (partie.getWidth() / 2) - (5 * heightBase / 6) * Math.sin(theta) - 10/* Width balle */;
         double y = (5 * heightBase / 6) * Math.cos(theta) - 10/* Height balle */;
         // Pour calculer nouvelles coordonnées de la balle après rotaion
-        Balle fantome = new Balle(partie.getWidth() / 2, 0d, 200d, 180 - controleur.getAngleTir());
+        Balle fantome = new Balle(partie.getWidth() / 2, 0d, 200d, 180 - angle);
         GeneralPath genPath = new GeneralPath();
         for (int i = 0; i < 80; i++) {
             fantome.update();
