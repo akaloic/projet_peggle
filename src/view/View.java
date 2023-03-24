@@ -53,25 +53,25 @@ public class View extends JFrame {
 
     public boolean versDroite = true;
 
-    public View(Controleur c) {
+    public View(Controleur controleur) {
         String urlDuSon = "ressources/SonsWav/Accueil.wav";
         LancerMusic(urlDuSon);
         Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
         width = (int) size.getWidth();
         height = (int) size.getHeight();
 
-        setSize(width, height);
-        setTitle("Hit the Peggles");
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setUndecorated(true); // nécessaire sinon getHeight et getWidth renvoie 0
-        setVisible(true);
-        controleur = c;
+        this.setSize(width, height);
+        this.setTitle("Hit the Peggles");
+        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        this.setUndecorated(true); // nécessaire sinon this.getHeight et this.getWidth renvoie 0
+        this.setVisible(true);
+        this.controleur = controleur;
 
         JPanel pane = new JPanel();
         pane.setSize(width, height);
         pane.setLayout(null);
         pane.setBorder(BorderFactory.createTitledBorder("Bienvenue dans notre jeu"));
-        add(pane);
+        this.add(pane);
 
         JLabel titrePane = new JLabel("HIT THE PEGGLES");
         titrePane.setBounds(width / 2 - 65, height - height * 2 / 3, 400, 100);
@@ -81,7 +81,7 @@ public class View extends JFrame {
         pane.add(start);
         start.addActionListener(e -> {
             son.stop();
-            changerPanel(choixNiveauPane(controleur));
+            changerPanel(choixNiveauPane(this.controleur));
         });
         JeuPanel(controleur);
     }
@@ -107,8 +107,8 @@ public class View extends JFrame {
                 ObstacleRectangulaire oR = new ObstacleRectangulaire(50, 50);
                 // dessineObstacleRect(g, oR); // ca marche
 
-                for (int i = 0; i < controleur.getModele().getNiveau().list_peg.size(); i++) {
-                    controleur.getModele().getNiveau().list_peg.get(i).dessine(g);
+                for (int i = 0; i < controleur.modele.niveau.list_peg.size(); i++) {
+                    controleur.modele.niveau.list_peg.get(i).dessine(g);
                 }
             }
         };
@@ -133,7 +133,7 @@ public class View extends JFrame {
         fondGauche = new JPanel();
         fondGauche.setLayout(new BorderLayout());
         fondGauche.setBackground(Color.gray);
-        fondGauche.setPreferredSize(new Dimension(getWidth() / 7, getHeight()));
+        fondGauche.setPreferredSize(new Dimension(this.getWidth() / 7, this.getHeight()));
 
         munition = new JPanel();
         munition.setLayout(new GridLayout(10, 1));
@@ -181,14 +181,14 @@ public class View extends JFrame {
         JPanel choixNiv = new JPanel();
         choixNiv.setBackground(Color.BLUE);
         choixNiv.setLayout(null);
-        choixNiv.setSize(width, height);
+        choixNiv.setSize(this.width, this.height);
         JButton precedent = new JButton("Acceuil");
         precedent.setBounds(0, 0, 100, 100);
         choixNiv.add(precedent);
         precedent.addActionListener(e -> {
-            invalidate();
+            this.invalidate();
             son.stop();
-            new View(controleur);
+            new View(this.controleur);
         });
         int xNiv = precedent.getWidth() * 2;
         int yNiv = precedent.getHeight() * 2;
@@ -204,7 +204,7 @@ public class View extends JFrame {
             nameNiv.addActionListener(e -> {
                 char lettre = nameNiv.getName().charAt(nameNiv.getName().length() - 1);
                 numNiveau = Integer.parseInt("" + lettre);
-                changerPanel(JeuPanel(controleur));
+                changerPanel(JeuPanel(this.controleur));
                 son.stop();
             });
         }
@@ -212,10 +212,10 @@ public class View extends JFrame {
     }
 
     public void changerPanel(JPanel pane) {
-        invalidate();
-        setContentPane(pane);
-        repaint();
-        revalidate();
+        this.invalidate();
+        this.setContentPane(pane);
+        this.repaint();
+        this.revalidate();
     }
 
     public void placePuit() {
@@ -350,11 +350,11 @@ public class View extends JFrame {
 
     public void drawBall(Graphics g) {
         Graphics g2d = g;
-        if (this.controleur.getModele().getBalle() != null) {
-            g2d.fillOval((int) (controleur.getModele().getBalle().getX() * ratioX),
-                    (int) (controleur.getModele().getBalle().getY() * ratioY),
-                    (int) (controleur.getModele().getBalle().getRayon() * ratioX),
-                    (int) (controleur.getModele().getBalle().getRayon() * ratioY));
+        if (this.controleur.modele.balle != null) {
+            g2d.fillOval((int) (controleur.modele.balle.getX() * ratioX),
+                    (int) (controleur.modele.balle.getY() * ratioY),
+                    (int) (controleur.modele.balle.getRayon() * ratioX),
+                    (int) (controleur.modele.balle.getRayon() * ratioY));
         }
     }
 
@@ -363,7 +363,7 @@ public class View extends JFrame {
     }
 
     public int getAngle() {
-        return angle;
+        return this.angle;
     }
 
     public void setColorX() {

@@ -112,25 +112,7 @@ public class Controleur {
         return view;
     }
 
-    public void setView(View view) {
-        this.view = view;
-    }
-
-    public Modele getModele() {
-        return modele;
-    }
-
-    public void setModele(Modele modele) {
-        this.modele = modele;
-    }
-
     public double getAngleTir() {
-        return this.angleTir;
+        return angleTir;
     }
-
-    public double getT() {
-        return this.t;
-    }
-    // ---------GETTER SETTER---------
-
 }

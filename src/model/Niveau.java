@@ -181,7 +181,7 @@ public class Niveau {
 
     public double getRayon() {
         Pegs p = new Pegs();
-        return p.getRayon();
+        return p.rayon;
     }
 
     public double getDiametre() {
