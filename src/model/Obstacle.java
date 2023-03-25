@@ -6,6 +6,7 @@ public class Obstacle extends Objet {
 
     protected boolean estMort; 
     protected int vie;
+    protected int rayon;
 
     public Obstacle(double x, double y, double largeur, double hauteur, boolean estMort, int vie) {
         super(x, y, largeur, hauteur,0);
@@ -44,6 +45,9 @@ public class Obstacle extends Objet {
     }
     public double getHeight(){
         return super.getHauteur();
+    }
+    public double getRayon(){
+        return this.rayon;
     }
     // ---------GETTER SETTER---------
     public void setVie(int pdv){

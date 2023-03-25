@@ -3,8 +3,8 @@ package controller;
 import view.*;
 import javax.swing.*;
 import model.*;
-import model.Modele;
 
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -14,81 +14,78 @@ public class Controleur {
     public Modele modele;
     public double angleTir;
     private Timer timer;
+    protected double t;
+    protected boolean balleEnJeu;
 
     public Controleur() {
+        this.balleEnJeu = false;
         modele = new Modele();
         view = new View(this);
         // --------------ANIMATION----------------------
         timer = new Timer(30, new ActionListener() {
-            double t = 0;
-
             public void actionPerformed(ActionEvent e) {
-                // seconde++;
 
                 // canon
                 view.setColorX();
                 view.setColorX();
                 view.calculeAngle();
+                view.repaint();
 
                 // puit
                 view.placePuit();
+                if (modele.getBalle() != null) {
+                    modele.getBalle().update();
 
-                // munition
-                /*
-                 * if (CONDITION) { // si la balle atteri dans le puit
-                 * nbMunition++;
-                 * munition.removeAll();
-                 * afficheMunition();
-                 * munition.revalidate();
-                 * }
-                 */
+                    // rebond
+                    for (int i = 0; i < modele.getNiveau().getList().size(); i++) {
+                        if (modele.getNiveau().getList().get(i) instanceof Pegs) {
+                            modele.getBalle().rebond( modele.getNiveau().getList().get(i));
+                            if (modele.getBalle().collision( modele.getNiveau().getList().get(i))) {
+                                modele.niveau.retirePeg(modele.getNiveau().getList().get(i));
+                            }
+                        }
+                    }
 
-                // retire LE pegs touché par la balle
-                if (modele.niveau.list_peg.size() != 0) {
-                    Pegs p = collisionPeg();
-                    if (p != null) {
-                        modele.niveau.list_peg.remove(p);
+                    if(modele.getBalle().getX()-modele.getBalle().getRayon()/2 <= 0 || modele.getBalle().getX()+modele.getBalle().getRayon()/2 >= 2000){
+                        modele.balle.rebondMur();
+                    }    
+                
+                    // munition
+                    Point p = view.puit.getLocationOnScreen();
+                    //System.out.println("balle x : " + (modele.balle.getX() - 140) + " balle y : " + modele.balle.getY());
+                    //System.out.println(p.x + view.puit.getWidth());
+                    //System.out.println("puit xonScreen : " + p.x + " puit yonScreen : " + p.y);
+                    if (modele.balle.getY() >= view.puit.getY() && ((modele.balle.getX() - 140) >= p.x
+                            && (modele.balle.getX() - 140) <= p.x + view.puit.getWidth())) {
+                        if (balleEnJeu) {
+                            view.nbMunition--;
+                            view.munition.removeAll();
+                            view.afficheMunition();
+                            view.munition.revalidate();
+                            balleEnJeu = false;
+                        }
                     }
                 }
-
-                if (modele.balle != null) {
-                    modele.balle.update(180 - angleTir, t);
-                    if (modele.balle.y > View.getPartie().getHeight()) {
-                        t = 0;
-                    }
-                    t += 0.3;
-                }
-
-                view.repaint();
             }
         });
         timer.start();
 
     }
 
-    public Pegs collisionPeg() {
-
-        Balle b = modele.balle;
-        for (int i = 0; i < modele.niveau.list_peg.size(); i++) {
-            Pegs p = (Pegs) modele.niveau.list_peg.get(i);
-            double distance = Math.sqrt(Math.pow(b.getX() - p.getX(), 2) +
-                    Math.pow(b.getY() - p.getY(), 2));
-
-            if (distance <= b.rayon + p.rayon) {
-                System.out.println("x de balle : " + b.getX() + '\n' + "y de balle : " + b.getY() + '\n' + "x de peg : "
-                        + p.getX() + '\n' + "y de peg : " + p.getY() + '\n' + "distance : " + distance + '\n'
-                        + "rayon balle : " + b.rayon + '\n' + "rayon peg : " + p.rayon + '\n');
-                return p; // Collision détectée
-            }
-        }
-        return null;
-
-    }
 
     public void tirer() {
-        this.modele.setBalle(null);
-        this.angleTir = this.view.getAngle();
-        this.modele.setBalle(new Balle(600d, 0d, 200d));
+        if (!this.balleEnJeu) {
+            view.nbMunition++;
+            view.munition.removeAll();
+            view.afficheMunition();
+            view.munition.revalidate();
+
+            this.balleEnJeu = true;
+            this.modele.setBalle(null);
+            t=0;
+            this.angleTir=this.view.getAngle();
+            this.modele.setBalle(new Balle(2000/2,0d,600d, 180-this.angleTir));
+        }
     }
 
     // -----------------GETTERS----------------------
@@ -122,8 +119,16 @@ public class Controleur {
         this.angleTir = angleTir;
     }
 
+    // -----------------GETTERS----------------------
     public void setTimer(Timer timer) {
         this.timer = timer;
     }
 
+    public double getT() {
+        return this.t;
+    }
+
+    public void balleHorsJeu() {
+        this.balleEnJeu = false;
+    }
 }

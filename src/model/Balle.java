@@ -1,28 +1,28 @@
 package model;
 
-import java.util.Timer;
+import view.View;
 
 public class Balle {
+    
+    protected double x;
+    protected double vY;
+    protected double y;
+    protected double vX;
+    protected double v0;
+    protected final double rayon = 50;
+    protected final double g = 500;
 
-  public double x;
-  public double x0;
-  public double y;
-  public double y0;
-  public double v0;
-  public final double rayon = 25;
-  public final double g = 150;
-
-  public Balle(double x0, double y0, double v0) {
-    this.x0 = x0;
+  public Balle(double x0, double y0, double v0, double angle) {
     this.x = x0;
-    this.y0 = y0;
     this.y = y0;
-    this.v0 = v0;
+    this.vX = Math.cos(Math.toRadians(angle)) * v0;
+    this.vY = Math.sin(Math.toRadians(angle)) * v0;
   }
 
-  public void update(double angle, double t) {
-    x = Math.cos(Math.toRadians(angle)) * v0 * t + this.x0;
-    y = (g * t * t) / 2 + (v0) * (Math.sin(Math.toRadians(angle))) * t + this.y0;
+  public void update() {
+    x = x + 0.03 * vX;
+    y = y + 0.03 * vY;
+    this.vY = vY + 0.03 * g;
   }
 
   public double getX() {
@@ -37,12 +37,24 @@ public class Balle {
     return this.rayon;
   }
 
-  /*
-   * public boolean collision(Pegs o) {
-   * return (o.getRayon() + this.rayon) * (o.getRayon() + this.rayon) == (this.x -
-   * o.getX()) * (this.x - o.getX())
-   * + (this.y - o.getY()) * (this.y - o.getY());
-   * }
-   */
+  public boolean collision(Obstacle o) {
+    return ((o.getRayon() + this.rayon) / 2) >= Math
+        .sqrt((this.x - o.getX()) * (this.x - o.getX()) + (this.y - o.getY()) * (this.y - o.getY()));
+  }
 
+  public void rebond(Obstacle o) {
+    if (collision(o)) {
+      double n = this.vX; // Variable auxiliaire pour garder vX avant qu'on modifie sa valeur
+      this.vX = this.vX - (2 * (this.vX * (this.x - o.getX()) + this.vY * ((this.y - o.getY())))
+          / ((this.x - o.getX()) * (this.x - o.getX()) + (this.y - o.getY()) * (this.y - o.getY())))
+          * (this.x - o.getX());
+      this.vY = this.vY - (2 * (n * (this.x - o.getX()) + this.vY * ((this.y - o.getY())))
+          / ((this.x - o.getX()) * (this.x - o.getX()) + (this.y - o.getY()) * (this.y - o.getY())))
+          * (this.y - o.getY());
+    }
+  }
+
+  public void rebondMur(){
+    this.vX = this.vX *-1;
+  }
 }
