@@ -36,16 +36,18 @@ public class Niveau {
         }
     }
 
+
     protected void diagonal(double x, double y, int pegUsed, boolean direction, boolean sens) {
         double nvx = x;
         double nvy = y;
         for (int i = 0; i < pegUsed; i++) {
             Pegs p = new Pegs(nvx, nvy, 1,Image.pegRondRose);
             list.add(p);
-            nvx = direction ? nvx - p.getDiametre() : nvx + p.getDiametre();
-            nvy += p.getDiametre();
+            nvx = direction? nvx + p.getDiametre() : nvx - p.getDiametre();//true pour droite, false pour gauche
+            nvy = sens? nvy - p.getRayon() : nvy + p.getRayon();//true pour haut, false pour bas
         }
     }
+
 
     protected void carres(double x, double y, int pegCote) {
         lignes(x, y, pegCote + 2);
