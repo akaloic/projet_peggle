@@ -38,6 +38,14 @@ public class Modele {
     public void setObstacles(Obstacle[] obstacles) {
         this.obstacles = obstacles;
     }
+    public Player getPlayer(){
+        return player;
+    }
+
+    public void setPlayer(Player p){
+        player=p;
+    }
+
     // ---------GETTER SETTER---------
 
 }
