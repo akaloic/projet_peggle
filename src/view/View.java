@@ -13,6 +13,7 @@ import java.awt.event.*;
 import java.awt.geom.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.util.Timer;
 
 import javax.sound.sampled.*;
 
@@ -22,6 +23,7 @@ public class View extends JFrame {
     public JPanel fond;
     public JPanel munition;
     public JPanel fondGauche;
+    public JPanel fondDroite;
     public JPanel partie;
 
     public JButton leave;
@@ -83,17 +85,21 @@ public class View extends JFrame {
     }
 
     public JPanel JeuPanel(Controleur controleur) {
-        nbMunition = 4; // Pour le moment on met 10 munitions
+        nbMunition = 4; // provisoire a remplacer par munition joueur
+        controleur.modele.niveau = new Niveau(numNiveau);
 
         fond = new JPanel();
         fond.setLayout(new BorderLayout());
-        // --------------DROITE---------------------
+        // --------------CENTRE---------------------
         partie = new JPanel() {
             @Override
             public void paint(Graphics g) {
                 super.paint(g);
                 dessineCanon(g);
                 drawBall(g);
+                for (int i = 0; i < controleur.modele.niveau.list_peg.size(); i++) {
+                    controleur.modele.niveau.list_peg.get(i).dessine(g);
+                }
             }
         };
         partie.setSize(new Dimension(800, 600));
@@ -111,7 +117,7 @@ public class View extends JFrame {
 
         partie.add(puit);
         fond.add(partie, BorderLayout.CENTER);
-        // --------------DROITE---------------------
+        // --------------CENTRE---------------------
 
         // --------------GAUCHE---------------------
         fondGauche = new JPanel();
@@ -135,6 +141,15 @@ public class View extends JFrame {
 
         fond.add(fondGauche, BorderLayout.WEST);
         // --------------GAUCHE---------------------
+
+        // --------------DROITE---------------------
+        fondDroite = new JPanel();
+        fondDroite.setLayout(new BorderLayout());
+        fondDroite.setBackground(Color.gray);
+        fondDroite.setPreferredSize(new Dimension(getWidth() / 11, getHeight()));
+
+        fond.add(fondDroite, BorderLayout.EAST);
+        // --------------DROITE---------------------
 
         add(fond);
         setVisible(true);
@@ -258,11 +273,11 @@ public class View extends JFrame {
         double x = (partie.getWidth() / 2) - (5 * heightBase / 6) * Math.sin(theta) - 10/* Width balle */;
         double y = (5 * heightBase / 6) * Math.cos(theta) - 10/* Height balle */;
         // Pour calculer nouvelles coordonnées de la balle après rotaion
-        Balle fantome = new Balle(600d, 0d, 200d, 180 - angle);
+        Balle fantome = new Balle(partie.getWidth() / 2, 0d, 200d, 180 - angle);
         GeneralPath genPath = new GeneralPath();
         for (int i = 0; i < 80; i++) {
             fantome.update();
-            double a = fantome.getX() + fantome.getRayon() / 2;
+            double a = fantome.getX() + fantome.rayon / 2;
             double b = fantome.getY();
             genPath.moveTo(a, b);
             genPath.lineTo(a, b);
@@ -275,10 +290,6 @@ public class View extends JFrame {
         g2d.setStroke(new BasicStroke(1));
         g2d.setPaint(null);
         g2d.setColor(Color.lightGray);
-
-        for (int i = 0; i < controleur.getModele().getNiveau().list_peg.size(); i++) {
-            controleur.getModele().getNiveau().list_peg.get(i).dessine(g);
-        }
     }
 
     public void calculeAngle() {
@@ -311,11 +322,11 @@ public class View extends JFrame {
 
     public void drawBall(Graphics g) {
         Graphics g2d = g;
-        if (this.controleur.getModele().getBalle() != null) {
-            g2d.fillOval((int) (controleur.getModele().getBalle().getX() * ratioX),
-                    (int) (controleur.getModele().getBalle().getY() * ratioY),
-                    (int) (controleur.getModele().getBalle().getRayon() * ratioX),
-                    (int) (controleur.getModele().getBalle().getRayon() * ratioY));
+        if (this.controleur.modele.balle != null) {
+            g2d.fillOval((int) (controleur.modele.balle.getX() * ratioX),
+                    (int) (controleur.modele.balle.getY() * ratioY),
+                    (int) (controleur.modele.balle.rayon * ratioX),
+                    (int) (controleur.modele.balle.rayon * ratioY));
         }
     }
 
@@ -355,7 +366,7 @@ public class View extends JFrame {
         }
     }
 
-    public int getNumNiveau() {
-        return this.numNiveau;
+    public void addExplosion(double x, double y) {
+        partie.add(new Explosion(x * ratioX, y * ratioY));
     }
 }

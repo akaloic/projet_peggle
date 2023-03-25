@@ -18,13 +18,20 @@ public class Pegs extends Obstacle {
         super(x, y, rayon, rayon, false, v);
         this.rayon = rayon;
     }
-    public double getRayon(){return this.rayon;}
-    public double getDiametre(){return this.rayon*2;}
-    public void dessine(Graphics g){
-        int gx=(int)(this.x*View.ratioX);
-        int gy=(int)(this.y*View.ratioY);
-        int gw=(int)(this.rayon*View.ratioX);
-        int gh=(int)(this.rayon*View.ratioY);
-        g.fillOval(gx,gy,gw,gh);
+
+    public double getRayon() {
+        return this.rayon;
+    }
+
+    public double getDiametre() {
+        return this.rayon * 2;
+    }
+
+    public void dessine(Graphics g) {
+        int gx = (int) (this.x * View.ratioX);
+        int gy = (int) (this.y * View.ratioY);
+        int gw = (int) (this.rayon * View.ratioX);
+        int gh = (int) (this.rayon * View.ratioY);
+        g.fillOval(gx, gy, gw, gh);
     }
 }
