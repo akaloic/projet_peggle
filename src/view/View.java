@@ -83,6 +83,14 @@ public class View extends JFrame {
         pane.setBorder(BorderFactory.createTitledBorder("Bienvenue dans notre jeu"));
         add(pane);
 
+        JLabel nameLabel=new JLabel("Pseudo : ");
+        nameLabel.setBounds(width/2-60, height-height/2, 50, 30);
+        pane.add(nameLabel);
+        JTextField nameField=new JTextField("test");
+        nameField.setBounds(width/2, height - height/2, 50, 30);
+        pane.add(nameField);
+
+
         JLabel titrePane = new JLabel("HIT THE PEGGLES");
         titrePane.setBounds(width / 2 - 65, height - height * 2 / 3, 400, 100);
         pane.add(titrePane);
@@ -96,6 +104,7 @@ public class View extends JFrame {
 
         start.addActionListener(e->{
             son.stop();
+            controleur.modele.setPlayer(new Player(nameField.getText(),4));
             changerPanel(choixNiveauPane(controleur));
         });
 
@@ -215,9 +224,6 @@ public class View extends JFrame {
         JButton precedent = new JButton("Acceuil");
         precedent.setBounds(0, 0, 100, 100);
         choixNiv.add(precedent);
-        JTextField name=new JTextField("");
-        name.setBounds(600, 500, 100, 30);
-        choixNiv.add(name);
         ratioX = ratioX/8;
         ratioY = ratioY/8;
 
@@ -250,7 +256,6 @@ public class View extends JFrame {
             xNiv += 1.5*wNiv;
             choixNiv.add(diviseur);
             nameNiv.setName("niveau"+i);
-            this.controleur.modele.setPlayer(new Player(name.getText(),4));
             nameNiv.addActionListener(e->{
                 char lettre = nameNiv.getName().charAt(nameNiv.getName().length()-1);
                 numNiveau = Integer.parseInt(""+lettre);
