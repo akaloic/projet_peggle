@@ -112,7 +112,7 @@ public class View extends JFrame {
 
     public JPanel JeuPanel(Controleur controleur) {
         nbMunition = 4; // provisoire a remplacer par munition joueur
-        controleur.modele.niveau = new Niveau(numNiveau);
+
 
         ratioX = (float)(width-width/7*2)/800;
         ratioY = (float)height/600;
