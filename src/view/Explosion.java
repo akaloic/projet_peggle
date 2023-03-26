@@ -11,7 +11,7 @@ import javax.swing.JPanel;
 
 public class Explosion extends JPanel {
 
-    public double x, y, halfX, halfY;
+    public double x, y;
     public int radius;
     public double maxRadius = 60.0;
     public boolean active;
@@ -19,8 +19,6 @@ public class Explosion extends JPanel {
     public Explosion(double x, double y) {
         this.x = x;
         this.y = y;
-        this.halfX = getWidth() / 2;
-        this.halfY = getHeight() / 2;
         this.radius = 0;
         this.active = true;
         int size = (int) (maxRadius * 2);
@@ -38,8 +36,6 @@ public class Explosion extends JPanel {
             g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
             g2d.setColor(Color.RED);
             g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.6f));
-            // Ellipse2D.Double circle = new Ellipse2D.Double(halfX - radius, halfY -
-            // radius, radius, radius);
             System.out.println(getWidth() / 2 - radius);
             Ellipse2D.Double circle = new Ellipse2D.Double(getWidth() / 2 - radius, getWidth() / 2 - radius, radius,
                     radius);
