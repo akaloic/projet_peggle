@@ -5,11 +5,13 @@ public class Modele {
     public Balle balle;
     public Obstacle[] obstacles;
     public Niveau niveau;
+    public Player player;
 
     public Modele() {
-        balle = new Balle(600d, 0d, 200d);
+        balle = null;
         obstacles = new Obstacle[0];
-        niveau = new Niveau(1);
+        player = new Player("Joueur", 4);
+        // niveau initié dans la view
     }
 
     // ---------GETTER SETTER---------
@@ -36,6 +38,14 @@ public class Modele {
     public void setObstacles(Obstacle[] obstacles) {
         this.obstacles = obstacles;
     }
+    public Player getPlayer(){
+        return player;
+    }
+
+    public void setPlayer(Player p){
+        player=p;
+    }
+
     // ---------GETTER SETTER---------
 
 }
