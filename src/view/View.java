@@ -236,60 +236,9 @@ public class View extends JFrame {
         int yNiv = precedent.getHeight() * 2;
         int wNiv = width/9;
         int hNiv = height/6;
-        for (int i = 1; i < 6; i++) {
-            JPanel diviseur = new JPanel(new BorderLayout());
-            int k = i;
-            JPanel vueMiniature = new JPanel(){
-                @Override
-                public void paint(Graphics g) {
-                    // TODO Auto-generated method stub
-                    super.paint(g);
-                    controleur.modele.setNiveau(new Niveau(k));
-                    dessineNiveau(g,controleur.modele.getNiveau().getList());
-                }
-            };
-            JButton nameNiv = new JButton("Niveau " + i);
-            diviseur.add(vueMiniature,BorderLayout.CENTER);
-            diviseur.add(nameNiv,BorderLayout.SOUTH);
-            diviseur.setBounds(xNiv, yNiv, wNiv, hNiv);
-
-            xNiv += 1.5*wNiv;
-            choixNiv.add(diviseur);
-            nameNiv.setName("niveau"+i);
-            nameNiv.addActionListener(e->{
-                char lettre = nameNiv.getName().charAt(nameNiv.getName().length()-1);
-                numNiveau = Integer.parseInt(""+lettre);
-                controleur.modele.setNiveau(new Niveau(numNiveau));
-                changerPanel(JeuPanel(this.controleur));
-                son.stop();
-            });
-
-        }
-        xNiv = precedent.getWidth() * 2;
-        for(int i = 0; i < Sauvegarde.liste.size(); i++){
-            JPanel diviseurEdit = new JPanel(new BorderLayout());
-            int k = i;
-            JPanel editMinature = new JPanel(){
-                @Override
-                public void paint(Graphics g) {
-                    // TODO Auto-generated method stub
-                    super.paint(g);
-                    dessineNiveau(g,Sauvegarde.charge(k));
-                }   
-            };
-
-            JButton editI = new JButton("Edit "+i);
-            diviseurEdit.add(editMinature,BorderLayout.CENTER);
-            diviseurEdit.add(editI,BorderLayout.SOUTH);
-            diviseurEdit.setBounds(xNiv, yNiv+400, wNiv, hNiv);
-            choixNiv.add(diviseurEdit);
-            editI.addActionListener(e->{
-                controleur.modele.getNiveau().setList(Sauvegarde.charge(k));
-                changerPanel(JeuPanel(this.controleur));
-                son.stop();
-            });
-            xNiv += 1.5*wNiv;
-        }
+        afficheMiniature(1, choixNiv, height/2-200);
+        afficheMiniature(2, choixNiv, height/2);
+        
         return choixNiv;
     }
 
@@ -302,24 +251,80 @@ public class View extends JFrame {
     }
 
     public JPanel choixEdit(){
-        JPanel choix = new JPanel(new GridLayout(1,6));
+        JPanel choix = new JPanel(null);
         JButton acceuil = new JButton("acceuil");
         acceuil.addActionListener(
             (ActionEvent e) -> {
                 this.invalidate();
                 changerPanel(menuPrincipal());
         });
+        acceuil.setBounds(0,0,100,50);
         choix.add(acceuil);
-        for(int i= 0; i < Sauvegarde.liste.size()+1; i++){
-            JButton j = new JButton(i+"");
-            int k = i;
-            j.addActionListener(
-                (ActionEvent e) -> {
-                   changerPanel(new Edit(null, width, height,k,this)); 
-            });
-            choix.add(j);
-        }
+        ratioX = ratioX/8;
+        ratioY = ratioY/8;
+        afficheMiniature(3, choix,height/2);
         return choix;
+    }
+
+    public void afficheMiniature(int mode,JPanel pane,int hauteur){
+        //1 = Niveau imposé
+        //2 = Niveau créer soit même
+        //3 = menu d'editing
+        JPanel bis = new JPanel(null);
+        int borne = mode == 1? 5: Math.max(Sauvegarde.liste.size(),1);
+        bis.setBounds(width/30, hauteur, width, height/6);
+        for(int i= 0; i < borne; i++){
+            int k = i;
+            JPanel panelPrincipal = new JPanel(new BorderLayout());
+            JPanel miniature = new JPanel(){
+                @Override
+                public void paint(Graphics g) {
+                    // TODO Auto-generated method stub
+                    super.paint(g);
+                    if(mode != 1){
+                        dessineNiveau(g,Sauvegarde.charge(k));
+                    }
+                    if(mode == 1){
+                        controleur.modele.setNiveau(new Niveau(k+1));
+                        dessineNiveau(g,controleur.modele.getNiveau().getList());
+                    }
+                }   
+            };
+            JButton bouton = new JButton("Edit "+(k+1));
+            if(mode == 1){
+                bouton = new JButton("Niveau "+(k+1));
+            }
+            panelPrincipal.add(miniature,BorderLayout.CENTER);
+            panelPrincipal.add(bouton,BorderLayout.SOUTH);
+            bouton.addActionListener(
+                (ActionEvent e) -> {
+                    ratioX = (float)(width-width/7*2)/800;
+                    ratioY = (float)height/600;
+                    if(mode == 1){
+                        controleur.modele.setNiveau(new Niveau(k+1));
+                        changerPanel(JeuPanel(this.controleur));
+                    }
+                    if(mode == 2){
+                        controleur.modele.setNiveau(new Niveau(1));//Sinon le niveau est pas initialisé
+                        controleur.modele.getNiveau().setList(Sauvegarde.charge(k));
+                        changerPanel(JeuPanel(this.controleur));    
+                    }
+                    if(mode == 3){
+                        changerPanel(new Edit(null, width, height,k,this)); 
+                    }
+                    son.stop();
+            });
+            miniature.setBackground(Color.lightGray);
+            miniature.setBorder(BorderFactory.createLineBorder(Color.black));
+            panelPrincipal.setBounds(width/30+i*width/6,0,width/8, height/6);
+            bis.add(panelPrincipal);
+        }
+        JScrollPane defile = new JScrollPane(bis, JScrollPane.VERTICAL_SCROLLBAR_NEVER, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        bis.setPreferredSize(new Dimension(width/30+borne*width/6,height*5));
+        defile.setBounds(width/30, hauteur, width, height/5);
+        bis.setBackground(Color.lightGray);
+        pane.add(defile);
+            
     }
 
     public void placePuit() {
