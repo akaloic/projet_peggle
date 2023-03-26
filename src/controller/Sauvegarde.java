@@ -27,7 +27,9 @@ public class Sauvegarde {
     }
 
     public static void save(ArrayList<Obstacle> a,int n){
-        liste.set(n, a);
+      if(a != null || n != 0){
+         liste.set(n, a);
+      }
         try {
             FileOutputStream fileOut = new FileOutputStream("save.ser");
             ObjectOutputStream out = new ObjectOutputStream(fileOut);

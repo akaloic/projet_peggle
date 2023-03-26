@@ -276,7 +276,7 @@ public class View extends JFrame {
         for(int i= 0; i < borne; i++){
             int k = i;
             JPanel panelPrincipal = new JPanel(new BorderLayout());
-            JPanel miniature = new JPanel(){
+            JPanel miniature = new JPanel(null){
                 @Override
                 public void paint(Graphics g) {
                     // TODO Auto-generated method stub
@@ -290,6 +290,17 @@ public class View extends JFrame {
                     }
                 }   
             };
+            if(mode == 3){
+                JButton supprimer = new JButton("x");
+                supprimer.addActionListener(
+                    (ActionEvent e) -> {
+                        Sauvegarde.liste.remove(k);
+                        changerPanel(choixEdit());
+                        Sauvegarde.save(null, 0);
+                });
+                supprimer.setSize(new Dimension(20,20));
+                miniature.add(supprimer);
+            }
             JButton bouton = new JButton("Edit "+(k+1));
             if(mode == 1){
                 bouton = new JButton("Niveau "+(k+1));
@@ -319,8 +330,20 @@ public class View extends JFrame {
             panelPrincipal.setBounds(width/30+i*width/6,0,width/8, height/6);
             bis.add(panelPrincipal);
         }
+        if(mode == 3){
+            JButton ajoute = new JButton("Nouveau");
+            ajoute.addActionListener(
+                (ActionEvent e) -> {
+                    ArrayList<Obstacle> a = new ArrayList<>();
+                    Sauvegarde.liste.add(a);
+                    Sauvegarde.save(a, borne);
+                    changerPanel(choixEdit());
+            });
+            ajoute.setBounds(width/30+borne*width/6,0,width/8, height/6);
+            bis.add(ajoute);
+        }
         JScrollPane defile = new JScrollPane(bis, JScrollPane.VERTICAL_SCROLLBAR_NEVER, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        bis.setPreferredSize(new Dimension(width/30+borne*width/6,height*5));
+        bis.setPreferredSize(new Dimension(width/30+(borne+1)*width/6,height*5));
         defile.setBounds(width/30, hauteur, width, height/5);
         bis.setBackground(Color.lightGray);
         pane.add(defile);
