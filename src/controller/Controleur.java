@@ -46,9 +46,11 @@ public class Controleur {
                             if (modele.getBalle().collision((Pegs) modele.niveau.list_peg.get(i))) {
                                 boolean detruit = modele.niveau.detruit(i);
                                 if (detruit) {
-                                    double x = modele.niveau.list_peg.get(i).getX();
-                                    double y = modele.niveau.list_peg.get(i).getY();
-                                    view.addExplosion(x, y);
+                                    if (facteur % 1 == 0) {
+                                        double x = modele.niveau.list_peg.get(i).getX();
+                                        double y = modele.niveau.list_peg.get(i).getY();
+                                        view.addExplosion(x, y);
+                                    }
                                     modele.niveau.list_peg.remove(i);
                                 }
                                 modele.player.calculScore(detruit, facteur++);
