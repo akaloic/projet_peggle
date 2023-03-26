@@ -8,6 +8,7 @@ public class Image {
     public static BufferedImage pegRondBleu;
     public static BufferedImage pegRondRose;
     public static BufferedImage pegRondRouge;
+    public static BufferedImage quad;
     
     public Image(){
         BufferedImage img = new BufferedImage(20, 20, BufferedImage.TYPE_INT_RGB);
@@ -34,7 +35,13 @@ public class Image {
             e.printStackTrace();
         }
         pegRondRouge = img;
-
+        try {
+            img = ImageIO.read(new File("ressources/quad.png"));
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        quad = img;
 
         
     }

@@ -151,7 +151,7 @@ public class View extends JFrame {
         ImageIcon nouvelleIcone = new ImageIcon(nouvelleImage);
         puit = new JLabel(nouvelleIcone);
         puit.setSize(new Dimension(partie.getWidth() / 8, partie.getHeight() / 3));
-        puit.setLocation(0, partie.getHeight() + partie.getHeight() / 3);
+        puit.setLocation(0, (int)(partie.getHeight()*ratioY)-partie.getHeight()/8);
 
 
         partie.add(puit);

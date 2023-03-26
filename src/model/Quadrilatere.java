@@ -7,11 +7,13 @@ public class Quadrilatere extends Obstacle {//peut etre un carré comme un recta
         rayon = (largeur + hauteur)/2;
     }
     public void dessine(Graphics g){
-        int gx=(int)(this.x*View.getRatioX());
-        int gy=(int)(this.y*View.getRatioY());
+        int gx=(int)(this.x*View.ratioX);
+        int gy=(int)(this.y*View.ratioY);
         int gw=(int)(this.largeur*View.getRatio());
         int gh=(int)(this.hauteur*View.getRatio());
         g.fillRect(gx,gy,gw,gh);
+        Graphics2D g2d = (Graphics2D)g;
+        g2d.drawImage(this.image,gx, gy,gw,gh,null);
     }
 
     public Quadrilatere clone(double x, double y, int v, double rayon){
