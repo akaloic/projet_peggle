@@ -491,10 +491,7 @@ public class View extends JFrame {
     public void drawBall(Graphics g) {
         Graphics g2d = g;
         if (this.controleur.modele.balle != null) {
-            g2d.fillOval((int) (controleur.modele.balle.getX()),
-                    (int) (controleur.modele.balle.getY()),
-                    (int) (controleur.modele.balle.rayon/2),
-                    (int) (controleur.modele.balle.rayon/2));
+            g2d.fillOval((int) (controleur.modele.balle.getX()),(int) (controleur.modele.balle.getY()),(int) (controleur.modele.balle.rayon/2),(int) (controleur.modele.balle.rayon/2));
         }
     }
 
