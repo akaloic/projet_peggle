@@ -36,7 +36,6 @@ public class Explosion extends JPanel {
             g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
             g2d.setColor(Color.RED);
             g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.6f));
-            System.out.println(getWidth() / 2 - radius);
             Ellipse2D.Double circle = new Ellipse2D.Double(getWidth() / 2 - radius, getWidth() / 2 - radius, radius,
                     radius);
             g2d.draw(circle);

@@ -77,19 +77,6 @@ public class Controleur {
                         }
                     }
 
-                    // munition
-                    /*
-                     * if (modele.balle.getY() >= view.puit.getY() && (modele.balle.getX() >=
-                     * view.puit.getX()
-                     * && modele.balle.getX() <= view.puit.getWidth())) {
-                     * view.nbMunition++;
-                     * view.munition.removeAll();
-                     * view.afficheMunition();
-                     * view.munition.revalidate();
-                     * // System.out.println("CA MARCHEEEEEEEEEEE");
-                     * }
-                     */
-
                     if (modele.getBalle().getY() > view.getPartie().getHeight()) {
                         modele.setBalle(null);
                         balleHorsJeu();
