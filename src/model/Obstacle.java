@@ -1,11 +1,14 @@
 package model;
 
 import java.awt.Graphics;
+import java.awt.image.BufferedImage;
 
-public class Obstacle extends Objet {
+public class Obstacle extends Objet{
 
-    public boolean estMort;
-    public int vie;
+    protected boolean estMort; 
+    protected int vie;
+    protected double rayon;
+    public BufferedImage image;
 
     public Obstacle(double x, double y, double largeur, double hauteur, boolean estMort, int vie) {
         super(x, y, largeur, hauteur, 0);
@@ -23,6 +26,16 @@ public class Obstacle extends Objet {
     // ---------GETTER GETTER---------
     public boolean isDead() {
         return this.vie <= 0;
+    }
+    public double getRayon(){
+        return this.rayon;
+    }
+    public void setRayon(double i){
+        this.rayon = i;
+    }
+
+    public Obstacle clone(double x, double y, int v, double rayon){
+        return new Obstacle(0);
     }
 
     public Obstacle(int v) {
@@ -52,6 +65,14 @@ public class Obstacle extends Objet {
 
     public double getHeight() {
         return super.getHauteur();
+    }
+
+    public void setX(double n){
+        this.x = n;
+    }
+
+    public void setY(double n){
+        this.y = n;
     }
 
     public void setVie(int pdv) {

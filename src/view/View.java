@@ -1,13 +1,13 @@
 package view;
 
 import controller.Controleur;
+import controller.Edit;
+import controller.Sauvegarde;
+
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.ActionEvent;
 import model.*;
-import model.sousObstacle.ObstacleRebondissant;
-import model.sousObstacle.ObstacleRectangulaire;
-import model.sousObstacle.PegRond;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -17,22 +17,24 @@ import java.awt.geom.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.Timer;
+import java.util.ArrayList;
+import java.awt.Image;
 
 import javax.sound.sampled.*;
 
 public class View extends JFrame {
 
-    public JLabel puit;
-    public JPanel fond;
-    public JPanel munition;
-    public JPanel fondGauche;
-    public JPanel fondDroite;
-    public JPanel partie;
+    public JLabel puit = new JLabel();
+    public JPanel fond = new JPanel();
+    public JPanel munition = new JPanel();
+    public JPanel fondGauche = new JPanel();
+    public JPanel fondDroite = new JPanel();
+    public JPanel partie = new JPanel();
 
     public JButton leave;
     public boolean enJeu = true;
     public boolean balleEnJeu = false;
-    public int angle;
+    public double angle;
     public String chemin = System.getProperty("user.dir") + "/ressources/";
     public Timer timer;
     public int directionX = 5;
@@ -54,25 +56,40 @@ public class View extends JFrame {
 
     public boolean versDroite = true;
 
+
+
     public View(Controleur controleur) {
-        String urlDuSon = "ressources/SonsWav/Accueil.wav";
-        LancerMusic(urlDuSon);
+        this.controleur = controleur;
         Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
         width = (int) size.getWidth();
         height = (int) size.getHeight();
-
         this.setSize(width, height);
         this.setTitle("Hit the Peggles");
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setUndecorated(true); // nécessaire sinon this.getHeight et this.getWidth renvoie 0
         this.setVisible(true);
-        this.controleur = controleur;
+
+        changerPanel(menuPrincipal());
+    }
+
+    public JPanel menuPrincipal(){
+
+        String urlDuSon = "ressources/SonsWav/Accueil.wav";
+        LancerMusic(urlDuSon);
 
         JPanel pane = new JPanel();
         pane.setSize(width, height);
         pane.setLayout(null);
         pane.setBorder(BorderFactory.createTitledBorder("Bienvenue dans notre jeu"));
-        this.add(pane);
+        add(pane);
+
+        JLabel nameLabel=new JLabel("Pseudo : ");
+        nameLabel.setBounds(width/2-60, height-height/2, 50, 30);
+        pane.add(nameLabel);
+        JTextField nameField=new JTextField("test");
+        nameField.setBounds(width/2, height - height/2, 50, 30);
+        pane.add(nameField);
+
 
         JLabel titrePane = new JLabel("HIT THE PEGGLES");
         titrePane.setBounds(width / 2 - 65, height - height * 2 / 3, 400, 100);
@@ -80,16 +97,34 @@ public class View extends JFrame {
         JButton start = new JButton("START");
         start.setBounds(width / 2 - 50, height - height / 3, 100, 100);
         pane.add(start);
-        start.addActionListener(e -> {
+
+        JButton edit = new JButton("edit");
+        edit.setBounds(width/2-50,height - height/3+200,100,100);
+        pane.add(edit);
+
+        start.addActionListener(e->{
             son.stop();
-            changerPanel(choixNiveauPane(this.controleur));
+            controleur.modele.setPlayer(new Player(nameField.getText(),4));
+            changerPanel(choixNiveauPane(controleur));
         });
-        JeuPanel(controleur);
+
+        edit.addActionListener(e->{
+            son.stop();
+            changerPanel(choixEdit());
+        });
+        ratioX = (float)(width-width/7*2)/800;
+        ratioY = (float)height/600;
+        return pane;
+
     }
+
 
     public JPanel JeuPanel(Controleur controleur) {
         nbMunition = 4; // provisoire a remplacer par munition joueur
-        controleur.modele.niveau = new Niveau(numNiveau);
+
+
+        ratioX = (float)(width-width/7*2)/800;
+        ratioY = (float)height/600;
 
         fond = new JPanel();
         fond.setLayout(new BorderLayout());
@@ -100,16 +135,8 @@ public class View extends JFrame {
                 super.paint(g);
                 dessineCanon(g);
                 drawBall(g);
-
-                PegRond pRond = new PegRond(0, 0);
-                // dessinePegRond(g, pRond); // ca marche
-                ObstacleRebondissant oRebond = new ObstacleRebondissant(100, 100);
-                // dessineObstacleRebond(g, oRebond); // ca marche
-                ObstacleRectangulaire oR = new ObstacleRectangulaire(50, 50);
-                // dessineObstacleRect(g, oR); // ca marche
-
-                for (int i = 0; i < controleur.modele.niveau.list_peg.size(); i++) {
-                    controleur.modele.niveau.list_peg.get(i).dessine(g);
+                for (int i = 0; i < controleur.modele.niveau.list.size(); i++) {
+                    controleur.modele.niveau.list.get(i).dessine(g);
                 }
             }
         };
@@ -124,7 +151,8 @@ public class View extends JFrame {
         ImageIcon nouvelleIcone = new ImageIcon(nouvelleImage);
         puit = new JLabel(nouvelleIcone);
         puit.setSize(new Dimension(partie.getWidth() / 8, partie.getHeight() / 3));
-        puit.setLocation(0, partie.getHeight() + partie.getHeight() / 3);
+        puit.setLocation(0, (int)(partie.getHeight()*ratioY)-partie.getHeight()/8);
+
 
         partie.add(puit);
         fond.add(partie, BorderLayout.CENTER);
@@ -134,7 +162,7 @@ public class View extends JFrame {
         fondGauche = new JPanel();
         fondGauche.setLayout(new BorderLayout());
         fondGauche.setBackground(Color.gray);
-        fondGauche.setPreferredSize(new Dimension(this.getWidth() / 7, this.getHeight()));
+        fondGauche.setPreferredSize(new Dimension(getWidth() / 7, getHeight()));
 
         munition = new JPanel();
         munition.setLayout(new GridLayout(10, 1));
@@ -147,8 +175,18 @@ public class View extends JFrame {
             }
         });
 
+        JButton retour = new JButton("Revenir menu");
+        retour.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                changerPanel(choixNiveauPane(controleur));
+            }
+        });
+
+        JPanel partieBas = new JPanel(new BorderLayout());
+        partieBas.add(leave,BorderLayout.WEST);
+        partieBas.add(retour,BorderLayout.EAST);
         fondGauche.add(munition, BorderLayout.CENTER);
-        fondGauche.add(leave, BorderLayout.SOUTH);
+        fondGauche.add(partieBas, BorderLayout.SOUTH);
 
         fond.add(fondGauche, BorderLayout.WEST);
         // --------------GAUCHE---------------------
@@ -164,8 +202,8 @@ public class View extends JFrame {
 
         add(fond);
         setVisible(true);
-        ratioX = (width - munition.getWidth()) / 2000f;
-        ratioY = height / 1325f;
+        ratioX = (float)(width-width/7*2)/800;
+        ratioY = (float)height/600;
 
         partie.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
@@ -180,47 +218,140 @@ public class View extends JFrame {
         String url = "ressources/SonsWav/ChoixNiveau.wav";
         LancerMusic(url);
         JPanel choixNiv = new JPanel();
-        choixNiv.setBackground(Color.BLUE);
+        choixNiv.setBackground(Color.lightGray);
         choixNiv.setLayout(null);
-        choixNiv.setSize(this.width, this.height);
+        choixNiv.setSize(width, height);
         JButton precedent = new JButton("Acceuil");
         precedent.setBounds(0, 0, 100, 100);
         choixNiv.add(precedent);
-        precedent.addActionListener(e -> {
+        ratioX = ratioX/8;
+        ratioY = ratioY/8;
+
+        precedent.addActionListener(e->{
             this.invalidate();
             son.stop();
-            new View(this.controleur);
+            changerPanel(menuPrincipal());
         });
         int xNiv = precedent.getWidth() * 2;
         int yNiv = precedent.getHeight() * 2;
-        int wNiv = 100;
-        int hNiv = 100;
-        for (int i = 1; i < 6; i++) {
-            ;
-            JButton nameNiv = new JButton("Niveau " + i);
-            nameNiv.setBounds(xNiv, yNiv, wNiv, yNiv);
-            xNiv += 2 * wNiv;
-            choixNiv.add(nameNiv);
-            nameNiv.setName("niveau" + i);
-            nameNiv.addActionListener(e -> {
-                char lettre = nameNiv.getName().charAt(nameNiv.getName().length() - 1);
-                numNiveau = Integer.parseInt("" + lettre);
-                changerPanel(JeuPanel(this.controleur));
-                son.stop();
-            });
-        }
+        int wNiv = width/9;
+        int hNiv = height/6;
+        afficheMiniature(1, choixNiv, height/2-200);
+        afficheMiniature(2, choixNiv, height/2);
+        
         return choixNiv;
     }
 
+
     public void changerPanel(JPanel pane) {
-        this.invalidate();
-        this.setContentPane(pane);
-        this.repaint();
-        this.revalidate();
+        invalidate();
+        setContentPane(pane);
+        repaint();
+        revalidate();
+    }
+
+    public JPanel choixEdit(){
+        JPanel choix = new JPanel(null);
+        JButton acceuil = new JButton("acceuil");
+        acceuil.addActionListener(
+            (ActionEvent e) -> {
+                this.invalidate();
+                changerPanel(menuPrincipal());
+        });
+        acceuil.setBounds(0,0,100,50);
+        choix.add(acceuil);
+        ratioX = ratioX/8;
+        ratioY = ratioY/8;
+        afficheMiniature(3, choix,height/2);
+        return choix;
+    }
+
+    public void afficheMiniature(int mode,JPanel pane,int hauteur){
+        //1 = Niveau imposé
+        //2 = Niveau créer soit même
+        //3 = menu d'editing
+        JPanel bis = new JPanel(null);
+        int borne = mode == 1? 5: Math.max(Sauvegarde.liste.size(),1);
+        bis.setBounds(width/30, hauteur, width, height/6);
+        for(int i= 0; i < borne; i++){
+            int k = i;
+            JPanel panelPrincipal = new JPanel(new BorderLayout());
+            JPanel miniature = new JPanel(null){
+                @Override
+                public void paint(Graphics g) {
+                    // TODO Auto-generated method stub
+                    super.paint(g);
+                    if(mode != 1){
+                        dessineNiveau(g,Sauvegarde.charge(k));
+                    }
+                    if(mode == 1){
+                        controleur.modele.setNiveau(new Niveau(k+1));
+                        dessineNiveau(g,controleur.modele.getNiveau().getList());
+                    }
+                }   
+            };
+            if(mode == 3){
+                JButton supprimer = new JButton("x");
+                supprimer.addActionListener(
+                    (ActionEvent e) -> {
+                        Sauvegarde.liste.remove(k);
+                        changerPanel(choixEdit());
+                        Sauvegarde.save(null, 0);
+                });
+                supprimer.setSize(new Dimension(20,20));
+                miniature.add(supprimer);
+            }
+            JButton bouton = new JButton("Edit "+(k+1));
+            if(mode == 1){
+                bouton = new JButton("Niveau "+(k+1));
+            }
+            panelPrincipal.add(miniature,BorderLayout.CENTER);
+            panelPrincipal.add(bouton,BorderLayout.SOUTH);
+            bouton.addActionListener(
+                (ActionEvent e) -> {
+                    ratioX = (float)(width-width/7*2)/800;
+                    ratioY = (float)height/600;
+                    if(mode == 1){
+                        controleur.modele.setNiveau(new Niveau(k+1));
+                        changerPanel(JeuPanel(this.controleur));
+                    }
+                    if(mode == 2){
+                        controleur.modele.setNiveau(new Niveau(1));//Sinon le niveau est pas initialisé
+                        controleur.modele.getNiveau().setList(Sauvegarde.charge(k));
+                        changerPanel(JeuPanel(this.controleur));    
+                    }
+                    if(mode == 3){
+                        changerPanel(new Edit(null, width, height,k,this)); 
+                    }
+                    son.stop();
+            });
+            miniature.setBackground(Color.lightGray);
+            miniature.setBorder(BorderFactory.createLineBorder(Color.black));
+            panelPrincipal.setBounds(width/30+i*width/6,0,width/8, height/6);
+            bis.add(panelPrincipal);
+        }
+        if(mode == 3){
+            JButton ajoute = new JButton("Nouveau");
+            ajoute.addActionListener(
+                (ActionEvent e) -> {
+                    ArrayList<Obstacle> a = new ArrayList<>();
+                    Sauvegarde.liste.add(a);
+                    Sauvegarde.save(a, borne);
+                    changerPanel(choixEdit());
+            });
+            ajoute.setBounds(width/30+borne*width/6,0,width/8, height/6);
+            bis.add(ajoute);
+        }
+        JScrollPane defile = new JScrollPane(bis, JScrollPane.VERTICAL_SCROLLBAR_NEVER, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        bis.setPreferredSize(new Dimension(width/30+(borne+1)*width/6,height*5));
+        defile.setBounds(width/30, hauteur, width, height/5);
+        bis.setBackground(Color.lightGray);
+        pane.add(defile);
+            
     }
 
     public void placePuit() {
-        if (versDroite) {
+        if (versDroite) {;
             if (puit.getX() + puit.getWidth() >= partie.getWidth()) {
                 puit.setLocation(puit.getX() - 5, puit.getY());
                 versDroite = false;
@@ -235,24 +366,6 @@ public class View extends JFrame {
                 puit.setLocation(puit.getX() - 5, puit.getY());
             }
         }
-    }
-
-    public void dessinePegRond(Graphics g, PegRond peg) {
-        Graphics2D g2d = (Graphics2D) g;
-        g2d.setColor(Color.PINK);
-        g2d.fillOval((int) peg.getX(), (int) peg.getY(), (int) peg.getWidth(), (int) peg.getHeight());
-    }
-
-    public void dessineObstacleRect(Graphics g, ObstacleRectangulaire oR) {
-        Graphics2D g2d = (Graphics2D) g;
-        g2d.setColor(Color.PINK);
-        g2d.fillRect((int) oR.getX(), (int) oR.getY(), (int) oR.getWidth(), (int) oR.getHeight());
-    }
-
-    public void dessineObstacleRebond(Graphics g, ObstacleRebondissant oReb) {
-        Graphics2D g2d = (Graphics2D) g;
-        g2d.setColor(Color.PINK);
-        g2d.fillRect((int) oReb.getX(), (int) oReb.getY(), (int) oReb.getWidth(), (int) oReb.getHeight());
     }
 
     public void dessineCanon(Graphics g) {
@@ -302,13 +415,31 @@ public class View extends JFrame {
         double x = (partie.getWidth() / 2) - (5 * heightBase / 6) * Math.sin(theta) - 10/* Width balle */;
         double y = (5 * heightBase / 6) * Math.cos(theta) - 10/* Height balle */;
         // Pour calculer nouvelles coordonnées de la balle après rotaion
-        Balle fantome = new Balle(partie.getWidth() / 2, 0d, 200d, 180 - angle);
+        Balle fantome = new Balle(partie.getWidth()/2-25, 0d, 300d, 180 - this.angle);
         GeneralPath genPath = new GeneralPath();
-        for (int i = 0; i < 80; i++) {
+        boolean premierRebond = false;
+        while(!premierRebond){
             fantome.update();
-            double a = fantome.getX() + fantome.rayon / 2;
-            double b = fantome.getY();
-            genPath.moveTo(a, b);
+            double a = fantome.getX()+fantome.rayon/2;double b = fantome.getY();
+            for (Obstacle o : controleur.modele.getNiveau().list) {
+                if(fantome.collision(o)){
+                    fantome.rebond(o);
+                    premierRebond = true;
+                }
+            }
+            if(fantome.getY() > height){
+                premierRebond = true;
+            }
+            genPath.moveTo(a,b);
+            genPath.lineTo(a, b);
+        }
+        for(int i = 0; i < 10; i++){
+            fantome.update();
+            double a = fantome.getX()+fantome.rayon/2;double b = fantome.getY();
+            for (Obstacle o : controleur.modele.getNiveau().list) {
+                fantome.rebond(o);
+            }
+            genPath.moveTo(a,b);
             genPath.lineTo(a, b);
         }
 
@@ -319,6 +450,14 @@ public class View extends JFrame {
         g2d.setStroke(new BasicStroke(1));
         g2d.setPaint(null);
         g2d.setColor(Color.lightGray);
+        dessineNiveau(g,controleur.modele.getNiveau().list);
+
+    }
+
+    public void dessineNiveau(Graphics g,ArrayList<Obstacle> l){
+        for (int i = 0; i < l.size(); i++) {
+            l.get(i).dessine(g);
+        }
     }
 
     public void calculeAngle() {
@@ -327,7 +466,7 @@ public class View extends JFrame {
         int pointX = munition.getWidth() + partie.getWidth() / 2;
         double angle1 = Math.atan2(mouseY - 0, mouseX - pointX);
         double angle2 = Math.atan2(0, -pointX);
-        angle = (int) Math.toDegrees(angle2 - angle1);
+        angle = Math.toDegrees(angle2 - angle1);
     }
 
     public void afficheMunition() {
@@ -352,10 +491,7 @@ public class View extends JFrame {
     public void drawBall(Graphics g) {
         Graphics g2d = g;
         if (this.controleur.modele.balle != null) {
-            g2d.fillOval((int) (controleur.modele.balle.getX() * ratioX),
-                    (int) (controleur.modele.balle.getY() * ratioY),
-                    (int) (controleur.modele.balle.rayon * ratioX),
-                    (int) (controleur.modele.balle.rayon * ratioY));
+            g2d.fillOval((int) (controleur.modele.balle.getX()),(int) (controleur.modele.balle.getY()),(int) (controleur.modele.balle.rayon/2),(int) (controleur.modele.balle.rayon/2));
         }
     }
 
@@ -363,8 +499,8 @@ public class View extends JFrame {
         return this.partie;
     }
 
-    public int getAngle() {
-        return this.angle;
+    public double getAngle() {
+        return angle;
     }
 
     public void setColorX() {
@@ -398,4 +534,8 @@ public class View extends JFrame {
     public void addExplosion(double x, double y) {
         partie.add(new Explosion(x * ratioX, y * ratioY));
     }
+    public int getNumNiveau() {return numNiveau;}
+    public static double getRatioX() {return ratioX;}
+    public static double getRatioY() {return ratioY;}
+    public static double getRatio(){return (ratioX+ratioX)/2;}
 }

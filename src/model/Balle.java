@@ -33,20 +33,23 @@ public class Balle {
     return y;
   }
 
-  public boolean collision(Pegs o) {
-    return ((o.rayon + this.rayon) / 2) >= Math
-        .sqrt((this.x - o.getX()) * (this.x - o.getX()) + (this.y - o.getY()) * (this.y - o.getY()));
+  public boolean collision(Obstacle o) {
+    return ((o.getRayon() + this.rayon) / 2) >= Math.sqrt((this.x - o.getX()*View.ratioX) * (this.x - o.getX()*View.ratioX) + (this.y - o.getY()*View.ratioY) * (this.y - o.getY()*View.ratioY));
   }
 
-  public void rebond(Pegs o) {
+  public void rebond(Obstacle o) {
     if (collision(o)) {
       double n = this.vX; // Variable auxiliaire pour garder vX avant qu'on modifie sa valeur
-      this.vX = this.vX - (2 * (this.vX * (this.x - o.getX()) + this.vY * ((this.y - o.getY())))
-          / ((this.x - o.getX()) * (this.x - o.getX()) + (this.y - o.getY()) * (this.y - o.getY())))
-          * (this.x - o.getX());
-      this.vY = this.vY - (2 * (n * (this.x - o.getX()) + this.vY * ((this.y - o.getY())))
-          / ((this.x - o.getX()) * (this.x - o.getX()) + (this.y - o.getY()) * (this.y - o.getY())))
-          * (this.y - o.getY());
+      this.vX = this.vX - (2 * (this.vX * (this.x - o.getX()*View.ratioX) + this.vY * ((this.y - o.getY()*View.ratioY)))
+          / ((this.x - o.getX()*View.ratioX) * (this.x - o.getX()*View.ratioX) + (this.y - o.getY()*View.ratioY) * (this.y - o.getY()*View.ratioY)))
+          * (this.x - o.getX()*View.ratioX);
+      this.vY = this.vY - (2 * (n * (this.x - o.getX()*View.ratioX) + this.vY * ((this.y - o.getY()*View.ratioY)))
+          / ((this.x - o.getX()*View.ratioX) * (this.x - o.getX()*View.ratioX) + (this.y - o.getY()*View.ratioY) * (this.y - o.getY()*View.ratioY)))
+          * (this.y - o.getY()*View.ratioY);
     }
   }
+  public void rebondMur(){
+    this.vX = this.vX *-1;
+  }
+
 }
