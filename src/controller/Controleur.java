@@ -53,6 +53,7 @@ public class Controleur {
                                     modele.niveau.list.remove(i);
                                 }
                                 modele.player.calculScore(detruit, facteur++);
+                                view.setScore();
                             }
                         }
                     }
