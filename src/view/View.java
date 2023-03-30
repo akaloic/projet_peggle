@@ -25,6 +25,7 @@ import javax.sound.sampled.*;
 public class View extends JFrame {
 
     public JLabel puit = new JLabel();
+    public JLabel scoreLabel=new JLabel();
     public JPanel fond = new JPanel();
     public JPanel munition = new JPanel();
     public JPanel fondGauche = new JPanel();
@@ -191,6 +192,17 @@ public class View extends JFrame {
         fondDroite.setBackground(Color.gray);
         fondDroite.setPreferredSize(new Dimension(getWidth() / 11, getHeight()));
 
+        JPanel info=new JPanel();
+        info.setBackground(Color.gray);
+        info.setPreferredSize(new Dimension(info.getWidth(), info.getHeight()+100));
+        scoreLabel.setText("Score : "+controleur.modele.getPlayer().score);
+        scoreLabel.setFont(new Font("Serif",Font.PLAIN,20));
+        JLabel pseudoLabel=new JLabel("Joueur : "+controleur.modele.player.pseudo);
+        pseudoLabel.setFont(new Font("Serif",Font.PLAIN,20));
+        info.add(pseudoLabel,BorderLayout.NORTH);
+        info.add(scoreLabel,BorderLayout.SOUTH);
+        fondDroite.add(info,BorderLayout.NORTH);
+
         fond.add(fondDroite, BorderLayout.EAST);
         // --------------DROITE---------------------
 
@@ -209,6 +221,7 @@ public class View extends JFrame {
     }
 
     public JPanel choixNiveauPane(Controleur controleur) {
+        controleur.modele.player.score=0;
         String url = "ressources/SonsWav/ChoixNiveau.wav";
         LancerMusic(url);
         JPanel choixNiv = new JPanel();
@@ -531,6 +544,10 @@ public class View extends JFrame {
 
     public void addExplosion(double x, double y) {
         partie.add(new Explosion(x * ratioX, y * ratioY));
+    }
+
+    public void setScore(){
+        scoreLabel.setText("Score : "+controleur.modele.getPlayer().score);
     }
 
     public int getNumNiveau() {
