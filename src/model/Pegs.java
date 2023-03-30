@@ -8,32 +8,32 @@ public class Pegs extends Obstacle{
         super(1);
     }
     public Pegs(double x, double y, int v,BufferedImage img){
-        super(x*View.ratioX, y*View.ratioY, 25,25, false, v);
+        super(x, y, 25,25, false, v);
         this.image = img;
     }
     public Pegs(double x, double y, int v){
-        super(x*View.ratioX, y*View.ratioY, 25,25, false, v);
+        super(x, y, 25,25, false, v);
     }
     public Pegs(double x, double y, int v,int rayon){
-        super(x*View.ratioX, y*View.ratioY, rayon,rayon, false, v);
+        super(x, y, rayon,rayon, false, v);
         this.rayon=rayon;
     }
 
     @Override
     public boolean collision(Balle balle) {
-        return ((this.getRayon() + balle.rayon) / 2) >= Math.sqrt((balle.x - this.getX()) * (balle.x - this.getX()) + (balle.y - this.getY()) * (balle.y - this.getY()));
+        return ((this.getRayon() + balle.rayon) / 2) >= Math.sqrt((balle.x - this.getX()*View.ratioX) * (balle.x - this.getX()*View.ratioX) + (balle.y - this.getY()*View.ratioY) * (balle.y - this.getY()*View.ratioY));
     }
 
     @Override
     public void rebond(Balle balle) {
         if (collision(balle)) {
           double n = balle.vX; // Variable auxiliaire pour garder vX avant qu'on modifie sa valeur
-          balle.vX = balle.vX - (2 * (balle.vX * (balle.x - this.getX()) + balle.vY * ((balle.y - this.getY())))
-              / ((balle.x - this.getX()) * (balle.x - this.getX()) + (balle.y - this.getY()) * (balle.y - this.getY())))
-              * (balle.x - this.getX());
-          balle.vY = balle.vY - (2 * (n * (balle.x - this.getX()) + balle.vY * ((balle.y - this.getY())))
-              / ((balle.x - this.getX()) * (balle.x - this.getX()) + (balle.y - this.getY()) * (balle.y - this.getY())))
-              * (balle.y - this.getY());
+          balle.vX = balle.vX - (2 * (balle.vX * (balle.x - this.getX()*View.ratioX) + balle.vY * ((balle.y - this.getY()*View.ratioY)))
+              / ((balle.x - this.getX()*View.ratioX) * (balle.x - this.getX()*View.ratioX) + (balle.y - this.getY()*View.ratioY) * (balle.y - this.getY()*View.ratioY)))
+              * (balle.x - this.getX()*View.ratioX);
+          balle.vY = balle.vY - (2 * (n * (balle.x - this.getX()*View.ratioX) + balle.vY * ((balle.y - this.getY()*View.ratioY)))
+              / ((balle.x - this.getX()*View.ratioX) * (balle.x - this.getX()*View.ratioX) + (balle.y - this.getY()*View.ratioY) * (balle.y - this.getY()*View.ratioY)))
+              * (balle.y - this.getY()*View.ratioY);
         }
     }
 
@@ -41,8 +41,8 @@ public class Pegs extends Obstacle{
     public double getRayon(){return this.rayon;}
     public double getDiametre(){return this.rayon*2;}
     public void dessine(Graphics g){
-        int gx=(int)(this.x);
-        int gy=(int)(this.y);
+        int gx=(int)(this.x*View.ratioX);
+        int gy=(int)(this.y*View.ratioY);
         int gw=(int)(this.rayon*View.getRatio());
         int gh=(int)(this.rayon*View.getRatio());
         if(image == null){
