@@ -36,7 +36,7 @@ public class Sauvegarde {
             out.writeObject(liste);
             out.close();
             fileOut.close();
-            System.out.printf("Serialized data is saved in save.ser");
+            System.out.println("Sauvegarde effectué");
          } catch (IOException i) {
             i.printStackTrace();
         }

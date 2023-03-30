@@ -13,12 +13,26 @@ public class Quadrilatere extends Obstacle {//peut etre un carré comme un recta
         rayon = (largeur + hauteur)/2;
         this.image=img;
     }
+
+    @Override
+    public boolean collision(Balle balle) {
+        return false;
+    }
+
+    @Override
+    public void rebond(Balle balle) {
+        if (collision(balle)) {
+
+        }
+    }
     public void dessine(Graphics g){
         int gx=(int)(this.x*View.ratioX);
         int gy=(int)(this.y*View.ratioY);
         int gw=(int)(this.largeur*View.getRatio());
         int gh=(int)(this.hauteur*View.getRatio());
-        g.fillRect(gx,gy,gw,gh);
+        if(image == null){
+            g.fillRect(gx,gy,gw,gh);
+        }
         Graphics2D g2d = (Graphics2D)g;
         g2d.drawImage(this.image,gx, gy,gw,gh,null);
     }

@@ -43,8 +43,8 @@ public class Controleur {
                     // rebond
                     for (int i = 0; i < modele.niveau.list.size(); i++) {
                         if (modele.niveau.list.get(i) instanceof Pegs) {
-                            modele.getBalle().rebond((Pegs) modele.niveau.list.get(i));
-                            if (modele.getBalle().collision((Pegs) modele.niveau.list.get(i))) {
+                            modele.niveau.list.get(i).rebond(modele.getBalle());
+                            if (modele.niveau.list.get(i).collision(modele.getBalle())) {
                                 boolean detruit = modele.niveau.detruit(i);
                                 if (detruit) {
                                     double x = modele.niveau.list.get(i).getX();

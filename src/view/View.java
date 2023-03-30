@@ -418,8 +418,8 @@ public class View extends JFrame {
             double a = fantome.getX() + fantome.rayon / 2;
             double b = fantome.getY();
             for (Obstacle o : controleur.modele.getNiveau().list) {
-                if (fantome.collision(o)) {
-                    fantome.rebond(o);
+                if (o.collision(fantome)) {
+                    o.rebond(fantome);
                     premierRebond = true;
                 }
             }
@@ -434,7 +434,7 @@ public class View extends JFrame {
             double a = fantome.getX() + fantome.rayon / 2;
             double b = fantome.getY();
             for (Obstacle o : controleur.modele.getNiveau().list) {
-                fantome.rebond(o);
+                o.rebond(fantome);
             }
             genPath.moveTo(a, b);
             genPath.lineTo(a, b);

@@ -3,6 +3,8 @@ package model;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
+import view.View;
+
 public class Obstacle extends Objet{
 
     protected boolean estMort; 
@@ -22,6 +24,11 @@ public class Obstacle extends Objet{
             this.estMort = false;
         }
     }
+    public boolean collision(Balle balle) {
+        return false;
+    }
+
+    public void rebond(Balle balle) {}
 
     // ---------GETTER GETTER---------
     public boolean isDead() {
@@ -86,4 +93,5 @@ public class Obstacle extends Objet{
     public void dessine(Graphics g) {
     }
     // ---------GETTER SETTER---------
+
 }
