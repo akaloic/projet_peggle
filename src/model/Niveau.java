@@ -2,10 +2,15 @@ package model;
 
 import java.util.ArrayList;
 
+import view.Image;
+import view.View;
+
+
 public class Niveau {
 
-    public ArrayList<Pegs> list_peg = new ArrayList<Pegs>();
-    protected int niveau;
+    public ArrayList<Obstacle> list = new ArrayList<Obstacle>();
+    public int niveau;
+    public static double milieu=-1;
 
     public Niveau(int i) {
         switch (i) {
@@ -22,160 +27,201 @@ public class Niveau {
                 niveau = 3;
                 break;
             case 4:
-                niveau_4();
+                niveau_4();//sardine
                 niveau = 4;
                 break;
             case 5:
-                niveau_5();
+                niveau_5();//grand triangle
                 niveau = 5;
                 break;
         }
     }
 
-    protected void diagonal(double x, double y, ArrayList<Pegs> list, int pegUsed, int distance, String direction) {
+
+    protected void diagonal(double x, double y, int pegUsed, boolean direction, boolean sens) {
         double nvx = x;
         double nvy = y;
         for (int i = 0; i < pegUsed; i++) {
-            Pegs p = new Pegs(nvx, nvy, 1, 25);
+            Pegs p = new Pegs(nvx, nvy, 1,Image.pegRondRose);
             list.add(p);
-            nvx = direction.equals("gauche") ? nvx - distance : nvx + distance;
-            nvy += distance;
+            nvx = direction? nvx + p.getDiametre() : nvx - p.getDiametre();//true pour droite, false pour gauche
+            nvy = sens? nvy - p.getRayon() : nvy + p.getRayon();//true pour haut, false pour bas
         }
     }
 
-    protected void carres(double x, double y, ArrayList<Pegs> list, int pegCote) {
-        lignes(x, y, list, pegCote + 2, 50);
-        colonne(x, y + 50, list, pegCote, 50);
-        colonne(x + ((pegCote + 1) * 50), y + 50, list, pegCote, 50);
-        lignes(x, y + ((pegCote + 1) * 50), list, pegCote + 2, 50);
+
+    protected void carres(double x, double y, int pegCote) {
+        lignes(x, y, pegCote + 2);
+        colonne(x, y + getDiametre(), pegCote);
+        colonne(x + ((pegCote + 1) * getDiametre()), y + getDiametre(), pegCote);
+        lignes(x, y + ((pegCote + 1) * getDiametre()), pegCote + 2);
     }
 
-    protected void lignes(double x, double y, ArrayList<Pegs> list, int pegUsed, int distance) {
+    protected void lignes(double x, double y, int pegUsed) {
         double nvx = x;
         for (int i = 0; i < pegUsed; i++) {
-            Pegs p = new Pegs(nvx, y, 1, 25);
+            Pegs p = new Pegs(nvx, y, 1,Image.pegRondRose);
             list.add(p);
-            nvx += distance;
+            nvx += p.getDiametre();
         }
     }
 
-    protected void colonne(double x, double y, ArrayList<Pegs> list, int pegUsed, int distance) {
+    protected void colonne(double x, double y, int pegUsed) {
         double nvy = y;
         for (int i = 0; i < pegUsed; i++) {
-            Pegs p = new Pegs(x, nvy, 1, 25);
+            Pegs p = new Pegs(x, nvy, 1,Image.pegRondRose);
             list.add(p);
-            nvy += distance;
+            nvy += p.getDiametre();
         }
     }
-    protected void triangle(double x, double y, ArrayList<Pegs> list, int lignes, int distance){
+    protected void triangle(double x, double y, int lignes, Boolean alenvers){
         double nvx=x;
         double nvy=y;
         for(int i=0;i<=lignes;i++){
-            lignes(nvx, nvy, list, i, distance);
-            nvx-=(distance/2);
-            nvy+=distance;
-        }
-    }
-    protected void triangleVide(double x, double y, ArrayList<Pegs> list, int lignes, int distance){
-        list.add(new Pegs(x, y, 1, 25));
-        diagonal(x-(distance/2), y+distance, list, lignes-1, distance/2, "gauche");
-        diagonal(x+(distance/2), y+distance, list, lignes-1, distance/2, "droite");
-        //TODO : a finir, essayer une autre approche que 2 diagonals et une ligne en bas
-    }
-
-    // Peut-être simplifié ou réutilisé pour le cercle
-    protected void losange(double x, double y, ArrayList<Pegs> list, int pegUsed, int distance) {
-        list.add(new Pegs(x, y, 1, 25));
-        double nvx=x+distance;
-        double nvy=y+distance;
-        double ny=y-distance;
-        for (int i=0;i<pegUsed/2;i++){
-            list.add(new Pegs(nvx,nvy,1,25));
-            list.add(new Pegs(nvx,ny,1,25));
-            nvx+=distance;
-            nvy+=distance;
-            ny-=distance;
-        }
-        nvy-=distance*2;
-        ny+=distance*2;
-        for (int i=0;i<pegUsed/2;i++){
-            list.add(new Pegs(nvx,nvy,1,25));
-            list.add(new Pegs(nvx,ny,1,25));
-            nvx+=distance;
-            nvy-=distance;
-            ny+=distance;
+            lignes(nvx, nvy, i);
+            nvx-=getRayon();
+            nvy=alenvers==false?nvy+getDiametre():nvy-getDiametre();
         }
     }
 
-    protected void carresRemplis(double x, double y, ArrayList<Pegs> list, int pegCote, int distance){
+    protected void carresRemplis(double x, double y, int pegCote){
         double nvy=y;
         for (int i=0;i<pegCote;i++){
-            lignes(x, nvy, list, pegCote, distance);
-            nvy+=distance;
+            lignes(x, nvy, pegCote);
+            nvy+=getDiametre();
         }
     }
 
-    protected void niveau_1() {
-        lignes(125, 300, list_peg, 20, 50);
-        lignes(100, 350, list_peg, 20, 50);
-        lignes(125, 400, list_peg, 20, 50);
-        lignes(100, 450, list_peg, 20, 50);
-        lignes(125, 500, list_peg, 20, 50);
-        lignes(100, 550, list_peg, 20, 50);
-        lignes(125, 600, list_peg, 20, 50);
-        lignes(100, 650, list_peg, 20, 50);
+    protected void niveau_1() {//liste de lignes
+        double y1=200; double x1=getRayon()/2;
+        for(int i=0;i<6;i++){
+            if(i%2==0){
+                lignes(x1+getRayon(), y1+(getDiametre()*i), 16);
+            }
+            else{
+                Quadrilatere obr = new Quadrilatere(x1, y1+(getDiametre()*i),getRayon()*5,getRayon(),Image.quad);
+                Quadrilatere obr2 = new Quadrilatere(x1+getDiametre()*14, y1+(getDiametre()*i),getRayon()*5,getRayon(),Image.quad);
+                lignes(x1+getRayon()*6, y1+(getDiametre()*i), 11);
+                list.add(obr);
+                list.add(obr2);
+            }
+            Quadrilatere barriereGauche= new Quadrilatere(x1+getDiametre()*3, y1+getDiametre()*6+getRayon(),getDiametre()*3,getRayon(),Image.quad);
+            Quadrilatere barriereDroit= new Quadrilatere(x1+getDiametre()*10+getRayon(), y1+getDiametre()*6+getRayon(),getDiametre()*3,getRayon(),Image.quad);
+            list.add(barriereGauche);
+            list.add(barriereDroit);
+            
+        }
     }
 
-    protected void niveau_2() {
-        //carres du haut
-        carres(50, 200, list_peg, 5);
-        carres(400, 200, list_peg, 4);
-        carres(700, 200, list_peg, 3);
-        carres(950, 200, list_peg, 2);
-        carres(1150, 200, list_peg, 1);
-        //carres du bas
-        carres(950, 500, list_peg, 5);
-        carres(650, 550, list_peg, 4);
-        carres(400, 600, list_peg, 3);
-        carres(200, 650, list_peg, 2);
-        carres(50, 700, list_peg, 1);
+    protected void niveau_2(){
+        double x2=View.getRatioX()*243;double y2=300;
+        //x2=500;
+        colonne(x2, y2, 6);
+        //coté droit du dé
+        diagonal(x2+getDiametre(), y2-getRayon(),4, true, true);
+        colonne(x2+getDiametre()*4, y2-getDiametre(), 4);
+        diagonal(x2+getDiametre(), y2+getRayon()*9, 4, true, true);
+        lignes(x2+getDiametre(), y2+getRayon()*7, 1);
+        lignes(x2+getDiametre()*3, y2-getRayon(), 1);
+        //coté gauche du dé
+        diagonal(x2-getDiametre(), y2-getRayon(), 4, false, true);
+        colonne(x2-getDiametre()*4, y2-getDiametre(), 4);
+        diagonal(x2-getDiametre(), y2+getRayon()*9, 4, false, true);
+        lignes(x2-getDiametre()*2, y2+getRayon()*3, 1);
+        //face du dé
+        diagonal(x2+getDiametre(), y2-getRayon()*7, 3, true, false);
+        diagonal(x2-getDiametre(), y2-getRayon()*7, 3, false, false);
+        colonne(x2, y2-getDiametre()*4, 4);
+    }
+    protected void niveau_3(){//series de carrés
+        double x3=getDiametre()*View.getRatioX(); double y3=getDiametre()*3;
+        int m1=0;int m2=0;int j=0;
+        for(int i=3; i>-1;i--){
+            carres(x3+getDiametre()*m1, y3, i);
+            carres(x3+getDiametre()*m2, y3+getDiametre()*(6-j), j);
+            m1+=i+2;m2+=j+2;j++;
+        }
+        Quadrilatere colonneGauche = new Quadrilatere(x3-getDiametre(), y3-getRayon()-2, getRayon(), getDiametre()*9,Image.quad);
+        Quadrilatere colonneDroit = new Quadrilatere(x3+getDiametre()*14, y3-getRayon()-2, getRayon(), getDiametre()*9,Image.quad);
+        Quadrilatere ligneGaucheHaut = new Quadrilatere(x3-getDiametre(), y3-getDiametre(), getDiametre()*6, getRayon(),Image.quad);
+        Quadrilatere ligneGaucheBas = new Quadrilatere(x3-getDiametre(), y3+getRayon()*16, getDiametre()*6, getRayon(),Image.quad);
+        Quadrilatere ligneDroitHaut = new Quadrilatere(x3+getDiametre()*8+getRayon(), y3-getDiametre(), getDiametre()*6, getRayon(),Image.quad);
+        Quadrilatere ligneDroitBas = new Quadrilatere(x3+getDiametre()*8+getRayon(), y3+getRayon()*16, getDiametre()*6, getRayon(),Image.quad);
+        list.add(colonneGauche);list.add(colonneDroit);
+        list.add(ligneGaucheHaut);list.add(ligneGaucheBas);
+        list.add(ligneDroitHaut);list.add(ligneDroitBas);
+    }
+    protected void niveau_4(){//sardine
+        double x4=getRayon(); double y4=getDiametre()*5;
+        //bouche et tete
+        diagonal(x4, y4, 4, true, true);
+        diagonal(x4+getDiametre(), y4+getRayon(), 2, true, false);
+        diagonal(x4+getDiametre(), y4+getRayon()*3, 2, false, false);
+        diagonal(x4+getDiametre(), y4+getRayon()*5, 3, true, false);
+        //aile haute
+        lignes(x4+getDiametre()*4, y4-getRayon()*3, 3);
+        lignes(x4+getDiametre()*5, y4-getRayon()*5, 3);
+        lignes(x4+getDiametre()*6, y4-getRayon()*7, 3);
+        //aile basse
+        lignes(x4+getDiametre()*4, y4+getRayon()*7, 3);
+        lignes(x4+getDiametre()*5, y4+getRayon()*9, 3);
+        lignes(x4+getDiametre()*6, y4+getRayon()*11, 3);
+        //arriere
+        diagonal(x4+getDiametre()*7, y4-getRayon()*3, 5, true, false);
+        diagonal(x4+getDiametre()*7, y4+getRayon()*7, 5, true, true);
+        //queue
+        diagonal(x4+getDiametre()*12, y4, 3, true, true);
+        diagonal(x4+getDiametre()*12, y4+getDiametre()*2, 3, true, false);
+        colonne(x4+getDiametre()*15, y4+getDiametre()*2, 2);
+        colonne(x4+getDiametre()*15, y4-getDiametre(), 2);
+        colonne(x4+getDiametre()*14, y4+getDiametre(), 1);
+        //visage
+        lignes(x4+getRayon()*7, y4-getRayon(), 1);
+        Quadrilatere ligne = new Quadrilatere(x4+getRayon()*9, y4-getRayon(), getRayon(), getRayon()*6,Image.quad);
+        list.add(ligne);
+    }
+    protected void niveau_5(){//triangle
+        double x5=0; double y5=100;
+        //triangle(x5, y5, 4, false);
+        for(int i=1;i<9;i++){
+            Quadrilatere ligneGauche = new Quadrilatere(x5, y5+getDiametre()*i, getDiametre()*8-(getRayon()*i)+30, getRayon(),Image.quad);
+            lignes(2.5+getDiametre()*8-(getRayon()*i)+getRayon()*1.5, y5+getDiametre()*i, i);
+            Quadrilatere ligneDroite = new Quadrilatere(x5+getRayon()+getDiametre()*8+getRayon()*i, y5+getDiametre()*i, getDiametre()*8-(getRayon()*i)+34, getRayon(),Image.quad);
+            list.add(ligneGauche);
+            list.add(ligneDroite);
+        }
+        /*triangle(x5-getDiametre()*2, y5+getDiametre()*4, 4, false);
+        triangle(x5+getDiametre()*2, y5+getDiametre()*4, 4, false);
+        for(int i=0;i<3;i++){
+            Quadrilatere ligneMilieu = new Quadrilatere(x5-getRayon()*3.5+getRayon()*i, y5+getDiametre()*5+getDiametre()*i, getDiametre()*3-getDiametre()*i, getRayon());
+            list.add(ligneMilieu);
+        }*/
+    }
+    public ArrayList<Obstacle> getList() {return list;}
+    public int getNiveau() {return niveau;}
+    public double getRayon(){
+        Pegs p = new Pegs();
+        return p.getRayon();
     }
 
-    protected void niveau_3() {
-        diagonal(100, 200, list_peg, 5, 50, "droite");
-        diagonal(600, 200, list_peg, 6, 50, "gauche");
-        diagonal(600, 200, list_peg, 6, 50, "droite");
-        diagonal(1100, 200, list_peg, 5, 50, "gauche");
-
-        diagonal(100, 400, list_peg, 5, 50, "droite");
-        diagonal(600, 400, list_peg, 6, 50, "gauche");
-        diagonal(600, 400, list_peg, 6, 50, "droite");
-        diagonal(1100, 400, list_peg, 5, 50, "gauche");
-
-        lignes(400, 700, list_peg, 9, 50);
-        lignes(100, 200, list_peg, 20, 50);
-
-    }
-    protected void niveau_4(){
-        triangle(625, 300, list_peg, 5, 50);
-        triangleVide(625, 600, list_peg, 5, 50);
-        triangle(225, 600, list_peg, 5, -50);
-        triangle(925, 600, list_peg, 5, -50);
+    public double getDiametre() {
+        Pegs p = new Pegs();
+        return p.getDiametre();
     }
 
-    protected void niveau_5(){
-        carresRemplis(550, 400, list_peg, 4,100);
-        losange(100, 300, list_peg, 6,50);
-        losange(1000, 300, list_peg, 6,50);
-        losange(1000, 800, list_peg, 6,50);
-        losange(100, 800, list_peg, 6,50);
+    public void setList(ArrayList<Obstacle> charge) {
+        this.list = charge;
     }
 
-    public ArrayList<Pegs> getList() {
-        return list_peg;
+    public boolean detruit(int i) {
+        if (list.get(i).vie - 1 == 0) {
+            return true;
+        } else {
+            list.get(i).vie--;
+            return false;
+        }
     }
-
-    public int getNiveau() {
-        return niveau;
+    public static void setMilieu(double m) {
+        milieu = m;
     }
 }
