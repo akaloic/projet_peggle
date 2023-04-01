@@ -21,32 +21,6 @@ import java.util.ArrayList;
 import java.awt.Image;
 
 import javax.sound.sampled.*;
-
-// <<<<<<< HEAD
-// public class View extends JFrame implements MouseInputListener {
-
-//     private JLabel puit;
-//     private JPanel fond;
-//     private JPanel munition;
-//     private JPanel fondGauche;
-//     private JPanel partie;
-
-//     private JButton leave;
-//     private boolean enJeu = true;
-//     private boolean balleEnJeu = false;
-//     private int angle;
-//     private String chemin = System.getProperty("user.dir") + "/ressources/";
-//     private Timer timer;
-//     private boolean NiveauxStop; // pause/resume du jeu
-
-//     private int directionX = 5;
-//     private Controleur controleur;
-//     private int nbMunition;
-//     private double mouseX;
-//     private double mouseY;
-//     private static int colorX = 25;
-//     private static int colorY = 15;
-// =======
 public class View extends JFrame {
 
     public JLabel puit = new JLabel();
@@ -255,34 +229,10 @@ public class View extends JFrame {
                 controleur.tirer();
             }
         });
-// <<<<<<< HEAD
-//         // timer.start();
-//         NiveauxStop = false;
 //         // --------------ANIMATION----------------------
         return fond;
     }
 
-    // public JPanel pauseJeu(){
-    //     JPanel pane = new JPanel();
-    //     pane.setLayout(null);
-    //     JButton retour = new JButton("Retour à l'acceuil");
-    //     retour.setBounds(width/3,height/2-50,150,100);
-    //     retour.addActionListener(e->{
-    //         timer = null;
-    //         new View(controleur);
-    //     });
-
-    //     JButton resume = new JButton("Resume");
-    //     resume.setBounds(width/3+200,height/2-50,150,100);
-    //     // resume.addActionListener(e->{
-    //     //     // timer.restart();
-    //     //     changerPanel(JeuPanel(controleur));
-    //     // });
-        
-    //     pane.add(retour);
-    //     pane.add(resume);
-    //     return pane;
-    // }
     public JPanel choixNiveauPane(Controleur controleur){
         String url = "ressources/SonsWav/ChoixNiveau.wav";
         LancerMusic(url);
@@ -298,17 +248,7 @@ public class View extends JFrame {
                 }
             }
         };
-// =======
-
-//         return fond;
-//     }
-
-    // public JPanel choixNiveauPane(Controleur controleur) {
-    //     String url = "ressources/SonsWav/ChoixNiveau.wav";
-    //     LancerMusic(url);
-    //     JPanel choixNiv = new JPanel();
         choixNiv.setBackground(Color.lightGray);
-// >>>>>>> develop
         choixNiv.setLayout(null);
         choixNiv.setSize(width, height);
         JButton precedent = new JButton("Acceuil");
@@ -322,57 +262,17 @@ public class View extends JFrame {
             son.stop();
             changerPanel(menuPrincipal());
         });
-// <<<<<<< HEAD
-//         int xNiv = precedent.getWidth()*2;
-//         int yNiv = precedent.getHeight()*3;
-//         int wNiv = 200;
-//         int hNiv = 200;
-//         for (int i = 1 ; i < 6 ; i++){;
-//             JButton nameNiv =  new JButton("Niveau "+i);
-//             nameNiv.setBounds(xNiv, yNiv, wNiv, hNiv);
-//             xNiv += wNiv;
-//             choixNiv.add(nameNiv);
-//             nameNiv.setName("niveau"+i);
-//             nameNiv.addActionListener(e->{
-//                 char lettre = nameNiv.getName().charAt(nameNiv.getName().length()-1);
-//                 numNiveau = Integer.parseInt(""+lettre);
-//                 changerPanel(JeuPanel(this.controleur));
-//                 son.stop();
-//             });
-//         }
-// =======
-        // int xNiv = precedent.getWidth() * 2;
-        // int yNiv = precedent.getHeight() * 2;
-        // int wNiv = width/9;
-        // int hNiv = height/6;
         afficheMiniature(1, choixNiv, height/2-200);
         afficheMiniature(2, choixNiv, height/2);
         
-// >>>>>>> develop
         return choixNiv;
     }
-
-// <<<<<<< HEAD
-//     public void placePuit() {
-//         // avec la redimension de l'image plus grande
-//         puit.setLocation(puit.getX() + directionX, partie.getHeight() / 2);
-//         if (puit.getX() > partie.getWidth() / 2)
-//             directionX = -5;
-//         if (puit.getX() < -partie.getWidth() / 2)
-//             directionX = 5;
-//     }
-//     public void dessinePegRond(Graphics g,PegRond peg){
-//         Graphics2D g2d = (Graphics2D) g;
-//         g2d.setColor(Color.PINK);
-//         g2d.fillOval((int)peg.getX(),(int)peg.getY(), (int)peg.getWidth(),(int)peg.getHeight());
-// =======
 
     public void changerPanel(JPanel pane) {
         invalidate();
         setContentPane(pane);
         repaint();
         revalidate();
-// >>>>>>> develop
     }
 
     public JPanel choixEdit(){
@@ -467,10 +367,6 @@ public class View extends JFrame {
             ajoute.setBounds(width/30+borne*width/6,0,width/8, height/6);
             bis.add(ajoute);
         }
-// <<<<<<< HEAD
-//         x = x+speedX;
-//         y = y+speedY;
-// =======
         JScrollPane defile = new JScrollPane(bis, JScrollPane.VERTICAL_SCROLLBAR_NEVER, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         bis.setPreferredSize(new Dimension(width/30+(borne+1)*width/6,height*5));
         defile.setBounds(width/30, hauteur, width, height/5);
@@ -495,7 +391,6 @@ public class View extends JFrame {
                 puit.setLocation(puit.getX() - 5, puit.getY());
             }
         }
-// >>>>>>> develop
     }
 
     public void dessineCanon(Graphics g) {
