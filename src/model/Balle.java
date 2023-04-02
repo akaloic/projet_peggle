@@ -63,11 +63,11 @@ public class Balle {
         vX = vX - ((2 * (vX * (x - o.getX() * View.ratioX) + vY * ((y - o.getY() * View.ratioY)))
             / ((x - o.getX() * View.ratioX) * (x - o.getX() * View.ratioX)
                 + (y - o.getY() * View.ratioY) * (y - o.getY() * View.ratioY)))
-            * (x - o.getX() * View.ratioX)) * 0.95;
+            * (x - o.getX() * View.ratioX)) * 0.99;
         vY = vY - ((2 * (n * (x - o.getX() * View.ratioX) + vY * ((y - o.getY() * View.ratioY)))
             / ((x - o.getX() * View.ratioX) * (x - o.getX() * View.ratioX)
                 + (y - o.getY() * View.ratioY) * (y - o.getY() * View.ratioY)))
-            * (y - o.getY() * View.ratioY)) * 0.95;
+            * (y - o.getY() * View.ratioY)) * 0.99;
         break;
       case 2:
         vX = vX * -0.95;
