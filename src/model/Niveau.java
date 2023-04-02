@@ -224,4 +224,7 @@ public class Niveau {
     public static void setMilieu(double m) {
         milieu = m;
     }
+    public int getNumNiveau(){
+        return niveau;
+    }
 }
