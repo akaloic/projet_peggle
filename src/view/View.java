@@ -25,7 +25,7 @@ import javax.sound.sampled.*;
 public class View extends JFrame {
 
     public JLabel puit = new JLabel();
-    public JLabel scoreLabel=new JLabel();
+    public JLabel scoreLabel = new JLabel();
     public JPanel fond = new JPanel();
     public JPanel munition = new JPanel();
     public JPanel fondGauche = new JPanel();
@@ -192,16 +192,16 @@ public class View extends JFrame {
         fondDroite.setBackground(Color.gray);
         fondDroite.setPreferredSize(new Dimension(getWidth() / 11, getHeight()));
 
-        JPanel info=new JPanel();
+        JPanel info = new JPanel();
         info.setBackground(Color.gray);
-        info.setPreferredSize(new Dimension(info.getWidth(), info.getHeight()+100));
-        scoreLabel.setText("Score : "+controleur.modele.getPlayer().score);
-        scoreLabel.setFont(new Font("Serif",Font.PLAIN,20));
-        JLabel pseudoLabel=new JLabel("Joueur : "+controleur.modele.player.pseudo);
-        pseudoLabel.setFont(new Font("Serif",Font.PLAIN,20));
-        info.add(pseudoLabel,BorderLayout.NORTH);
-        info.add(scoreLabel,BorderLayout.SOUTH);
-        fondDroite.add(info,BorderLayout.NORTH);
+        info.setPreferredSize(new Dimension(info.getWidth(), info.getHeight() + 100));
+        scoreLabel.setText("Score : " + controleur.modele.getPlayer().score);
+        scoreLabel.setFont(new Font("Serif", Font.PLAIN, 20));
+        JLabel pseudoLabel = new JLabel("Joueur : " + controleur.modele.player.pseudo);
+        pseudoLabel.setFont(new Font("Serif", Font.PLAIN, 20));
+        info.add(pseudoLabel, BorderLayout.NORTH);
+        info.add(scoreLabel, BorderLayout.SOUTH);
+        fondDroite.add(info, BorderLayout.NORTH);
 
         fond.add(fondDroite, BorderLayout.EAST);
         // --------------DROITE---------------------
@@ -221,18 +221,61 @@ public class View extends JFrame {
     }
 
     public JPanel choixNiveauPane(Controleur controleur) {
-        controleur.modele.player.score=0;
+        // controleur.modele.player.score=0;
         String url = "ressources/SonsWav/ChoixNiveau.wav";
         LancerMusic(url);
+
         JPanel choixNiv = new JPanel();
         choixNiv.setBackground(Color.lightGray);
         choixNiv.setLayout(null);
         choixNiv.setSize(width, height);
+
         JButton precedent = new JButton("Acceuil");
         precedent.setBounds(0, 0, 100, 100);
         choixNiv.add(precedent);
         ratioX = ratioX / 8;
         ratioY = ratioY / 8;
+
+        JWindow window = new JWindow();
+        JPanel panel = new JPanel();
+        JTextArea textArea = new JTextArea(5, 20);
+        textArea.setLineWrap(true);
+        textArea.setWrapStyleWord(true);
+        textArea.setEditable(false);
+        textArea.setText(
+                " Le but de PEGS est de détruire tous les pegs.\n\n Pour cela, vous devez tirer des balles sur les pegs. \n Vous disposez d'un nombre limité de balles. \n Vous pourrez passer au niveau suivant si vous détruisez tous les pegs. \n\n Bonne chance !");
+        JButton fermer = new JButton("Fermer");
+        fermer.addActionListener(e -> window.dispose());
+        panel.add(fermer);
+        JButton suivant = new JButton("Suivant");
+        suivant.addActionListener(e -> {
+            textArea.setText(
+                    " Pour tirer, il vous suffit d'appuyer sur la souris.\n\n Important, si vous tirez dans le puit, on vous rajoute une munition.\n Quant aux points, on les calcule ainsi, si vous touchez 3 pegs en un seul tir, vous avez 1+2+3 = 6 points, auquel on ajoute 5 points par peg detruit.\n\n Bonne chance !");
+            JButton retour = new JButton("Précédent");
+            panel.add(retour);
+            panel.remove(suivant);
+            panel.revalidate();
+            panel.repaint();
+
+            retour.addActionListener(e2 -> {
+                textArea.setText(
+                        " Le but de PEGS est de détruire tous les pegs.\n\n Pour cela, vous devez tirer des balles sur les pegs. \n Vous disposez d'un nombre limité de balles. \n Vous pourrez passer au niveau suivant si vous détruisez tous les pegs. \n\n Bonne chance !");
+                panel.remove(retour);
+                panel.add(fermer);
+                panel.add(suivant);
+                panel.revalidate();
+                panel.repaint();
+            });
+        });
+        panel.add(fermer);
+        panel.add(suivant);
+
+        window.getContentPane().add(new JLabel("", new ImageIcon(chemin + "loading.gif"), JLabel.CENTER));
+        window.setBounds(0, 0, getWidth() / 3, getHeight() / 5);
+        window.setVisible(true);
+        window.setLocationRelativeTo(null);
+        window.add(textArea, BorderLayout.CENTER);
+        window.add(panel, BorderLayout.SOUTH);
 
         precedent.addActionListener(e -> {
             this.invalidate();
@@ -546,8 +589,8 @@ public class View extends JFrame {
         partie.add(new Explosion(x * ratioX, y * ratioY));
     }
 
-    public void setScore(){
-        scoreLabel.setText("Score : "+controleur.modele.getPlayer().score);
+    public void setScore() {
+        scoreLabel.setText("Score : " + controleur.modele.getPlayer().score);
     }
 
     public int getNumNiveau() {
