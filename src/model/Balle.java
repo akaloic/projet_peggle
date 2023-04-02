@@ -60,26 +60,26 @@ public class Balle {
     switch (collision) {
       case 1:
         double n = vX; // Variable auxiliaire pour garder vX avant qu'on modifie sa valeur
-        vX = vX - (2 * (vX * (x - o.getX() * View.ratioX) + vY * ((y - o.getY() * View.ratioY)))
+        vX = vX - ((2 * (vX * (x - o.getX() * View.ratioX) + vY * ((y - o.getY() * View.ratioY)))
             / ((x - o.getX() * View.ratioX) * (x - o.getX() * View.ratioX)
                 + (y - o.getY() * View.ratioY) * (y - o.getY() * View.ratioY)))
-            * (x - o.getX() * View.ratioX);
-        vY = vY - (2 * (n * (x - o.getX() * View.ratioX) + vY * ((y - o.getY() * View.ratioY)))
+            * (x - o.getX() * View.ratioX)) * 0.95;
+        vY = vY - ((2 * (n * (x - o.getX() * View.ratioX) + vY * ((y - o.getY() * View.ratioY)))
             / ((x - o.getX() * View.ratioX) * (x - o.getX() * View.ratioX)
                 + (y - o.getY() * View.ratioY) * (y - o.getY() * View.ratioY)))
-            * (y - o.getY() * View.ratioY);
+            * (y - o.getY() * View.ratioY)) * 0.95;
         break;
       case 2:
-        vX = vX * -1;
+        vX = vX * -0.95;
         break;
       case 3:
-        vY = vY * -1;
+        vY = vY * -0.95;
         break;
     }
   }
 
   public void rebondMur() {
-    vX = vX * -1;
+    vX = vX * -0.95;
   }
 
 }

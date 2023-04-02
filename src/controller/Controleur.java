@@ -43,7 +43,7 @@ public class Controleur {
                     // rebond
                     for (int i = 0; i < modele.niveau.list.size(); i++) {
                         modele.getBalle().rebond(modele.niveau.list.get(i));
-                        if (modele.getBalle().collision( modele.niveau.list.get(i))==1) {
+                        if (modele.getBalle().collision(modele.niveau.list.get(i)) == 1) {
                             boolean detruit = modele.niveau.detruit(i);
                             if (detruit) {
                                 double x = modele.niveau.list.get(i).getX();
@@ -55,10 +55,11 @@ public class Controleur {
                         }
                     }
 
-                    if(modele.getBalle().getX()-modele.getBalle().diametre/2 <= 0 || modele.getBalle().getX()+modele.getBalle().diametre/2 >= view.getPartie().getWidth()){
+                    if (modele.getBalle().getX() - modele.getBalle().diametre / 2 <= 0 || modele.getBalle().getX()
+                            + modele.getBalle().diametre / 2 >= view.getPartie().getWidth()) {
                         modele.balle.rebondMur();
-                    }    
-                
+                    }
+
                     // munition
                     Point p = view.puit.getLocationOnScreen();
                     if (modele.balle.getY() + (view.partie.getHeight() / 2) >= view.puit.getY()
@@ -74,17 +75,7 @@ public class Controleur {
                         }
                     }
 
-                    // munition
-                    /*if (modele.balle.getY() >= view.puit.getY() && (modele.balle.getX() >= view.puit.getX()
-                            && modele.balle.getX() <= view.puit.getWidth())) {
-                        view.nbMunition++;
-                        view.munition.removeAll();
-                        view.afficheMunition();
-                        view.munition.revalidate();
-                        // System.out.println("CA MARCHEEEEEEEEEEE");
-                    }*/
-
-                    if (modele.getBalle().getY()  > view.getPartie().getHeight()) {
+                    if (modele.getBalle().getY() > view.getPartie().getHeight()) {
                         modele.setBalle(null);
                         balleHorsJeu();
                     }
@@ -109,9 +100,9 @@ public class Controleur {
 
             this.balleEnJeu = true;
             this.modele.setBalle(null);
-            t=0;
-            this.angleTir=this.view.getAngle();
-            this.modele.setBalle(new Balle(view.getPartie().getWidth()/2-25,0d,500, 180-this.angleTir));
+            t = 0;
+            this.angleTir = this.view.getAngle();
+            this.modele.setBalle(new Balle(view.getPartie().getWidth() / 2 - 25, 0d, 500, 180 - this.angleTir));
         }
     }
 
