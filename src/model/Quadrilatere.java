@@ -4,13 +4,23 @@ import java.awt.image.BufferedImage;
 
 import view.View;
 public class Quadrilatere extends Obstacle {//peut etre un carré comme un rectangle
+    public Point coinHautGauche, coinBasGauche, coinHautDroit, coinBasDroit;
+
     public Quadrilatere(double x, double y, double largeur, double hauteur) {
         super(x, y, largeur, hauteur, false, 100);
         rayon = (largeur + hauteur)/2;
+        coinHautGauche = new Point((int)x, (int)y);
+        coinHautDroit = new Point((int) (x +largeur),(int)y);
+        coinBasGauche = new Point((int)x,(int)(y+hauteur));
+        coinBasDroit = new Point((int) (x +largeur),(int)(y+hauteur));
     }
     public Quadrilatere(double x, double y, double largeur, double hauteur, BufferedImage img) {
         super(x, y, largeur, hauteur, false, 100);
         rayon = (largeur + hauteur)/2;
+        coinHautGauche = new Point((int)x, (int)y);
+        coinHautDroit = new Point((int) (x +largeur),(int)y);
+        coinBasGauche = new Point((int)x,(int)(y+hauteur));
+        coinBasDroit = new Point((int) (x +largeur),(int)(y+hauteur));
         this.image=img;
     }
     public void dessine(Graphics g){

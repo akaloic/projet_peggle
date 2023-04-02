@@ -42,22 +42,20 @@ public class Controleur {
 
                     // rebond
                     for (int i = 0; i < modele.niveau.list.size(); i++) {
-                        if (modele.niveau.list.get(i) instanceof Pegs) {
-                            modele.getBalle().rebond((Pegs) modele.niveau.list.get(i));
-                            if (modele.getBalle().collision((Pegs) modele.niveau.list.get(i))) {
-                                boolean detruit = modele.niveau.detruit(i);
-                                if (detruit) {
-                                    double x = modele.niveau.list.get(i).getX();
-                                    double y = modele.niveau.list.get(i).getY();
-                                    view.addExplosion(x, y);
-                                    modele.niveau.list.remove(i);
-                                }
-                                modele.player.calculScore(detruit, facteur++);
+                        modele.getBalle().rebond(modele.niveau.list.get(i));
+                        if (modele.getBalle().collision( modele.niveau.list.get(i))==1) {
+                            boolean detruit = modele.niveau.detruit(i);
+                            if (detruit) {
+                                double x = modele.niveau.list.get(i).getX();
+                                double y = modele.niveau.list.get(i).getY();
+                                view.addExplosion(x, y);
+                                modele.niveau.list.remove(i);
                             }
+                            modele.player.calculScore(detruit, facteur++);
                         }
                     }
 
-                    if(modele.getBalle().getX()-modele.getBalle().rayon/2 <= 0 || modele.getBalle().getX()+modele.getBalle().rayon/2 >= view.getPartie().getWidth()){
+                    if(modele.getBalle().getX()-modele.getBalle().diametre/2 <= 0 || modele.getBalle().getX()+modele.getBalle().diametre/2 >= view.getPartie().getWidth()){
                         modele.balle.rebondMur();
                     }    
                 
@@ -113,7 +111,7 @@ public class Controleur {
             this.modele.setBalle(null);
             t=0;
             this.angleTir=this.view.getAngle();
-            this.modele.setBalle(new Balle(view.getPartie().getWidth()/2-25,0d,300, 180-this.angleTir));
+            this.modele.setBalle(new Balle(view.getPartie().getWidth()/2-25,0d,500, 180-this.angleTir));
         }
     }
 

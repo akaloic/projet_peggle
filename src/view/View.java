@@ -415,14 +415,14 @@ public class View extends JFrame {
         double x = (partie.getWidth() / 2) - (5 * heightBase / 6) * Math.sin(theta) - 10/* Width balle */;
         double y = (5 * heightBase / 6) * Math.cos(theta) - 10/* Height balle */;
         // Pour calculer nouvelles coordonnées de la balle après rotaion
-        Balle fantome = new Balle(partie.getWidth()/2-25, 0d, 300d, 180 - this.angle);
+        Balle fantome = new Balle(partie.getWidth()/2-25, 0d, 500d, 180 - this.angle);
         GeneralPath genPath = new GeneralPath();
         boolean premierRebond = false;
         while(!premierRebond){
             fantome.update();
-            double a = fantome.getX()+fantome.rayon/2;double b = fantome.getY();
+            double a = fantome.getX()+fantome.diametre/2;double b = fantome.getY();
             for (Obstacle o : controleur.modele.getNiveau().list) {
-                if(fantome.collision(o)){
+                if(fantome.collision(o)!=0){
                     fantome.rebond(o);
                     premierRebond = true;
                 }
@@ -435,7 +435,8 @@ public class View extends JFrame {
         }
         for(int i = 0; i < 10; i++){
             fantome.update();
-            double a = fantome.getX()+fantome.rayon/2;double b = fantome.getY();
+            double a = fantome.getX()+fantome.diametre/2;
+            double b = fantome.getY();
             for (Obstacle o : controleur.modele.getNiveau().list) {
                 fantome.rebond(o);
             }
@@ -491,7 +492,7 @@ public class View extends JFrame {
     public void drawBall(Graphics g) {
         Graphics g2d = g;
         if (this.controleur.modele.balle != null) {
-            g2d.fillOval((int) (controleur.modele.balle.getX()),(int) (controleur.modele.balle.getY()),(int) (controleur.modele.balle.rayon/2),(int) (controleur.modele.balle.rayon/2));
+            g2d.fillOval((int) (controleur.modele.balle.getX()),(int) (controleur.modele.balle.getY()),(int) (controleur.modele.balle.diametre/2),(int) (controleur.modele.balle.diametre/2));
         }
     }
 
