@@ -54,6 +54,7 @@ public class View extends JFrame {
     public int width;
     public int height;
     public int numNiveau;
+    public BufferedImage fondEcran;
 
     public boolean versDroite = true;
 
@@ -125,10 +126,13 @@ public class View extends JFrame {
         fond = new JPanel();
         fond.setLayout(new BorderLayout());
         // --------------CENTRE---------------------
+
         partie = new JPanel() {
             @Override
             public void paint(Graphics g) {
                 super.paint(g);
+                Graphics2D g2d = (Graphics2D)g;
+                g2d.drawImage(fondEcran,0, 0,getWidth(),getHeight(),null);
                 dessineCanon(g);
                 drawBall(g);
                 for (int i = 0; i < controleur.modele.niveau.list.size(); i++) {
@@ -318,6 +322,14 @@ public class View extends JFrame {
                         ratioX = (float) (width - width / 7 * 2) / 800;
                         ratioY = (float) height / 600;
                         if (mode == 1) {
+                            numNiveau = k + 1;
+                            fondEcran = new BufferedImage(20, 20, BufferedImage.TYPE_INT_RGB);
+                            try {
+                                fondEcran = ImageIO.read(new File("ressources/Niveau"+numNiveau+"Fond.png"));
+                            } catch (IOException excep) {
+                                // TODO Auto-generated catch block
+                                excep.printStackTrace();
+                            }
                             controleur.modele.setNiveau(new Niveau(k + 1));
                             changerPanel(JeuPanel(this.controleur));
                         }
