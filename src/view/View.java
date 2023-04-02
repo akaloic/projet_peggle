@@ -213,7 +213,7 @@ public class View extends JFrame {
         // --------------DROITE---------------------
         fondDroite = new JPanel();
         fondDroite.setLayout(new BorderLayout());
-        fondDroite.setBackground(Color.gray);
+        fondDroite.setBackground(Color.PINK);
         fondDroite.setPreferredSize(new Dimension(getWidth() / 11, getHeight()));
 
         fond.add(fondDroite, BorderLayout.EAST);
