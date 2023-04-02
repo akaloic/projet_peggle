@@ -37,14 +37,14 @@ public class Balle {
   public int collision(Obstacle o) {
     if (o instanceof Pegs
         && ((o.getRayon() + diametre) / 2) >= Math.sqrt((x - o.getX() * View.ratioX) * (x - o.getX() * View.ratioX)
-            + (y - o.getY() * View.ratioY) * (y - o.getY() * View.ratioY)))
+            + (y - o.getY() * View.ratioY) * (y - o.getY() * View.ratioY))) // rebond cercle
       return 1;
-    if (o instanceof Quadrilatere) {
+    if (o instanceof Quadrilatere) { // rebond laterale rectangle
       if ((y >= o.y * View.ratioY && y <= (o.y + o.hauteur) * View.ratioY)
           && (x + rayon >= o.x * View.ratioX && x - rayon <= (o.x + o.largeur) * View.ratioX)) {
         System.out.println("Collision quadrilatere 2");
         return 2;
-      }
+      } // rebond laterale rectangle
       if ((x >= o.x * View.ratioX && x <= (o.x + o.largeur) * View.ratioX)
           && (y + rayon >= o.y * View.ratioY && y - rayon <= (o.y + o.hauteur) * View.ratioY)) {
         System.out.println("Collision quadrilatere 3");
