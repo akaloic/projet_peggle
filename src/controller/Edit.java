@@ -84,6 +84,11 @@ public class Edit extends JPanel{
             if(objetSelectionner != null && !objetSelectionner.decoration){
                 objetSelectionner.obstacle.setRayon(taille.getValue());
                 objetSelectionner.setSize(new Dimension((int)(taille.getValue()*View.getRatio()),(int)(taille.getValue()*View.getRatio())));
+                for (objetMobile objetMobile : listeSelection) {
+                    objetMobile.obstacle.setRayon(taille.getValue());
+                    objetMobile.setSize(new Dimension((int)(taille.getValue()*View.getRatio()),(int)(taille.getValue()*View.getRatio())));
+                }
+            principal.requestFocus();
             }
          });
 
@@ -99,6 +104,7 @@ public class Edit extends JPanel{
                 listPanel.get(i).obstacle.setRayon(tailleGeneral.getValue());
                 listPanel.get(i).setSize(new Dimension((int)(tailleGeneral.getValue()*View.getRatio()),(int)(tailleGeneral.getValue()*View.getRatio())));
             }
+            principal.requestFocus();
           });
 
         JPanel espaceX = new JPanel(new BorderLayout());
@@ -218,6 +224,23 @@ public class Edit extends JPanel{
                     // TODO Auto-generated method stub
                     super.paint(g);
                     o.clone(0, 0, 0, obstacle.getRayon()).dessine(g);
+                    if(this == objetSelectionner){
+                        if(peutBouger){
+                            this.setForeground(Color.cyan);
+                        }
+                        else{
+                            this.setForeground(Color.red);
+                        }
+                    }
+                    else{
+                        if(listeSelection.contains(this)){
+                            this.setForeground(Color.green);
+                        }
+                        else{
+                            this.setForeground(Color.black);
+                        }
+                    } 
+
                 }
                 //Astuce ultime pour mettre à jour les textes dès qu'une coordonnée bouge
                 @Override
@@ -306,12 +329,7 @@ public class Edit extends JPanel{
                     objetSelectionner.obstacle.setX(objetSelectionner.getX()/View.ratioX);
                 }else{
                     suivant = plusProche(3);//Gauche
-                    objetSelectionner.setForeground(Color.black);
-                    if(listeSelection.contains(objetSelectionner)){
-                        objetSelectionner.setForeground(Color.green);
-                    }
                     objetSelectionner = suivant;
-                    objetSelectionner.setForeground(Color.red);
                 }
               }
               if (keyCode == KeyEvent.VK_D) {
@@ -320,12 +338,7 @@ public class Edit extends JPanel{
                     objetSelectionner.obstacle.setX(objetSelectionner.getX()/View.ratioX);
                 }else{
                     suivant = plusProche(1);//Droite
-                    objetSelectionner.setForeground(Color.black);
-                    if(listeSelection.contains(objetSelectionner)){
-                        objetSelectionner.setForeground(Color.green);
-                    }
                     objetSelectionner = suivant;
-                    objetSelectionner.setForeground(Color.red);
                 }
               }
               if (keyCode == KeyEvent.VK_Z) {
@@ -334,12 +347,7 @@ public class Edit extends JPanel{
                     objetSelectionner.obstacle.setY(objetSelectionner.getY()/View.ratioY);
                 }else{
                     suivant = plusProche(0);//Haut
-                    objetSelectionner.setForeground(Color.black);
-                    if(listeSelection.contains(objetSelectionner)){
-                        objetSelectionner.setForeground(Color.green);
-                    }
                     objetSelectionner = suivant;
-                    objetSelectionner.setForeground(Color.red);
                 }
               }
               if (keyCode == KeyEvent.VK_S) {
@@ -349,21 +357,13 @@ public class Edit extends JPanel{
                 }
                 else{
                     suivant = plusProche(2);//Bas
-                    objetSelectionner.setForeground(Color.black);
-                    if(listeSelection.contains(objetSelectionner)){
-                        objetSelectionner.setForeground(Color.green);
-                    }
                     objetSelectionner = suivant;
-                    objetSelectionner.setForeground(Color.red);
                 }
               }
               if (keyCode == KeyEvent.VK_ENTER) {
                 if(objetSelectionner != null){
+                    taille.setEnabled(true);
                     peutBouger = !peutBouger;
-                    objetSelectionner.setForeground(Color.cyan);
-                    if(!peutBouger){
-                        objetSelectionner.setForeground(Color.red);
-                    }
                 }
               }
               if (keyCode == KeyEvent.VK_W) {
@@ -374,13 +374,10 @@ public class Edit extends JPanel{
                     Obstacle o = pegRond.obstacle.clone(objetSelectionner.getX()/View.getRatioX(), objetSelectionner.getY()/View.getRatioY(), 20, pegRond.obstacle.getRayon());
                     objetSelectionner = creeObstacle(o,(int)(objetSelectionner.obstacle.getX()*View.getRatioX()), (int)(objetSelectionner.obstacle.getY()*View.getRatioY()), 0, 0);
                     objetSelectionner.deplacement = false;
-                    objetSelectionner.setForeground(Color.cyan);
                 }else{
-                    objetSelectionner.setForeground(Color.black);
                     Obstacle o = pegRond.obstacle.clone(objetSelectionner.getX()/View.ratioX, objetSelectionner.getY()/View.ratioY, (int)pegRond.obstacle.getRayon(), (int)pegRond.obstacle.getRayon());
                     objetSelectionner = creeObstacle(o, (int)(objetSelectionner.obstacle.getX()*View.getRatioX()), (int)(objetSelectionner.obstacle.getY()*View.getRatioY()), 0, 0);
                     peutBouger = true;
-                    objetSelectionner.setForeground(Color.cyan);
                 }
               }
               if (keyCode == KeyEvent.VK_X) {
@@ -391,13 +388,10 @@ public class Edit extends JPanel{
                     Obstacle o = pegRect.obstacle.clone(objetSelectionner.getX()/View.getRatioX(), objetSelectionner.getY()/View.getRatioY(), 20, pegRect.obstacle.getRayon());
                     objetSelectionner = creeObstacle(o,(int)(objetSelectionner.obstacle.getX()*View.getRatioX()), (int)(objetSelectionner.obstacle.getY()*View.getRatioY()), 0, 0);
                     objetSelectionner.deplacement = false;
-                    objetSelectionner.setForeground(Color.cyan);
                 }else{
-                    objetSelectionner.setForeground(Color.black);
                     Obstacle o = pegRect.obstacle.clone(objetSelectionner.getX()/View.ratioX, objetSelectionner.getY()/View.ratioY, (int)pegRect.obstacle.getRayon(), (int)pegRect.obstacle.getRayon());
                     objetSelectionner = creeObstacle(o, (int)(objetSelectionner.obstacle.getX()*View.getRatioX()), (int)(objetSelectionner.obstacle.getY()*View.getRatioY()), 0, 0);
                     peutBouger = true;
-                    objetSelectionner.setForeground(Color.cyan);
                 }
               }
               if (keyCode == KeyEvent.VK_N) {
@@ -469,6 +463,22 @@ public class Edit extends JPanel{
                 // TODO Auto-generated method stub
                 super.paint(g);
                 obstacle.clone(0, 0, 0, obstacle.getRayon()).dessine(g);
+                if(this == objetSelectionner){
+                    if(peutBouger){
+                        this.setForeground(Color.cyan);
+                    }
+                    else{
+                        this.setForeground(Color.red);
+                    }
+                }
+                else{
+                    if(listeSelection.contains(this)){
+                        this.setForeground(Color.green);
+                    }
+                    else{
+                        this.setForeground(Color.black);
+                    }
+                } 
             }
             @Override
             public void setLocation(int x, int y) {
@@ -515,13 +525,10 @@ public class Edit extends JPanel{
                     Obstacle o = obstacle.clone(objetSelectionner.getX()/View.getRatioX(), objetSelectionner.getY()/View.getRatioY(), 20, obstacle.getRayon());
                     objetSelectionner = creeObstacle(o,(int)(objetSelectionner.obstacle.getX()*View.getRatioX()), (int)(objetSelectionner.obstacle.getY()*View.getRatioY()), 0, 0);
                     objetSelectionner.deplacement = false;
-                    objetSelectionner.setForeground(Color.cyan);
                 }else{
-                    objetSelectionner.setForeground(Color.black);
                     Obstacle o = obstacle.clone((e.getX()-xClick)/View.ratioX, (e.getY()-yClick)/View.ratioY, 20, obstacle.getRayon());
                     objetSelectionner = creeObstacle(o, e.getX(), e.getY(), xClick, yClick);
                     objetSelectionner.deplacement = true;
-                    objetSelectionner.setForeground(Color.red);
                 }
         }
         }
@@ -535,11 +542,7 @@ public class Edit extends JPanel{
                 if(e.getButton() == 1){
                     if(!deplacement){
                         deplacement = true;
-                        if(objetSelectionner != null){
-                            objetSelectionner.setForeground(Color.BLACK);
-                        } 
                         objetSelectionner = this;
-                        objetSelectionner.setForeground(Color.red);
                         taille.setEnabled(true);
                         taille.setValue((int)objetSelectionner.obstacle.getRayon());
                     }else{
@@ -549,15 +552,12 @@ public class Edit extends JPanel{
                 }else if(e.getButton() == 3){
                     if(!listeSelection.contains(this)){
                         listeSelection.add(this);
-                        this.setForeground(Color.green);
                     }else{
                         listeSelection.remove(this);
-                        this.setForeground(Color.black);
                     }
                 }
             }
             principal.requestFocus();
-
         }
 
         @Override
@@ -629,7 +629,7 @@ public class Edit extends JPanel{
 
         public void undo(){
             for(int i = 0; i < liste.size();i++){
-                liste.get(i).setForeground(Color.black);
+                //liste.get(i).setForeground(Color.black);
                 listPanel.add(liste.get(i));
                 principal.add(liste.get(i));
                 niveau.add(liste.get(i).obstacle);

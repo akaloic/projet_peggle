@@ -143,6 +143,9 @@ public class View extends JFrame {
                 // TODO Auto-generated method stub
                 super.paintComponent(g);
                 Graphics2D g2d = (Graphics2D)g;
+                if(fondEcran == null){
+                    setBackground(Color.gray);
+                }
                 g2d.drawImage(fondEcran,0, 0,getWidth(),getHeight(),null);
             }   
         };
