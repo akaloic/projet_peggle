@@ -31,7 +31,7 @@ public class Niveau {
                 niveau = 4;
                 break;
             case 5:
-                niveau_5();//grand triangle
+                niveau_5();//triforce de zelda (le retour)
                 niveau = 5;
                 break;
         }
@@ -96,17 +96,17 @@ public class Niveau {
         double y1=200; double x1=getRayon()/2;
         for(int i=0;i<6;i++){
             if(i%2==0){
-                lignes(x1+getRayon(), y1+(getDiametre()*i), 16);
+                lignes(x1+getRayon(), y1+(getDiametre()*i), 17);
             }
             else{
                 Quadrilatere obr = new Quadrilatere(x1, y1+(getDiametre()*i),getRayon()*5,getRayon(),Image.quad);
-                Quadrilatere obr2 = new Quadrilatere(x1+getDiametre()*14, y1+(getDiametre()*i),getRayon()*5,getRayon(),Image.quad);
-                lignes(x1+getRayon()*6, y1+(getDiametre()*i), 11);
+                Quadrilatere obr2 = new Quadrilatere(x1+getDiametre()*15, y1+(getDiametre()*i),getRayon()*5,getRayon(),Image.quad);
+                lignes(x1+getRayon()*6, y1+(getDiametre()*i), 12);
                 list.add(obr);
                 list.add(obr2);
             }
             Quadrilatere barriereGauche= new Quadrilatere(x1+getDiametre()*3, y1+getDiametre()*6+getRayon(),getDiametre()*3,getRayon(),Image.quad);
-            Quadrilatere barriereDroit= new Quadrilatere(x1+getDiametre()*10+getRayon(), y1+getDiametre()*6+getRayon(),getDiametre()*3,getRayon(),Image.quad);
+            Quadrilatere barriereDroit= new Quadrilatere(x1+getDiametre()*11+getRayon(), y1+getDiametre()*6+getRayon(),getDiametre()*3,getRayon(),Image.quad);
             list.add(barriereGauche);
             list.add(barriereDroit);
             
@@ -114,7 +114,7 @@ public class Niveau {
     }
 
     protected void niveau_2(){
-        double x2=View.getRatioX()*243;double y2=300;
+        double x2=View.getRatioX()*252.5;double y2=300;
         //x2=500;
         colonne(x2, y2, 6);
         //coté droit du dé
@@ -180,22 +180,22 @@ public class Niveau {
         Quadrilatere ligne = new Quadrilatere(x4+getRayon()*9, y4-getRayon(), getRayon(), getRayon()*6,Image.quad);
         list.add(ligne);
     }
-    protected void niveau_5(){//triangle
-        double x5=0; double y5=100;
+    protected void niveau_5(){//triforce de zelda
+        double x5=getRayon()/2; double y5=100;
         //triangle(x5, y5, 4, false);
         for(int i=1;i<9;i++){
             Quadrilatere ligneGauche = new Quadrilatere(x5, y5+getDiametre()*i, getDiametre()*8-(getRayon()*i)+30, getRayon(),Image.quad);
-            lignes(2.5+getDiametre()*8-(getRayon()*i)+getRayon()*1.5, y5+getDiametre()*i, i);
+            if(i<5){lignes(x5+2.5+getDiametre()*8-(getRayon()*i)+getRayon()*1.5, y5+getDiametre()*i, i);}
             Quadrilatere ligneDroite = new Quadrilatere(x5+getRayon()+getDiametre()*8+getRayon()*i, y5+getDiametre()*i, getDiametre()*8-(getRayon()*i)+34, getRayon(),Image.quad);
             list.add(ligneGauche);
             list.add(ligneDroite);
         }
-        /*triangle(x5-getDiametre()*2, y5+getDiametre()*4, 4, false);
-        triangle(x5+getDiametre()*2, y5+getDiametre()*4, 4, false);
+        triangle(2.5+getDiametre()*7, y5+getDiametre()*4, 4, false);
+        triangle(2.5+getDiametre()*11, y5+getDiametre()*4, 4, false);
         for(int i=0;i<3;i++){
-            Quadrilatere ligneMilieu = new Quadrilatere(x5-getRayon()*3.5+getRayon()*i, y5+getDiametre()*5+getDiametre()*i, getDiametre()*3-getDiametre()*i, getRayon());
+            Quadrilatere ligneMilieu = new Quadrilatere(2.5+getDiametre()*7+getRayon()/2+getRayon()*i, y5+getDiametre()*5+getDiametre()*i, getDiametre()*3-getDiametre()*i, getRayon(),Image.quad);
             list.add(ligneMilieu);
-        }*/
+        }
     }
     public ArrayList<Obstacle> getList() {return list;}
     public int getNiveau() {return niveau;}

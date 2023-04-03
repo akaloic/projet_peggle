@@ -1,7 +1,5 @@
 package model;
 
-import view.View;
-
 public class Balle {
 
   public double x;

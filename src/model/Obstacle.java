@@ -3,8 +3,6 @@ package model;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
-import view.View;
-
 public class Obstacle extends Objet{
 
     protected boolean estMort; 
