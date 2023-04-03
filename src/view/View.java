@@ -111,8 +111,7 @@ public class View extends JFrame {
             son.stop();
             changerPanel(choixEdit());
         });
-        ratioX = (float) (width - width / 7 * 2) / 800;
-        ratioY = (float) height / 600;
+        resetRatio();
         return pane;
 
     }
@@ -120,8 +119,7 @@ public class View extends JFrame {
     public JPanel JeuPanel(Controleur controleur) {
         nbMunition = 4; // provisoire a remplacer par munition joueur
 
-        ratioX = (float) (width - width / 7 * 2) / 800;
-        ratioY = (float) height / 600;
+        resetRatio();
 
         fond = new JPanel();
         fond.setLayout(new BorderLayout());
@@ -221,8 +219,7 @@ public class View extends JFrame {
 
         add(fond);
         setVisible(true);
-        ratioX = (float) (width - width / 7 * 2) / 800;
-        ratioY = (float) height / 600;
+        resetRatio();
 
         partie.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
@@ -367,8 +364,7 @@ public class View extends JFrame {
             panelPrincipal.add(bouton, BorderLayout.SOUTH);
             bouton.addActionListener(
                     (ActionEvent e) -> {
-                        ratioX = (float) (width - width / 7 * 2) / 800;
-                        ratioY = (float) height / 600;
+                        resetRatio();
                         if (mode == 1) {
                             numNiveau = k + 1;
                             fondEcran = new BufferedImage(20, 20, BufferedImage.TYPE_INT_RGB);
@@ -611,6 +607,11 @@ public class View extends JFrame {
 
     public int getNumNiveau() {
         return numNiveau;
+    }
+
+    public void resetRatio(){
+        ratioX = (float) (width - width / 7 - width / 11) / 800;
+        ratioY = (float) height / 600;
     }
 
     public static double getRatioX() {
