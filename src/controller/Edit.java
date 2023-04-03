@@ -47,6 +47,7 @@ public class Edit extends JPanel{
     UndoManager undoManager = new UndoManager();
     JTextField xSaisie = new JTextField();
     JTextField ySaisie = new JTextField();
+    JSlider pointDeVie = new JSlider();
     View view;
 
     public Edit(Niveau n,int widht, int height,int idSauvegarde,View v){
@@ -57,12 +58,14 @@ public class Edit extends JPanel{
         this.height = height;
         JPanel partieBouton = new JPanel();
         partieBouton.setLayout(new GridLayout(6,1));
-        partieBouton.add(save);
-        partieBouton.add(leave);
-            JPanel sepateur = new JPanel(new GridLayout(1,2));
-            sepateur.add(cancel);
-            sepateur.add(redo);
-        partieBouton.add(sepateur);
+        JPanel separateur1 = new JPanel(new GridLayout(1,2));
+            separateur1.add(save);
+            separateur1.add(leave);
+        partieBouton.add(separateur1);
+            JPanel sepateur2 = new JPanel(new GridLayout(1,2));
+            sepateur2.add(cancel);
+            sepateur2.add(redo);
+        partieBouton.add(sepateur2);
         partieBouton.add(delete);
         partieBouton.add(espaceCoords);
         partieBouton.add(espaceSlider);
@@ -107,6 +110,24 @@ public class Edit extends JPanel{
             principal.requestFocus();
           });
 
+        JPanel espaceVie = new JPanel();
+        espaceVie.add(new JLabel("Point de vie"));
+        espaceVie.add(pointDeVie);
+        pointDeVie.setMinimum(1);
+        pointDeVie.setMaximum(5);
+        pointDeVie.setMinorTickSpacing(1);
+        pointDeVie.setMajorTickSpacing(1);
+        pointDeVie.setPaintTrack(true); 
+        pointDeVie.setPaintTicks(true); 
+        pointDeVie.setPaintLabels(true);
+        pointDeVie.addChangeListener (( event ) -> { 
+            objetSelectionner.obstacle.setHP(pointDeVie.getValue());
+            for(int i = 0; i < listPanel.size();i++){
+                listPanel.get(i).obstacle.setHP(pointDeVie.getValue());
+            }
+            principal.requestFocus();
+          });
+        partieBouton.add(espaceVie);
         JPanel espaceX = new JPanel(new BorderLayout());
         JButton xPlus = new JButton("+");
         JButton xMoins = new JButton("-");

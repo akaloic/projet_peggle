@@ -84,6 +84,10 @@ public class Obstacle extends Objet{
         this.vie += pdv;
     }
 
+    public void setHP(int hp){//Pour set le total de vie
+        this.vie = hp;
+    }
+
     public void setEstMort(boolean mort) {
         this.estMort = mort;
     }
