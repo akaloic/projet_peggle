@@ -42,20 +42,19 @@ public class Controleur {
 
                     // rebond
                     for (int i = 0; i < modele.niveau.list.size(); i++) {
-                        if (modele.niveau.list.get(i) instanceof Pegs) {
-                            modele.niveau.list.get(i).rebond(modele.getBalle());
-                            if (modele.niveau.list.get(i).collision(modele.getBalle())) {
-                                boolean detruit = modele.niveau.detruit(i);
-                                if (detruit) {
-                                    double x = modele.niveau.list.get(i).getX();
-                                    double y = modele.niveau.list.get(i).getY();
-                                    view.addExplosion(x, y);
-                                    modele.niveau.list.remove(i);
-                                }
-                                modele.player.calculScore(detruit, facteur++);
-                                view.setScore();
+                        modele.niveau.list.get(i).rebond(modele.getBalle());
+                        if (modele.niveau.list.get(i).collision(modele.getBalle())) {
+                            boolean detruit = modele.niveau.detruit(i);
+                            if (detruit) {
+                                double x = modele.niveau.list.get(i).getX();
+                                double y = modele.niveau.list.get(i).getY();
+                                view.addExplosion(x, y);
+                                modele.niveau.list.remove(i);
                             }
+                            modele.player.calculScore(detruit, facteur++);
+                            view.setScore();
                         }
+                        
                     }
 
                     if (modele.getBalle().getX() - modele.getBalle().rayon / 2 <= 0

@@ -131,18 +131,24 @@ public class View extends JFrame {
             @Override
             public void paint(Graphics g) {
                 super.paint(g);
-                Graphics2D g2d = (Graphics2D)g;
-                g2d.drawImage(fondEcran,0, 0,getWidth(),getHeight(),null);
                 dessineCanon(g);
                 drawBall(g);
                 for (int i = 0; i < controleur.modele.niveau.list.size(); i++) {
                     controleur.modele.niveau.list.get(i).dessine(g);
                 }
             }
+
+            @Override
+            protected void paintComponent(Graphics g) {
+                // TODO Auto-generated method stub
+                super.paintComponent(g);
+                Graphics2D g2d = (Graphics2D)g;
+                g2d.drawImage(fondEcran,0, 0,getWidth(),getHeight(),null);
+            }   
         };
         partie.setSize(new Dimension(800, 600));
         partie.setLayout(null);
-        partie.setBackground(Color.darkGray);
+
 
         ImageIcon icon = new ImageIcon(chemin + "puit.png");
         Image image = icon.getImage();
@@ -286,10 +292,6 @@ public class View extends JFrame {
             son.stop();
             changerPanel(menuPrincipal());
         });
-        int xNiv = precedent.getWidth() * 2;
-        int yNiv = precedent.getHeight() * 2;
-        int wNiv = width / 9;
-        int hNiv = height / 6;
         afficheMiniature(1, choixNiv, height / 2 - 200);
         afficheMiniature(2, choixNiv, height / 2);
 
@@ -514,7 +516,6 @@ public class View extends JFrame {
         g2d.draw(genPath);
         g2d.setStroke(new BasicStroke(1));
         g2d.setPaint(null);
-        g2d.setColor(Color.lightGray);
         dessineNiveau(g, controleur.modele.getNiveau().list);
 
     }
