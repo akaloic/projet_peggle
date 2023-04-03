@@ -11,6 +11,9 @@ import model.*;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.*;
@@ -56,6 +59,7 @@ public class View extends JFrame {
     public int width;
     public int height;
     public int numNiveau;
+    public BufferedImage fondEcran;
 
     public boolean versDroite = true;
 
@@ -137,19 +141,13 @@ public class View extends JFrame {
         fond = new JPanel();
         fond.setLayout(new BorderLayout());
         // --------------CENTRE---------------------
+
         partie = new JPanel() {
             @Override
             public void paint(Graphics g) {
                 super.paint(g);
-                if( controleur.modele.niveau.getNumNiveau() == 1 ) {
-                    try {
-                        BufferedImage image = ImageIO.read(new File("ressources/fondPartie.png"));
-                        super.paintComponent(g);
-                        g.drawImage(image,0, 0,width,height, null);
-                    }catch(Exception e){
-                        e.printStackTrace();
-                    }
-                }
+                Graphics2D g2d = (Graphics2D)g;
+                g2d.drawImage(fondEcran,0, 0,getWidth(),getHeight(),null);
                 dessineCanon(g);
                 drawBall(g);
                 for (int i = 0; i < controleur.modele.niveau.list.size(); i++) {
@@ -184,13 +182,15 @@ public class View extends JFrame {
         munition.setLayout(new GridLayout(10, 1));
         afficheMunition();
 
-        JButton pause = new JButton("pause");
+        JButton pause = new JButton("Pause/resume");
         pause.setBounds(0,0,50,50);
-        // pause.addActionListener(e->{
-        //     timer.stop();
-        //     changerPanel(pauseJeu());
-        // });
-
+        pause.addActionListener(e->{
+            if(controleur.timer.isRunning()){
+                controleur.timer.stop();
+            }else{
+                controleur.timer.restart();
+            }
+        });
 
         leave = new JButton("Fermer");
         leave.addActionListener(new ActionListener() {
@@ -220,12 +220,10 @@ public class View extends JFrame {
         // --------------DROITE---------------------
         fondDroite = new JPanel();
         fondDroite.setLayout(new BorderLayout());
-        fondDroite.setBackground(Color.gray);
+        fondDroite.setBackground(Color.white);
         fondDroite.setPreferredSize(new Dimension(getWidth() / 11, getHeight()));
 
-        JPanel jauge = new JPanel();
-        jauge.setLayout(null);
-        fondDroite.add(jauge);
+        JProgressBar jauge = dessineJauge(fondDroite);
 
         JPanel info=new JPanel();
         info.setBackground(Color.gray);
@@ -237,6 +235,7 @@ public class View extends JFrame {
         info.add(pseudoLabel,BorderLayout.NORTH);
         info.add(scoreLabel,BorderLayout.SOUTH);
         fondDroite.add(info,BorderLayout.NORTH);
+
 
         fond.add(fondDroite, BorderLayout.EAST);
         // --------------DROITE---------------------
@@ -251,13 +250,22 @@ public class View extends JFrame {
                 controleur.tirer();
             }
         });
-//         // --------------ANIMATION----------------------
         return fond;
     }
 
+    public JProgressBar dessineJauge(JPanel panel) {
+        JProgressBar jauge = new JProgressBar(SwingConstants.VERTICAL,0,200);
+        jauge.setPreferredSize(new Dimension(fondDroite.getWidth(),fondDroite.getHeight()));
+        jauge.setStringPainted(true);  
+        while(controleur.balleEnJeu) {
+            jauge.setValue((int)controleur.modele.getPlayer().pointGagneParBalleEnJeu*20000/100);
+        }
+        panel.add(jauge);
+        return jauge;
+    }
 
     public JPanel choixNiveauPane(Controleur controleur) {
-        controleur.modele.player.score=0;
+        controleur.modele.player.score = 0;
         String url = "ressources/SonsWav/ChoixNiveau.wav";
         LancerMusic(url);
         JPanel choixNiv = new JPanel(){
@@ -361,6 +369,14 @@ public class View extends JFrame {
                         ratioX = (float) (width - width / 7 * 2) / 800;
                         ratioY = (float) height / 600;
                         if (mode == 1) {
+                            numNiveau = k + 1;
+                            fondEcran = new BufferedImage(20, 20, BufferedImage.TYPE_INT_RGB);
+                            try {
+                                fondEcran = ImageIO.read(new File("ressources/Niveau"+numNiveau+"Fond.png"));
+                            } catch (IOException excep) {
+                                // TODO Auto-generated catch block
+                                excep.printStackTrace();
+                            }
                             controleur.modele.setNiveau(new Niveau(k + 1));
                             changerPanel(JeuPanel(this.controleur));
                         }

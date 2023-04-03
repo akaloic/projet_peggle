@@ -52,8 +52,7 @@ public class Controleur {
                                     view.addExplosion(x, y);
                                     modele.niveau.list.remove(i);
                                 }
-                                modele.player.calculScore(detruit, facteur++);
-                                
+                                modele.player.calculScore(detruit, facteur++, balleEnJeu);
                                 view.setScore();
                             }
                         }
