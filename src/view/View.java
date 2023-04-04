@@ -464,8 +464,7 @@ public class View extends JFrame {
             e.printStackTrace();
         }
 
-        Rectangle rect2 = (new Rectangle(partie.getWidth() / 2 - widthBase / 10, heightBase / 3, widthBase / 5,
-                heightBase / 2));
+        //Rectangle rect2 = (new Rectangle(partie.getWidth() / 2 - widthBase / 10, heightBase / 3, widthBase / 5,heightBase / 2));
 
         g2d.rotate(Math.toRadians(90 - angle), partie.getWidth() / 2, 0);
         g2d.setClip(null);
@@ -475,9 +474,9 @@ public class View extends JFrame {
         // On annule la rotation après avoir dessiner le rectangle pour que seule le
         // bout du partie rotate
 
-        double theta = Math.toRadians(angle);
-        double x = (partie.getWidth() / 2) - (5 * heightBase / 6) * Math.sin(theta) - 10/* Width balle */;
-        double y = (5 * heightBase / 6) * Math.cos(theta) - 10/* Height balle */;
+        //double theta = Math.toRadians(angle);
+        //double x = (partie.getWidth() / 2) - (5 * heightBase / 6) * Math.sin(theta) - 10/* Width balle */;
+        //double y = (5 * heightBase / 6) * Math.cos(theta) - 10/* Height balle */;
         // Pour calculer nouvelles coordonnées de la balle après rotaion
         Balle fantome = new Balle(partie.getWidth() / 2 - 25, 0d, 300d, 180 - this.angle);
         GeneralPath genPath = new GeneralPath();
@@ -555,10 +554,12 @@ public class View extends JFrame {
 
     public void drawBall(Graphics g) {
         Graphics g2d = g;
-        if (this.controleur.modele.balle != null) {
+        /*if (this.controleur.modele.balle != null) {
             g2d.fillOval((int) (controleur.modele.balle.getX()), (int) (controleur.modele.balle.getY()),
                     (int) (controleur.modele.balle.rayon / 2), (int) (controleur.modele.balle.rayon / 2));
-        }
+        }*/
+        if(this.controleur.modele.balle!=null){
+            this.controleur.modele.balle.dessine(g2d);}
     }
 
     public JPanel getPartie() {

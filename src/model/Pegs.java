@@ -1,6 +1,8 @@
 package model;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.Random;
+
 import view.View;
 public class Pegs extends Obstacle{
     private int rayon = 25;
@@ -9,6 +11,8 @@ public class Pegs extends Obstacle{
     }
     public Pegs(double x, double y, int v,BufferedImage img){
         super(x, y, 25,25, false, v);
+        Random r = new Random();
+        super.vie=r.nextInt(3)+1;
         this.image = img;
     }
     public Pegs(double x, double y, int v){
