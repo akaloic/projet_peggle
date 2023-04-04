@@ -131,8 +131,8 @@ public class View extends JFrame {
             @Override
             public void paint(Graphics g) {
                 super.paint(g);
-                Graphics2D g2d = (Graphics2D)g;
-                g2d.drawImage(fondEcran,0, 0,getWidth(),getHeight(),null);
+                Graphics2D g2d = (Graphics2D) g;
+                g2d.drawImage(fondEcran, 0, 0, getWidth(), getHeight(), null);
                 dessineCanon(g);
                 drawBall(g);
                 for (int i = 0; i < controleur.modele.niveau.list.size(); i++) {
@@ -368,7 +368,7 @@ public class View extends JFrame {
                             numNiveau = k + 1;
                             fondEcran = new BufferedImage(20, 20, BufferedImage.TYPE_INT_RGB);
                             try {
-                                fondEcran = ImageIO.read(new File("ressources/Niveau"+numNiveau+"Fond.png"));
+                                fondEcran = ImageIO.read(new File("ressources/Niveau" + numNiveau + "Fond.png"));
                             } catch (IOException excep) {
                                 // TODO Auto-generated catch block
                                 excep.printStackTrace();
@@ -414,7 +414,6 @@ public class View extends JFrame {
 
     public void placePuit() {
         if (versDroite) {
-            ;
             if (puit.getX() + puit.getWidth() >= partie.getWidth()) {
                 puit.setLocation(puit.getX() - 5, puit.getY());
                 versDroite = false;
