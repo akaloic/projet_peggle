@@ -51,8 +51,8 @@ public class View extends JFrame {
 
     static Clip son;
 
-    public int width;
-    public int height;
+    public static int width;
+    public static int height;
     public int numNiveau;
     public BufferedImage fondEcran;
 
@@ -282,10 +282,11 @@ public class View extends JFrame {
 
         window.getContentPane().add(new JLabel("", new ImageIcon(chemin + "loading.gif"), JLabel.CENTER));
         window.setBounds(0, 0, getWidth() / 3, getHeight() / 5);
-        window.setVisible(true);
         window.setLocationRelativeTo(null);
         window.add(textArea, BorderLayout.CENTER);
         window.add(panel, BorderLayout.SOUTH);
+        window.setVisible(true);
+
 
         precedent.addActionListener(e -> {
             this.invalidate();
@@ -610,7 +611,7 @@ public class View extends JFrame {
         return numNiveau;
     }
 
-    public void resetRatio(){
+    public static void resetRatio(){
         ratioX = (float) (width - width / 7 - width / 11) / 800;
         ratioY = (float) height / 600;
     }

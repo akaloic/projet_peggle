@@ -1,5 +1,7 @@
 package model;
 
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.util.ArrayList;
 
 import view.Image;
@@ -77,7 +79,7 @@ public class Niveau {
     protected void triangle(double x, double y, int lignes, Boolean alenvers){
         double nvx=x;
         double nvy=y;
-        for(int i=0;i<=lignes;i++){
+        for(int i=1;i<=lignes;i++){
             lignes(nvx, nvy, i);
             nvx-=getRayon();
             nvy=alenvers==false?nvy+getDiametre():nvy-getDiametre();
@@ -114,8 +116,7 @@ public class Niveau {
     }
 
     protected void niveau_2(){
-        double x2=View.getRatioX()*252.5;double y2=300;
-        //x2=500;
+        double x2=400+(getRayon()/6);double y2=300;
         colonne(x2, y2, 6);
         //coté droit du dé
         diagonal(x2+getDiametre(), y2-getRayon(),4, true, true);
@@ -134,15 +135,15 @@ public class Niveau {
         colonne(x2, y2-getDiametre()*4, 4);
     }
     protected void niveau_3(){//series de carrés
-        double x3=getDiametre()*View.getRatioX(); double y3=getDiametre()*3;
+        double x3=(400/5)-(getRayon()/12); double y3=getRayon()*5;
         int m1=0;int m2=0;int j=0;
         for(int i=3; i>-1;i--){
             carres(x3+getDiametre()*m1, y3, i);
             carres(x3+getDiametre()*m2, y3+getDiametre()*(6-j), j);
             m1+=i+2;m2+=j+2;j++;
         }
-        Quadrilatere colonneGauche = new Quadrilatere(x3-getDiametre(), y3-getRayon()-2, getRayon(), getDiametre()*9,Image.quad);
-        Quadrilatere colonneDroit = new Quadrilatere(x3+getDiametre()*14, y3-getRayon()-2, getRayon(), getDiametre()*9,Image.quad);
+        Quadrilatere colonneGauche = new Quadrilatere(x3-getDiametre(), y3-getRayon()-2, getRayon(), getDiametre()*8+getRayon(),Image.quad);
+        Quadrilatere colonneDroit = new Quadrilatere(x3+getDiametre()*14, y3-getRayon()-2, getRayon(), getDiametre()*8+getRayon(),Image.quad);
         Quadrilatere ligneGaucheHaut = new Quadrilatere(x3-getDiametre(), y3-getDiametre(), getDiametre()*6, getRayon(),Image.quad);
         Quadrilatere ligneGaucheBas = new Quadrilatere(x3-getDiametre(), y3+getRayon()*16, getDiametre()*6, getRayon(),Image.quad);
         Quadrilatere ligneDroitHaut = new Quadrilatere(x3+getDiametre()*8+getRayon(), y3-getDiametre(), getDiametre()*6, getRayon(),Image.quad);
@@ -181,19 +182,15 @@ public class Niveau {
         list.add(ligne);
     }
     protected void niveau_5(){//triforce de zelda
-        double x5=getRayon()/2; double y5=100;
-        //triangle(x5, y5, 4, false);
-        for(int i=1;i<9;i++){
-            Quadrilatere ligneGauche = new Quadrilatere(x5, y5+getDiametre()*i, getDiametre()*8-(getRayon()*i)+30, getRayon(),Image.quad);
-            if(i<5){lignes(x5+2.5+getDiametre()*8-(getRayon()*i)+getRayon()*1.5, y5+getDiametre()*i, i);}
-            Quadrilatere ligneDroite = new Quadrilatere(x5+getRayon()+getDiametre()*8+getRayon()*i, y5+getDiametre()*i, getDiametre()*8-(getRayon()*i)+34, getRayon(),Image.quad);
-            list.add(ligneGauche);
-            list.add(ligneDroite);
-        }
-        triangle(2.5+getDiametre()*7, y5+getDiametre()*4, 4, false);
-        triangle(2.5+getDiametre()*11, y5+getDiametre()*4, 4, false);
-        for(int i=0;i<3;i++){
-            Quadrilatere ligneMilieu = new Quadrilatere(2.5+getDiametre()*7+getRayon()/2+getRayon()*i, y5+getDiametre()*5+getDiametre()*i, getDiametre()*3-getDiametre()*i, getRayon(),Image.quad);
+        double x5=getRayon()/2; double y5=150;
+        x5=400+(getRayon()/6);
+        triangle(x5, y5, 4, false);
+        triangle(x5-getDiametre()*2, y5+getDiametre()*4, 4, false);
+        triangle(x5-getDiametre()*5-getRayon(), y5+getDiametre()*5, 3, false);
+        triangle(x5+getDiametre()*2, y5+getDiametre()*4, 4, false);
+        triangle(x5+getDiametre()*5+getRayon(), y5+getDiametre()*5, 3, false);
+        for(int i=1;i<4;i++){
+            Quadrilatere ligneMilieu = new Quadrilatere(x5-getRayon()*4+(getRayon()/2)+getRayon()*i, y5+getDiametre()*3+getDiametre()*i, getDiametre()*4-getDiametre()*i, getRayon(),Image.quad);
             list.add(ligneMilieu);
         }
     }
