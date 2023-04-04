@@ -1,17 +1,18 @@
 package model;
 import java.awt.*;
-import java.awt.image.BufferedImage;
+import view.Image;
 
 import view.View;
 public class Quadrilatere extends Obstacle {//peut etre un carré comme un rectangle
     public Quadrilatere(double x, double y, double largeur, double hauteur) {
         super(x, y, largeur, hauteur, false, 100);
         rayon = (largeur + hauteur)/2;
-    }
-    public Quadrilatere(double x, double y, double largeur, double hauteur, BufferedImage img) {
-        super(x, y, largeur, hauteur, false, 100);
-        rayon = (largeur + hauteur)/2;
-        this.image=img;
+        if(largeur>=hauteur){
+            this.image=Image.quadHorizontal;
+        }
+        else{
+            this.image=Image.quadVertical;
+        }
     }
 
     @Override

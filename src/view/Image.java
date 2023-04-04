@@ -8,7 +8,8 @@ public class Image {
     public static BufferedImage pegRondBleu;
     public static BufferedImage pegRondRose;
     public static BufferedImage pegRondRouge;
-    public static BufferedImage quad;
+    public static BufferedImage quadHorizontal;
+    public static BufferedImage quadVertical;
     public static BufferedImage boulet;
     
     public Image(){
@@ -37,12 +38,19 @@ public class Image {
         }
         pegRondRouge = img;
         try {
-            img = ImageIO.read(new File("ressources/quad.png"));
+            img = ImageIO.read(new File("ressources/quadHorizontal.png"));
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        quad = img;
+        quadHorizontal = img;
+        try {
+            img = ImageIO.read(new File("ressources/quadVertical.png"));
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        quadVertical = img;
         try {
             img = ImageIO.read(new File("ressources/boulet.png"));
         } catch (IOException e) {
