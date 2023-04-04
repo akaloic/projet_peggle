@@ -1,13 +1,6 @@
 package model;
-
-import java.awt.Dimension;
-import java.awt.Toolkit;
 import java.util.ArrayList;
-
 import view.Image;
-import view.View;
-
-
 public class Niveau {
 
     public ArrayList<Obstacle> list = new ArrayList<Obstacle>();

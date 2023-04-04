@@ -1,6 +1,5 @@
 package model;
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.util.Random;
 
 import view.View;
