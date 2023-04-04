@@ -42,7 +42,7 @@ public class Niveau {
         double nvx = x;
         double nvy = y;
         for (int i = 0; i < pegUsed; i++) {
-            Pegs p = new Pegs(nvx, nvy, 1,Image.pegRondRose);
+            Pegs p = new Pegs(nvx, nvy, 1);
             list.add(p);
             nvx = direction? nvx + p.getDiametre() : nvx - p.getDiametre();//true pour droite, false pour gauche
             nvy = sens? nvy - p.getRayon() : nvy + p.getRayon();//true pour haut, false pour bas
@@ -60,7 +60,7 @@ public class Niveau {
     protected void lignes(double x, double y, int pegUsed) {
         double nvx = x;
         for (int i = 0; i < pegUsed; i++) {
-            Pegs p = new Pegs(nvx, y, 1,Image.pegRondRose);
+            Pegs p = new Pegs(nvx, y, 1);
             list.add(p);
             nvx += p.getDiametre();
         }
@@ -69,7 +69,7 @@ public class Niveau {
     protected void colonne(double x, double y, int pegUsed) {
         double nvy = y;
         for (int i = 0; i < pegUsed; i++) {
-            Pegs p = new Pegs(x, nvy, 1,Image.pegRondRose);
+            Pegs p = new Pegs(x, nvy, 1);
             list.add(p);
             nvy += p.getDiametre();
         }

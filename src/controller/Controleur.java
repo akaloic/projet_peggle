@@ -44,7 +44,8 @@ public class Controleur {
                     for (int i = 0; i < modele.niveau.list.size(); i++) {
                         modele.niveau.list.get(i).rebond(modele.getBalle());
                         if (modele.niveau.list.get(i).collision(modele.getBalle())) {
-                            boolean detruit = modele.niveau.detruit(i);
+                            modele.niveau.list.get(i).perdDeLaVie(1);
+                            boolean detruit = modele.niveau.list.get(i).getEstMort();
                             if (detruit) {
                                 double x = modele.niveau.list.get(i).getX();
                                 double y = modele.niveau.list.get(i).getY();

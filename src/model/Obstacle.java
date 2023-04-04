@@ -2,7 +2,7 @@ package model;
 
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
-
+import view.Image;
 public class Obstacle extends Objet{
 
     protected boolean estMort; 
@@ -18,8 +18,11 @@ public class Obstacle extends Objet{
 
     public void perdDeLaVie(int degats) {
         this.vie -= degats;
-        if (isDead()) {
-            this.estMort = false;
+        switch(this.vie){
+            default: this.estMort=true;break;
+            case 1: this.image=Image.pegRondRouge;break;
+            case 2: this.image=Image.pegRondRose;break;
+            case 3: this.image=Image.pegRondBleu;break;
         }
     }
     public boolean collision(Balle balle) {
@@ -63,27 +66,6 @@ public class Obstacle extends Objet{
     public boolean getEstMort() {
         return this.estMort;
     }
-
-    public double getWidth() {
-        return super.getLargeur();
-    }
-
-    public double getHeight() {
-        return super.getHauteur();
-    }
-
-    public void setX(double n){
-        this.x = n;
-    }
-
-    public void setY(double n){
-        this.y = n;
-    }
-
-    public void setVie(int pdv) {
-        this.vie += pdv;
-    }
-
     public void setHP(int hp){//Pour set le total de vie
         this.vie = hp;
     }

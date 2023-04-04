@@ -4,19 +4,24 @@ import java.awt.image.BufferedImage;
 import java.util.Random;
 
 import view.View;
+import view.Image;
 public class Pegs extends Obstacle{
     private int rayon = 25;
     public Pegs(){
         super(1);
     }
-    public Pegs(double x, double y, int v,BufferedImage img){
+    public Pegs(double x, double y, int v){
         super(x, y, 25,25, false, v);
         Random r = new Random();
         super.vie=r.nextInt(3)+1;
-        this.image = img;
-    }
-    public Pegs(double x, double y, int v){
-        super(x, y, 25,25, false, v);
+        switch(super.vie){
+            default:
+                    this.image=Image.pegRondRouge; break;
+            case 2:
+                    this.image=Image.pegRondRose; break;
+            case 3:
+                    this.image=Image.pegRondBleu; break;
+        }
     }
     public Pegs(double x, double y, int v,int rayon){
         super(x, y, rayon,rayon, false, v);
