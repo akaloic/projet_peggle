@@ -57,7 +57,10 @@ public class Image {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        boulet = img;
-        
+        boulet = img;    
+    }
+
+    public static BufferedImage getBoulet(){
+        return boulet;
     }
 }

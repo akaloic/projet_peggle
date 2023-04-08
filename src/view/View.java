@@ -542,7 +542,8 @@ public class View extends JFrame {
                     @Override
                     public void paint(Graphics g) {
                         super.paint(g);
-                        g.fillOval(50, 20, 50, 50);
+                        Graphics2D g2d = (Graphics2D)g;
+                        g2d.drawImage(view.Image.getBoulet(),50, 20,50,50,null);
                     }
                 };
             }
