@@ -22,9 +22,9 @@ public class Pegs extends Obstacle{
                     this.image=Image.pegRondBleu; break;
         }
     }
-    public Pegs(double x, double y, int v,int rayon){
-        super(x, y, rayon,rayon, false, v);
-        this.rayon=rayon;
+    public Pegs(double x, double y, int v,double largeur, double hauteur){
+        super(x, y, largeur,hauteur, false, v);
+        this.rayon=(int)((hauteur+largeur)/2);
     }
 
     @Override
@@ -48,6 +48,7 @@ public class Pegs extends Obstacle{
 
     public double getRayon(){return this.rayon;}
     public double getDiametre(){return this.rayon*2;}
+    @Override
     public void dessine(Graphics g){
         int gx=(int)(this.x*View.ratioX);
         int gy=(int)(this.y*View.ratioY);
@@ -59,11 +60,18 @@ public class Pegs extends Obstacle{
         Graphics2D g2d = (Graphics2D)g;
         g2d.drawImage(this.image,gx, gy,gw,gh,null);
     }
-
-    public Pegs clone(double x, double y, int v, double rayon){
-        return new Pegs(x, y, v, (int)rayon);
+    @Override
+    public Pegs clone(double x, double y, int v, double largeur,double hauteur){
+        Pegs p = new Pegs(x, y, v, largeur,hauteur);
+        p.rayon=(int)((hauteur+largeur)/2);
+        return p;
     }
     public void setRayon(double i){
         this.rayon = (int)i;
+    }
+
+    @Override
+    public boolean utiliseRayon(){
+        return true;
     }
 }

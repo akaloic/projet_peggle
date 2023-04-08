@@ -42,7 +42,7 @@ public class Obstacle extends Objet{
         this.rayon = i;
     }
 
-    public Obstacle clone(double x, double y, int v, double rayon){
+    public Obstacle clone(double x, double y, int v, double largeur,double hauteur){
         return new Obstacle(0);
     }
 
@@ -57,6 +57,14 @@ public class Obstacle extends Objet{
 
     public double getY() {
         return this.y;
+    }
+
+    public void setX(double x){
+        this.x = x;
+    }
+
+    public void setY(double y){
+        this.y = y;
     }
 
     public int getVie() {
@@ -75,6 +83,10 @@ public class Obstacle extends Objet{
     }
 
     public void dessine(Graphics g) {
+    }
+
+    public boolean utiliseRayon(){
+        return false;
     }
     // ---------GETTER SETTER---------
 

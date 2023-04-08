@@ -6,7 +6,6 @@ import view.View;
 public class Quadrilatere extends Obstacle {//peut etre un carré comme un rectangle
     public Quadrilatere(double x, double y, double largeur, double hauteur) {
         super(x, y, largeur, hauteur, false, 100);
-        rayon = (largeur + hauteur)/2;
         if(largeur>=hauteur){
             this.image=Image.quadHorizontal;
         }
@@ -26,11 +25,12 @@ public class Quadrilatere extends Obstacle {//peut etre un carré comme un recta
 
         }
     }
+    @Override
     public void dessine(Graphics g){
         int gx=(int)(this.x*View.ratioX);
         int gy=(int)(this.y*View.ratioY);
-        int gw=(int)(this.largeur*View.getRatio());
-        int gh=(int)(this.hauteur*View.getRatio());
+        int gw=(int)(this.largeur*View.ratioX);
+        int gh=(int)(this.hauteur*View.ratioY);
         if(image == null){
             g.fillRect(gx,gy,gw,gh);
         }
@@ -38,8 +38,16 @@ public class Quadrilatere extends Obstacle {//peut etre un carré comme un recta
         g2d.drawImage(this.image,gx, gy,gw,gh,null);
     }
 
-    public Quadrilatere clone(double x, double y, int v, double rayon){
-        return new Quadrilatere(x, y, 20, rayon);
+    @Override
+    public Quadrilatere clone(double x, double y, int v, double largeur,double hauteur){
+        Quadrilatere q = new Quadrilatere(x, y, largeur, hauteur);
+        q.image = null;
+        return q;
+    }
+
+    @Override
+    public boolean utiliseRayon(){
+        return false;
     }
 
 }
