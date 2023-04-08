@@ -543,7 +543,7 @@ public class View extends JFrame {
                     public void paint(Graphics g) {
                         super.paint(g);
                         Graphics2D g2d = (Graphics2D)g;
-                        g2d.drawImage(view.Image.getBoulet(),50, 20,50,50,null);
+                        g2d.drawImage(view.Image.boulet,50, 20,50,50,null);
                     }
                 };
             }

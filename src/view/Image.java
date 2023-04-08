@@ -59,8 +59,4 @@ public class Image {
         }
         boulet = img;    
     }
-
-    public static BufferedImage getBoulet(){
-        return boulet;
-    }
 }
