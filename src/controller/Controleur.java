@@ -24,6 +24,7 @@ public class Controleur {
         new Image();
         new Sauvegarde();
         view = new View(this);
+        Sauvegarde.joueur = 0;
         facteur = 1;
         // --------------ANIMATION----------------------
         timer = new Timer(30, new ActionListener() {
@@ -33,8 +34,10 @@ public class Controleur {
                 view.setColorX();
                 view.setColorX();
                 view.calculeAngle();
-                view./*getPartie().*/repaint();
-
+                if(View.enJeu){
+                    view.repaint();
+                }
+                
                 // puit
                 view.placePuit();
                 if (modele.getBalle() != null) {

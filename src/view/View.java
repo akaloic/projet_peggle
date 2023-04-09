@@ -33,7 +33,7 @@ public class View extends JFrame {
     public JPanel partie = new JPanel();
 
     public JButton leave;
-    public boolean enJeu = true;
+    public static boolean enJeu = true;
     public boolean balleEnJeu = false;
     public double angle;
     public String chemin = System.getProperty("user.dir") + "/ressources/";
@@ -107,7 +107,7 @@ public class View extends JFrame {
         start.addActionListener(e -> {
             son.stop();
             controleur.modele.setPlayer(new Player(nameField.getText(), 4));
-            changerPanel(choixNiveauPane(controleur));
+            changerPanel(choixJoueur());
         });
 
         edit.addActionListener(e -> {
@@ -302,8 +302,9 @@ public class View extends JFrame {
         return choixNiv;
     }
 
-    public void changerPanel(JPanel pane) {
+    public void changerPanel(Container pane) {
         invalidate();
+        enJeu = pane.equals(fond);
         setContentPane(pane);
         repaint();
         revalidate();
@@ -329,7 +330,7 @@ public class View extends JFrame {
         // 1 = Niveau imposé
         // 2 = Niveau créer soit même
         JPanel bis = new JPanel(null);
-        int borne = mode == 1 ? 5 : Math.max(Sauvegarde.liste.size(), 1);
+        int borne = mode == 1 ? 5 : Math.max(Sauvegarde.listeJoueurs.get(Sauvegarde.joueur).liste.size(), 1);
         bis.setBounds(width / 30, height/8, width, height / 6);
         for (int i = 0; i < borne; i++) {
             int k = i;
@@ -346,6 +347,8 @@ public class View extends JFrame {
                         controleur.modele.setNiveau(new Niveau(k + 1));
                         dessineNiveau(g, controleur.modele.getNiveau().getList());
                     }
+                    g.setFont(new Font("TimesRoman", Font.PLAIN, 30)); 
+                    ((Graphics2D)g).drawString("Meilleur score : 666", 0, 30);
                 }
 
                 @Override
@@ -362,14 +365,14 @@ public class View extends JFrame {
                     if(fondEcran == null){
                         setBackground(Color.gray);
                     }
-                    g2d.drawImage(fondEcran,0, 0,getWidth(),getHeight(),null);
+                    /*g2d.drawImage(view.Image.boulet,0, 0,getWidth(),getHeight(),null);*/
                 }
             };
             if (mode == 2) {
                 JButton supprimer = new JButton("X");
                 supprimer.addActionListener(
                         (ActionEvent e) -> {
-                            Sauvegarde.liste.remove(k);
+                            Sauvegarde.listeJoueurs.get(Sauvegarde.joueur).liste.remove(k-1);
                             changerPanel(choixEdit());
                             Sauvegarde.save(null, 0);
                         });
@@ -422,10 +425,10 @@ public class View extends JFrame {
             ajoute.addActionListener(
                     (ActionEvent e) -> {
                         ArrayList<Obstacle> a = new ArrayList<>();
-                        Sauvegarde.liste.add(a);
+                        Sauvegarde.listeJoueurs.get(Sauvegarde.joueur).liste.add(a);
                         Sauvegarde.save(a, borne);
                         changerPanel(choixEdit());
-                    });
+            });
             ajoute.setBounds(width / 20 , borne * height, width - width/5, height);
             bis.add(ajoute);
         }
@@ -437,6 +440,67 @@ public class View extends JFrame {
         bis.setBackground(Color.lightGray);
         pane.add(defile);
 
+    }
+
+    public Container choixJoueur(){
+        JPanel auxiliaire = new JPanel(null);
+        JPanel bis = new JPanel(new GridLayout(Sauvegarde.listeJoueurs.size()+1,1));
+        JScrollPane principal = new JScrollPane(bis, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+        ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+
+        for(int i = 0; i < Sauvegarde.listeJoueurs.size(); i++){
+            JPanel pane = new JPanel(new BorderLayout());
+            int k = i+1;
+            JPanel info = new JPanel(null){
+                @Override
+                public void paint(Graphics g) {
+                    // TODO Auto-generated method stub
+                    super.paint(g);
+                    ((Graphics2D)g).drawString("Joueur "+k, 20, 50);
+                }     
+            };
+
+            JButton choix = new JButton("Joueur "+(k+1));
+            choix.addActionListener(
+                (ActionEvent e) -> {
+                    Sauvegarde.joueur = k-1;
+                    changerPanel(menuPrincipal());
+            });
+
+            JButton supprimer = new JButton("X");
+            supprimer.addActionListener(
+                (ActionEvent e) -> {
+                    Sauvegarde.listeJoueurs.remove(k-1);
+                    Sauvegarde.save();
+                    changerPanel(menuPrincipal());
+            });
+
+            pane.add(choix,BorderLayout.WEST);
+            pane.add(info,BorderLayout.CENTER);
+            info.add(supprimer);
+            info.setBackground(Color.lightGray);
+
+            bis.add(pane);
+            supprimer.setBounds(info.getWidth(), 0, 50, 50);
+        }
+
+        principal.setBackground(Color.lightGray);
+
+        JButton nouveau = new JButton("Nouvelle sauvegarde");
+        nouveau.addActionListener(
+            (ActionEvent e) -> {
+                Sauvegarde.listeJoueurs.add(new Player("Nouveau", 4));
+                Sauvegarde.save();
+                changerPanel(menuPrincipal());
+        });
+        bis.add(nouveau);
+
+        principal.setBounds(200,100, width - width / 4, height - height / 4);
+        bis.setPreferredSize(new Dimension(principal.getWidth(),principal.getHeight() * Sauvegarde.listeJoueurs.size()));
+        principal.getVerticalScrollBar().setUnitIncrement(30);
+        auxiliaire.add(principal);
+        auxiliaire.setBackground(Color.lightGray);
+        return auxiliaire;
     }
 
     public void placePuit() {

@@ -8,15 +8,17 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
 import model.Obstacle;
+import model.Player;
 
 public class Sauvegarde {
-   public static ArrayList<ArrayList<Obstacle>> liste = new ArrayList<ArrayList<Obstacle>>();
+   public static int joueur;
+   public static ArrayList<Player> listeJoueurs = new ArrayList<Player>();
 
    public Sauvegarde() {
       try {
          FileInputStream fileIn = new FileInputStream("save.ser");
          ObjectInputStream in = new ObjectInputStream(fileIn);
-         liste = (ArrayList<ArrayList<Obstacle>>) in.readObject();
+         listeJoueurs = (ArrayList<Player>) in.readObject();
          in.close();
          fileIn.close();
       } catch (IOException i) {
@@ -28,12 +30,12 @@ public class Sauvegarde {
 
    public static void save(ArrayList<Obstacle> a, int n) {
       if (a != null || n != 0) {
-         liste.set(n, a);
+         listeJoueurs.get(joueur).liste.set(n, a);
       }
       try {
          FileOutputStream fileOut = new FileOutputStream("save.ser");
          ObjectOutputStream out = new ObjectOutputStream(fileOut);
-         out.writeObject(liste);
+         out.writeObject(listeJoueurs);
          out.close();
          fileOut.close();
          System.out.println("Sauvegarde effectué");
@@ -42,11 +44,25 @@ public class Sauvegarde {
       }
    }
 
+   public static void save(){
+      try {
+         FileOutputStream fileOut = new FileOutputStream("save.ser");
+         ObjectOutputStream out = new ObjectOutputStream(fileOut);
+         out.writeObject(listeJoueurs);
+         out.close();
+         fileOut.close();
+         System.out.println("Sauvegarde effectué");
+      } catch (IOException i) {
+         i.printStackTrace();
+      }
+
+   }
+
    public static ArrayList<Obstacle> charge(int n) {
       try {
          FileInputStream fileIn = new FileInputStream("save.ser");
          ObjectInputStream in = new ObjectInputStream(fileIn);
-         liste = (ArrayList<ArrayList<Obstacle>>) in.readObject();
+         listeJoueurs = (ArrayList<Player>) in.readObject();
          in.close();
          fileIn.close();
       } catch (IOException i) {
@@ -54,10 +70,10 @@ public class Sauvegarde {
       } catch (ClassNotFoundException c) {
          c.printStackTrace();
       }
-      if (n >= liste.size()) {
+      if (n >= listeJoueurs.get(joueur).liste.size()) {
          ArrayList<Obstacle> a = new ArrayList<>();
-         liste.add(a);
+         listeJoueurs.get(joueur).liste.add(a);
       }
-      return liste.get(n);
+      return listeJoueurs.get(joueur).liste.get(n);
    }
 }
