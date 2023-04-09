@@ -21,6 +21,7 @@ public class Pegs extends Obstacle{
             case 3:
                     this.image=Image.pegRondBleu; break;
         }
+        System.out.println(this);
     }
     public Pegs(double x, double y, int v,double largeur, double hauteur){
         super(x, y, largeur,hauteur, false, v);
