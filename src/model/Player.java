@@ -19,4 +19,12 @@ public class Player implements Serializable{
         if (detruit)
             score += 5;
     }
+
+    public String getPseudo(){
+        return this.pseudo;
+    }
+
+    public void setPseudo(String s){
+        this.pseudo = s;
+    }
 }

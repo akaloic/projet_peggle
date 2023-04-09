@@ -69,7 +69,7 @@ public class View extends JFrame {
         this.setUndecorated(true); // nécessaire sinon this.getHeight et this.getWidth renvoie 0
         this.setVisible(true);
 
-        changerPanel(menuPrincipal());
+        changerPanel(choixJoueur());
     }
 
     public JPanel menuPrincipal() {
@@ -87,7 +87,7 @@ public class View extends JFrame {
         JLabel nameLabel = new JLabel("Pseudo : ");
         nameLabel.setBounds(width / 2 - 60, height - height / 2, 50, 30);
         pane.add(nameLabel);
-        JTextField nameField = new JTextField("test");
+        JTextField nameField = new JTextField(controleur.modele.getPlayer().getPseudo());
         nameField.setBounds(width / 2, height - height / 2, 50, 30);
         pane.add(nameField);
 
@@ -106,12 +106,16 @@ public class View extends JFrame {
 
         start.addActionListener(e -> {
             son.stop();
-            controleur.modele.setPlayer(new Player(nameField.getText(), 4));
-            changerPanel(choixJoueur());
+            controleur.modele.getPlayer().setPseudo(nameField.getText());
+            Sauvegarde.save(controleur.modele.getPlayer());
+            changerPanel(choixNiveauPane(controleur));
         });
 
         edit.addActionListener(e -> {
             son.stop();
+
+            controleur.modele.getPlayer().setPseudo(nameField.getText());
+            Sauvegarde.save(controleur.modele.getPlayer());
             changerPanel(choixEdit());
         });
         resetRatio();
@@ -450,29 +454,30 @@ public class View extends JFrame {
 
         for(int i = 0; i < Sauvegarde.listeJoueurs.size(); i++){
             JPanel pane = new JPanel(new BorderLayout());
-            int k = i+1;
+            int k = i;
             JPanel info = new JPanel(null){
                 @Override
                 public void paint(Graphics g) {
                     // TODO Auto-generated method stub
                     super.paint(g);
-                    ((Graphics2D)g).drawString("Joueur "+k, 20, 50);
+                    ((Graphics2D)g).drawString(Sauvegarde.listeJoueurs.get(k).pseudo, 20, 50);
                 }     
             };
 
             JButton choix = new JButton("Joueur "+(k+1));
             choix.addActionListener(
                 (ActionEvent e) -> {
-                    Sauvegarde.joueur = k-1;
+                    Sauvegarde.joueur = k;
+                    controleur.modele.setPlayer(Sauvegarde.listeJoueurs.get(k));
                     changerPanel(menuPrincipal());
             });
 
             JButton supprimer = new JButton("X");
             supprimer.addActionListener(
                 (ActionEvent e) -> {
-                    Sauvegarde.listeJoueurs.remove(k-1);
-                    Sauvegarde.save();
-                    changerPanel(menuPrincipal());
+                    Sauvegarde.listeJoueurs.remove(k);
+                    Sauvegarde.save(null);
+                    changerPanel(choixJoueur());
             });
 
             pane.add(choix,BorderLayout.WEST);
@@ -489,14 +494,15 @@ public class View extends JFrame {
         JButton nouveau = new JButton("Nouvelle sauvegarde");
         nouveau.addActionListener(
             (ActionEvent e) -> {
+                Sauvegarde.joueur = Sauvegarde.listeJoueurs.size();
                 Sauvegarde.listeJoueurs.add(new Player("Nouveau", 4));
-                Sauvegarde.save();
+                Sauvegarde.save(controleur.modele.getPlayer());
                 changerPanel(menuPrincipal());
         });
         bis.add(nouveau);
 
         principal.setBounds(200,100, width - width / 4, height - height / 4);
-        bis.setPreferredSize(new Dimension(principal.getWidth(),principal.getHeight() * Sauvegarde.listeJoueurs.size()));
+        bis.setPreferredSize(new Dimension(principal.getWidth(),principal.getHeight()/2 * Sauvegarde.listeJoueurs.size()));
         principal.getVerticalScrollBar().setUnitIncrement(30);
         auxiliaire.add(principal);
         auxiliaire.setBackground(Color.lightGray);

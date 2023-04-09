@@ -44,7 +44,10 @@ public class Sauvegarde {
       }
    }
 
-   public static void save(){
+   public static void save(Player p){
+      if(p != null){
+         listeJoueurs.set(joueur, p);
+      }
       try {
          FileOutputStream fileOut = new FileOutputStream("save.ser");
          ObjectOutputStream out = new ObjectOutputStream(fileOut);
@@ -55,6 +58,9 @@ public class Sauvegarde {
       } catch (IOException i) {
          i.printStackTrace();
       }
+      /*for (Player player : listeJoueurs) {
+         System.out.println(player.getPseudo());
+      }*/
 
    }
 

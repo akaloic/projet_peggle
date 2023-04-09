@@ -153,14 +153,13 @@ public class Edit extends JPanel{
         rayon.setPaintLabels(true);
         rayon.addChangeListener (( event ) -> { 
             if(objetSelectionner != null && !objetSelectionner.decoration){
-                /*objetSelectionner.obstacle.setHauteur(rayon.getValue());
-                objetSelectionner.obstacle.setLargeur(rayon.getValue());*/
+                objetSelectionner.obstacle.setHauteur(rayon.getValue());
+                objetSelectionner.obstacle.setLargeur(rayon.getValue());
                 objetSelectionner.obstacle.setRayon(rayon.getValue());
-                //System.out.println(objetSelectionner.obstacle.getRayon());
                 objetSelectionner.setSize(new Dimension((int)(rayon.getValue()*View.getRatio()),(int)(rayon.getValue()*View.getRatio())));
                 for (objetMobile objetMobile : listeSelection) {
-                    /*objetMobile.obstacle.setHauteur(rayon.getValue());
-                    objetMobile.obstacle.setLargeur(rayon.getValue());*/
+                    objetMobile.obstacle.setHauteur(rayon.getValue());
+                    objetMobile.obstacle.setLargeur(rayon.getValue());
                     objetMobile.obstacle.setRayon(rayon.getValue());
                     objetMobile.setSize(new Dimension((int)(rayon.getValue()*View.getRatio()),(int)(rayon.getValue()*View.getRatio())));
                 }
@@ -612,7 +611,8 @@ public class Edit extends JPanel{
                         actualiseSlider();
                     }else{
                         deplacement = false;
-                        obstacle.setX((e.getX()-xClick)/View.ratioX);obstacle.setY((e.getY()-yClick)/View.ratioY);
+                        obstacle.setX((e.getX()-xClick)/View.ratioX);
+                        obstacle.setY((e.getY()-yClick)/View.ratioY);
                     }  
                 }else if(e.getButton() == 3){
                     if(!listeSelection.contains(this)){
@@ -622,7 +622,6 @@ public class Edit extends JPanel{
                     }
                 }
             }
-            actualiseSlider();
             principal.requestFocus();
         }
 
