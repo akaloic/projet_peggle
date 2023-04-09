@@ -81,6 +81,7 @@ public class View extends JFrame {
         pane.setSize(width, height);
         pane.setLayout(null);
         pane.setBorder(BorderFactory.createTitledBorder("Bienvenue dans notre jeu"));
+        pane.setBackground(Color.lightGray);
         add(pane);
 
         JLabel nameLabel = new JLabel("Pseudo : ");
@@ -94,6 +95,8 @@ public class View extends JFrame {
         titrePane.setBounds(width / 2 - 65, height - height * 2 / 3, 400, 100);
         pane.add(titrePane);
         JButton start = new JButton("START");
+        start.setFocusPainted(false);
+        start.setBackground(new Color(59, 89, 182));
         start.setBounds(width / 2 - 50, height - height / 3, 100, 100);
         pane.add(start);
 
@@ -243,8 +246,8 @@ public class View extends JFrame {
         JButton precedent = new JButton("Acceuil");
         precedent.setBounds(0, 0, 100, 100);
         choixNiv.add(precedent);
-        ratioX = ratioX / 8;
-        ratioY = ratioY / 8;
+        ratioX = ratioX / 1;
+        ratioY = ratioY / 1;
 
         JWindow window = new JWindow();
         JPanel panel = new JPanel();
@@ -293,8 +296,8 @@ public class View extends JFrame {
             son.stop();
             changerPanel(menuPrincipal());
         });
-        afficheMiniature(1, choixNiv, height / 2 - 200);
-        afficheMiniature(2, choixNiv, height / 2);
+        afficheMiniature(1, choixNiv);
+        //afficheMiniature(2, choixNiv, height / 2);
 
         return choixNiv;
     }
@@ -316,19 +319,18 @@ public class View extends JFrame {
                 });
         acceuil.setBounds(0, 0, 100, 50);
         choix.add(acceuil);
-        ratioX = ratioX / 8;
-        ratioY = ratioY / 8;
-        afficheMiniature(3, choix, height / 2);
+        ratioX = ratioX / 1;
+        ratioY = ratioY / 1;
+        afficheMiniature(2, choix);
         return choix;
     }
 
-    public void afficheMiniature(int mode, JPanel pane, int hauteur) {
+    public void afficheMiniature(int mode, JPanel pane) {
         // 1 = Niveau imposé
         // 2 = Niveau créer soit même
-        // 3 = menu d'editing
         JPanel bis = new JPanel(null);
         int borne = mode == 1 ? 5 : Math.max(Sauvegarde.liste.size(), 1);
-        bis.setBounds(width / 30, hauteur, width, height / 6);
+        bis.setBounds(width / 30, height/8, width, height / 6);
         for (int i = 0; i < borne; i++) {
             int k = i;
             JPanel panelPrincipal = new JPanel(new BorderLayout());
@@ -345,19 +347,44 @@ public class View extends JFrame {
                         dessineNiveau(g, controleur.modele.getNiveau().getList());
                     }
                 }
+
+                @Override
+                protected void paintComponent(Graphics g) {
+                    // TODO Auto-generated method stub
+                    super.paintComponent(g);
+                    Graphics2D g2d = (Graphics2D)g;
+                    /*try {
+                        fondEcran = ImageIO.read(new File("ressources/Niveau"+(k+1)+"Fond.png"));
+                    } catch (IOException excep) {
+                        // TODO Auto-generated catch block
+                        excep.printStackTrace();
+                    }*/
+                    if(fondEcran == null){
+                        setBackground(Color.gray);
+                    }
+                    g2d.drawImage(fondEcran,0, 0,getWidth(),getHeight(),null);
+                }
             };
-            if (mode == 3) {
-                JButton supprimer = new JButton("x");
+            if (mode == 2) {
+                JButton supprimer = new JButton("X");
                 supprimer.addActionListener(
                         (ActionEvent e) -> {
                             Sauvegarde.liste.remove(k);
                             changerPanel(choixEdit());
                             Sauvegarde.save(null, 0);
                         });
-                supprimer.setSize(new Dimension(20, 20));
+                supprimer.setSize(new Dimension(50, 50));
                 miniature.add(supprimer);
+
+                JButton edit = new JButton("E");
+                edit.addActionListener(
+                        (ActionEvent e) -> {
+                            changerPanel(new Edit(null, width, height, k, this));
+                        });
+                edit.setBounds(width - width/5-50, 0, 50, 50);
+                miniature.add(edit);
             }
-            JButton bouton = new JButton("Edit " + (k + 1));
+            JButton bouton = new JButton("Jouer");
             if (mode == 1) {
                 bouton = new JButton("Niveau " + (k + 1));
             }
@@ -383,17 +410,14 @@ public class View extends JFrame {
                             controleur.modele.getNiveau().setList(Sauvegarde.charge(k));
                             changerPanel(JeuPanel(this.controleur));
                         }
-                        if (mode == 3) {
-                            changerPanel(new Edit(null, width, height, k, this));
-                        }
                         son.stop();
                     });
             miniature.setBackground(Color.lightGray);
             miniature.setBorder(BorderFactory.createLineBorder(Color.black));
-            panelPrincipal.setBounds(width / 30 + i * width / 6, 0, width / 8, height / 6);
+            panelPrincipal.setBounds(width / 20 , i * height, width - width/5, height );
             bis.add(panelPrincipal);
         }
-        if (mode == 3) {
+        if (mode == 2) {
             JButton ajoute = new JButton("Nouveau");
             ajoute.addActionListener(
                     (ActionEvent e) -> {
@@ -402,13 +426,14 @@ public class View extends JFrame {
                         Sauvegarde.save(a, borne);
                         changerPanel(choixEdit());
                     });
-            ajoute.setBounds(width / 30 + borne * width / 6, 0, width / 8, height / 6);
+            ajoute.setBounds(width / 20 , borne * height, width - width/5, height);
             bis.add(ajoute);
         }
-        JScrollPane defile = new JScrollPane(bis, JScrollPane.VERTICAL_SCROLLBAR_NEVER,
-                ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        bis.setPreferredSize(new Dimension(width / 30 + (borne + 1) * width / 6, height * 5));
-        defile.setBounds(width / 30, hauteur, width, height / 5);
+        JScrollPane defile = new JScrollPane(bis, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+                ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        defile.getVerticalScrollBar().setUnitIncrement(30);
+        bis.setPreferredSize(new Dimension(width / 30 + (borne + 1) * width / 6, height * (borne+2)));
+        defile.setBounds(width / 30, height/8, width, height * 2);
         bis.setBackground(Color.lightGray);
         pane.add(defile);
 

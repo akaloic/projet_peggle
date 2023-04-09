@@ -33,7 +33,7 @@ public class Controleur {
                 view.setColorX();
                 view.setColorX();
                 view.calculeAngle();
-                view.repaint();
+                view.getPartie().repaint();
 
                 // puit
                 view.placePuit();
