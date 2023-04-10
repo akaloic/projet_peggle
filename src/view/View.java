@@ -373,10 +373,18 @@ public class View extends JFrame {
             int k = i;
             JPanel panelPrincipal = new JPanel(new BorderLayout());
             JPanel miniature = new JPanel(null) {
+
                 @Override
-                public void paint(Graphics g) {
+                protected void paintComponent(Graphics g) {
                     // TODO Auto-generated method stub
-                    super.paint(g);
+                    super.paintComponent(g);
+                    g.setFont(new Font("TimesRoman", Font.PLAIN, 30)); 
+                    Graphics2D g2d = (Graphics2D)g;
+                    if(fondEcran == null){
+                        setBackground(Color.gray);
+                    }
+                    g2d.drawImage(view.Image.fondEcrans[k],0, 0,getWidth(),getHeight(),null);
+                    
                     if (mode != 1) {
                         dessineNiveau(g, Sauvegarde.charge(k));
                     }
@@ -384,31 +392,12 @@ public class View extends JFrame {
                         controleur.modele.setNiveau(new Niveau(k + 1));
                         dessineNiveau(g, controleur.modele.getNiveau().getList());
                     }
-                    g.setFont(new Font("TimesRoman", Font.PLAIN, 30)); 
                     if(Sauvegarde.numNiveau == -1){
                         ((Graphics2D)g).drawString("Meilleur score : "+controleur.modele.getPlayer().listeScore[k], 0, 30);
                     }
                     else{
                         ((Graphics2D)g).drawString("Meilleur score : "+controleur.modele.getPlayer().listeScoreEdit.get(k), 0, 30);
                     }
-                    
-                }
-
-                @Override
-                protected void paintComponent(Graphics g) {
-                    // TODO Auto-generated method stub
-                    super.paintComponent(g);
-                    Graphics2D g2d = (Graphics2D)g;
-                    /*try {
-                        fondEcran = ImageIO.read(new File("ressources/Niveau"+(k+1)+"Fond.png"));
-                    } catch (IOException excep) {
-                        // TODO Auto-generated catch block
-                        excep.printStackTrace();
-                    }*/
-                    if(fondEcran == null){
-                        setBackground(Color.gray);
-                    }
-                    /*g2d.drawImage(view.Image.boulet,0, 0,getWidth(),getHeight(),null);*/
                 }
             };
             if (mode == 2) {
@@ -688,7 +677,7 @@ public class View extends JFrame {
             if (i > nbMunition) { // il reste i + 1 munition
                 panel = new JPanel() {
                     @Override
-                    public void paint(Graphics g) {
+                    public void paintComponent(Graphics g) {
                         super.paint(g);
                         Graphics2D g2d = (Graphics2D)g;
                         g2d.drawImage(view.Image.boulet,50, 20,50,50,null);
