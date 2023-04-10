@@ -85,28 +85,27 @@ public class View extends JFrame {
         add(pane);
 
         JLabel nameLabel = new JLabel("Pseudo : ");
-        nameLabel.setBounds(width / 2 - 60, height - height / 2, 50, 30);
+        nameLabel.setBounds(width / 2 - 60, height - height / 3*2, width/10, 30);
         pane.add(nameLabel);
         JTextField nameField = new JTextField(controleur.modele.getPlayer().getPseudo());
-        nameField.setBounds(width / 2, height - height / 2, 50, 30);
+        nameField.setBounds(width / 2, height - height / 3*2, width/10, 30);
         pane.add(nameField);
 
         JLabel titrePane = new JLabel("HIT THE PEGGLES");
-        titrePane.setBounds(width / 2 - 65, height - height * 2 / 3, 400, 100);
+        titrePane.setBounds(width / 2 - 65, height /5, 400, 100);
         pane.add(titrePane);
         JButton start = new JButton("START");
         start.setFocusPainted(false);
         start.setBackground(new Color(59, 89, 182));
-        start.setBounds(width / 2 - 50, height - height / 3, 100, 100);
+        start.setBounds(width / 3, height -height / 2, width/3, height/8);
         pane.add(start);
 
-        JButton edit = new JButton("edit");
-        edit.setBounds(width / 2 - 50, height - height / 3 + 200, 100, 100);
+        JButton edit = new JButton("Création niveaux");
+        edit.setBounds(width / 3, start.getY()+start.getHeight()+20, width/3, height/8);
         pane.add(edit);
         
-
-        JButton choixJoueur = new JButton("Retour Sélection");
-        choixJoueur.setBounds(0,0,300,100);
+        JButton choixJoueur = new JButton("Retour sélection");
+        choixJoueur.setBounds(width / 3, edit.getY()+edit.getHeight()+20, width/3, height/8);
         pane.add(choixJoueur);
 
         start.addActionListener(e -> {
@@ -372,6 +371,7 @@ public class View extends JFrame {
         for (int i = 0; i < borne; i++) {
             int k = i;
             JPanel panelPrincipal = new JPanel(new BorderLayout());
+            panelPrincipal.setBounds(width / 20 , i * height, width - width/5, height );
             JPanel miniature = new JPanel(null) {
 
                 @Override
@@ -402,21 +402,24 @@ public class View extends JFrame {
             };
             if (mode == 2) {
                 JButton supprimer = new JButton("X");
+                supprimer.setBackground(Color.red);
                 supprimer.addActionListener(
-                        (ActionEvent e) -> {
+                    (ActionEvent e) -> {
                             Sauvegarde.listeJoueurs.get(Sauvegarde.joueur).liste.remove(k);
                             changerPanel(choixEdit());
                             Sauvegarde.save(null, 0);
-                        });
-                supprimer.setSize(new Dimension(50, 50));
+                    });
+                    System.out.println(bis.getWidth());
+                supprimer.setBounds(panelPrincipal.getWidth()-50, 0, 50, 50);
                 miniature.add(supprimer);
 
                 JButton edit = new JButton("E");
+                edit.setBackground(Color.cyan);
                 edit.addActionListener(
                         (ActionEvent e) -> {
                             changerPanel(new Edit(null, width, height, k, this));
                         });
-                edit.setBounds(width - width/5-50, 0, 50, 50);
+                edit.setBounds(panelPrincipal.getWidth()-50, 50, 50, 50);
                 miniature.add(edit);
             }
             JButton bouton = new JButton("Jouer");
@@ -450,7 +453,6 @@ public class View extends JFrame {
                     });
             miniature.setBackground(Color.lightGray);
             miniature.setBorder(BorderFactory.createLineBorder(Color.black));
-            panelPrincipal.setBounds(width / 20 , i * height, width - width/5, height );
             bis.add(panelPrincipal);
         }
         if (mode == 2) {
@@ -469,8 +471,8 @@ public class View extends JFrame {
         JScrollPane defile = new JScrollPane(bis, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
                 ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         defile.getVerticalScrollBar().setUnitIncrement(30);
-        bis.setPreferredSize(new Dimension(width / 30 + (borne + 1) * width / 6, height * (borne+2)));
-        defile.setBounds(width / 30, height/8, width, height * 2);
+        bis.setPreferredSize(new Dimension(width / 30 + width / 6, height * (borne+2)));
+        defile.setBounds(width / 30, height/8, width - width/15, height);
         bis.setBackground(Color.lightGray);
         pane.add(defile);
 
@@ -678,7 +680,7 @@ public class View extends JFrame {
                 panel = new JPanel() {
                     @Override
                     public void paintComponent(Graphics g) {
-                        super.paint(g);
+                        super.paintComponent(g);
                         Graphics2D g2d = (Graphics2D)g;
                         g2d.drawImage(view.Image.boulet,50, 20,50,50,null);
                     }
