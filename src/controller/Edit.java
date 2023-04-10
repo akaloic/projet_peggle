@@ -29,7 +29,6 @@ public class Edit extends JPanel{
     objetMobile pegsEcran;
     objetMobile objetSelectionner;//Le dernière objet sur lequel on a cliqué
     objetMobile suivant = new objetMobile(null);
-    boolean choixMultiple = true;
     public ArrayList<objetMobile> listeSelection = new ArrayList<objetMobile>();
     boolean peutBouger = false;
     JPanel partieGauche = new JPanel();
@@ -457,16 +456,11 @@ public class Edit extends JPanel{
                 }
               }
               if (keyCode == KeyEvent.VK_N) {
-                if(choixMultiple){
-                    if(!listeSelection.contains(objetSelectionner)){
-                        listeSelection.add(objetSelectionner);
-                    }else{
-                        listeSelection.remove(objetSelectionner);
-                    }
+                if(!listeSelection.contains(objetSelectionner)){
+                    listeSelection.add(objetSelectionner);
+                }else{
+                    listeSelection.remove(objetSelectionner);   
                 }
-              }
-              if (keyCode == KeyEvent.VK_M) {
-                choixMultiple = !choixMultiple;
               }
             }
         });

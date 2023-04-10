@@ -632,7 +632,7 @@ public class View extends JFrame {
         boolean premierRebond = false;
         while (!premierRebond) {
             fantome.update();
-            double a = fantome.getX() + fantome.rayon / 2;
+            double a = fantome.getX();
             double b = fantome.getY();
             for (Obstacle o : controleur.modele.getNiveau().list) {
                 if (o.collision(fantome)) {
@@ -643,8 +643,8 @@ public class View extends JFrame {
             if (fantome.getY() > height) {
                 premierRebond = true;
             }
-            genPath.moveTo(a, b);
-            genPath.lineTo(a, b);
+            genPath.moveTo(a+12.5, b+12.5);
+            genPath.lineTo(a+12.5, b+12.5);
         }
         for (int i = 0; i < 10; i++) {
             fantome.update();
