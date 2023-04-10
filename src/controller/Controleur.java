@@ -40,7 +40,6 @@ public class Controleur {
                 view.placePuit();
                 if (modele.getBalle() != null) {
                     modele.getBalle().update();
-
                     // rebond
                     for (int i = 0; i < modele.niveau.list.size(); i++) {
                         modele.niveau.list.get(i).rebond(modele.getBalle());
@@ -65,19 +64,22 @@ public class Controleur {
                     }
 
                     // munition
-                    Point p = view.puit.getLocationOnScreen();
-                    if (modele.balle.getY() + (view.partie.getHeight() / 2) >= view.puit.getY()
-                            + (view.partie.getHeight() / 2)
-                            && ((modele.balle.getX() - 140) >= p.x
-                                    && (modele.balle.getX() - 140) <= p.x + view.puit.getWidth())) {
-                        if (balleEnJeu) {
-                            view.nbMunition--;
-                            view.munition.removeAll();
-                            view.afficheMunition();
-                            view.munition.revalidate();
-                            balleHorsJeu();
+                    if(View.enJeu){
+                        Point p = view.puit.getLocationOnScreen();
+                        if (modele.balle.getY() + (view.partie.getHeight() / 2) >= view.puit.getY()
+                                + (view.partie.getHeight() / 2)
+                                && ((modele.balle.getX() - 140) >= p.x
+                                        && (modele.balle.getX() - 140) <= p.x + view.puit.getWidth())) {
+                            if (balleEnJeu) {
+                                view.nbMunition--;
+                                view.munition.removeAll();
+                                view.afficheMunition();
+                                view.munition.revalidate();
+                                balleHorsJeu();
+                            }
                         }
                     }
+
 
                     if (modele.getBalle().getY() > view.getPartie().getHeight()) {
                         modele.setBalle(null);

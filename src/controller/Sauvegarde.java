@@ -6,12 +6,14 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.jar.Attributes.Name;
 
 import model.Obstacle;
 import model.Player;
 
 public class Sauvegarde {
    public static int joueur;
+   public static int numNiveau =-1;
    public static ArrayList<Player> listeJoueurs = new ArrayList<Player>();
 
    public Sauvegarde() {
@@ -65,6 +67,7 @@ public class Sauvegarde {
    }
 
    public static ArrayList<Obstacle> charge(int n) {
+      numNiveau = n;
       try {
          FileInputStream fileIn = new FileInputStream("save.ser");
          ObjectInputStream in = new ObjectInputStream(fileIn);
@@ -80,6 +83,7 @@ public class Sauvegarde {
          ArrayList<Obstacle> a = new ArrayList<>();
          listeJoueurs.get(joueur).liste.add(a);
       }
+      //System.out.println(listeJoueurs.get(joueur).liste.get(n));
       return listeJoueurs.get(joueur).liste.get(n);
    }
 }

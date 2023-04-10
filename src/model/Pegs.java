@@ -35,6 +35,7 @@ public class Pegs extends Obstacle{
     @Override
     public void rebond(Balle balle) {
         if (collision(balle)) {
+            //System.out.println(this.x*View.ratioX+"      "+balle.x+"       "+this.y*View.ratioY+"      "+balle.y);
           double n = balle.vX; // Variable auxiliaire pour garder vX avant qu'on modifie sa valeur
           balle.vX = balle.vX - (2 * (balle.vX * (balle.x - this.getX()*View.ratioX) + balle.vY * ((balle.y - this.getY()*View.ratioY)))
               / ((balle.x - this.getX()*View.ratioX) * (balle.x - this.getX()*View.ratioX) + (balle.y - this.getY()*View.ratioY) * (balle.y - this.getY()*View.ratioY)))

@@ -103,6 +103,11 @@ public class View extends JFrame {
         JButton edit = new JButton("edit");
         edit.setBounds(width / 2 - 50, height - height / 3 + 200, 100, 100);
         pane.add(edit);
+        
+
+        JButton choixJoueur = new JButton("Retour Sélection");
+        choixJoueur.setBounds(0,0,300,100);
+        pane.add(choixJoueur);
 
         start.addActionListener(e -> {
             son.stop();
@@ -113,10 +118,15 @@ public class View extends JFrame {
 
         edit.addActionListener(e -> {
             son.stop();
+            controleur.modele.getPlayer().setPseudo(nameField.getText());
+            changerPanel(choixEdit());
+        });
 
+        choixJoueur.addActionListener(e -> {
+            son.stop();
             controleur.modele.getPlayer().setPseudo(nameField.getText());
             Sauvegarde.save(controleur.modele.getPlayer());
-            changerPanel(choixEdit());
+            changerPanel(choixJoueur());
         });
         resetRatio();
         return pane;
@@ -183,7 +193,15 @@ public class View extends JFrame {
 
         leave = new JButton("Fermer");
         leave.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+            public void actionPerformed(ActionEvent e) { 
+                if(Sauvegarde.numNiveau == -1){
+                    controleur.modele.getPlayer().setScore(numNiveau-1);
+                }
+                else{
+                    controleur.modele.getPlayer().setScore(Sauvegarde.numNiveau);
+                }
+                controleur.modele.getPlayer().score = 0;
+                Sauvegarde.save(controleur.modele.getPlayer());
                 System.exit(0);
             }
         });
@@ -191,7 +209,16 @@ public class View extends JFrame {
         JButton retour = new JButton("Revenir menu");
         retour.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                changerPanel(choixNiveauPane(controleur));
+                if(Sauvegarde.numNiveau == -1){
+                    controleur.modele.getPlayer().setScore(numNiveau-1);
+                    changerPanel(choixNiveauPane(controleur));
+                }
+                else{
+                    controleur.modele.getPlayer().setScore(Sauvegarde.numNiveau);
+                    changerPanel(choixEdit());
+                }
+                controleur.modele.getPlayer().score = 0;
+                Sauvegarde.save(controleur.modele.getPlayer());
             }
         });
 
@@ -333,6 +360,12 @@ public class View extends JFrame {
     public void afficheMiniature(int mode, JPanel pane) {
         // 1 = Niveau imposé
         // 2 = Niveau créer soit même
+        if(mode == 1){
+            Sauvegarde.numNiveau = -1;
+        }
+        else{
+            Sauvegarde.numNiveau = 0;
+        }
         JPanel bis = new JPanel(null);
         int borne = mode == 1 ? 5 : Math.max(Sauvegarde.listeJoueurs.get(Sauvegarde.joueur).liste.size(), 1);
         bis.setBounds(width / 30, height/8, width, height / 6);
@@ -352,7 +385,13 @@ public class View extends JFrame {
                         dessineNiveau(g, controleur.modele.getNiveau().getList());
                     }
                     g.setFont(new Font("TimesRoman", Font.PLAIN, 30)); 
-                    ((Graphics2D)g).drawString("Meilleur score : 666", 0, 30);
+                    if(Sauvegarde.numNiveau == -1){
+                        ((Graphics2D)g).drawString("Meilleur score : "+controleur.modele.getPlayer().listeScore[k], 0, 30);
+                    }
+                    else{
+                        ((Graphics2D)g).drawString("Meilleur score : "+controleur.modele.getPlayer().listeScoreEdit.get(k), 0, 30);
+                    }
+                    
                 }
 
                 @Override
@@ -376,7 +415,7 @@ public class View extends JFrame {
                 JButton supprimer = new JButton("X");
                 supprimer.addActionListener(
                         (ActionEvent e) -> {
-                            Sauvegarde.listeJoueurs.get(Sauvegarde.joueur).liste.remove(k-1);
+                            Sauvegarde.listeJoueurs.get(Sauvegarde.joueur).liste.remove(k);
                             changerPanel(choixEdit());
                             Sauvegarde.save(null, 0);
                         });
@@ -409,6 +448,7 @@ public class View extends JFrame {
                                 // TODO Auto-generated catch block
                                 excep.printStackTrace();
                             }
+                            Sauvegarde.numNiveau = -1;
                             controleur.modele.setNiveau(new Niveau(k + 1));
                             changerPanel(JeuPanel(this.controleur));
                         }
@@ -430,6 +470,7 @@ public class View extends JFrame {
                     (ActionEvent e) -> {
                         ArrayList<Obstacle> a = new ArrayList<>();
                         Sauvegarde.listeJoueurs.get(Sauvegarde.joueur).liste.add(a);
+                        Sauvegarde.listeJoueurs.get(Sauvegarde.joueur).listeScoreEdit.add(0);
                         Sauvegarde.save(a, borne);
                         changerPanel(choixEdit());
             });
@@ -451,6 +492,8 @@ public class View extends JFrame {
         JPanel bis = new JPanel(new GridLayout(Sauvegarde.listeJoueurs.size()+1,1));
         JScrollPane principal = new JScrollPane(bis, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
         ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        principal.setBounds(200,100, width - width / 4, height - height / 4);
+        bis.setPreferredSize(new Dimension(principal.getWidth(),principal.getHeight()/2 * Sauvegarde.listeJoueurs.size()));
 
         for(int i = 0; i < Sauvegarde.listeJoueurs.size(); i++){
             JPanel pane = new JPanel(new BorderLayout());
@@ -460,7 +503,10 @@ public class View extends JFrame {
                 public void paint(Graphics g) {
                     // TODO Auto-generated method stub
                     super.paint(g);
-                    ((Graphics2D)g).drawString(Sauvegarde.listeJoueurs.get(k).pseudo, 20, 50);
+                    g.setFont(new Font("TimesRoman", Font.PLAIN, 30));
+                    ((Graphics2D)g).drawString("Pseudo : "+Sauvegarde.listeJoueurs.get(k).pseudo, getWidth()/4, getHeight()/4);
+                    ((Graphics2D)g).drawString("Nombre de niveau: "+Sauvegarde.listeJoueurs.get(k).liste.size(), getWidth()/4, getHeight()/4*2);
+                    ((Graphics2D)g).drawString("Progressions: Niveau 5", getWidth()/4, getHeight()/4*3);
                 }     
             };
 
@@ -472,7 +518,14 @@ public class View extends JFrame {
                     changerPanel(menuPrincipal());
             });
 
-            JButton supprimer = new JButton("X");
+            JButton supprimer = new JButton("X"){
+                @Override
+                public void paint(Graphics g) {
+                    // TODO Auto-generated method stub
+                    super.paint(g);
+                    setBackground(Color.red);
+                }
+            };
             supprimer.addActionListener(
                 (ActionEvent e) -> {
                     Sauvegarde.listeJoueurs.remove(k);
@@ -486,7 +539,7 @@ public class View extends JFrame {
             info.setBackground(Color.lightGray);
 
             bis.add(pane);
-            supprimer.setBounds(info.getWidth(), 0, 50, 50);
+            supprimer.setBounds(principal.getWidth()-150,0,50,50);
         }
 
         principal.setBackground(Color.lightGray);
@@ -496,13 +549,13 @@ public class View extends JFrame {
             (ActionEvent e) -> {
                 Sauvegarde.joueur = Sauvegarde.listeJoueurs.size();
                 Sauvegarde.listeJoueurs.add(new Player("Nouveau", 4));
+                controleur.modele.getPlayer().listeScoreEdit.add(0);
                 Sauvegarde.save(controleur.modele.getPlayer());
                 changerPanel(menuPrincipal());
         });
         bis.add(nouveau);
 
-        principal.setBounds(200,100, width - width / 4, height - height / 4);
-        bis.setPreferredSize(new Dimension(principal.getWidth(),principal.getHeight()/2 * Sauvegarde.listeJoueurs.size()));
+
         principal.getVerticalScrollBar().setUnitIncrement(30);
         auxiliaire.add(principal);
         auxiliaire.setBackground(Color.lightGray);
