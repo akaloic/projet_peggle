@@ -101,10 +101,12 @@ public class View extends JFrame {
         pane.add(start);
 
         JButton edit = new JButton("Création niveaux");
+        edit.setBackground(new Color(59, 89, 182));
         edit.setBounds(width / 3, start.getY()+start.getHeight()+20, width/3, height/8);
         pane.add(edit);
         
         JButton choixJoueur = new JButton("Retour sélection");
+        choixJoueur.setBackground(new Color(59, 89, 182));
         choixJoueur.setBounds(width / 3, edit.getY()+edit.getHeight()+20, width/3, height/8);
         pane.add(choixJoueur);
 
@@ -191,6 +193,7 @@ public class View extends JFrame {
         afficheMunition();
 
         leave = new JButton("Fermer");
+        leave.setBackground(new Color(59, 89, 182));
         leave.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) { 
                 if(Sauvegarde.numNiveau == -1){
@@ -206,6 +209,7 @@ public class View extends JFrame {
         });
 
         JButton retour = new JButton("Revenir menu");
+        retour.setBackground(new Color(59, 89, 182));
         retour.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 if(Sauvegarde.numNiveau == -1){
@@ -273,8 +277,9 @@ public class View extends JFrame {
         choixNiv.setLayout(null);
         choixNiv.setSize(width, height);
 
-        JButton precedent = new JButton("Acceuil");
-        precedent.setBounds(0, 0, 100, 100);
+        JButton precedent = new JButton("Menu Principal");
+        precedent.setBackground(new Color(59, 89, 182));
+        precedent.setBounds(0, 0, width/6, 100);
         choixNiv.add(precedent);
         ratioX = ratioX / 1;
         ratioY = ratioY / 1;
@@ -288,13 +293,16 @@ public class View extends JFrame {
         textArea.setText(
                 " Le but de PEGS est de détruire tous les pegs.\n\n Pour cela, vous devez tirer des balles sur les pegs. \n Vous disposez d'un nombre limité de balles. \n Vous pourrez passer au niveau suivant si vous détruisez tous les pegs. \n\n Bonne chance !");
         JButton fermer = new JButton("Fermer");
+        fermer.setBackground(new Color(59, 89, 182));
         fermer.addActionListener(e -> window.dispose());
         panel.add(fermer);
         JButton suivant = new JButton("Suivant");
+        suivant.setBackground(new Color(59, 89, 182));
         suivant.addActionListener(e -> {
             textArea.setText(
                     " Pour tirer, il vous suffit d'appuyer sur la souris.\n\n Important, si vous tirez dans le puit, on vous rajoute une munition.\n Quant aux points, on les calcule ainsi, si vous touchez 3 pegs en un seul tir, vous avez 1+2+3 = 6 points, auquel on ajoute 5 points par peg detruit.\n\n Bonne chance !");
             JButton retour = new JButton("Précédent");
+            retour.setBackground(new Color(59, 89, 182));
             panel.add(retour);
             panel.remove(suivant);
             panel.revalidate();
@@ -342,13 +350,14 @@ public class View extends JFrame {
 
     public JPanel choixEdit() {
         JPanel choix = new JPanel(null);
-        JButton acceuil = new JButton("acceuil");
+        JButton acceuil = new JButton("Menu Principal");
+        acceuil.setBackground(new Color(59, 89, 182));
         acceuil.addActionListener(
                 (ActionEvent e) -> {
                     this.invalidate();
                     changerPanel(menuPrincipal());
                 });
-        acceuil.setBounds(0, 0, 100, 50);
+        acceuil.setBounds(0, 0, width/6, 50);
         choix.add(acceuil);
         ratioX = ratioX / 1;
         ratioY = ratioY / 1;
@@ -423,8 +432,9 @@ public class View extends JFrame {
                 miniature.add(edit);
             }
             JButton bouton = new JButton("Jouer");
+            bouton.setBackground(new Color(37, 253, 233));
             if (mode == 1) {
-                bouton = new JButton("Niveau " + (k + 1));
+                bouton.setText("Niveau " + (k + 1));
             }
             panelPrincipal.add(miniature, BorderLayout.CENTER);
             panelPrincipal.add(bouton, BorderLayout.SOUTH);
@@ -457,6 +467,7 @@ public class View extends JFrame {
         }
         if (mode == 2) {
             JButton ajoute = new JButton("Nouveau");
+            ajoute.setBackground(new Color(59, 89, 182));
             ajoute.addActionListener(
                     (ActionEvent e) -> {
                         ArrayList<Obstacle> a = new ArrayList<>();
@@ -502,6 +513,7 @@ public class View extends JFrame {
             };
 
             JButton choix = new JButton("Joueur "+(k+1));
+            choix.setBackground(new Color(59, 89, 182));
             choix.addActionListener(
                 (ActionEvent e) -> {
                     Sauvegarde.joueur = k;
@@ -536,6 +548,7 @@ public class View extends JFrame {
         principal.setBackground(Color.lightGray);
 
         JButton nouveau = new JButton("Nouvelle sauvegarde");
+        nouveau.setBackground(new Color(151, 223, 198));
         nouveau.addActionListener(
             (ActionEvent e) -> {
                 Sauvegarde.joueur = Sauvegarde.listeJoueurs.size();
