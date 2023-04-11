@@ -57,6 +57,7 @@ public class Controleur {
                             }
                         }
                     }
+                   
 
                     if (modele.getBalle().getX() - modele.getBalle().rayon / 2 <= 0
                             || modele.getBalle().getX() + modele.getBalle().rayon / 2 >= view.getPartie().getWidth()) {
@@ -81,6 +82,10 @@ public class Controleur {
                     if (modele.getBalle().getY() > view.getPartie().getHeight()) {
                         modele.setBalle(null);
                         balleHorsJeu();
+                    }
+
+                    if(modele.niveau.listeEstVide() && !balleEnJeu) {
+                        view.nextLevel();
                     }
 
                 }

@@ -21,22 +21,24 @@ public class Player {
             if (detruit){
                 pointGagneParBalleEnJeu += 5;
                 if(pointGagneParBalleEnJeu >= 150 && pointGagneParBalleEnJeu< 300 ) {
-                    multiplicateurPoints(2);
+                    pointGagneParBalleEnJeu += 5*2;
                 }else if (pointGagneParBalleEnJeu >= 300 && pointGagneParBalleEnJeu< 500) {
-                    multiplicateurPoints(3);
+                    pointGagneParBalleEnJeu += 5*3;
                 }else if(pointGagneParBalleEnJeu >= 500 && pointGagneParBalleEnJeu< 700) {
-                    multiplicateurPoints(4);
+                    pointGagneParBalleEnJeu += 5*4;
                 }else if(pointGagneParBalleEnJeu > 700) {
-                    multiplicateurPoints(5);
+                    pointGagneParBalleEnJeu += 5*5;
                 }
             }
         }
+        System.out.print(pointGagneParBalleEnJeu );
         score += pointGagneParBalleEnJeu;
-        if(pointGagneParBalleEnJeu > 0) {
-            pointGagneParBalleEnJeu -= 10;
+        if(pointGagneParBalleEnJeu > 5) {
+            pointGagneParBalleEnJeu -= 5;
         }
+        System.out.println( " - 10 = "+  pointGagneParBalleEnJeu);
     }
-    public void multiplicateurPoints(int multiplicateur) {
-        pointGagneParBalleEnJeu += 5*multiplicateur;
-    }
+    // public void multiplicateurPoints(int multiplicateur) {
+    //     pointGagneParBalleEnJeu += 5*multiplicateur;
+    // }
 }

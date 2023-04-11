@@ -28,6 +28,7 @@ public class View extends JFrame {
 
     public JLabel puit = new JLabel();
     public JLabel scoreLabel=new JLabel();
+    public JLabel points = new JLabel(); // a effacer plus tard
     public JPanel fond = new JPanel();
     public JPanel munition = new JPanel();
     public JPanel fondGauche = new JPanel();
@@ -228,14 +229,20 @@ public class View extends JFrame {
         JPanel info=new JPanel();
         info.setBackground(Color.gray);
         info.setPreferredSize(new Dimension(info.getWidth(), info.getHeight()+100));
+
         scoreLabel.setText("Score : "+controleur.modele.getPlayer().score);
         scoreLabel.setFont(new Font("Serif",Font.PLAIN,20));
+
         JLabel pseudoLabel=new JLabel("Joueur : "+controleur.modele.player.pseudo);
         pseudoLabel.setFont(new Font("Serif",Font.PLAIN,20));
+
+        points.setText("points " + controleur.modele.getPlayer().pointGagneParBalleEnJeu);
+        points.setFont(new Font("Serif",Font.PLAIN,20));
+
         info.add(pseudoLabel,BorderLayout.NORTH);
+        info.add(points, BorderLayout.NORTH);
         info.add(scoreLabel,BorderLayout.SOUTH);
         fondDroite.add(info,BorderLayout.NORTH);
-
 
         fond.add(fondDroite, BorderLayout.EAST);
         // --------------DROITE---------------------
@@ -296,7 +303,6 @@ public class View extends JFrame {
         });
         afficheMiniature(1, choixNiv, height/2-200);
         afficheMiniature(2, choixNiv, height/2);
-
         return choixNiv;
     }
 
@@ -321,6 +327,39 @@ public class View extends JFrame {
         ratioY = ratioY / 8;
         afficheMiniature(3, choix, height / 2);
         return choix;
+    }
+
+    public void nextLevel() {
+        System.out.println(controleur.modele.getNiveau().getNumNiveau());
+        JButton acceuil = new JButton("Acceuil");
+        JButton niveauSuivant = new JButton("Niveau suivant");
+        JPanel nextLvl = new JPanel(){
+
+        };
+        nextLvl.setSize(width,height);
+        controleur.timer.stop();
+        nextLvl.setLayout(null);
+        acceuil.setBounds(width/3-50, height/2-75, 150,150);
+        niveauSuivant.setBounds(acceuil.getX()+300, acceuil.getY(),150,150);
+
+        acceuil.addActionListener(e->{
+            changerPanel(menuPrincipal());
+        });
+        niveauSuivant.addActionListener(e->{
+            int niv = controleur.modele.getNiveau().getNumNiveau() + 1;
+            fondEcran = new BufferedImage(20, 20, BufferedImage.TYPE_INT_RGB);
+            try {
+            fondEcran = ImageIO.read(new File("ressources/Niveau"+niv+"Fond.png"));
+            } catch (IOException excep) {
+                excep.printStackTrace();
+            }
+            controleur.modele.setNiveau(new Niveau(niv));
+            changerPanel(JeuPanel(this.controleur));
+            
+        });
+        nextLvl.add(acceuil);
+        nextLvl.add(niveauSuivant);
+        changerPanel(nextLvl);
     }
 
     public void afficheMiniature(int mode, JPanel pane, int hauteur) {
