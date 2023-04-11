@@ -355,6 +355,7 @@ public class View extends JFrame {
         acceuil.addActionListener(
                 (ActionEvent e) -> {
                     this.invalidate();
+                    controleur.modele.setPlayer(Sauvegarde.listeJoueurs.get(Sauvegarde.joueur));
                     changerPanel(menuPrincipal());
                 });
         acceuil.setBounds(0, 0, width/6, 50);
@@ -415,10 +416,10 @@ public class View extends JFrame {
                 supprimer.addActionListener(
                     (ActionEvent e) -> {
                             Sauvegarde.listeJoueurs.get(Sauvegarde.joueur).liste.remove(k);
+                            Sauvegarde.listeJoueurs.get(Sauvegarde.joueur).listeScoreEdit.remove(k);
+                            Sauvegarde.save(Sauvegarde.listeJoueurs.get(Sauvegarde.joueur));
                             changerPanel(choixEdit());
-                            Sauvegarde.save(null, 0);
                     });
-                    System.out.println(bis.getWidth());
                 supprimer.setBounds(panelPrincipal.getWidth()-50, 0, 50, 50);
                 miniature.add(supprimer);
 
@@ -517,7 +518,7 @@ public class View extends JFrame {
             choix.addActionListener(
                 (ActionEvent e) -> {
                     Sauvegarde.joueur = k;
-                    controleur.modele.setPlayer(Sauvegarde.listeJoueurs.get(k));
+                    controleur.modele.setPlayer(Sauvegarde.listeJoueurs.get(Sauvegarde.joueur));
                     changerPanel(menuPrincipal());
             });
 
@@ -631,7 +632,7 @@ public class View extends JFrame {
         //double x = (partie.getWidth() / 2) - (5 * heightBase / 6) * Math.sin(theta) - 10/* Width balle */;
         //double y = (5 * heightBase / 6) * Math.cos(theta) - 10/* Height balle */;
         // Pour calculer nouvelles coordonnées de la balle après rotaion
-        Balle fantome = new Balle(partie.getWidth() / 2 - 25, 0d, 300d, 180 - this.angle);
+        Balle fantome = new Balle(partie.getWidth() / 2 - 25, 0d, 100, 180 - this.angle);
         GeneralPath genPath = new GeneralPath();
         boolean premierRebond = false;
         while (!premierRebond) {
