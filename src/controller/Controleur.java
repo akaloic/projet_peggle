@@ -85,6 +85,12 @@ public class Controleur {
                     }
 
                     if(modele.niveau.listeEstVide() && !balleEnJeu) {
+                        if(view.nbMunition > 0) {
+                            for(int i = 0 ; i < view.nbMunition ; i++) {
+                                modele.getPlayer().score += 400; 
+                                // s il n y a plus de pegs mais qu'il reste des munitions
+                            } 
+                        }
                         view.nextLevel();
                     }
 

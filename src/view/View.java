@@ -21,6 +21,7 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.Timer;
 import java.util.ArrayList;
+import javax.swing.border.Border;
 import java.awt.Image;
 
 import javax.sound.sampled.*;
@@ -28,7 +29,6 @@ public class View extends JFrame {
 
     public JLabel puit = new JLabel();
     public JLabel scoreLabel=new JLabel();
-    public JLabel points = new JLabel(); // a effacer plus tard
     public JPanel fond = new JPanel();
     public JPanel munition = new JPanel();
     public JPanel fondGauche = new JPanel();
@@ -56,14 +56,13 @@ public class View extends JFrame {
     public static float ratioY;
 
     static Clip son;
+    static boolean sonMute = false;
 
     public int width;
     public int height;
     public int numNiveau;
     public BufferedImage fondEcran;
-
     public boolean versDroite = true;
-
     public View(Controleur controleur) {
         this.controleur = controleur;
         Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
@@ -76,7 +75,6 @@ public class View extends JFrame {
         this.setVisible(true);
         changerPanel(menuPrincipal());
     }
-
     public JPanel menuPrincipal() {
         String urlDuSon = "ressources/SonsWav/Accueil.wav";
         LancerMusic(urlDuSon);
@@ -85,12 +83,10 @@ public class View extends JFrame {
             public void paintComponent(Graphics g) {
                 try {
                     BufferedImage image = ImageIO.read(new File("ressources/image_acceuil1.png"));
-                    // BufferedImage img = new BufferedImage(width, height, image.getType());
                     super.paintComponent(g);
                     g.drawImage(image,0, 0,width,height, null);
                 }catch(Exception e){
                     e.printStackTrace();
-                    System.out.println("non frère force a toi");
                 }
             }
         };
@@ -100,10 +96,10 @@ public class View extends JFrame {
         add(pane);
 
         JLabel nameLabel = new JLabel("Pseudo : ");
-        nameLabel.setBounds(width / 2 - 60, height - height / 2, 50, 30);
+        nameLabel.setBounds(width / 2 - 60, height - height / 2, 100, 50);
         pane.add(nameLabel);
-        JTextField nameField = new JTextField("test");
-        nameField.setBounds(width / 2, height - height / 2, 50, 30);
+        JTextField nameField = new JTextField("Name");
+        nameField.setBounds(width / 2, height - height / 2, 100, 50);
         pane.add(nameField);
 
         JLabel titrePane = new JLabel("HIT THE PEGGLES");
@@ -130,6 +126,7 @@ public class View extends JFrame {
         });
         ratioX = (float) (width - width / 7 * 2) / 800;
         ratioY = (float) height / 600;
+        mute(pane, urlDuSon);
         return pane;
     }
 
@@ -224,8 +221,14 @@ public class View extends JFrame {
         fondDroite.setBackground(Color.white);
         fondDroite.setPreferredSize(new Dimension(getWidth() / 11, getHeight()));
 
-        JProgressBar jauge = dessineJauge(fondDroite);
-
+        JProgressBar jauge = new JProgressBar(SwingConstants.VERTICAL,0,200);
+        jauge.setPreferredSize(new Dimension(fondDroite.getWidth(),fondDroite.getHeight()));
+        jauge.setStringPainted(true); 
+        while(controleur.balleEnJeu) {
+            jauge.setValue((int)controleur.modele.getPlayer().pointGagneParBalleEnJeu*20000/100);
+            repaint();
+            System.out.println((int)controleur.modele.getPlayer().pointGagneParBalleEnJeu);
+        }
         JPanel info=new JPanel();
         info.setBackground(Color.gray);
         info.setPreferredSize(new Dimension(info.getWidth(), info.getHeight()+100));
@@ -236,13 +239,11 @@ public class View extends JFrame {
         JLabel pseudoLabel=new JLabel("Joueur : "+controleur.modele.player.pseudo);
         pseudoLabel.setFont(new Font("Serif",Font.PLAIN,20));
 
-        points.setText("points " + controleur.modele.getPlayer().pointGagneParBalleEnJeu);
-        points.setFont(new Font("Serif",Font.PLAIN,20));
 
         info.add(pseudoLabel,BorderLayout.NORTH);
-        info.add(points, BorderLayout.NORTH);
         info.add(scoreLabel,BorderLayout.SOUTH);
         fondDroite.add(info,BorderLayout.NORTH);
+        fondDroite.add(jauge);
 
         fond.add(fondDroite, BorderLayout.EAST);
         // --------------DROITE---------------------
@@ -260,16 +261,6 @@ public class View extends JFrame {
         return fond;
     }
 
-    public JProgressBar dessineJauge(JPanel panel) {
-        JProgressBar jauge = new JProgressBar(SwingConstants.VERTICAL,0,200);
-        jauge.setPreferredSize(new Dimension(fondDroite.getWidth(),fondDroite.getHeight()));
-        jauge.setStringPainted(true);  
-        while(controleur.balleEnJeu) {
-            jauge.setValue((int)controleur.modele.getPlayer().pointGagneParBalleEnJeu*20000/100);
-        }
-        panel.add(jauge);
-        return jauge;
-    }
 
     public JPanel choixNiveauPane(Controleur controleur) {
         controleur.modele.player.score = 0;
@@ -303,6 +294,7 @@ public class View extends JFrame {
         });
         afficheMiniature(1, choixNiv, height/2-200);
         afficheMiniature(2, choixNiv, height/2);
+        mute(choixNiv,url);
         return choixNiv;
     }
 
@@ -317,10 +309,10 @@ public class View extends JFrame {
         JPanel choix = new JPanel(null);
         JButton acceuil = new JButton("acceuil");
         acceuil.addActionListener(
-                (ActionEvent e) -> {
-                    this.invalidate();
-                    changerPanel(menuPrincipal());
-                });
+            (ActionEvent e) -> {
+                this.invalidate();
+                changerPanel(menuPrincipal());
+            });
         acceuil.setBounds(0, 0, 100, 50);
         choix.add(acceuil);
         ratioX = ratioX / 8;
@@ -330,35 +322,60 @@ public class View extends JFrame {
     }
 
     public void nextLevel() {
-        System.out.println(controleur.modele.getNiveau().getNumNiveau());
+        JPanel nextLvl = new JPanel();
+        
         JButton acceuil = new JButton("Acceuil");
-        JButton niveauSuivant = new JButton("Niveau suivant");
-        JPanel nextLvl = new JPanel(){
-
-        };
+        JLabel winOrLose = new JLabel();
+        JButton niveauSuiv_retry ;
         nextLvl.setSize(width,height);
         controleur.timer.stop();
         nextLvl.setLayout(null);
         acceuil.setBounds(width/3-50, height/2-75, 150,150);
-        niveauSuivant.setBounds(acceuil.getX()+300, acceuil.getY(),150,150);
-
+        
         acceuil.addActionListener(e->{
             changerPanel(menuPrincipal());
         });
-        niveauSuivant.addActionListener(e->{
-            int niv = controleur.modele.getNiveau().getNumNiveau() + 1;
-            fondEcran = new BufferedImage(20, 20, BufferedImage.TYPE_INT_RGB);
-            try {
-            fondEcran = ImageIO.read(new File("ressources/Niveau"+niv+"Fond.png"));
-            } catch (IOException excep) {
-                excep.printStackTrace();
-            }
-            controleur.modele.setNiveau(new Niveau(niv));
-            changerPanel(JeuPanel(this.controleur));
-            
-        });
+        if(controleur.modele.getNiveau().listeEstVide() && nbMunition >= 0) { 
+            winOrLose.setText("Vous avez gagné");
+            winOrLose.setFont(new Font("TimesRoman", Font.BOLD, 100));
+            niveauSuiv_retry = new JButton("Niveau Suivant");
+            niveauSuiv_retry.addActionListener(e->{
+                int niv = controleur.modele.getNiveau().getNumNiveau() + 1;
+                fondEcran = new BufferedImage(20, 20, BufferedImage.TYPE_INT_RGB);
+                try {
+                    fondEcran = ImageIO.read(new File("ressources/Niveau"+niv+"Fond.png"));
+                } catch (IOException excep) {
+                    excep.printStackTrace();
+                }
+                controleur.modele.getPlayer().score = 0;
+                controleur.modele.getPlayer().pointGagneParBalleEnJeu = 0;
+                controleur.modele.setNiveau(new Niveau(niv));
+                changerPanel(JeuPanel(this.controleur));
+                controleur.timer.restart();
+            });
+        }else {
+            winOrLose.setText("Vous avez perdu");
+            winOrLose.setFont(new Font("TimesRoman", Font.BOLD, 100));
+            niveauSuiv_retry = new JButton("Réessayer");
+            niveauSuiv_retry.addActionListener(e->{
+                fondEcran = new BufferedImage(20, 20, BufferedImage.TYPE_INT_RGB);
+                try {
+                    fondEcran = ImageIO.read(new File("ressources/Niveau"+controleur.modele.getNiveau().getNumNiveau()+"Fond.png"));
+                } catch (IOException excep) {
+                    excep.printStackTrace();
+                }
+                controleur.modele.getPlayer().score = 0;
+                controleur.modele.getPlayer().pointGagneParBalleEnJeu = 0;
+                controleur.modele.setNiveau(new Niveau(controleur.modele.getNiveau().getNumNiveau()));
+                changerPanel(JeuPanel(this.controleur));
+                controleur.timer.restart();
+            });
+        }
+        winOrLose.setBounds(width/4,height/4, width,150);
+        nextLvl.add(niveauSuiv_retry);
+        niveauSuiv_retry.setBounds(acceuil.getX()+300, acceuil.getY(),150,150);
+        nextLvl.add(winOrLose);
         nextLvl.add(acceuil);
-        nextLvl.add(niveauSuivant);
         changerPanel(nextLvl);
     }
 
@@ -621,22 +638,24 @@ public class View extends JFrame {
     }
 
     public static void LancerMusic(String url) {
-        try {
+        if(!sonMute) {
+            try {
 
-            File ficSon = new File(url);
+                File ficSon = new File(url);
 
-            if (ficSon.exists()) {
-                AudioInputStream audio = AudioSystem.getAudioInputStream(ficSon);
-                son = AudioSystem.getClip();
-                son.open(audio);
-                son.start();
-                son.loop(Clip.LOOP_CONTINUOUSLY);
-            } else {
-                System.out.println("fichier introuvable");
+                if (ficSon.exists()) {
+                    AudioInputStream audio = AudioSystem.getAudioInputStream(ficSon);
+                    son = AudioSystem.getClip();
+                    son.open(audio);
+                    son.start();
+                    son.loop(Clip.LOOP_CONTINUOUSLY);
+                } else {
+                    System.out.println("fichier introuvable");
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
@@ -662,5 +681,20 @@ public class View extends JFrame {
 
     public static double getRatio() {
         return (ratioX + ratioX) / 2;
+    }
+
+    public void mute( JPanel panel, String url) {
+        JButton btnMute = new JButton("Mute");
+        btnMute.setBounds(200,0,75,75);
+        panel.add(btnMute);
+        btnMute.addActionListener(e->{
+            if(son.isActive()) {
+                son.stop();
+                sonMute = true;
+            }else {
+                LancerMusic(url);
+                sonMute = false;
+            }
+        });
     }
 }
