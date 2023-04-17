@@ -29,31 +29,7 @@ public class Quadrilatere extends Obstacle {//peut etre un carré comme un recta
         coinBasGauche = new Point((int) (this.x*View.ratioX), (int) ((this.y + this.hauteur)*View.ratioY));
         coinBasDroit = new Point((int) ((this.x + this.largeur)*View.ratioX), (int) ((this.y + this.hauteur)*View.ratioY));
 
-    if(balle.rayon/2>= Math.sqrt((balle.x-this.coinHautGauche.x)*(balle.x-this.coinHautGauche.x) + (balle.y - this.coinHautGauche.y)*(balle.y - this.coinHautGauche.y))){
-      //collision coin haut gauche
-      System.out.println("Collision quadrilatere 3");
-      typeCollision = 3;
-      return true;
-    }
-    else if(balle.rayon/2>= Math.sqrt((balle.x - this.coinHautDroit.x)*(balle.x - this.coinHautDroit.x) + (balle.y - this.coinHautDroit.y)*(balle.y - this.coinHautDroit.y))){
-      //collision coin haut droit
-      System.out.println("Collision quadrilatere 4");
-      typeCollision = 4;
-      return true;
-    }
-    else if(balle.rayon/2>= Math.sqrt((balle.x - this.coinBasGauche.x)*(balle.x - this.coinBasGauche.x) + (balle.y - this.coinBasGauche.y)*(balle.y - this.coinBasGauche.y))){
-      //collision coin bas gauche
-      System.out.println("Collision quadrilatere 5");
-      typeCollision = 5;
-      return true;
-    }
-    else if(balle.rayon/2>= Math.sqrt((balle.x - this.coinBasDroit.x)*(balle.x-this.coinBasDroit.x) + (balle.y - this.coinBasDroit.y)*(balle.y-this.coinBasDroit.y))){
-      //collision coin bas droit
-      System.out.println("Collision quadrilatere 6");
-      typeCollision = 6;
-      return true;
-    }
-    else if ((balle.y >= this.y * View.ratioY && balle.y <= (this.y + this.hauteur) * View.ratioY)
+    if ((balle.y >= this.y * View.ratioY && balle.y <= (this.y + this.hauteur) * View.ratioY)
         && (((balle.x + balle.rayon/2) >= this.x * View.ratioX && balle.x<= this.x*View.ratioX) || ((balle.x - balle.rayon/2)<= (this.x + this.largeur) * View.ratioX && balle.x>=(this.x + this.largeur) * View.ratioX ))) {
       System.out.println("Collision quadrilatere 1");
       typeCollision = 1;
@@ -63,6 +39,31 @@ public class Quadrilatere extends Obstacle {//peut etre un carré comme un recta
         && (((balle.y + balle.rayon/2) >= this.y * View.ratioY && balle.y <= this.y * View.ratioY) || ((balle.y - balle.rayon/2)<= (this.y + this.hauteur) * View.ratioY && balle.y >= (this.y + this.hauteur) * View.ratioY))) {
       System.out.println("Collision quadrilatere 2");
       typeCollision = 2;
+      return true;
+    }
+
+    else if(balle.rayon/2>= Math.sqrt((balle.x+balle.rayon/4-this.coinHautGauche.x)*(balle.x+balle.rayon/4-this.coinHautGauche.x) + (balle.y+balle.rayon/4 - this.coinHautGauche.y)*(balle.y+balle.rayon/4 - this.coinHautGauche.y))){
+      //collision coin haut gauche
+      System.out.println("Collision quadrilatere 3");
+      typeCollision = 3;
+      return true;
+    }
+    else if(balle.rayon/2>= Math.sqrt((balle.x+balle.rayon/4 - this.coinHautDroit.x)*(balle.x+balle.rayon/4 - this.coinHautDroit.x) + (balle.y+balle.rayon/4 - this.coinHautDroit.y)*(balle.y+balle.rayon/4 - this.coinHautDroit.y))){
+      //collision coin haut droit
+      System.out.println("Collision quadrilatere 4");
+      typeCollision = 4;
+      return true;
+    }
+    else if(balle.rayon/2>= Math.sqrt((balle.x+balle.rayon/4 - this.coinBasGauche.x)*(balle.x+balle.rayon/4 - this.coinBasGauche.x) + (balle.y+balle.rayon/4 - this.coinBasGauche.y)*(balle.y+balle.rayon/4 - this.coinBasGauche.y))){
+      //collision coin bas gauche
+      System.out.println("Collision quadrilatere 5");
+      typeCollision = 5;
+      return true;
+    }
+    else if(balle.rayon/2>= Math.sqrt((balle.x+balle.rayon/4 - this.coinBasDroit.x)*(balle.x+balle.rayon/4-this.coinBasDroit.x) + (balle.y+balle.rayon/4 - this.coinBasDroit.y)*(balle.y+balle.rayon/4-this.coinBasDroit.y))){
+      //collision coin bas droit
+      System.out.println("Collision quadrilatere 6");
+      typeCollision = 6;
       return true;
     }
     return false;
@@ -91,8 +92,7 @@ public class Quadrilatere extends Obstacle {//peut etre un carré comme un recta
                 case 6:
                     coin(this.coinBasDroit,balle);
                   break;
-              }
-          
+              } 
         }
     }
 

@@ -632,7 +632,7 @@ public class View extends JFrame {
         //double x = (partie.getWidth() / 2) - (5 * heightBase / 6) * Math.sin(theta) - 10/* Width balle */;
         //double y = (5 * heightBase / 6) * Math.cos(theta) - 10/* Height balle */;
         // Pour calculer nouvelles coordonnées de la balle après rotaion
-        Balle fantome = new Balle(partie.getWidth() / 2 - 25, 0d, 100, 180 - this.angle);
+        Balle fantome = new Balle(partie.getWidth() / 2 - 25, 0d, 300d, 180 - this.angle);
         GeneralPath genPath = new GeneralPath();
         boolean premierRebond = false;
         while (!premierRebond) {
@@ -653,13 +653,13 @@ public class View extends JFrame {
         }
         for (int i = 0; i < 10; i++) {
             fantome.update();
-            double a = fantome.getX() + fantome.rayon / 2;
+            double a = fantome.getX();
             double b = fantome.getY();
             for (Obstacle o : controleur.modele.getNiveau().list) {
                 o.rebond(fantome);
             }
-            genPath.moveTo(a, b);
-            genPath.lineTo(a, b);
+            genPath.moveTo(a+12.5, b+12.5);
+            genPath.lineTo(a+12.5, b+12.5);
         }
 
         g2d.setStroke(new BasicStroke(5));
