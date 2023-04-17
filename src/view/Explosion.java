@@ -23,10 +23,10 @@ public class Explosion extends JPanel {
         this.active = true;
         int size = (int) (maxRadius * 2);
 
-        setBackground(Color.darkGray);
-        setBounds((int) x, (int) y, 50, 50);
+        setBounds((int) x, (int) y, 40, 40);
         setPreferredSize(new Dimension(size, size));
         setVisible(active);
+        setOpaque(false);
     }
 
     public void paintComponent(Graphics g) {
@@ -36,10 +36,11 @@ public class Explosion extends JPanel {
             g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
             g2d.setColor(Color.RED);
             g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.6f));
-            Ellipse2D.Double circle = new Ellipse2D.Double(0, 0, radius, radius);
-            g2d.fill(circle);
+            Ellipse2D.Double circle = new Ellipse2D.Double(getWidth() / 2 - radius, getWidth() / 2 - radius, radius,
+                    radius);
+            g2d.draw(circle);
             g2d.dispose();
-            if (radius >= getWidth()) {
+            if (getWidth() / 2 - radius <= 0) {
                 active = false;
             }
             radius += 4;

@@ -33,18 +33,19 @@ public class Controleur {
                 view.setColorX();
                 view.setColorX();
                 view.calculeAngle();
-                view.repaint();
-
+                if(View.enJeu){
+                    view.repaint();
+                }
                 // puit
                 view.placePuit();
                 if (modele.getBalle() != null) {
                     modele.getBalle().update();
-
                     // rebond
                     for (int i = 0; i < modele.niveau.list.size(); i++) {
                         modele.getBalle().rebond(modele.niveau.list.get(i));
                         if (modele.getBalle().collision(modele.niveau.list.get(i)) == 1) {
-                            boolean detruit = modele.niveau.detruit(i);
+                            modele.niveau.list.get(i).perdDeLaVie(1);
+                            boolean detruit = modele.niveau.list.get(i).getEstMort();
                             if (detruit) {
                                 double x = modele.niveau.list.get(i).getX();
                                 double y = modele.niveau.list.get(i).getY();
@@ -52,6 +53,7 @@ public class Controleur {
                                 modele.niveau.list.remove(i);
                             }
                             modele.player.calculScore(detruit, facteur++);
+                            view.setScore();
                         }
                     }
 
@@ -60,17 +62,19 @@ public class Controleur {
                     }
 
                     // munition
-                    Point p = view.puit.getLocationOnScreen();
-                    if (modele.balle.getY() + (view.partie.getHeight() / 2) >= view.puit.getY()
-                            + (view.partie.getHeight() / 2)
-                            && ((modele.balle.getX() - 140) >= p.x
-                                    && (modele.balle.getX() - 140) <= p.x + view.puit.getWidth())) {
-                        if (balleEnJeu) {
-                            view.nbMunition--;
-                            view.munition.removeAll();
-                            view.afficheMunition();
-                            view.munition.revalidate();
-                            balleHorsJeu();
+                    if(View.enJeu){
+                        Point p = view.puit.getLocationOnScreen();
+                        if (modele.balle.getY() + (view.partie.getHeight() / 2) >= view.puit.getY()
+                                + (view.partie.getHeight() / 2)
+                                && ((modele.balle.getX() - 140) >= p.x
+                                        && (modele.balle.getX() - 140) <= p.x + view.puit.getWidth())) {
+                            if (balleEnJeu) {
+                                view.nbMunition--;
+                                view.munition.removeAll();
+                                view.afficheMunition();
+                                view.munition.revalidate();
+                                balleHorsJeu();
+                            }
                         }
                     }
 
