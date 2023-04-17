@@ -219,6 +219,8 @@ public class View extends JFrame {
                 }
                 controleur.modele.getPlayer().score = 0;
                 Sauvegarde.save(controleur.modele.getPlayer());
+                controleur.modele.setBalle(null);
+                controleur.balleHorsJeu();
             }
         });
 
