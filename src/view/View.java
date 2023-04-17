@@ -415,7 +415,7 @@ public class View extends JFrame {
         double x = (partie.getWidth() / 2) - (5 * heightBase / 6) * Math.sin(theta) - 10/* Width balle */;
         double y = (5 * heightBase / 6) * Math.cos(theta) - 10/* Height balle */;
         // Pour calculer nouvelles coordonnées de la balle après rotaion
-        Balle fantome = new Balle(partie.getWidth()/2-25, 0d, 500d, 180 - this.angle);
+        Balle fantome = new Balle(partie.getWidth() / 2 / View.ratioX, 0d, 500d, 180 - this.angle);
         GeneralPath genPath = new GeneralPath();
         boolean premierRebond = false;
         while(!premierRebond){
@@ -492,7 +492,8 @@ public class View extends JFrame {
     public void drawBall(Graphics g) {
         Graphics g2d = g;
         if (this.controleur.modele.balle != null) {
-            g2d.fillOval((int) (controleur.modele.balle.getX()),(int) (controleur.modele.balle.getY()),(int) (controleur.modele.balle.diametre/2),(int) (controleur.modele.balle.diametre/2));
+            g2d.fillOval((int) (controleur.modele.balle.getX()*ratioX),(int) (controleur.modele.balle.getY()*ratioY),(int) (controleur.modele.balle.diametre*ratioX),(int) (controleur.modele.balle.diametre*ratioY
+            ));
         }
     }
 

@@ -26,7 +26,7 @@ public class Controleur {
         view = new View(this);
         facteur = 1;
         // --------------ANIMATION----------------------
-        timer = new Timer(30, new ActionListener() {
+        timer = new Timer(10, new ActionListener() {
             public void actionPerformed(ActionEvent e) {
 
                 // canon
@@ -55,8 +55,7 @@ public class Controleur {
                         }
                     }
 
-                    if (modele.getBalle().getX() - modele.getBalle().diametre / 2 <= 0 || modele.getBalle().getX()
-                            + modele.getBalle().diametre / 2 >= view.getPartie().getWidth()) {
+                    if ((modele.getBalle().getX() - modele.getBalle().rayon)*View.ratioX <= 0 || (modele.getBalle().getX() + modele.getBalle().rayon)*View.ratioX >= view.getPartie().getWidth()) {
                         modele.balle.rebondMur();
                     }
 
@@ -102,7 +101,7 @@ public class Controleur {
             this.modele.setBalle(null);
             t = 0;
             this.angleTir = this.view.getAngle();
-            this.modele.setBalle(new Balle(view.getPartie().getWidth() / 2 - 25, 0d, 500, 180 - this.angleTir));
+            this.modele.setBalle(new Balle(view.getPartie().getWidth() / 2 / View.ratioX , 0d, 500, 180 - this.angleTir));
         }
     }
 
