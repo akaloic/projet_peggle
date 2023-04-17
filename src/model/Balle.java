@@ -138,10 +138,10 @@ public class Balle {
     vX = vX * -0.95;
   }
   public void dessine(Graphics g){
-    int gx=(int)(this.x);
-    int gy=(int)(this.y);
-    int gw=(int)(this.rayon)/2;
-    int gh=(int)(this.rayon)/2;
+    int gx=(int)(this.x*View.ratioX);
+    int gy=(int)(this.y*View.ratioY);
+    int gw=(int)(this.diametre*View.ratioX);
+    int gh=(int)(this.diametre*View.ratioY);
     if(image == null){
         g.fillOval(gx,gy,gw,gh);
     }
