@@ -75,10 +75,11 @@ public class Quadrilatere extends Obstacle {//peut etre un carré comme un recta
         if (collision(balle)) {
             switch (this.typeCollision) {
                 case 1:
-                  balle.vX = balle.vX * -0.95;
+                  balle.vX = balle.x > this.x*View.getRatioX() ? Math.abs(balle.vX * -0.95) : -Math.abs(balle.vX * -0.95);
                   break;
                 case 2:
-                  balle.vY = balle.vY * -0.95;
+                  //balle.vY = balle.vY * -0.95;
+                  balle.vY = balle.y > this.y*View.getRatioY() ? Math.abs(balle.vY * -0.95) : -Math.abs(balle.vY * -0.95);
                   break;
                 case 3:
                     coin(this.coinHautGauche,balle);
@@ -98,12 +99,16 @@ public class Quadrilatere extends Obstacle {//peut etre un carré comme un recta
 
     public void coin(Point point,Balle balle){
         double n1 = balle.vX; // Variable auxiliaire pour garder balle.vX avant qu'on modifie sa valeur
-        balle.vX = balle.vX - (2 * (balle.vX * (balle.x - point.x) + balle.vY * (balle.y - point.y)))
-            / (((balle.x - point.x)) * ((balle.x - point.x))+ ((balle.y - point.y)) * ((balle.y - point.y)))
-            * ((balle.x - point.x)) * 0.95;
-        balle.vY = balle.vY - (2 * (n1 * (balle.x - point.x) + balle.vY * (balle.y - point.y)))
-            / (((balle.x - point.x)) * ((balle.x - point.x)) + ((balle.y - point.y)) * ((balle.y - point.y)))
-            * ((balle.y - point.y)) * 0.95;
+        double newX = balle.vX - (2 * (balle.vX * (balle.x - point.x) + balle.vY * (balle.y - point.y)))
+        / (((balle.x - point.x)) * ((balle.x - point.x))+ ((balle.y - point.y)) * ((balle.y - point.y)))
+        * ((balle.x - point.x)) * 0.95;
+
+        double newY = balle.vY - (2 * (n1 * (balle.x - point.x) + balle.vY * (balle.y - point.y)))
+        / (((balle.x - point.x)) * ((balle.x - point.x)) + ((balle.y - point.y)) * ((balle.y - point.y)))
+        * ((balle.y - point.y)) * 0.95;
+
+        balle.vX = balle.x > this.x*View.getRatioX() ? Math.abs(newX) : -Math.abs(newX);
+        balle.vY = balle.y > this.y*View.getRatioX() ? Math.abs(newY) : -Math.abs(newY);
     }
 
     public void perdDeLaVie(int degats) {
