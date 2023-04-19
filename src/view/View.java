@@ -377,14 +377,39 @@ public class View extends JFrame {
         }
         JPanel bis = new JPanel(null);
         int borne = mode == 1 ? 5 : Math.max(Sauvegarde.listeJoueurs.get(Sauvegarde.joueur).liste.size(), 1);
-        System.out.println(Sauvegarde.listeJoueurs.get(Sauvegarde.joueur).listeScoreEdit.size());
         bis.setBounds(width / 30, height/8, width, height / 6);
         for (int i = 0; i < borne; i++) {
             int k = i;
             JPanel panelPrincipal = new JPanel(new BorderLayout());
             panelPrincipal.setBounds(width / 20 , i * height, width - width/5, height );
-            JPanel miniature = new JPanel(null) {
+            JPanel miniature = new JPanel(null);
+            if (mode == 2) {
+                JButton supprimer = new JButton("X");
+                supprimer.setBackground(Color.red);
+                supprimer.addActionListener(
+                    (ActionEvent e) -> {
+                        if(Sauvegarde.listeJoueurs.get(Sauvegarde.joueur).liste.size() > 0){
+                            Sauvegarde.listeJoueurs.get(Sauvegarde.joueur).liste.remove(k);
+                            Sauvegarde.listeJoueurs.get(Sauvegarde.joueur).listeScoreEdit.remove(k);
+                            Sauvegarde.save(Sauvegarde.listeJoueurs.get(Sauvegarde.joueur));
+                            changerPanel(choixEdit());
+                        }
+                    });
+                supprimer.setBounds(panelPrincipal.getWidth()-50, 0, 50, 50);
+                supprimer.requestFocus();
+                miniature.add(supprimer);
 
+                JButton edit = new JButton("E");
+                edit.setBackground(Color.cyan);
+                edit.addActionListener(
+                        (ActionEvent e) -> {
+                            changerPanel(new Edit(null, width, height, k, this));
+                        });
+                edit.setBounds(panelPrincipal.getWidth()-50, 50, 50, 50);
+                edit.requestFocus();
+                miniature.add(edit);
+            }
+            JButton bouton = new JButton("Jouer"){
                 @Override
                 protected void paintComponent(Graphics g) {
                     // TODO Auto-generated method stub
@@ -410,38 +435,13 @@ public class View extends JFrame {
                         ((Graphics2D)g).drawString("Meilleur score : "+Sauvegarde.listeJoueurs.get(Sauvegarde.joueur).listeScoreEdit.get(k), 0, 30);
                     }
                 }
-            };
-            if (mode == 2) {
-                JButton supprimer = new JButton("X");
-                supprimer.setBackground(Color.red);
-                supprimer.addActionListener(
-                    (ActionEvent e) -> {
-                        if(Sauvegarde.listeJoueurs.get(Sauvegarde.joueur).liste.size() > 0){
-                            Sauvegarde.listeJoueurs.get(Sauvegarde.joueur).liste.remove(k);
-                            Sauvegarde.listeJoueurs.get(Sauvegarde.joueur).listeScoreEdit.remove(k);
-                            Sauvegarde.save(Sauvegarde.listeJoueurs.get(Sauvegarde.joueur));
-                            changerPanel(choixEdit());
-                        }
-                    });
-                supprimer.setBounds(panelPrincipal.getWidth()-50, 0, 50, 50);
-                miniature.add(supprimer);
 
-                JButton edit = new JButton("E");
-                edit.setBackground(Color.cyan);
-                edit.addActionListener(
-                        (ActionEvent e) -> {
-                            changerPanel(new Edit(null, width, height, k, this));
-                        });
-                edit.setBounds(panelPrincipal.getWidth()-50, 50, 50, 50);
-                miniature.add(edit);
-            }
-            JButton bouton = new JButton("Jouer");
-            bouton.setBackground(new Color(37, 253, 233));
-            if (mode == 1) {
-                bouton.setText("Niveau " + (k + 1));
-            }
-            panelPrincipal.add(miniature, BorderLayout.CENTER);
-            panelPrincipal.add(bouton, BorderLayout.SOUTH);
+                @Override
+                public void repaint() {}
+            };
+            panelPrincipal.add(miniature);
+            miniature.add(bouton);
+            bouton.setSize(panelPrincipal.getWidth(), panelPrincipal.getHeight());
             bouton.addActionListener(
                     (ActionEvent e) -> {
                         resetRatio();
@@ -465,8 +465,6 @@ public class View extends JFrame {
                         }
                         son.stop();
                     });
-            miniature.setBackground(Color.lightGray);
-            miniature.setBorder(BorderFactory.createLineBorder(Color.black));
             bis.add(panelPrincipal);
         }
         if (mode == 2) {

@@ -152,15 +152,15 @@ public class Edit extends JPanel{
         rayon.setPaintLabels(true);
         rayon.addChangeListener (( event ) -> { 
             if(objetSelectionner != null && !objetSelectionner.decoration){
-                objetSelectionner.obstacle.setHauteur(rayon.getValue());
-                objetSelectionner.obstacle.setLargeur(rayon.getValue());
+                objetSelectionner.obstacle.setHauteur(rayon.getValue()*2);
+                objetSelectionner.obstacle.setLargeur(rayon.getValue()*2);
                 objetSelectionner.obstacle.setRayon(rayon.getValue());
-                objetSelectionner.setSize(new Dimension((int)(rayon.getValue()*View.getRatio()),(int)(rayon.getValue()*View.getRatio())));
+                objetSelectionner.setSize(new Dimension((int)(rayon.getValue()*View.getRatio()*2),(int)(rayon.getValue()*View.getRatio()*2)));
                 for (objetMobile objetMobile : listeSelection) {
-                    objetMobile.obstacle.setHauteur(rayon.getValue());
-                    objetMobile.obstacle.setLargeur(rayon.getValue());
+                    objetMobile.obstacle.setHauteur(rayon.getValue()*2);
+                    objetMobile.obstacle.setLargeur(rayon.getValue()*2);
                     objetMobile.obstacle.setRayon(rayon.getValue());
-                    objetMobile.setSize(new Dimension((int)(rayon.getValue()*View.getRatio()),(int)(rayon.getValue()*View.getRatio())));
+                    objetMobile.setSize(new Dimension((int)(rayon.getValue()*View.getRatio()*2),(int)(rayon.getValue()*View.getRatio()*2)));
                 }
             principal.requestFocus();
             }
@@ -649,14 +649,20 @@ public class Edit extends JPanel{
     }
 
     public void actualiseSlider(){
-        hauteur.setEnabled(!objetSelectionner.obstacle.utiliseRayon());
-        hauteur.setValue((int)objetSelectionner.obstacle.getHauteur());
 
-        largeur.setEnabled(!objetSelectionner.obstacle.utiliseRayon());
-        largeur.setValue((int)objetSelectionner.obstacle.getLargeur());
-
+        if(!objetSelectionner.obstacle.utiliseRayon()){
+            hauteur.setEnabled(!objetSelectionner.obstacle.utiliseRayon());
+            hauteur.setValue((int)objetSelectionner.obstacle.getHauteur());
+    
+            largeur.setEnabled(!objetSelectionner.obstacle.utiliseRayon());
+            largeur.setValue((int)objetSelectionner.obstacle.getLargeur());
+        }else{
         rayon.setEnabled(objetSelectionner.obstacle.utiliseRayon());
-        rayon.setValue((int)((objetSelectionner.obstacle.getHauteur()+objetSelectionner.obstacle.getLargeur()))/2);
+        rayon.setValue((int)(objetSelectionner.obstacle.getRayon()));            
+        }
+
+
+
 
     }
 
