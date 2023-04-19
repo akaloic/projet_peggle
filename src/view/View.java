@@ -377,6 +377,7 @@ public class View extends JFrame {
         }
         JPanel bis = new JPanel(null);
         int borne = mode == 1 ? 5 : Math.max(Sauvegarde.listeJoueurs.get(Sauvegarde.joueur).liste.size(), 1);
+        System.out.println(Sauvegarde.listeJoueurs.get(Sauvegarde.joueur).listeScoreEdit.size());
         bis.setBounds(width / 30, height/8, width, height / 6);
         for (int i = 0; i < borne; i++) {
             int k = i;
@@ -393,7 +394,7 @@ public class View extends JFrame {
                     if(fondEcran == null){
                         setBackground(Color.gray);
                     }
-                    g2d.drawImage(view.Image.fondEcrans[k],0, 0,getWidth(),getHeight(),null);
+                    g2d.drawImage(view.Image.fondEcrans[Math.min(k,4)],0, 0,getWidth(),getHeight(),null);
                     
                     if (mode != 1) {
                         dessineNiveau(g, Sauvegarde.charge(k));
@@ -403,10 +404,10 @@ public class View extends JFrame {
                         dessineNiveau(g, controleur.modele.getNiveau().getList());
                     }
                     if(Sauvegarde.numNiveau == -1){
-                        ((Graphics2D)g).drawString("Meilleur score : "+controleur.modele.getPlayer().listeScore[k], 0, 30);
+                        ((Graphics2D)g).drawString("Meilleur score : "+Sauvegarde.listeJoueurs.get(Sauvegarde.joueur).listeScore[k], 0, 30);
                     }
                     else{
-                        ((Graphics2D)g).drawString("Meilleur score : "+controleur.modele.getPlayer().listeScoreEdit.get(k), 0, 30);
+                        ((Graphics2D)g).drawString("Meilleur score : "+Sauvegarde.listeJoueurs.get(Sauvegarde.joueur).listeScoreEdit.get(k), 0, 30);
                     }
                 }
             };
@@ -415,10 +416,12 @@ public class View extends JFrame {
                 supprimer.setBackground(Color.red);
                 supprimer.addActionListener(
                     (ActionEvent e) -> {
+                        if(Sauvegarde.listeJoueurs.get(Sauvegarde.joueur).liste.size() > 0){
                             Sauvegarde.listeJoueurs.get(Sauvegarde.joueur).liste.remove(k);
                             Sauvegarde.listeJoueurs.get(Sauvegarde.joueur).listeScoreEdit.remove(k);
                             Sauvegarde.save(Sauvegarde.listeJoueurs.get(Sauvegarde.joueur));
                             changerPanel(choixEdit());
+                        }
                     });
                 supprimer.setBounds(panelPrincipal.getWidth()-50, 0, 50, 50);
                 miniature.add(supprimer);
