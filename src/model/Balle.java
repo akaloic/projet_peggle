@@ -3,6 +3,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import view.Image;
+import view.View;
 public class Balle {
 
   public double x;
@@ -40,10 +41,10 @@ public class Balle {
     this.vX = this.vX *-1;
   }
   public void dessine(Graphics g){
-    int gx=(int)(this.x);
-    int gy=(int)(this.y);
-    int gw=(int)(this.rayon)/2;
-    int gh=(int)(this.rayon)/2;
+    int gx=(int)(this.x*View.ratioX);
+    int gy=(int)(this.y*View.ratioY);
+    int gw=(int)(this.rayon/2*View.getRatio());
+    int gh=(int)(this.rayon/2*View.getRatio());
     if(image == null){
         g.fillOval(gx,gy,gw,gh);
     }

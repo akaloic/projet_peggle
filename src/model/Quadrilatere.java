@@ -8,10 +8,10 @@ public class Quadrilatere extends Obstacle {//peut etre un carré comme un recta
     public Point coinHautGauche, coinBasGauche, coinHautDroit, coinBasDroit;
     public Quadrilatere(double x, double y, double largeur, double hauteur) {
         super(x, y, largeur, hauteur, false, 100);
-        /*coinHautGauche = new Point((int) x, (int) y);
+        coinHautGauche = new Point((int) x, (int) y);
         coinHautDroit = new Point((int) ((x + largeur)), (int) y);
         coinBasGauche = new Point((int) x, (int) (y + hauteur));
-        coinBasDroit = new Point((int) (x + largeur), (int) (y + hauteur));*/
+        coinBasDroit = new Point((int) (x + largeur), (int) (y + hauteur));
 
         if(largeur>=hauteur){
             this.image=Image.quadHorizontal;
@@ -24,19 +24,19 @@ public class Quadrilatere extends Obstacle {//peut etre un carré comme un recta
     @Override
     public boolean collision(Balle balle) {
         //System.out.println(this.x*View.ratioX+"    "+this.largeur*View.ratioX+"    "+this.coinHautDroit.x*View.ratioX);
-        coinHautGauche = new Point((int) (this.x*View.ratioX), (int) (this.y*View.ratioY));
-        coinHautDroit = new Point((int) ((this.x+this.largeur)*View.ratioX), (int) (this.y*View.ratioY));
-        coinBasGauche = new Point((int) (this.x*View.ratioX), (int) ((this.y + this.hauteur)*View.ratioY));
-        coinBasDroit = new Point((int) ((this.x + this.largeur)*View.ratioX), (int) ((this.y + this.hauteur)*View.ratioY));
+        coinHautGauche = new Point((int) (this.x), (int) (this.y));
+        coinHautDroit = new Point((int) ((this.x+this.largeur)), (int) (this.y));
+        coinBasGauche = new Point((int) (this.x), (int) ((this.y + this.hauteur)));
+        coinBasDroit = new Point((int) ((this.x + this.largeur)), (int) ((this.y + this.hauteur)));
 
-    if ((balle.y >= this.y * View.ratioY && balle.y <= (this.y + this.hauteur) * View.ratioY)
-        && (((balle.x + balle.rayon/2) >= this.x * View.ratioX && balle.x<= this.x*View.ratioX) || ((balle.x - balle.rayon/2)<= (this.x + this.largeur) * View.ratioX && balle.x>=(this.x + this.largeur) * View.ratioX ))) {
+    if ((balle.y >= this.y && balle.y <= (this.y + this.hauteur))
+        && (((balle.x + balle.rayon/2) >= this.x && balle.x<= this.x) || ((balle.x - balle.rayon/2)<= (this.x + this.largeur) && balle.x>=(this.x + this.largeur) ))) {
       System.out.println("Collision quadrilatere 1");
       typeCollision = 1;
       return true;
     } 
-    else if ((balle.x>= this.x * View.ratioX && balle.x<= (this.x + this.largeur) * View.ratioX)
-        && (((balle.y + balle.rayon/2) >= this.y * View.ratioY && balle.y <= this.y * View.ratioY) || ((balle.y - balle.rayon/2)<= (this.y + this.hauteur) * View.ratioY && balle.y >= (this.y + this.hauteur) * View.ratioY))) {
+    else if ((balle.x>= this.x && balle.x<= (this.x + this.largeur))
+        && (((balle.y + balle.rayon/2) >= this.y && balle.y <= this.y) || ((balle.y - balle.rayon/2)<= (this.y + this.hauteur) && balle.y >= (this.y + this.hauteur)))) {
       System.out.println("Collision quadrilatere 2");
       typeCollision = 2;
       return true;
@@ -75,11 +75,11 @@ public class Quadrilatere extends Obstacle {//peut etre un carré comme un recta
         if (collision(balle)) {
             switch (this.typeCollision) {
                 case 1:
-                  balle.vX = balle.x > this.x*View.getRatioX() ? Math.abs(balle.vX * -0.95) : -Math.abs(balle.vX * -0.95);
+                  balle.vX = balle.x > this.x ? Math.abs(balle.vX * -0.95) : -Math.abs(balle.vX * -0.95);
                   break;
                 case 2:
                   //balle.vY = balle.vY * -0.95;
-                  balle.vY = balle.y > this.y*View.getRatioY() ? Math.abs(balle.vY * -0.95) : -Math.abs(balle.vY * -0.95);
+                  balle.vY = balle.y > this.y ? Math.abs(balle.vY * -0.95) : -Math.abs(balle.vY * -0.95);
                   break;
                 case 3:
                     coin(this.coinHautGauche,balle);
@@ -107,8 +107,8 @@ public class Quadrilatere extends Obstacle {//peut etre un carré comme un recta
         / (((balle.x - point.x)) * ((balle.x - point.x)) + ((balle.y - point.y)) * ((balle.y - point.y)))
         * ((balle.y - point.y)) * 0.95;
 
-        balle.vX = balle.x > this.x*View.getRatioX() ? Math.abs(newX) : -Math.abs(newX);
-        balle.vY = balle.y > this.y*View.getRatioX() ? Math.abs(newY) : -Math.abs(newY);
+        balle.vX = balle.x > this.x ? Math.abs(newX) : -Math.abs(newX);
+        balle.vY = balle.y > this.y ? Math.abs(newY) : -Math.abs(newY);
     }
 
     public void perdDeLaVie(int degats) {

@@ -59,7 +59,7 @@ public class Controleur {
                     }
 
                     if (modele.getBalle().getX() - modele.getBalle().rayon / 2 <= 0
-                            || modele.getBalle().getX() + modele.getBalle().rayon / 2 >= view.getPartie().getWidth()) {
+                            || modele.getBalle().getX() + modele.getBalle().rayon / 2 >= 800) {
                         modele.balle.rebondMur();
                     }
 
@@ -108,7 +108,7 @@ public class Controleur {
             this.modele.setBalle(null);
             t = 0;
             this.angleTir = this.view.getAngle();
-            this.modele.setBalle(new Balle(View.xBoutCanon, View.yBoutCanon, 300d, 180 - this.angleTir));
+            this.modele.setBalle(new Balle(View.xBoutCanon/View.ratioX, View.yBoutCanon/View.ratioY, 300d, 180 - this.angleTir));
         }
     }
 
