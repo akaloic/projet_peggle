@@ -108,7 +108,7 @@ public class Controleur {
             this.modele.setBalle(null);
             t = 0;
             this.angleTir = this.view.getAngle();
-            this.modele.setBalle(new Balle(view.getPartie().getWidth() / 2 - 25, 0d, 300d, 180 - this.angleTir));
+            this.modele.setBalle(new Balle(View.xBoutCanon, View.yBoutCanon, 300d, 180 - this.angleTir));
         }
     }
 

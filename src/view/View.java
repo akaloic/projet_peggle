@@ -43,6 +43,8 @@ public class View extends JFrame {
     public int nbMunition;
     public double mouseX;
     public double mouseY;
+    public static double xBoutCanon;
+    public static double yBoutCanon;
     public static int colorX = 25;
     public static int colorY = 15;
     int seconde = 0;
@@ -608,32 +610,11 @@ public class View extends JFrame {
             e.printStackTrace();
         }
 
-        g2d.setClip(arc2);
-        g2d.drawImage(img, partie.getWidth() / 2 - 85, -85, 170, 170, partie);
-        // g2d.draw(arc2);
-
-        try {
-            img = ImageIO.read(new File("ressources/canon.png"));
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-
-        //Rectangle rect2 = (new Rectangle(partie.getWidth() / 2 - widthBase / 10, heightBase / 3, widthBase / 5,heightBase / 2));
-
-        g2d.rotate(Math.toRadians(90 - angle), partie.getWidth() / 2, 0);
-        g2d.setClip(null);
-        g2d.drawImage(img, partie.getWidth() / 2 - 85, -55, 170, 170, partie);
-        // g2d.draw(rect2);
-        g2d.rotate(Math.toRadians(angle - 90), partie.getWidth() / 2, 0);
-        // On annule la rotation après avoir dessiner le rectangle pour que seule le
-        // bout du partie rotate
-
-        //double theta = Math.toRadians(angle);
-        //double x = (partie.getWidth() / 2) - (5 * heightBase / 6) * Math.sin(theta) - 10/* Width balle */;
-        //double y = (5 * heightBase / 6) * Math.cos(theta) - 10/* Height balle */;
+        double theta = Math.toRadians(90-angle);
+        xBoutCanon = (partie.getWidth() / 2) - (5 * heightBase / 8) * Math.sin(theta)- 12.5 /* Width balle */;
+        yBoutCanon = (5 * heightBase / 8) * Math.cos(theta) -12.5 /* Height balle */;
         // Pour calculer nouvelles coordonnées de la balle après rotaion
-        Balle fantome = new Balle(partie.getWidth() / 2 - 25, 0d, 300d, 180 - this.angle);
+        Balle fantome = new Balle(xBoutCanon, yBoutCanon, 300d, 180 - this.angle);
         GeneralPath genPath = new GeneralPath();
         boolean premierRebond = false;
         while (!premierRebond) {
@@ -669,8 +650,29 @@ public class View extends JFrame {
         g2d.draw(genPath);
         g2d.setStroke(new BasicStroke(1));
         g2d.setPaint(Color.BLACK);
-        dessineNiveau(g, controleur.modele.getNiveau().list);
 
+        g2d.setClip(arc2);
+        g2d.drawImage(img, partie.getWidth() / 2 - 85, -85, 170, 170, partie);
+        // g2d.draw(arc2);
+
+        try {
+            img = ImageIO.read(new File("ressources/canon.png"));
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        //Rectangle rect2 = (new Rectangle(partie.getWidth() / 2 - widthBase / 10, heightBase / 3, widthBase / 5,heightBase / 2));
+
+        g2d.rotate(Math.toRadians(90 - angle), partie.getWidth() / 2, 0);
+        g2d.setClip(null);
+        g2d.drawImage(img, partie.getWidth() / 2 - 85, -55, 170, 170, partie);
+        // g2d.draw(rect2);
+        g2d.rotate(Math.toRadians(angle - 90), partie.getWidth() / 2, 0);
+        // On annule la rotation après avoir dessiner le rectangle pour que seule le
+        // bout du partie rotate
+
+        dessineNiveau(g, controleur.modele.getNiveau().list);
     }
 
     public void dessineNiveau(Graphics g, ArrayList<Obstacle> l) {
