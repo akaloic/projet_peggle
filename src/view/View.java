@@ -664,11 +664,11 @@ public class View extends JFrame {
         }
 
         g2d.setStroke(new BasicStroke(5));
-        GradientPaint gp = new GradientPaint(colorX, colorX, Color.yellow, colorY, colorX, Color.cyan, true);
+        GradientPaint gp = new GradientPaint(colorX, colorX, Color.yellow, colorY, colorY, Color.cyan, true);
         g2d.setPaint(gp);
         g2d.draw(genPath);
         g2d.setStroke(new BasicStroke(1));
-        g2d.setPaint(null);
+        g2d.setPaint(Color.BLACK);
         dessineNiveau(g, controleur.modele.getNiveau().list);
 
     }
@@ -727,11 +727,11 @@ public class View extends JFrame {
     }
 
     public void setColorX() {
-        colorX -= 1 % 25;
+        colorX -= 1;
     }
 
     public void setColorY() {
-        colorY -= 1 % 25;
+        colorY -= 1 ;
     }
 
     public static void LancerMusic(String url) {

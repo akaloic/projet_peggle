@@ -31,7 +31,7 @@ public class Controleur {
 
                 // canon
                 view.setColorX();
-                view.setColorX();
+                view.setColorY();
                 view.calculeAngle();
                 if(View.enJeu){
                     view.repaint();
