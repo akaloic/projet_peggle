@@ -48,6 +48,7 @@ public class View extends JFrame {
     int seconde = 0;
     public static float ratioX;
     public static float ratioY;
+    public int MAX_MUNITION = 15;
 
     static Clip son;
 
@@ -188,7 +189,7 @@ public class View extends JFrame {
         fondGauche.setPreferredSize(new Dimension(getWidth() / 9, getHeight()));
 
         munition = new JPanel();
-        munition.setLayout(new GridLayout(10, 1));
+        munition.setLayout(new GridLayout(MAX_MUNITION, 1));
         afficheMunition();
 
         leave = new JButton("Fermer");
@@ -703,7 +704,9 @@ public class View extends JFrame {
     }
 
     public void afficheMunition() {
-        for (int i = 0; i < 10; i++) {
+        int xMun = (2 * munition.getWidth()) / 5;
+        int yMun = (munition.getHeight() / MAX_MUNITION) / 4;
+        for (int i = 0; i < MAX_MUNITION; i++) {
             JPanel panel = new JPanel();
             if (i > nbMunition) { // il reste i + 1 munition
                 panel = new JPanel() {
@@ -711,7 +714,7 @@ public class View extends JFrame {
                     public void paintComponent(Graphics g) {
                         super.paintComponent(g);
                         Graphics2D g2d = (Graphics2D) g;
-                        g2d.drawImage(view.Image.boulet, 50, 20, 50, 50, null);
+                        g2d.drawImage(view.Image.boulet, xMun, yMun, 2 * yMun, 2 * yMun, null);
                     }
                 };
             }
