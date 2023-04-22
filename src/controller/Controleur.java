@@ -4,7 +4,6 @@ import view.*;
 import javax.swing.*;
 import model.*;
 
-import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -58,7 +57,6 @@ public class Controleur {
                         }
 
                     }
-
                     if (modele.getBalle().getX() - modele.getBalle().rayon / 2 <= 0
                             || modele.getBalle().getX() + modele.getBalle().rayon / 2 >= view.getPartie().getWidth()) {
                         modele.balle.rebondMur();
