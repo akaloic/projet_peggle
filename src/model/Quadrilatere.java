@@ -1,11 +1,20 @@
 package model;
+
 import java.awt.*;
 import view.Image;
 
 import view.View;
-public class Quadrilatere extends Obstacle {//peut etre un carré comme un rectangle
+
+public class Quadrilatere extends Obstacle { // peut etre un carré comme un rectangle
+    public Point coinHautGauche, coinBasGauche, coinHautDroit, coinBasDroit;
+
     public Quadrilatere(double x, double y, double largeur, double hauteur) {
         super(x, y, largeur, hauteur, false, 100);
+        rayon = (largeur + hauteur) / 2;
+        coinHautGauche = new Point((int) x, (int) y);
+        coinHautDroit = new Point((int) (x + largeur), (int) y);
+        coinBasGauche = new Point((int) x, (int) (y + hauteur));
+        coinBasDroit = new Point((int) (x + largeur), (int) (y + hauteur));
         if(largeur>=hauteur){
             this.image=Image.quadHorizontal;
         }
@@ -14,17 +23,6 @@ public class Quadrilatere extends Obstacle {//peut etre un carré comme un recta
         }
     }
 
-    @Override
-    public boolean collision(Balle balle) {
-        return false;
-    }
-
-    @Override
-    public void rebond(Balle balle) {
-        if (collision(balle)) {
-
-        }
-    }
     @Override
     public void dessine(Graphics g){
         int gx=(int)(this.x*View.ratioX);

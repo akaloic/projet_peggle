@@ -219,6 +219,8 @@ public class View extends JFrame {
                 }
                 controleur.modele.getPlayer().score = 0;
                 Sauvegarde.save(controleur.modele.getPlayer());
+                controleur.modele.setBalle(null);
+                controleur.balleHorsJeu();
             }
         });
 
@@ -647,7 +649,7 @@ public class View extends JFrame {
         // 10/* Width balle */;
         // double y = (5 * heightBase / 6) * Math.cos(theta) - 10/* Height balle */;
         // Pour calculer nouvelles coordonnées de la balle après rotaion
-        Balle fantome = new Balle(partie.getWidth() / 2 - 25, 0d, 100, 180 - this.angle);
+        Balle fantome = new Balle((partie.getWidth() / 2 -25) / View.ratioX, 0d, 500d, 180 - this.angle);
         GeneralPath genPath = new GeneralPath();
         boolean premierRebond = false;
         while (!premierRebond) {
@@ -655,8 +657,8 @@ public class View extends JFrame {
             double a = fantome.getX();
             double b = fantome.getY();
             for (Obstacle o : controleur.modele.getNiveau().list) {
-                if (o.collision(fantome)) {
-                    o.rebond(fantome);
+                if(fantome.collision(o)!=0){
+                    fantome.rebond(o);
                     premierRebond = true;
                 }
             }

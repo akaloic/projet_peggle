@@ -13,7 +13,7 @@ import model.Player;
 
 public class Sauvegarde {
    public static int joueur;
-   public static int numNiveau =-1;
+   public static int numNiveau = -1;
    public static ArrayList<Player> listeJoueurs = new ArrayList<Player>();
 
    public Sauvegarde() {
@@ -46,8 +46,8 @@ public class Sauvegarde {
       }
    }
 
-   public static void save(Player p){
-      if(p != null){
+   public static void save(Player p) {
+      if (p != null) {
          listeJoueurs.set(joueur, p);
       }
       try {
@@ -60,9 +60,11 @@ public class Sauvegarde {
       } catch (IOException i) {
          i.printStackTrace();
       }
-      /*for (Player player : listeJoueurs) {
-         System.out.println(player.getPseudo());
-      }*/
+      /*
+       * for (Player player : listeJoueurs) {
+       * System.out.println(player.getPseudo());
+       * }
+       */
 
    }
 
@@ -83,7 +85,7 @@ public class Sauvegarde {
          ArrayList<Obstacle> a = new ArrayList<>();
          listeJoueurs.get(joueur).liste.add(a);
       }
-      //System.out.println(listeJoueurs.get(joueur).liste.get(n));
+      // System.out.println(listeJoueurs.get(joueur).liste.get(n));
       return listeJoueurs.get(joueur).liste.get(n);
    }
 }
