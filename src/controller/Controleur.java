@@ -33,13 +33,14 @@ public class Controleur {
                 view.setColorX();
                 view.setColorX();
                 view.calculeAngle();
-                if(View.enJeu){
+                if (View.enJeu) {
                     view.repaint();
                 }
                 // puit
                 view.placePuit();
                 if (modele.getBalle() != null) {
                     modele.getBalle().update();
+
                     // rebond
                     for (int i = 0; i < modele.niveau.list.size(); i++) {
                         modele.niveau.list.get(i).rebond(modele.getBalle());
@@ -55,23 +56,29 @@ public class Controleur {
                             modele.player.calculScore(detruit, facteur++);
                             view.setScore();
                         }
-                        
-                    }
 
+                    }
                     if (modele.getBalle().getX() - modele.getBalle().rayon / 2 <= 0
                             || modele.getBalle().getX() + modele.getBalle().rayon / 2 >= view.getPartie().getWidth()) {
                         modele.balle.rebondMur();
                     }
 
                     // munition
-                    if(View.enJeu){
-                        Point p = view.puit.getLocationOnScreen();
-                        if (modele.balle.getY() + (view.partie.getHeight() / 2) >= view.puit.getY()
-                                + (view.partie.getHeight() / 2)
-                                && ((modele.balle.getX() - 140) >= p.x
-                                        && (modele.balle.getX() - 140) <= p.x + view.puit.getWidth())) {
+                    if (View.enJeu) {
+                        int xPuit = (int) (view.puit.getX() * View.ratioX);
+                        int yPuit = (int) (view.puit.getY() * View.ratioY);
+                        int widthRatio = (int) (view.puit.getWidth() * View.ratioX);
+                        int heightRatio = (int) (view.puit.getHeight() * View.ratioY);
+                        int xBalle = (int) (modele.getBalle().getX() * View.ratioX);
+                        int yBalle = (int) (modele.getBalle().getY() * View.ratioY);
+
+                        if (xBalle >= xPuit && xBalle <= xPuit + widthRatio
+                                && yBalle >= yPuit
+                                && yBalle <= yPuit + heightRatio) {
                             if (balleEnJeu) {
-                                view.nbMunition--;
+                                // view.addExplosion(modele.balle.x, modele.balle.x);
+                                // view.addExplosion(xBalle, yBalle); //marche pas
+                                view.nbMunition++;
                                 view.munition.removeAll();
                                 view.afficheMunition();
                                 view.munition.revalidate();
@@ -79,7 +86,6 @@ public class Controleur {
                             }
                         }
                     }
-
 
                     if (modele.getBalle().getY() > view.getPartie().getHeight()) {
                         modele.setBalle(null);
@@ -99,7 +105,7 @@ public class Controleur {
 
     public void tirer() {
         if (!this.balleEnJeu) {
-            view.nbMunition++;
+            view.nbMunition--;
             view.munition.removeAll();
             view.afficheMunition();
             view.munition.revalidate();

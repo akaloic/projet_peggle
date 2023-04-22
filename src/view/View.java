@@ -38,9 +38,9 @@ public class View extends JFrame {
     public double angle;
     public String chemin = System.getProperty("user.dir") + "/ressources/";
     public Timer timer;
+    public int nbMunition;
     public int directionX = 5;
     public Controleur controleur;
-    public int nbMunition;
     public double mouseX;
     public double mouseY;
     public static int colorX = 25;
@@ -136,14 +136,13 @@ public class View extends JFrame {
     }
 
     public JPanel JeuPanel(Controleur controleur) {
-        nbMunition = 4; // provisoire a remplacer par munition joueur
-
         resetRatio();
+        nbMunition = MAX_MUNITION - 1;
 
         fond = new JPanel();
         fond.setLayout(new BorderLayout());
-        // --------------CENTRE---------------------
 
+        // --------------CENTRE---------------------
         partie = new JPanel() {
             @Override
             public void paint(Graphics g) {
@@ -706,9 +705,9 @@ public class View extends JFrame {
     public void afficheMunition() {
         int xMun = (2 * munition.getWidth()) / 5;
         int yMun = (munition.getHeight() / MAX_MUNITION) / 4;
-        for (int i = 0; i < MAX_MUNITION; i++) {
+        for (int i = 1; i <= MAX_MUNITION; i++) {
             JPanel panel = new JPanel();
-            if (i > nbMunition) { // il reste i + 1 munition
+            if (MAX_MUNITION - i <= nbMunition) {
                 panel = new JPanel() {
                     @Override
                     public void paintComponent(Graphics g) {
@@ -721,6 +720,7 @@ public class View extends JFrame {
             panel.setBackground(Color.white);
             panel.setLayout(new BorderLayout());
             panel.setBorder(BorderFactory.createLineBorder(Color.black));
+            panel.setVisible(true);
             munition.add(panel);
         }
     }
