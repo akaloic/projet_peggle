@@ -34,6 +34,9 @@ public class Controleur {
                 view.calculeAngle();
                 if (View.enJeu) {
                     view.repaint();
+                    view.munition.removeAll();
+                    view.afficheMunition();
+                    view.munition.revalidate();
                 }
                 // puit
                 view.placePuit();
@@ -78,9 +81,6 @@ public class Controleur {
                                 // view.addExplosion(modele.balle.x, modele.balle.x);
                                 // view.addExplosion(xBalle, yBalle); //marche pas
                                 view.nbMunition++;
-                                view.munition.removeAll();
-                                view.afficheMunition();
-                                view.munition.revalidate();
                                 balleHorsJeu();
                             }
                         }
@@ -105,9 +105,6 @@ public class Controleur {
     public void tirer() {
         if (!this.balleEnJeu) {
             view.nbMunition--;
-            view.munition.removeAll();
-            view.afficheMunition();
-            view.munition.revalidate();
 
             this.balleEnJeu = true;
             this.modele.setBalle(null);
