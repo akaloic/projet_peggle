@@ -23,12 +23,6 @@ public class Quadrilatere extends Obstacle {//peut etre un carré comme un recta
 
     @Override
     public boolean collision(Balle balle) {
-        //System.out.println(this.x*View.ratioX+"    "+this.largeur*View.ratioX+"    "+this.coinHautDroit.x*View.ratioX);
-        coinHautGauche = new Point((int) (this.x), (int) (this.y));
-        coinHautDroit = new Point((int) ((this.x+this.largeur)), (int) (this.y));
-        coinBasGauche = new Point((int) (this.x), (int) ((this.y + this.hauteur)));
-        coinBasDroit = new Point((int) ((this.x + this.largeur)), (int) ((this.y + this.hauteur)));
-
     if ((balle.y >= this.y && balle.y <= (this.y + this.hauteur))
         && (((balle.x + balle.rayon/2) >= this.x && balle.x<= this.x) || ((balle.x - balle.rayon/2)<= (this.x + this.largeur) && balle.x>=(this.x + this.largeur) ))) {
       System.out.println("Collision quadrilatere 1");
@@ -130,6 +124,10 @@ public class Quadrilatere extends Obstacle {//peut etre un carré comme un recta
     public Quadrilatere clone(double x, double y, int v, double largeur,double hauteur){
         Quadrilatere q = new Quadrilatere(x, y, largeur, hauteur);
         q.image = null;
+        q.coinHautGauche = new Point((int) (this.x), (int) (this.y));
+        q.coinHautDroit = new Point((int) ((this.x+this.largeur)), (int) (this.y));
+        q.coinBasGauche = new Point((int) (this.x), (int) ((this.y + this.hauteur)));
+        q.coinBasDroit = new Point((int) ((this.x + this.largeur)), (int) ((this.y + this.hauteur)));
         return q;
     }
 

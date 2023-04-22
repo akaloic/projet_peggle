@@ -377,8 +377,6 @@ public class Edit extends JPanel{
         principal.add(pegRect);
         principal.addMouseListener(pegRect);
         principal.addMouseMotionListener(pegRect);
-        principal.addMouseListener(selection);
-        principal.addMouseMotionListener(selection);
         principal.setFocusable(true);
         principal.requestFocus();
         principal.addKeyListener(new KeyAdapter() {
@@ -569,6 +567,11 @@ public class Edit extends JPanel{
 
         public objetMobile(Obstacle o){
             this.obstacle = o;
+        }
+
+        public objetMobile(Obstacle o, int x, int y){
+            this.obstacle = o;
+
         }
 
         public void specialDecoration(MouseEvent e){
