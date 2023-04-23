@@ -1,5 +1,4 @@
 package model;
-
 import java.awt.*;
 import view.Image;
 
@@ -26,38 +25,38 @@ public class Quadrilatere extends Obstacle {//peut etre un carré comme un recta
     public boolean collision(Balle balle) {
     if ((balle.y >= this.y && balle.y <= (this.y + this.hauteur))
         && (((balle.x + balle.rayon) >= this.x && balle.x<= this.x) || ((balle.x - balle.rayon)<= (this.x + this.largeur) && balle.x>=(this.x + this.largeur) ))) {
-      System.out.println("Collision quadrilatere 1");
+      //System.out.println("Collision quadrilatere 1");
       typeCollision = 1;
       return true;
     } 
     else if ((balle.x>= this.x && balle.x<= (this.x + this.largeur))
         && (((balle.y + balle.rayon) >= this.y && balle.y <= this.y) || ((balle.y - balle.rayon)<= (this.y + this.hauteur) && balle.y >= (this.y + this.hauteur)))) {
-      System.out.println("Collision quadrilatere 2");
+      //System.out.println("Collision quadrilatere 2");
       typeCollision = 2;
       return true;
     }
 
-    else if(balle.rayon>= Math.sqrt((balle.x+balle.rayon-this.coinHautGauche.x)*(balle.x+balle.rayon-this.coinHautGauche.x) + (balle.y+balle.rayon - this.coinHautGauche.y)*(balle.y+balle.rayon - this.coinHautGauche.y))){
+    else if(balle.rayon>= Math.sqrt((balle.x+balle.rayon/2-this.coinHautGauche.x)*(balle.x+balle.rayon/2-this.coinHautGauche.x) + (balle.y+balle.rayon/2 - this.coinHautGauche.y)*(balle.y+balle.rayon/2 - this.coinHautGauche.y))){
       //collision coin haut gauche
-      System.out.println("Collision quadrilatere 3");
+      //System.out.println("Collision quadrilatere 3");
       typeCollision = 3;
       return true;
     }
-    else if(balle.rayon>= Math.sqrt((balle.x+balle.rayon - this.coinHautDroit.x)*(balle.x+balle.rayon - this.coinHautDroit.x) + (balle.y+balle.rayon - this.coinHautDroit.y)*(balle.y+balle.rayon - this.coinHautDroit.y))){
+    else if(balle.rayon>= Math.sqrt((balle.x+balle.rayon/2 - this.coinHautDroit.x)*(balle.x+balle.rayon/2 - this.coinHautDroit.x) + (balle.y+balle.rayon/2 - this.coinHautDroit.y)*(balle.y+balle.rayon/2 - this.coinHautDroit.y))){
       //collision coin haut droit
-      System.out.println("Collision quadrilatere 4");
+      //System.out.println("Collision quadrilatere 4");
       typeCollision = 4;
       return true;
     }
-    else if(balle.rayon>= Math.sqrt((balle.x+balle.rayon - this.coinBasGauche.x)*(balle.x+balle.rayon - this.coinBasGauche.x) + (balle.y+balle.rayon - this.coinBasGauche.y)*(balle.y+balle.rayon - this.coinBasGauche.y))){
+    else if(balle.rayon>= Math.sqrt((balle.x+balle.rayon/2 - this.coinBasGauche.x)*(balle.x+balle.rayon/2 - this.coinBasGauche.x) + (balle.y+balle.rayon/2 - this.coinBasGauche.y)*(balle.y+balle.rayon/2 - this.coinBasGauche.y))){
       //collision coin bas gauche
-      System.out.println("Collision quadrilatere 5");
+      //System.out.println("Collision quadrilatere 5");
       typeCollision = 5;
       return true;
     }
-    else if(balle.rayon>= Math.sqrt((balle.x+balle.rayon - this.coinBasDroit.x)*(balle.x+balle.rayon-this.coinBasDroit.x) + (balle.y+balle.rayon - this.coinBasDroit.y)*(balle.y+balle.rayon/4-this.coinBasDroit.y))){
+    else if(balle.rayon>= Math.sqrt((balle.x+balle.rayon/2 - this.coinBasDroit.x)*(balle.x+balle.rayon/2-this.coinBasDroit.x) + (balle.y+balle.rayon/2 - this.coinBasDroit.y)*(balle.y+balle.rayon/2-this.coinBasDroit.y))){
       //collision coin bas droit
-      System.out.println("Collision quadrilatere 6");
+      //System.out.println("Collision quadrilatere 6");
       typeCollision = 6;
       return true;
     }
