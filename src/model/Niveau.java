@@ -229,7 +229,7 @@ public class Niveau {
     }
     public boolean listeEstVide() {
         for (int i = 0 ; i < list.size() ; i++ ){
-            if(list.get(i).vie > 0) {
+            if(list.get(i).vie > 0 && list.get(i) instanceof Pegs) {
                 return false;
             }
         }
