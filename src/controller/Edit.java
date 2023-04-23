@@ -28,7 +28,6 @@ public class Edit extends JPanel{
     JPanel principal;
     objetMobile pegsEcran;
     objetMobile objetSelectionner;//Le dernière objet sur lequel on a cliqué
-    objetMobile suivant = new objetMobile(null);
     public ArrayList<objetMobile> listeSelection = new ArrayList<objetMobile>();
     boolean peutBouger = false;
     JPanel partieGauche = new JPanel();
@@ -283,8 +282,6 @@ public class Edit extends JPanel{
                 g2d.setPaint(Color.magenta);
                 g2d.fillRect(widht/7*4, h, 20, 20);
                 g2d.setPaint(Color.black);
-                System.out.println(widht);
-
                 drawString(g2d, "Objet sélectionner\nAppuyer sur Z-S-Q-D pour se\ndéplacer vers l'objet le plus\nproche dans la direction", widht/7+20, h);
                 drawString(g2d, "Objet sélectionner(Peut bouger)\nAppuyer sur Z-S-Q-D pour se\ndéplacer dans la direction.\nAppuyer sur W pour transformer en Pegs.\nAppuyer sur X pour transformer en Obstacle", widht/7*2+20, h);
                 drawString(g2d, "Objet dans liste de sélection.\nSera affecter par le boutton \n\"Tout supprimer\" et les sliders", widht/7*3+20, h);
@@ -406,8 +403,7 @@ public class Edit extends JPanel{
                     objetSelectionner.setLocation(objetSelectionner.getX()-10, objetSelectionner.getY());
                     objetSelectionner.obstacle.setX(objetSelectionner.getX()/View.ratioX);
                 }else{
-                    suivant = plusProche(3);//Gauche
-                    objetSelectionner = suivant;
+                    objetSelectionner = plusProche(3);//Gauche
                 }
               }
               if (keyCode == KeyEvent.VK_D) {
@@ -415,8 +411,7 @@ public class Edit extends JPanel{
                     objetSelectionner.setLocation(objetSelectionner.getX()+10, objetSelectionner.getY());
                     objetSelectionner.obstacle.setX(objetSelectionner.getX()/View.ratioX);
                 }else{
-                    suivant = plusProche(1);//Droite
-                    objetSelectionner = suivant;
+                    objetSelectionner = plusProche(1);//Droite
                 }
               }
               if (keyCode == KeyEvent.VK_Z) {
@@ -424,8 +419,7 @@ public class Edit extends JPanel{
                     objetSelectionner.setLocation(objetSelectionner.getX(), objetSelectionner.getY()-10);
                     objetSelectionner.obstacle.setY(objetSelectionner.getY()/View.ratioY);
                 }else{
-                    suivant = plusProche(0);//Haut
-                    objetSelectionner = suivant;
+                    objetSelectionner = plusProche(0);//Haut
                 }
               }
               if (keyCode == KeyEvent.VK_S) {
@@ -434,8 +428,7 @@ public class Edit extends JPanel{
                     objetSelectionner.obstacle.setY(objetSelectionner.getY()/View.ratioY);
                 }
                 else{
-                    suivant = plusProche(2);//Bas
-                    objetSelectionner = suivant;
+                    objetSelectionner = plusProche(2);//Bas
                 }
               }
               if (keyCode == KeyEvent.VK_ENTER) {
@@ -489,7 +482,7 @@ public class Edit extends JPanel{
     }
 
     public objetMobile plusProche(int direction){
-        objetMobile voisin = listPanel.get(0);
+        objetMobile voisin = objetSelectionner;
         for(int i = 0; i < listPanel.size();i++){
             if((distance(listPanel.get(i)) <= distance(voisin)  || distance(voisin) == 0 )&& objetSelectionner != listPanel.get(i)){
                 switch(direction){
