@@ -4,6 +4,7 @@ import view.*;
 import javax.swing.*;
 import model.*;
 
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -30,20 +31,22 @@ public class Controleur {
 
                 // canon
                 view.setColorX();
-                view.setColorX();
+                view.setColorY();
                 view.calculeAngle();
                 if (View.enJeu) {
                     view.repaint();
+                    view.munition.removeAll();
+                    view.afficheMunition();
+                    view.munition.revalidate();
                 }
                 // puit
                 view.placePuit();
                 if (modele.getBalle() != null) {
                     modele.getBalle().update();
-
                     // rebond
                     for (int i = 0; i < modele.niveau.list.size(); i++) {
-                        modele.getBalle().rebond(modele.niveau.list.get(i));
-                        if (modele.getBalle().collision(modele.niveau.list.get(i)) == 1) {
+                        modele.niveau.list.get(i).rebond(modele.getBalle());
+                        if (modele.niveau.list.get(i).collision(modele.getBalle())) {
                             modele.niveau.list.get(i).perdDeLaVie(1);
                             boolean detruit = modele.niveau.list.get(i).getEstMort();
                             if (detruit) {
@@ -55,10 +58,11 @@ public class Controleur {
                             modele.player.calculScore(detruit, facteur++);
                             view.setScore();
                         }
-
+                        
                     }
+
                     if (modele.getBalle().getX() - modele.getBalle().rayon / 2 <= 0
-                            || modele.getBalle().getX() + modele.getBalle().rayon / 2 >= view.getPartie().getWidth()) {
+                            || modele.getBalle().getX() + modele.getBalle().rayon / 2 >= 800) {
                         modele.balle.rebondMur();
                     }
 
@@ -78,9 +82,6 @@ public class Controleur {
                                 // view.addExplosion(modele.balle.x, modele.balle.x);
                                 // view.addExplosion(xBalle, yBalle); //marche pas
                                 view.nbMunition++;
-                                view.munition.removeAll();
-                                view.afficheMunition();
-                                view.munition.revalidate();
                                 balleHorsJeu();
                             }
                         }
@@ -105,16 +106,12 @@ public class Controleur {
     public void tirer() {
         if (!this.balleEnJeu) {
             view.nbMunition--;
-            view.munition.removeAll();
-            view.afficheMunition();
-            view.munition.revalidate();
 
             this.balleEnJeu = true;
             this.modele.setBalle(null);
             t = 0;
             this.angleTir = this.view.getAngle();
-            this.modele
-                    .setBalle(new Balle(view.getPartie().getWidth() / 2 / View.ratioX, 0d, 500, 180 - this.angleTir));
+            this.modele.setBalle(new Balle(View.xBoutCanon/View.ratioX, View.yBoutCanon/View.ratioY, 300d, 180 - this.angleTir));
         }
     }
 
@@ -122,9 +119,9 @@ public class Controleur {
         this.modele.setBalle(null);
         this.balleEnJeu = false;
         this.modele.niveau = new Niveau(this.modele.niveau.niveau + 1);
-        this.view.partie.removeAll();
-        this.view.changerPanel(view.choixNiveauPane(this));
-        this.view.partie.revalidate();
+        view.partie.removeAll();
+        view.changerPanel(view.choixNiveauPane(this));
+        view.partie.revalidate();
     }
 
     // ---------GETTER SETTER---------

@@ -38,11 +38,13 @@ public class View extends JFrame {
     public double angle;
     public String chemin = System.getProperty("user.dir") + "/ressources/";
     public Timer timer;
-    public int nbMunition;
     public int directionX = 5;
     public Controleur controleur;
+    public int nbMunition;
     public double mouseX;
     public double mouseY;
+    public static double xBoutCanon;
+    public static double yBoutCanon;
     public static int colorX = 25;
     public static int colorY = 15;
     int seconde = 0;
@@ -105,11 +107,12 @@ public class View extends JFrame {
         edit.setBackground(new Color(59, 89, 182));
         edit.setBounds(width / 3, start.getY() + start.getHeight() + 20, width / 3, height / 8);
         pane.add(edit);
-
+        
         JButton choixJoueur = new JButton("Retour sélection");
         choixJoueur.setBackground(new Color(59, 89, 182));
-        choixJoueur.setBounds(width / 3, edit.getY() + edit.getHeight() + 20, width / 3, height / 8);
+        choixJoueur.setBounds(width / 3, edit.getY()+edit.getHeight()+20, width/3, height/8);
         pane.add(choixJoueur);
+
 
         start.addActionListener(e -> {
             son.stop();
@@ -158,12 +161,12 @@ public class View extends JFrame {
             protected void paintComponent(Graphics g) {
                 // TODO Auto-generated method stub
                 super.paintComponent(g);
-                Graphics2D g2d = (Graphics2D) g;
-                if (fondEcran == null) {
+                Graphics2D g2d = (Graphics2D)g;
+                if(fondEcran == null){
                     setBackground(Color.gray);
                 }
-                g2d.drawImage(fondEcran, 0, 0, getWidth(), getHeight(), null);
-            }
+                g2d.drawImage(fondEcran,0, 0,getWidth(),getHeight(),null);
+            }   
         };
         partie.setSize(new Dimension(800, 600));
         partie.setLayout(null);
@@ -194,10 +197,11 @@ public class View extends JFrame {
         leave = new JButton("Fermer");
         leave.setBackground(new Color(59, 89, 182));
         leave.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                if (Sauvegarde.numNiveau == -1) {
-                    controleur.modele.getPlayer().setScore(numNiveau - 1);
-                } else {
+            public void actionPerformed(ActionEvent e) { 
+                if(Sauvegarde.numNiveau == -1){
+                    controleur.modele.getPlayer().setScore(numNiveau-1);
+                }
+                else{
                     controleur.modele.getPlayer().setScore(Sauvegarde.numNiveau);
                 }
                 controleur.modele.getPlayer().score = 0;
@@ -210,17 +214,16 @@ public class View extends JFrame {
         retour.setBackground(new Color(59, 89, 182));
         retour.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                if (Sauvegarde.numNiveau == -1) {
-                    controleur.modele.getPlayer().setScore(numNiveau - 1);
+                if(Sauvegarde.numNiveau == -1){
+                    controleur.modele.getPlayer().setScore(numNiveau-1);
                     changerPanel(choixNiveauPane(controleur));
-                } else {
+                }
+                else{
                     controleur.modele.getPlayer().setScore(Sauvegarde.numNiveau);
                     changerPanel(choixEdit());
                 }
                 controleur.modele.getPlayer().score = 0;
                 Sauvegarde.save(controleur.modele.getPlayer());
-                controleur.modele.setBalle(null);
-                controleur.balleHorsJeu();
             }
         });
 
@@ -265,6 +268,7 @@ public class View extends JFrame {
 
         fondDroite.add(info);
 
+
         fond.add(fondDroite, BorderLayout.EAST);
         // --------------DROITE---------------------
 
@@ -293,7 +297,7 @@ public class View extends JFrame {
 
         JButton precedent = new JButton("Menu Principal");
         precedent.setBackground(new Color(59, 89, 182));
-        precedent.setBounds(0, 0, width / 6, 100);
+        precedent.setBounds(0, 0, width/6, 100);
         choixNiv.add(precedent);
         ratioX = ratioX / 1;
         ratioY = ratioY / 1;
@@ -348,7 +352,7 @@ public class View extends JFrame {
             changerPanel(menuPrincipal());
         });
         afficheMiniature(1, choixNiv);
-        // afficheMiniature(2, choixNiv, height / 2);
+        //afficheMiniature(2, choixNiv, height / 2);
 
         return choixNiv;
     }
@@ -371,7 +375,7 @@ public class View extends JFrame {
                     controleur.modele.setPlayer(Sauvegarde.listeJoueurs.get(Sauvegarde.joueur));
                     changerPanel(menuPrincipal());
                 });
-        acceuil.setBounds(0, 0, width / 6, 50);
+        acceuil.setBounds(0, 0, width/6, 50);
         choix.add(acceuil);
         ratioX = ratioX / 1;
         ratioY = ratioY / 1;
@@ -389,51 +393,26 @@ public class View extends JFrame {
         }
         JPanel bis = new JPanel(null);
         int borne = mode == 1 ? 5 : Math.max(Sauvegarde.listeJoueurs.get(Sauvegarde.joueur).liste.size(), 1);
-        bis.setBounds(width / 30, height / 8, width, height / 6);
+        bis.setBounds(width / 30, height/8, width, height / 6);
         for (int i = 0; i < borne; i++) {
             int k = i;
             JPanel panelPrincipal = new JPanel(new BorderLayout());
-            panelPrincipal.setBounds(width / 20, i * height, width - width / 5, height);
-            JPanel miniature = new JPanel(null) {
-
-                @Override
-                protected void paintComponent(Graphics g) {
-                    // TODO Auto-generated method stub
-                    super.paintComponent(g);
-                    g.setFont(new Font("TimesRoman", Font.PLAIN, 30));
-                    Graphics2D g2d = (Graphics2D) g;
-                    if (fondEcran == null) {
-                        setBackground(Color.gray);
-                    }
-                    g2d.drawImage(view.Image.fondEcrans[k], 0, 0, getWidth(), getHeight(), null);
-
-                    if (mode != 1) {
-                        dessineNiveau(g, Sauvegarde.charge(k));
-                    }
-                    if (mode == 1) {
-                        controleur.modele.setNiveau(new Niveau(k + 1));
-                        dessineNiveau(g, controleur.modele.getNiveau().getList());
-                    }
-                    if (Sauvegarde.numNiveau == -1) {
-                        ((Graphics2D) g).drawString("Meilleur score : " + controleur.modele.getPlayer().listeScore[k],
-                                0, 30);
-                    } else {
-                        ((Graphics2D) g).drawString(
-                                "Meilleur score : " + controleur.modele.getPlayer().listeScoreEdit.get(k), 0, 30);
-                    }
-                }
-            };
+            panelPrincipal.setBounds(width / 20 , i * height, width - width/5, height );
+            JPanel miniature = new JPanel(null);
             if (mode == 2) {
                 JButton supprimer = new JButton("X");
                 supprimer.setBackground(Color.red);
                 supprimer.addActionListener(
-                        (ActionEvent e) -> {
+                    (ActionEvent e) -> {
+                        if(Sauvegarde.listeJoueurs.get(Sauvegarde.joueur).liste.size() > 0){
                             Sauvegarde.listeJoueurs.get(Sauvegarde.joueur).liste.remove(k);
                             Sauvegarde.listeJoueurs.get(Sauvegarde.joueur).listeScoreEdit.remove(k);
                             Sauvegarde.save(Sauvegarde.listeJoueurs.get(Sauvegarde.joueur));
                             changerPanel(choixEdit());
-                        });
-                supprimer.setBounds(panelPrincipal.getWidth() - 50, 0, 50, 50);
+                        }
+                    });
+                supprimer.setBounds(panelPrincipal.getWidth()-50, 0, 50, 50);
+                supprimer.requestFocus();
                 miniature.add(supprimer);
 
                 JButton edit = new JButton("E");
@@ -442,16 +421,43 @@ public class View extends JFrame {
                         (ActionEvent e) -> {
                             changerPanel(new Edit(null, width, height, k, this));
                         });
-                edit.setBounds(panelPrincipal.getWidth() - 50, 50, 50, 50);
+                edit.setBounds(panelPrincipal.getWidth()-50, 50, 50, 50);
+                edit.requestFocus();
                 miniature.add(edit);
             }
-            JButton bouton = new JButton("Jouer");
-            bouton.setBackground(new Color(37, 253, 233));
-            if (mode == 1) {
-                bouton.setText("Niveau " + (k + 1));
-            }
-            panelPrincipal.add(miniature, BorderLayout.CENTER);
-            panelPrincipal.add(bouton, BorderLayout.SOUTH);
+            JButton bouton = new JButton("Jouer"){
+                @Override
+                protected void paintComponent(Graphics g) {
+                    // TODO Auto-generated method stub
+                    super.paintComponent(g);
+                    g.setFont(new Font("TimesRoman", Font.PLAIN, 30)); 
+                    Graphics2D g2d = (Graphics2D)g;
+                    if(fondEcran == null){
+                        setBackground(Color.gray);
+                    }
+                    g2d.drawImage(view.Image.fondEcrans[Math.min(k,4)],0, 0,getWidth(),getHeight(),null);
+                    
+                    if (mode != 1) {
+                        dessineNiveau(g, Sauvegarde.charge(k));
+                    }
+                    if (mode == 1) {
+                        controleur.modele.setNiveau(new Niveau(k + 1));
+                        dessineNiveau(g, controleur.modele.getNiveau().getList());
+                    }
+                    if(Sauvegarde.numNiveau == -1){
+                        ((Graphics2D)g).drawString("Meilleur score : "+Sauvegarde.listeJoueurs.get(Sauvegarde.joueur).listeScore[k], 0, 30);
+                    }
+                    else{
+                        ((Graphics2D)g).drawString("Meilleur score : "+Sauvegarde.listeJoueurs.get(Sauvegarde.joueur).listeScoreEdit.get(k), 0, 30);
+                    }
+                }
+
+                @Override
+                public void repaint() {}
+            };
+            panelPrincipal.add(miniature);
+            miniature.add(bouton);
+            bouton.setSize(panelPrincipal.getWidth(), panelPrincipal.getHeight());
             bouton.addActionListener(
                     (ActionEvent e) -> {
                         resetRatio();
@@ -459,7 +465,7 @@ public class View extends JFrame {
                             numNiveau = k + 1;
                             fondEcran = new BufferedImage(20, 20, BufferedImage.TYPE_INT_RGB);
                             try {
-                                fondEcran = ImageIO.read(new File("ressources/Niveau" + numNiveau + "Fond.png"));
+                                fondEcran = ImageIO.read(new File("ressources/Niveau"+numNiveau+"Fond.png"));
                             } catch (IOException excep) {
                                 // TODO Auto-generated catch block
                                 excep.printStackTrace();
@@ -475,8 +481,6 @@ public class View extends JFrame {
                         }
                         son.stop();
                     });
-            miniature.setBackground(Color.lightGray);
-            miniature.setBorder(BorderFactory.createLineBorder(Color.black));
             bis.add(panelPrincipal);
         }
         if (mode == 2) {
@@ -489,56 +493,53 @@ public class View extends JFrame {
                         Sauvegarde.listeJoueurs.get(Sauvegarde.joueur).listeScoreEdit.add(0);
                         Sauvegarde.save(a, borne);
                         changerPanel(choixEdit());
-                    });
-            ajoute.setBounds(width / 20, borne * height, width - width / 5, height);
+            });
+            ajoute.setBounds(width / 20 , borne * height, width - width/5, height);
             bis.add(ajoute);
         }
         JScrollPane defile = new JScrollPane(bis, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
                 ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         defile.getVerticalScrollBar().setUnitIncrement(30);
-        bis.setPreferredSize(new Dimension(width / 30 + width / 6, height * (borne + 2)));
-        defile.setBounds(width / 30, height / 8, width - width / 15, height);
+        bis.setPreferredSize(new Dimension(width / 30 + width / 6, height * (borne+2)));
+        defile.setBounds(width / 30, height/8, width - width/15, height);
         bis.setBackground(Color.lightGray);
         pane.add(defile);
 
     }
 
-    public Container choixJoueur() {
+    public Container choixJoueur(){
         JPanel auxiliaire = new JPanel(null);
-        JPanel bis = new JPanel(new GridLayout(Sauvegarde.listeJoueurs.size() + 1, 1));
+        JPanel bis = new JPanel(new GridLayout(Sauvegarde.listeJoueurs.size()+1,1));
         JScrollPane principal = new JScrollPane(bis, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
-                ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        principal.setBounds(200, 100, width - width / 4, height - height / 4);
-        bis.setPreferredSize(
-                new Dimension(principal.getWidth(), principal.getHeight() / 2 * Sauvegarde.listeJoueurs.size()));
+        ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        principal.setBounds(200,100, width - width / 4, height - height / 4);
+        bis.setPreferredSize(new Dimension(principal.getWidth(),principal.getHeight()/2 * Sauvegarde.listeJoueurs.size()));
 
-        for (int i = 0; i < Sauvegarde.listeJoueurs.size(); i++) {
+        for(int i = 0; i < Sauvegarde.listeJoueurs.size(); i++){
             JPanel pane = new JPanel(new BorderLayout());
             int k = i;
-            JPanel info = new JPanel(null) {
+            JPanel info = new JPanel(null){
                 @Override
                 public void paint(Graphics g) {
                     // TODO Auto-generated method stub
                     super.paint(g);
                     g.setFont(new Font("TimesRoman", Font.PLAIN, 30));
-                    ((Graphics2D) g).drawString("Pseudo : " + Sauvegarde.listeJoueurs.get(k).pseudo, getWidth() / 4,
-                            getHeight() / 4);
-                    ((Graphics2D) g).drawString("Nombre de niveau: " + Sauvegarde.listeJoueurs.get(k).liste.size(),
-                            getWidth() / 4, getHeight() / 4 * 2);
-                    ((Graphics2D) g).drawString("Progressions: Niveau 5", getWidth() / 4, getHeight() / 4 * 3);
-                }
+                    ((Graphics2D)g).drawString("Pseudo : "+Sauvegarde.listeJoueurs.get(k).pseudo, getWidth()/4, getHeight()/4);
+                    ((Graphics2D)g).drawString("Nombre de niveau: "+Sauvegarde.listeJoueurs.get(k).liste.size(), getWidth()/4, getHeight()/4*2);
+                    ((Graphics2D)g).drawString("Progressions: Niveau 5", getWidth()/4, getHeight()/4*3);
+                }     
             };
 
-            JButton choix = new JButton("Joueur " + (k + 1));
+            JButton choix = new JButton("Joueur "+(k+1));
             choix.setBackground(new Color(59, 89, 182));
             choix.addActionListener(
-                    (ActionEvent e) -> {
-                        Sauvegarde.joueur = k;
-                        controleur.modele.setPlayer(Sauvegarde.listeJoueurs.get(Sauvegarde.joueur));
-                        changerPanel(menuPrincipal());
-                    });
+                (ActionEvent e) -> {
+                    Sauvegarde.joueur = k;
+                    controleur.modele.setPlayer(Sauvegarde.listeJoueurs.get(Sauvegarde.joueur));
+                    changerPanel(menuPrincipal());
+            });
 
-            JButton supprimer = new JButton("X") {
+            JButton supprimer = new JButton("X"){
                 @Override
                 public void paint(Graphics g) {
                     // TODO Auto-generated method stub
@@ -547,14 +548,14 @@ public class View extends JFrame {
                 }
             };
             supprimer.addActionListener(
-                    (ActionEvent e) -> {
-                        Sauvegarde.listeJoueurs.remove(k);
-                        Sauvegarde.save(null);
-                        changerPanel(choixJoueur());
-                    });
+                (ActionEvent e) -> {
+                    Sauvegarde.listeJoueurs.remove(k);
+                    Sauvegarde.save(null);
+                    changerPanel(choixJoueur());
+            });
 
-            pane.add(choix, BorderLayout.WEST);
-            pane.add(info, BorderLayout.CENTER);
+            pane.add(choix,BorderLayout.WEST);
+            pane.add(info,BorderLayout.CENTER);
             info.add(supprimer);
             info.setBackground(Color.lightGray);
 
@@ -575,6 +576,7 @@ public class View extends JFrame {
                     changerPanel(menuPrincipal());
                 });
         bis.add(nouveau);
+
 
         principal.getVerticalScrollBar().setUnitIncrement(30);
         auxiliaire.add(principal);
@@ -622,6 +624,47 @@ public class View extends JFrame {
             e.printStackTrace();
         }
 
+        double theta = Math.toRadians(90-angle);
+        xBoutCanon = (partie.getWidth() / 2) - (5 * heightBase / 8) * Math.sin(theta)- 12.5 /* Width balle */;
+        yBoutCanon = (5 * heightBase / 8) * Math.cos(theta) -12.5 /* Height balle */;
+        // Pour calculer nouvelles coordonnées de la balle après rotaion
+        Balle fantome = new Balle(xBoutCanon/View.ratioX, yBoutCanon/View.ratioY, 300d, 180 - this.angle);
+        GeneralPath genPath = new GeneralPath();
+        boolean premierRebond = false;
+        while (!premierRebond) {
+            fantome.update();
+            double a = fantome.getX();
+            double b = fantome.getY();
+            for (Obstacle o : controleur.modele.getNiveau().list) {
+                if (o.collision(fantome)) {
+                    o.rebond(fantome);
+                    premierRebond = true;
+                }
+            }
+            if (fantome.getY() > height) {
+                premierRebond = true;
+            }
+            genPath.moveTo((a+12.5)*ratioX, (b+12.5)*ratioY);
+            genPath.lineTo((a+12.5)*ratioX, (b+12.5)*ratioY);
+        }
+        for (int i = 0; i < 10; i++) {
+            fantome.update();
+            double a = fantome.getX();
+            double b = fantome.getY();
+            for (Obstacle o : controleur.modele.getNiveau().list) {
+                o.rebond(fantome);
+            }
+            genPath.moveTo((a+12.5)*ratioX, (b+12.5)*ratioY);
+            genPath.lineTo((a+12.5)*ratioX, (b+12.5)*ratioY);
+        }
+
+        g2d.setStroke(new BasicStroke(5));
+        GradientPaint gp = new GradientPaint(colorX, colorX, Color.yellow, colorY, colorY, Color.cyan, true);
+        g2d.setPaint(gp);
+        g2d.draw(genPath);
+        g2d.setStroke(new BasicStroke(1));
+        g2d.setPaint(Color.BLACK);
+
         g2d.setClip(arc2);
         g2d.drawImage(img, partie.getWidth() / 2 - 85, -85, 170, 170, partie);
         // g2d.draw(arc2);
@@ -633,8 +676,7 @@ public class View extends JFrame {
             e.printStackTrace();
         }
 
-        // Rectangle rect2 = (new Rectangle(partie.getWidth() / 2 - widthBase / 10,
-        // heightBase / 3, widthBase / 5,heightBase / 2));
+        //Rectangle rect2 = (new Rectangle(partie.getWidth() / 2 - widthBase / 10, heightBase / 3, widthBase / 5,heightBase / 2));
 
         g2d.rotate(Math.toRadians(90 - angle), partie.getWidth() / 2, 0);
         g2d.setClip(null);
@@ -644,49 +686,7 @@ public class View extends JFrame {
         // On annule la rotation après avoir dessiner le rectangle pour que seule le
         // bout du partie rotate
 
-        // double theta = Math.toRadians(angle);
-        // double x = (partie.getWidth() / 2) - (5 * heightBase / 6) * Math.sin(theta) -
-        // 10/* Width balle */;
-        // double y = (5 * heightBase / 6) * Math.cos(theta) - 10/* Height balle */;
-        // Pour calculer nouvelles coordonnées de la balle après rotaion
-        Balle fantome = new Balle((partie.getWidth() / 2 -25) / View.ratioX, 0d, 500d, 180 - this.angle);
-        GeneralPath genPath = new GeneralPath();
-        boolean premierRebond = false;
-        while (!premierRebond) {
-            fantome.update();
-            double a = fantome.getX();
-            double b = fantome.getY();
-            for (Obstacle o : controleur.modele.getNiveau().list) {
-                if(fantome.collision(o)!=0){
-                    fantome.rebond(o);
-                    premierRebond = true;
-                }
-            }
-            if (fantome.getY() > height) {
-                premierRebond = true;
-            }
-            genPath.moveTo(a + 12.5, b + 12.5);
-            genPath.lineTo(a + 12.5, b + 12.5);
-        }
-        for (int i = 0; i < 10; i++) {
-            fantome.update();
-            double a = fantome.getX() + fantome.rayon / 2;
-            double b = fantome.getY();
-            for (Obstacle o : controleur.modele.getNiveau().list) {
-                o.rebond(fantome);
-            }
-            genPath.moveTo(a, b);
-            genPath.lineTo(a, b);
-        }
-
-        g2d.setStroke(new BasicStroke(5));
-        GradientPaint gp = new GradientPaint(colorX, colorX, Color.yellow, colorY, colorX, Color.cyan, true);
-        g2d.setPaint(gp);
-        g2d.draw(genPath);
-        g2d.setStroke(new BasicStroke(1));
-        g2d.setPaint(null);
         dessineNiveau(g, controleur.modele.getNiveau().list);
-
     }
 
     public void dessineNiveau(Graphics g, ArrayList<Obstacle> l) {
@@ -727,6 +727,7 @@ public class View extends JFrame {
         }
     }
 
+
     public void drawBall(Graphics g) {
         Graphics g2d = g;
         if (this.controleur.modele.balle != null) {
@@ -743,11 +744,11 @@ public class View extends JFrame {
     }
 
     public void setColorX() {
-        colorX -= 1 % 25;
+        colorX -= 1;
     }
 
     public void setColorY() {
-        colorY -= 1 % 25;
+        colorY -= 1 ;
     }
 
     public static void LancerMusic(String url) {

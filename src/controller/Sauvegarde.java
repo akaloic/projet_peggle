@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
-import java.util.jar.Attributes.Name;
 
 import model.Obstacle;
 import model.Player;
@@ -85,7 +84,6 @@ public class Sauvegarde {
          ArrayList<Obstacle> a = new ArrayList<>();
          listeJoueurs.get(joueur).liste.add(a);
       }
-      // System.out.println(listeJoueurs.get(joueur).liste.get(n));
       return listeJoueurs.get(joueur).liste.get(n);
    }
 }

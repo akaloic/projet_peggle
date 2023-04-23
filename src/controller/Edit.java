@@ -28,7 +28,6 @@ public class Edit extends JPanel{
     JPanel principal;
     objetMobile pegsEcran;
     objetMobile objetSelectionner;//Le dernière objet sur lequel on a cliqué
-    objetMobile suivant = new objetMobile(null);
     public ArrayList<objetMobile> listeSelection = new ArrayList<objetMobile>();
     boolean peutBouger = false;
     JPanel partieGauche = new JPanel();
@@ -152,15 +151,15 @@ public class Edit extends JPanel{
         rayon.setPaintLabels(true);
         rayon.addChangeListener (( event ) -> { 
             if(objetSelectionner != null && !objetSelectionner.decoration){
-                objetSelectionner.obstacle.setHauteur(rayon.getValue());
-                objetSelectionner.obstacle.setLargeur(rayon.getValue());
+                objetSelectionner.obstacle.setHauteur(rayon.getValue()*2);
+                objetSelectionner.obstacle.setLargeur(rayon.getValue()*2);
                 objetSelectionner.obstacle.setRayon(rayon.getValue());
-                objetSelectionner.setSize(new Dimension((int)(rayon.getValue()*View.getRatio()),(int)(rayon.getValue()*View.getRatio())));
+                objetSelectionner.setSize(new Dimension((int)(rayon.getValue()*View.getRatio()*2),(int)(rayon.getValue()*View.getRatio()*2)));
                 for (objetMobile objetMobile : listeSelection) {
-                    objetMobile.obstacle.setHauteur(rayon.getValue());
-                    objetMobile.obstacle.setLargeur(rayon.getValue());
+                    objetMobile.obstacle.setHauteur(rayon.getValue()*2);
+                    objetMobile.obstacle.setLargeur(rayon.getValue()*2);
                     objetMobile.obstacle.setRayon(rayon.getValue());
-                    objetMobile.setSize(new Dimension((int)(rayon.getValue()*View.getRatio()),(int)(rayon.getValue()*View.getRatio())));
+                    objetMobile.setSize(new Dimension((int)(rayon.getValue()*View.getRatio()*2),(int)(rayon.getValue()*View.getRatio()*2)));
                 }
             principal.requestFocus();
             }
@@ -271,7 +270,23 @@ public class Edit extends JPanel{
             protected void paintComponent(Graphics g) {
                 // TODO Auto-generated method stub
                 super.paintComponent(g);
-                ((Graphics2D) g).draw(selection.getRectangle());
+                Graphics2D g2d = (Graphics2D) g;
+                int h = height - height/8;
+                g2d.draw(selection.getRectangle());
+                g2d.setPaint(Color.red);
+                g2d.fillRect(widht/7, h, 20, 20);
+                g2d.setPaint(Color.cyan);
+                g2d.fillRect(widht/7*2, h, 20, 20);
+                g2d.setPaint(Color.green);
+                g2d.fillRect(widht/7*3, h, 20, 20);
+                g2d.setPaint(Color.magenta);
+                g2d.fillRect(widht/7*4, h, 20, 20);
+                g2d.setPaint(Color.black);
+                drawString(g2d, "Objet sélectionner\nAppuyer sur Z-S-Q-D pour se\ndéplacer vers l'objet le plus\nproche dans la direction", widht/7+20, h);
+                drawString(g2d, "Objet sélectionner(Peut bouger)\nAppuyer sur Z-S-Q-D pour se\ndéplacer dans la direction.\nAppuyer sur W pour transformer en Pegs.\nAppuyer sur X pour transformer en Obstacle", widht/7*2+20, h);
+                drawString(g2d, "Objet dans liste de sélection.\nSera affecter par le boutton \n\"Tout supprimer\" et les sliders", widht/7*3+20, h);
+                drawString(g2d, "Objet dans liste de sélection et Objet sélectionner\nPour ne pas s'y perdre", widht/7*4+20, h);
+                
             }
         };
         for(int i = 0; i < niveau.size();i++){
@@ -377,8 +392,6 @@ public class Edit extends JPanel{
         principal.add(pegRect);
         principal.addMouseListener(pegRect);
         principal.addMouseMotionListener(pegRect);
-        principal.addMouseListener(selection);
-        principal.addMouseMotionListener(selection);
         principal.setFocusable(true);
         principal.requestFocus();
         principal.addKeyListener(new KeyAdapter() {
@@ -390,8 +403,7 @@ public class Edit extends JPanel{
                     objetSelectionner.setLocation(objetSelectionner.getX()-10, objetSelectionner.getY());
                     objetSelectionner.obstacle.setX(objetSelectionner.getX()/View.ratioX);
                 }else{
-                    suivant = plusProche(3);//Gauche
-                    objetSelectionner = suivant;
+                    objetSelectionner = plusProche(3);//Gauche
                 }
               }
               if (keyCode == KeyEvent.VK_D) {
@@ -399,8 +411,7 @@ public class Edit extends JPanel{
                     objetSelectionner.setLocation(objetSelectionner.getX()+10, objetSelectionner.getY());
                     objetSelectionner.obstacle.setX(objetSelectionner.getX()/View.ratioX);
                 }else{
-                    suivant = plusProche(1);//Droite
-                    objetSelectionner = suivant;
+                    objetSelectionner = plusProche(1);//Droite
                 }
               }
               if (keyCode == KeyEvent.VK_Z) {
@@ -408,8 +419,7 @@ public class Edit extends JPanel{
                     objetSelectionner.setLocation(objetSelectionner.getX(), objetSelectionner.getY()-10);
                     objetSelectionner.obstacle.setY(objetSelectionner.getY()/View.ratioY);
                 }else{
-                    suivant = plusProche(0);//Haut
-                    objetSelectionner = suivant;
+                    objetSelectionner = plusProche(0);//Haut
                 }
               }
               if (keyCode == KeyEvent.VK_S) {
@@ -418,8 +428,7 @@ public class Edit extends JPanel{
                     objetSelectionner.obstacle.setY(objetSelectionner.getY()/View.ratioY);
                 }
                 else{
-                    suivant = plusProche(2);//Bas
-                    objetSelectionner = suivant;
+                    objetSelectionner = plusProche(2);//Bas
                 }
               }
               if (keyCode == KeyEvent.VK_ENTER) {
@@ -473,7 +482,7 @@ public class Edit extends JPanel{
     }
 
     public objetMobile plusProche(int direction){
-        objetMobile voisin = listPanel.get(0);
+        objetMobile voisin = objetSelectionner;
         for(int i = 0; i < listPanel.size();i++){
             if((distance(listPanel.get(i)) <= distance(voisin)  || distance(voisin) == 0 )&& objetSelectionner != listPanel.get(i)){
                 switch(direction){
@@ -557,6 +566,12 @@ public class Edit extends JPanel{
         return om;
 
     }
+
+    void drawString(Graphics g, String text, int x, int y) {
+        int lineHeight = g.getFontMetrics().getHeight();
+        for (String line : text.split("\n"))
+            g.drawString(line, x, y += lineHeight);
+    }
     
     
 
@@ -569,6 +584,11 @@ public class Edit extends JPanel{
 
         public objetMobile(Obstacle o){
             this.obstacle = o;
+        }
+
+        public objetMobile(Obstacle o, int x, int y){
+            this.obstacle = o;
+
         }
 
         public void specialDecoration(MouseEvent e){
@@ -649,14 +669,20 @@ public class Edit extends JPanel{
     }
 
     public void actualiseSlider(){
-        hauteur.setEnabled(!objetSelectionner.obstacle.utiliseRayon());
-        hauteur.setValue((int)objetSelectionner.obstacle.getHauteur());
 
-        largeur.setEnabled(!objetSelectionner.obstacle.utiliseRayon());
-        largeur.setValue((int)objetSelectionner.obstacle.getLargeur());
-
+        if(!objetSelectionner.obstacle.utiliseRayon()){
+            hauteur.setEnabled(!objetSelectionner.obstacle.utiliseRayon());
+            hauteur.setValue((int)objetSelectionner.obstacle.getHauteur());
+    
+            largeur.setEnabled(!objetSelectionner.obstacle.utiliseRayon());
+            largeur.setValue((int)objetSelectionner.obstacle.getLargeur());
+        }else{
         rayon.setEnabled(objetSelectionner.obstacle.utiliseRayon());
-        rayon.setValue((int)((objetSelectionner.obstacle.getHauteur()+objetSelectionner.obstacle.getLargeur()))/2);
+        rayon.setValue((int)(objetSelectionner.obstacle.getRayon()));            
+        }
+
+
+
 
     }
 
