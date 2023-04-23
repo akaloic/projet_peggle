@@ -271,7 +271,25 @@ public class Edit extends JPanel{
             protected void paintComponent(Graphics g) {
                 // TODO Auto-generated method stub
                 super.paintComponent(g);
-                ((Graphics2D) g).draw(selection.getRectangle());
+                Graphics2D g2d = (Graphics2D) g;
+                int h = height - height/8;
+                g2d.draw(selection.getRectangle());
+                g2d.setPaint(Color.red);
+                g2d.fillRect(widht/7, h, 20, 20);
+                g2d.setPaint(Color.cyan);
+                g2d.fillRect(widht/7*2, h, 20, 20);
+                g2d.setPaint(Color.green);
+                g2d.fillRect(widht/7*3, h, 20, 20);
+                g2d.setPaint(Color.magenta);
+                g2d.fillRect(widht/7*4, h, 20, 20);
+                g2d.setPaint(Color.black);
+                System.out.println(widht);
+
+                drawString(g2d, "Objet sélectionner\nAppuyer sur Z-S-Q-D pour se\ndéplacer vers l'objet le plus\nproche dans la direction", widht/7+20, h);
+                drawString(g2d, "Objet sélectionner(Peut bouger)\nAppuyer sur Z-S-Q-D pour se\ndéplacer dans la direction.\nAppuyer sur W pour transformer en Pegs.\nAppuyer sur X pour transformer en Obstacle", widht/7*2+20, h);
+                drawString(g2d, "Objet dans liste de sélection.\nSera affecter par le boutton \n\"Tout supprimer\" et les sliders", widht/7*3+20, h);
+                drawString(g2d, "Objet dans liste de sélection et Objet sélectionner\nPour ne pas s'y perdre", widht/7*4+20, h);
+                
             }
         };
         for(int i = 0; i < niveau.size();i++){
@@ -554,6 +572,12 @@ public class Edit extends JPanel{
         om.yClick = yClick;
         return om;
 
+    }
+
+    void drawString(Graphics g, String text, int x, int y) {
+        int lineHeight = g.getFontMetrics().getHeight();
+        for (String line : text.split("\n"))
+            g.drawString(line, x, y += lineHeight);
     }
     
     
