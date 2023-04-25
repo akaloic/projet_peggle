@@ -33,7 +33,7 @@ public class Pegs extends Obstacle{
     }
 
     @Override
-    public void rebond(Balle balle) {
+    public boolean rebond(Balle balle) {
         if (collision(balle)) {
             //System.out.println(this.x+"      "+balle.x+"       "+this.y+"      "+balle.y);
           double n = balle.vX; // Variable auxiliaire pour garder vX avant qu'on modifie sa valeur
@@ -43,7 +43,9 @@ public class Pegs extends Obstacle{
           balle.vY = balle.vY - (2 * (n * (balle.x - this.getX()) + balle.vY * ((balle.y - this.getY())))
               / ((balle.x - this.getX()) * (balle.x - this.getX()) + (balle.y - this.getY()) * (balle.y - this.getY())))
               * (balle.y - this.getY());
+            return true;
         }
+        return false;
     }
 
 

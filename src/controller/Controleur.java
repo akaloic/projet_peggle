@@ -45,8 +45,7 @@ public class Controleur {
                     modele.getBalle().update();
                     // rebond
                     for (int i = 0; i < modele.niveau.list.size(); i++) {
-                        modele.niveau.list.get(i).rebond(modele.getBalle());
-                        if (modele.niveau.list.get(i).collision(modele.getBalle())) {
+                        if (modele.niveau.list.get(i).rebond(modele.getBalle())) {
                             modele.niveau.list.get(i).perdDeLaVie(1);
                             boolean detruit = modele.niveau.list.get(i).getEstMort();
                             if (detruit) {
@@ -55,11 +54,12 @@ public class Controleur {
                                 view.addExplosion(x, y);
                                 modele.niveau.list.remove(i);
                             }
-                            modele.player.calculScore(detruit, facteur++);
+                            modele.player.calculScore(detruit, facteur++,balleEnJeu);
                             view.setScore();
                         }
                         
                     }
+                   
 
                     if (modele.getBalle().getX() - modele.getBalle().rayon / 2 <= 0
                             || modele.getBalle().getX() + modele.getBalle().rayon / 2 >= 800) {
@@ -90,6 +90,19 @@ public class Controleur {
                     if (modele.getBalle().getY() > view.getPartie().getHeight()) {
                         modele.setBalle(null);
                         balleHorsJeu();
+                    }
+
+                    if(modele.niveau.listeEstVide() && !balleEnJeu) {
+                        if(view.nbMunition > 0) {
+                            for(int i = 0 ; i < view.nbMunition ; i++) {
+                                modele.getPlayer().score += 400; 
+                                // s il n y a plus de pegs mais qu'il reste des munitions
+                            } 
+                        }
+                        if(Sauvegarde.numNiveau == -1){
+                            view.nextLevel();
+                        }
+
                     }
 
                 }

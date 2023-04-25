@@ -29,7 +29,7 @@ public class Obstacle extends Objet{
         return false;
     }
 
-    public void rebond(Balle balle) {}
+    public boolean rebond(Balle balle) {return false;}
 
     // ---------GETTER GETTER---------
     public boolean isDead() {

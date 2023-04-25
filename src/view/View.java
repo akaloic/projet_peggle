@@ -11,6 +11,9 @@ import model.*;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.*;
@@ -18,10 +21,10 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.Timer;
 import java.util.ArrayList;
+import javax.swing.border.Border;
 import java.awt.Image;
 
 import javax.sound.sampled.*;
-
 public class View extends JFrame {
 
     public JLabel puit = new JLabel();
@@ -38,6 +41,8 @@ public class View extends JFrame {
     public double angle;
     public String chemin = System.getProperty("user.dir") + "/ressources/";
     public Timer timer;
+    private boolean NiveauxStop; // pause/resume du jeu
+    
     public int directionX = 5;
     public Controleur controleur;
     public int nbMunition;
@@ -47,20 +52,20 @@ public class View extends JFrame {
     public static double yBoutCanon;
     public static int colorX = 25;
     public static int colorY = 15;
+// >>>>>>> develop
     int seconde = 0;
     public static float ratioX;
     public static float ratioY;
     public int MAX_MUNITION = 15;
 
     static Clip son;
+    static boolean sonMute = false;
 
     public static int width;
     public static int height;
     public int numNiveau;
     public BufferedImage fondEcran;
-
     public boolean versDroite = true;
-
     public View(Controleur controleur) {
         this.controleur = controleur;
         Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
@@ -72,21 +77,44 @@ public class View extends JFrame {
         this.setUndecorated(true); // nécessaire sinon this.getHeight et this.getWidth renvoie 0
         this.setVisible(true);
 
-        changerPanel(choixJoueur());
+        changerPanel(ecranTitre());
     }
 
-    public JPanel menuPrincipal() {
-
-        String urlDuSon = "ressources/SonsWav/Accueil.wav";
-        LancerMusic(urlDuSon);
-
-        JPanel pane = new JPanel();
+    public JPanel ecranTitre(){
+        JPanel pane = new JPanel(){
+            @Override
+            public void paintComponent(Graphics g) {
+                try {
+                    BufferedImage image = ImageIO.read(new File("ressources/image_acceuil1.png"));
+                    super.paintComponent(g);
+                    g.drawImage(image,0, 0,width,height, null);
+                }catch(Exception e){
+                    e.printStackTrace();
+                }
+            }
+        };
         pane.setSize(width, height);
         pane.setLayout(null);
         pane.setBorder(BorderFactory.createTitledBorder("Bienvenue dans notre jeu"));
         pane.setBackground(Color.lightGray);
         add(pane);
 
+        JButton jouer = new JButton("Jouer");
+        jouer.setBackground(new Color(255, 51, 51));
+        jouer.setBounds(width/2 - width/10/2, height - height/5, width/10, height/10);
+        pane.add(jouer);
+        jouer.addActionListener(e -> {
+            changerPanel(choixJoueur());
+        });
+        pane.setBackground(Color.lightGray);
+        return pane;
+    }
+    public JPanel menuPrincipal() {
+        String urlDuSon = "ressources/SonsWav/Accueil.wav";
+        LancerMusic(urlDuSon);
+
+        
+        JPanel pane = new JPanel(null);
         JLabel nameLabel = new JLabel("Pseudo : ");
         nameLabel.setBounds(width / 2 - 60, height - height / 3 * 2, width / 10, 30);
         pane.add(nameLabel);
@@ -97,6 +125,7 @@ public class View extends JFrame {
         JLabel titrePane = new JLabel("HIT THE PEGGLES");
         titrePane.setBounds(width / 2 - 65, height / 5, 400, 100);
         pane.add(titrePane);
+
         JButton start = new JButton("START");
         start.setFocusPainted(false);
         start.setBackground(new Color(59, 89, 182));
@@ -134,8 +163,8 @@ public class View extends JFrame {
             changerPanel(choixJoueur());
         });
         resetRatio();
+        mute(pane, urlDuSon);
         return pane;
-
     }
 
     public JPanel JeuPanel(Controleur controleur) {
@@ -194,6 +223,16 @@ public class View extends JFrame {
         munition.setLayout(new GridLayout(MAX_MUNITION, 1));
         afficheMunition();
 
+        JButton pause = new JButton("Pause/resume");
+        pause.setBounds(0,0,50,50);
+        pause.addActionListener(e->{
+            if(controleur.timer.isRunning()){
+                controleur.timer.stop();
+            }else{
+                controleur.timer.restart();
+            }
+        });
+
         leave = new JButton("Fermer");
         leave.setBackground(new Color(59, 89, 182));
         leave.addActionListener(new ActionListener() {
@@ -231,6 +270,8 @@ public class View extends JFrame {
         partieBas.add(leave, BorderLayout.WEST);
         partieBas.add(retour, BorderLayout.EAST);
         fondGauche.add(munition, BorderLayout.CENTER);
+        fondGauche.add(leave, BorderLayout.SOUTH);
+        fondGauche.add(pause, BorderLayout.NORTH);
         fondGauche.add(partieBas, BorderLayout.SOUTH);
 
         fond.add(fondGauche, BorderLayout.WEST);
@@ -239,7 +280,7 @@ public class View extends JFrame {
         // --------------DROITE---------------------
         fondDroite = new JPanel();
         fondDroite.setLayout(new BorderLayout());
-        fondDroite.setBackground(Color.gray);
+        fondDroite.setBackground(Color.white);
         fondDroite.setPreferredSize(new Dimension(getWidth() / 11, getHeight()));
 
         JPanel info = new JPanel() {
@@ -268,6 +309,31 @@ public class View extends JFrame {
 
         fondDroite.add(info);
 
+        /* 
+        JProgressBar jauge = new JProgressBar(SwingConstants.VERTICAL,0,200);
+        jauge.setPreferredSize(new Dimension(fondDroite.getWidth(),fondDroite.getHeight()));
+        jauge.setStringPainted(true); 
+        while(controleur.balleEnJeu) {
+            jauge.setValue((int)controleur.modele.getPlayer().pointGagneParBalleEnJeu*20000/100);
+            repaint();
+            System.out.println((int)controleur.modele.getPlayer().pointGagneParBalleEnJeu);
+        }
+        JPanel info=new JPanel();
+        info.setBackground(Color.gray);
+        info.setPreferredSize(new Dimension(info.getWidth(), info.getHeight()+100));
+
+        scoreLabel.setText("Score : "+controleur.modele.getPlayer().score);
+        scoreLabel.setFont(new Font("Serif",Font.PLAIN,20));
+
+        JLabel pseudoLabel=new JLabel("Joueur : "+controleur.modele.player.pseudo);
+        pseudoLabel.setFont(new Font("Serif",Font.PLAIN,20));
+
+
+        info.add(pseudoLabel,BorderLayout.NORTH);
+        info.add(scoreLabel,BorderLayout.SOUTH);
+        fondDroite.add(info,BorderLayout.NORTH);
+        fondDroite.add(jauge);
+         */
 
         fond.add(fondDroite, BorderLayout.EAST);
         // --------------DROITE---------------------
@@ -281,9 +347,9 @@ public class View extends JFrame {
                 controleur.tirer();
             }
         });
-
         return fond;
     }
+
 
     public JPanel choixNiveauPane(Controleur controleur) {
         // controleur.modele.player.score=0;
@@ -353,7 +419,7 @@ public class View extends JFrame {
         });
         afficheMiniature(1, choixNiv);
         //afficheMiniature(2, choixNiv, height / 2);
-
+        mute(choixNiv,url);
         return choixNiv;
     }
 
@@ -383,6 +449,71 @@ public class View extends JFrame {
         return choix;
     }
 
+    public void nextLevel() {
+        JPanel nextLvl = new JPanel();
+        
+        JButton acceuil = new JButton("Acceuil");
+        JLabel winOrLose = new JLabel();
+        JButton niveauSuiv_retry ;
+        nextLvl.setSize(width,height);
+        controleur.timer.stop();
+        nextLvl.setLayout(null);
+        acceuil.setBounds(width/3-50, height/2-75, 150,150);
+        
+        acceuil.addActionListener(e->{
+            changerPanel(menuPrincipal());
+        });
+        if(controleur.modele.getNiveau().listeEstVide() && nbMunition >= 0) { 
+            winOrLose.setText("Vous avez gagné");
+            controleur.modele.getPlayer().progression++;
+            winOrLose.setFont(new Font("TimesRoman", Font.BOLD, 100));
+            niveauSuiv_retry = new JButton("Niveau Suivant");
+            niveauSuiv_retry.setBackground(new Color(59, 89, 182));
+            niveauSuiv_retry.addActionListener(e->{
+                int niv = controleur.modele.getNiveau().getNumNiveau() + 1;
+                fondEcran = new BufferedImage(20, 20, BufferedImage.TYPE_INT_RGB);
+                try {
+                    fondEcran = ImageIO.read(new File("ressources/Niveau"+niv+"Fond.png"));
+                } catch (IOException excep) {
+                    excep.printStackTrace();
+                }
+                controleur.modele.getPlayer().score = 0;
+                controleur.modele.getPlayer().pointGagneParBalleEnJeu = 0;
+                controleur.modele.setNiveau(new Niveau(niv));
+                changerPanel(JeuPanel(this.controleur));
+                controleur.timer.restart();
+            });
+        }else {
+            winOrLose.setText("Vous avez perdu");
+            winOrLose.setFont(new Font("TimesRoman", Font.BOLD, 100));
+            niveauSuiv_retry = new JButton("Réessayer");
+            niveauSuiv_retry.addActionListener(e->{
+                fondEcran = new BufferedImage(20, 20, BufferedImage.TYPE_INT_RGB);
+                try {
+                    fondEcran = ImageIO.read(new File("ressources/Niveau"+controleur.modele.getNiveau().getNumNiveau()+"Fond.png"));
+                } catch (IOException excep) {
+                    excep.printStackTrace();
+                }
+                controleur.modele.getPlayer().score = 0;
+                controleur.modele.getPlayer().pointGagneParBalleEnJeu = 0;
+                controleur.modele.setNiveau(new Niveau(controleur.modele.getNiveau().getNumNiveau()));
+                changerPanel(JeuPanel(this.controleur));
+                controleur.timer.restart();
+            });
+        }
+        winOrLose.setBounds(width/4,height/4, width,150);
+        winOrLose.setBackground(new Color(59, 89, 182));
+        nextLvl.add(niveauSuiv_retry);
+        niveauSuiv_retry.setBounds(acceuil.getX()+300, acceuil.getY(),150,150);
+        nextLvl.add(winOrLose);
+        nextLvl.add(acceuil);
+
+        Sauvegarde.save(controleur.modele.getPlayer());
+
+
+        changerPanel(nextLvl);
+    }
+
     public void afficheMiniature(int mode, JPanel pane) {
         // 1 = Niveau imposé
         // 2 = Niveau créer soit même
@@ -392,7 +523,7 @@ public class View extends JFrame {
             Sauvegarde.numNiveau = 0;
         }
         JPanel bis = new JPanel(null);
-        int borne = mode == 1 ? 5 : Math.max(Sauvegarde.listeJoueurs.get(Sauvegarde.joueur).liste.size(), 1);
+        int borne = mode == 1 ? controleur.modele.getPlayer().progression : Math.max(Sauvegarde.listeJoueurs.get(Sauvegarde.joueur).liste.size(), 1);
         bis.setBounds(width / 30, height/8, width, height / 6);
         for (int i = 0; i < borne; i++) {
             int k = i;
@@ -425,7 +556,7 @@ public class View extends JFrame {
                 edit.requestFocus();
                 miniature.add(edit);
             }
-            JButton bouton = new JButton("Jouer"){
+            JButton bouton = new JButton(){
                 @Override
                 protected void paintComponent(Graphics g) {
                     // TODO Auto-generated method stub
@@ -441,11 +572,18 @@ public class View extends JFrame {
                         dessineNiveau(g, Sauvegarde.charge(k));
                     }
                     if (mode == 1) {
-                        controleur.modele.setNiveau(new Niveau(k + 1));
-                        dessineNiveau(g, controleur.modele.getNiveau().getList());
+                        if(controleur.modele.getPlayer().progression >= k+1){
+                            controleur.modele.setNiveau(new Niveau(k + 1));
+                            dessineNiveau(g, controleur.modele.getNiveau().getList());
+                        }/*else{
+                            g.setFont(new Font("TimesRoman", Font.PLAIN, 80));
+                            g.drawString("Pas encore débloqué", getWidth()/2, getHeight()/2);
+                        }*/
                     }
                     if(Sauvegarde.numNiveau == -1){
-                        ((Graphics2D)g).drawString("Meilleur score : "+Sauvegarde.listeJoueurs.get(Sauvegarde.joueur).listeScore[k], 0, 30);
+                        if(controleur.modele.getPlayer().progression >= k+1){
+                            ((Graphics2D)g).drawString("Meilleur score : "+Sauvegarde.listeJoueurs.get(Sauvegarde.joueur).listeScore[k], 0, 30);
+                        }
                     }
                     else{
                         ((Graphics2D)g).drawString("Meilleur score : "+Sauvegarde.listeJoueurs.get(Sauvegarde.joueur).listeScoreEdit.get(k), 0, 30);
@@ -692,7 +830,7 @@ public class View extends JFrame {
     public void dessineNiveau(Graphics g, ArrayList<Obstacle> l) {
         for (int i = 0; i < l.size(); i++) {
             l.get(i).dessine(g);
-        }
+        } 
     }
 
     public void calculeAngle() {
@@ -752,22 +890,24 @@ public class View extends JFrame {
     }
 
     public static void LancerMusic(String url) {
-        try {
+        if(!sonMute) {
+            try {
 
-            File ficSon = new File(url);
+                File ficSon = new File(url);
 
-            if (ficSon.exists()) {
-                AudioInputStream audio = AudioSystem.getAudioInputStream(ficSon);
-                son = AudioSystem.getClip();
-                son.open(audio);
-                son.start();
-                son.loop(Clip.LOOP_CONTINUOUSLY);
-            } else {
-                System.out.println("fichier introuvable");
+                if (ficSon.exists()) {
+                    AudioInputStream audio = AudioSystem.getAudioInputStream(ficSon);
+                    son = AudioSystem.getClip();
+                    son.open(audio);
+                    son.start();
+                    son.loop(Clip.LOOP_CONTINUOUSLY);
+                } else {
+                    System.out.println("fichier introuvable");
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
@@ -798,5 +938,20 @@ public class View extends JFrame {
 
     public static double getRatio() {
         return (ratioX + ratioX) / 2;
+    }
+
+    public void mute( JPanel panel, String url) {
+        JButton btnMute = new JButton("Mute");
+        btnMute.setBounds(width-75,0,75,75);
+        panel.add(btnMute);
+        btnMute.addActionListener(e->{
+            if(son.isActive()) {
+                son.stop();
+                sonMute = true;
+            }else {
+                LancerMusic(url);
+                sonMute = false;
+            }
+        });
     }
 }

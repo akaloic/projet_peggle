@@ -213,4 +213,15 @@ public class Niveau {
     public static void setMilieu(double m) {
         milieu = m;
     }
+    public int getNumNiveau(){
+        return niveau;
+    }
+    public boolean listeEstVide() {
+        for (int i = 0 ; i < list.size() ; i++ ){
+            if(list.get(i).vie > 0 && list.get(i) instanceof Pegs) {
+                return false;
+            }
+        }
+        return true;
+    }
 }

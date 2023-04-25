@@ -69,7 +69,7 @@ public class Quadrilatere extends Obstacle {//peut etre un carré comme un recta
     }
 
     @Override
-    public void rebond(Balle balle) {
+    public boolean rebond(Balle balle) {
         if (collision(balle)) {
             switch (this.typeCollision) {
                 case 1:
@@ -92,7 +92,9 @@ public class Quadrilatere extends Obstacle {//peut etre un carré comme un recta
                     coin(this.coinBasDroit,balle);
                   break;
               } 
+            return true;
         }
+      return false;
     }
 
     public void coin(Point point,Balle balle){
