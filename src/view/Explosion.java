@@ -23,10 +23,10 @@ public class Explosion extends JPanel {
         this.active = true;
         int size = (int) (maxRadius * 2);
 
-        setBackground(Color.darkGray);
         setBounds((int) x, (int) y, 40, 40);
         setPreferredSize(new Dimension(size, size));
         setVisible(active);
+        setOpaque(false);
     }
 
     public void paintComponent(Graphics g) {
