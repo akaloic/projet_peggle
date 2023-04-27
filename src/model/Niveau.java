@@ -88,7 +88,7 @@ public class Niveau {
 
     protected void niveau_1() {//liste de lignes
         double y1=200; double x1=getRayon()/6;
-        for(int i=0;i<6;i++){
+        /*for(int i=0;i<6;i++){
             if(i%2==0){
                 lignes(x1+getRayon(), y1+(getDiametre()*i), 16);
             }
@@ -104,7 +104,10 @@ public class Niveau {
             list.add(barriereGauche);
             list.add(barriereDroit);
             
-        }
+        }*/
+        Pegs p = new Pegs(400, 400, 1);
+        p.setHP(1);
+        list.add(p);
     }
 
     protected void niveau_2(){
