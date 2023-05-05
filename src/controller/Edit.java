@@ -64,13 +64,15 @@ public class Edit extends JPanel{
     JTextField ySaisie = new JTextField();
     JSlider pointDeVie = new JSlider();
     View view;
+    Controleur controlleur;
 
-    public Edit(Niveau n,int widht, int height,int idSauvegarde,View v){
+    public Edit(Niveau n,int widht, int height,int idSauvegarde,View v,Controleur controlleur){
         this.setBackground(Color.gray);
         niveau = Sauvegarde.charge(idSauvegarde);
         this.view = v;
         this.width = widht;
         this.height = height;
+        this.controlleur = controlleur;
         JPanel partieBouton = new JPanel();
         partieBouton.setLayout(new GridLayout(3,1));
         JPanel regroupe = new JPanel(new GridLayout(2,1));
@@ -225,6 +227,7 @@ public class Edit extends JPanel{
         });
         leave.addActionListener(
             (ActionEvent e) -> {
+                Sauvegarde.save(controlleur.modele.getPlayer());
                 Sauvegarde.save(niveau,idSauvegarde);
                 view.changerPanel(view.choixEdit());
         });
@@ -389,6 +392,7 @@ public class Edit extends JPanel{
         pegRect.setBounds(80,750,(int)(pegRect.obstacle.getLargeur()*View.ratioX),(int)(pegRect.obstacle.getHauteur()*View.ratioY));
         pegRect.setOpaque(false);
         pegRect.decoration = true;
+        pegRect.obstacle.image = null;
         principal.add(pegRect);
         principal.addMouseListener(pegRect);
         principal.addMouseMotionListener(pegRect);
@@ -591,9 +595,15 @@ public class Edit extends JPanel{
 
         }
 
+        public boolean inX(int x){
+            return (x >= this.getX() && x <= this.getX()+this.getWidth());
+        }
+        public boolean inY(int y){
+           return (y >= this.getY() && y <= this.getY()+this.getHeight()); 
+        }
+
         public void specialDecoration(MouseEvent e){
-            if(e.getX() >= this.getX() && e.getX() <= this.getX()+this.getWidth()
-            && e.getY() >= this.getY() && e.getY() <= this.getY()+this.getHeight()){
+            if(inX(e.getX()) && inY(e.getY())){
                 xClick = e.getX()-this.getX();
                 yClick = e.getY()-this.getY();
                 if (peutBouger){
@@ -614,8 +624,7 @@ public class Edit extends JPanel{
 
         @Override
         public void mouseClicked(MouseEvent e) {
-            if(e.getX() >= this.getX() && e.getX() <= this.getX()+this.getWidth()
-                && e.getY() >= this.getY() && e.getY() <= this.getY()+this.getHeight()){
+            if(inX(e.getX()) && inY(e.getY())){
                 xClick = e.getX()-this.getX();
                 yClick = e.getY()-this.getY();
                 if(e.getButton() == 1){
@@ -656,8 +665,7 @@ public class Edit extends JPanel{
         }
 
         @Override
-        public void mouseDragged(MouseEvent e) {
-        }
+        public void mouseDragged(MouseEvent e) {}
 
         @Override
         public void mouseMoved(MouseEvent e) {
@@ -680,10 +688,6 @@ public class Edit extends JPanel{
         rayon.setEnabled(objetSelectionner.obstacle.utiliseRayon());
         rayon.setValue((int)(objetSelectionner.obstacle.getRayon()));            
         }
-
-
-
-
     }
 
     public class Selection extends MouseAdapter{

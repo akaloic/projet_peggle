@@ -170,7 +170,7 @@ public class View extends JFrame {
     public JPanel JeuPanel(Controleur controleur) {
         resetRatio();
         nbMunition = MAX_MUNITION - 1;
-
+        controleur.timer.restart();
         fond = new JPanel();
         fond.setLayout(new BorderLayout());
 
@@ -550,7 +550,7 @@ public class View extends JFrame {
                 edit.setBackground(Color.cyan);
                 edit.addActionListener(
                         (ActionEvent e) -> {
-                            changerPanel(new Edit(null, width, height, k, this));
+                            changerPanel(new Edit(null, width, height, k, this,controleur));
                         });
                 edit.setBounds(panelPrincipal.getWidth()-50, 50, 50, 50);
                 edit.requestFocus();
