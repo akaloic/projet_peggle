@@ -11,8 +11,6 @@ import model.*;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -21,7 +19,6 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.Timer;
 import java.util.ArrayList;
-import javax.swing.border.Border;
 import java.awt.Image;
 
 import javax.sound.sampled.*;
@@ -41,7 +38,6 @@ public class View extends JFrame {
     public double angle;
     public String chemin = System.getProperty("user.dir") + "/ressources/";
     public Timer timer;
-    private boolean NiveauxStop; // pause/resume du jeu
     
     public int directionX = 5;
     public Controleur controleur;
