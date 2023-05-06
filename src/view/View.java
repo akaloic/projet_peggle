@@ -907,8 +907,8 @@ public class View extends JFrame {
         }
     }
 
-    public void addExplosion(double x, double y) {
-        partie.add(new Explosion(x * ratioX, y * ratioY));
+    public void addExplosion(double x, double y,int point) {
+        partie.add(new Explosion(x * ratioX, y * ratioY,point));
     }
 
     public void setScore() {

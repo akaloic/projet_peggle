@@ -20,7 +20,7 @@ public class Player implements Serializable{
         pointGagneParBalleEnJeu = 0;
     }
 
-    public void calculScore(boolean detruit, int facteur, boolean balleEnJeu) {
+    public int calculScore(boolean detruit, int facteur, boolean balleEnJeu) {
         pointGagneParBalleEnJeu += facteur;
         if(balleEnJeu) {
             if (detruit){
@@ -40,6 +40,7 @@ public class Player implements Serializable{
         if(pointGagneParBalleEnJeu > 5) {
             pointGagneParBalleEnJeu -= 5;
         }
+        return pointGagneParBalleEnJeu;
     }
     public String getPseudo(){
         return this.pseudo;

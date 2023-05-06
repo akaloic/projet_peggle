@@ -46,13 +46,13 @@ public class Controleur {
                         if (modele.niveau.list.get(i).rebond(modele.getBalle())) {
                             modele.niveau.list.get(i).perdDeLaVie(1);
                             boolean detruit = modele.niveau.list.get(i).getEstMort();
+                            int point = modele.player.calculScore(detruit, facteur++,balleEnJeu);
                             if (detruit) {
                                 double x = modele.niveau.list.get(i).getX();
                                 double y = modele.niveau.list.get(i).getY();
-                                view.addExplosion(x, y);
+                                view.addExplosion(x, y,point);
                                 modele.niveau.list.remove(i);
                             }
-                            modele.player.calculScore(detruit, facteur++,balleEnJeu);
                             view.setScore();
                         }
                         
