@@ -63,31 +63,30 @@ public class Controleur {
                             || modele.getBalle().getX() + modele.getBalle().rayon / 2 >= 800) {
                         modele.balle.rebondMur();
                     }
-
                     // munition
                     if (View.enJeu) {
-                        int xPuit = (int) (view.puit.getX() * View.ratioX);
-                        int yPuit = (int) (view.puit.getY() * View.ratioY);
-                        int widthRatio = (int) (view.puit.getWidth() * View.ratioX);
-                        int heightRatio = (int) (view.puit.getHeight() * View.ratioY);
+                        int xPuit = (int) (view.puit.getX());
+                        int yPuit = (int) (view.puit.getY());
+                        int widthRatio = (int) (view.puit.getWidth());
+                        int heightRatio = (int) (view.puit.getHeight());
                         int xBalle = (int) (modele.getBalle().getX() * View.ratioX);
                         int yBalle = (int) (modele.getBalle().getY() * View.ratioY);
 
-                        if (xBalle >= xPuit && xBalle <= xPuit + widthRatio
+                        if (xBalle>= xPuit && xBalle <= xPuit + widthRatio
                                 && yBalle >= yPuit
                                 && yBalle <= yPuit + heightRatio) {
                             if (balleEnJeu) {
                                 // view.addExplosion(modele.balle.x, modele.balle.x);
                                 // view.addExplosion(xBalle, yBalle); //marche pas
+                                modele.setBalle(null);
                                 view.nbMunition++;
                                 balleHorsJeu();
                             }
                         }
-                    }
-
-                    if (modele.getBalle().getY() > view.getPartie().getHeight()) {
-                        modele.setBalle(null);
-                        balleHorsJeu();
+                        if (modele.getBalle()!= null && modele.getBalle().getY() > view.getPartie().getHeight()) {
+                            modele.setBalle(null);
+                            balleHorsJeu();
+                        }
                     }
 
                     if(modele.niveau.listeEstVide() && !balleEnJeu) {
