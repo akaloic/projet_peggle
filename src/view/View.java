@@ -125,7 +125,7 @@ public class View extends JFrame {
         JButton start = new JButton("START");
         start.setFocusPainted(false);
         start.setBackground(new Color(59, 89, 182));
-        start.setBounds(width / 3, height - height / 2, width / 3, height / 8);
+        start.setBounds(width / 3, height*3/7, width / 3, height / 8);
         pane.add(start);
 
         JButton edit = new JButton("Création niveaux");
@@ -137,6 +137,11 @@ public class View extends JFrame {
         choixJoueur.setBackground(new Color(59, 89, 182));
         choixJoueur.setBounds(width / 3, edit.getY()+edit.getHeight()+20, width/3, height/8);
         pane.add(choixJoueur);
+
+        JButton femer = new JButton("Quitter jeu");
+        femer.setBackground(Color.red);
+        femer.setBounds(width / 3, choixJoueur.getY()+choixJoueur.getHeight()+20, width/3, height/8);
+        pane.add(femer);
 
 
         start.addActionListener(e -> {
@@ -157,6 +162,12 @@ public class View extends JFrame {
             controleur.modele.getPlayer().setPseudo(nameField.getText());
             Sauvegarde.save(controleur.modele.getPlayer());
             changerPanel(choixJoueur());
+        });
+
+        femer.addActionListener(e -> {
+            controleur.modele.getPlayer().setPseudo(nameField.getText());
+            Sauvegarde.save(controleur.modele.getPlayer());
+            System.exit(0);
         });
         resetRatio();
         mute(pane, urlDuSon);
@@ -660,6 +671,11 @@ public class View extends JFrame {
                 public void paintComponent(Graphics g) {
                     // TODO Auto-generated method stub
                     super.paintComponent(g);
+                    Graphics2D g2d = (Graphics2D) g;
+                    GradientPaint gp = new GradientPaint(0, 0, new Color(0,0,153), getWidth(), getHeight(),Color.black , false);
+                    g2d.setPaint(gp);
+                    g2d.fillRect(0, 0, getWidth(), getHeight());
+                    g2d.setPaint(Color.white);
                     g.setFont(new Font("TimesRoman", Font.PLAIN, 30));
                     ((Graphics2D)g).drawString("Pseudo : "+Sauvegarde.listeJoueurs.get(k).pseudo, getWidth()/4, getHeight()/4);
                     ((Graphics2D)g).drawString("Nombre de niveau: "+Sauvegarde.listeJoueurs.get(k).liste.size(), getWidth()/4, getHeight()/4*2);
@@ -694,7 +710,6 @@ public class View extends JFrame {
             pane.add(choix,BorderLayout.WEST);
             pane.add(info,BorderLayout.CENTER);
             info.add(supprimer);
-            info.setBackground(Color.lightGray);
 
             bis.add(pane);
             supprimer.setBounds(principal.getWidth() - 150, 0, 50, 50);
