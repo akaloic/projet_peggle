@@ -32,7 +32,7 @@ public class View extends JFrame {
     public JPanel fondDroite = new JPanel();
     public JPanel partie = new JPanel();
 
-    public JButton leave;
+    public JButton resetBalle;
     public static boolean enJeu = true;
     public boolean balleEnJeu = false;
     public double angle;
@@ -229,19 +229,12 @@ public class View extends JFrame {
             }
         });
 
-        leave = new JButton("Fermer");
-        leave.setBackground(new Color(59, 89, 182));
-        leave.addActionListener(new ActionListener() {
+        resetBalle = new JButton("RESET");
+        resetBalle.setBackground(new Color(47, 250, 30));
+        resetBalle.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) { 
-                if(Sauvegarde.numNiveau == -1){
-                    controleur.modele.getPlayer().setScore(numNiveau-1);
-                }
-                else{
-                    controleur.modele.getPlayer().setScore(Sauvegarde.numNiveau);
-                }
-                controleur.modele.getPlayer().score = 0;
-                Sauvegarde.save(controleur.modele.getPlayer());
-                System.exit(0);
+                controleur.modele.balle = null;
+                controleur.balleHorsJeu();
             }
         });
 
@@ -268,10 +261,9 @@ public class View extends JFrame {
         });
 
         JPanel partieBas = new JPanel(new BorderLayout());
-        partieBas.add(leave, BorderLayout.WEST);
+        partieBas.add(resetBalle, BorderLayout.WEST);
         partieBas.add(retour, BorderLayout.EAST);
         fondGauche.add(munition, BorderLayout.CENTER);
-        fondGauche.add(leave, BorderLayout.SOUTH);
         fondGauche.add(pause, BorderLayout.NORTH);
         fondGauche.add(partieBas, BorderLayout.SOUTH);
 
