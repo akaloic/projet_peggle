@@ -933,8 +933,8 @@ public class View extends JFrame {
     }
 
     public static void resetRatio() {
-        ratioX = 1;
-        ratioY = 1;
+        ratioX = (float) (width - width / 7 - width / 11) / 800;
+        ratioY = (float) height / 600;
     }
 
     public static double getRatioX() {
