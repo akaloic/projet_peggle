@@ -7,7 +7,7 @@ public class Player implements Serializable{
     public int score;
     public String pseudo;
     public int munition;
-    public int progression = 1;
+    public int progression = 5;
     public int pointGagneParBalleEnJeu;
     public int[]listeScore = new int[5];
     public ArrayList<Integer> listeScoreEdit = new ArrayList<Integer>();

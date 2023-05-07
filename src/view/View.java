@@ -257,7 +257,12 @@ public class View extends JFrame {
                     controleur.modele.getPlayer().setScore(Sauvegarde.numNiveau);
                     changerPanel(choixEdit());
                 }
+                controleur.balleHorsJeu();
+                if(controleur.modele.balle!= null){
+                    controleur.modele.balle = null;
+                }
                 controleur.modele.getPlayer().score = 0;
+                controleur.modele.getPlayer().pointGagneParBalleEnJeu = 0;
                 Sauvegarde.save(controleur.modele.getPlayer());
             }
         });
@@ -279,7 +284,7 @@ public class View extends JFrame {
         fondDroite.setBackground(Color.white);
         fondDroite.setPreferredSize(new Dimension(getWidth() / 11, getHeight()));
 
-        JPanel info = new JPanel() {
+        /*JPanel info = new JPanel() {
             @Override
             public void paint(Graphics g) {
                 super.paintComponent(g);
@@ -303,17 +308,23 @@ public class View extends JFrame {
             }
         };
 
-        fondDroite.add(info);
+        fondDroite.add(info);*/
 
-        /* 
-        JProgressBar jauge = new JProgressBar(SwingConstants.VERTICAL,0,200);
+        
+        JProgressBar jauge = new JProgressBar(SwingConstants.VERTICAL,0,200){
+            @Override
+            protected void paintComponent(Graphics g) {
+                // TODO Auto-generated method stub
+                super.paintComponent(g);
+                if(controleur.modele.balle != null){
+                    super.setValue(controleur.modele.getPlayer().score);
+                }else{
+                    super.setValue(0);
+                }
+            }
+        };
         jauge.setPreferredSize(new Dimension(fondDroite.getWidth(),fondDroite.getHeight()));
         jauge.setStringPainted(true); 
-        while(controleur.balleEnJeu) {
-            jauge.setValue((int)controleur.modele.getPlayer().pointGagneParBalleEnJeu*20000/100);
-            repaint();
-            System.out.println((int)controleur.modele.getPlayer().pointGagneParBalleEnJeu);
-        }
         JPanel info=new JPanel();
         info.setBackground(Color.gray);
         info.setPreferredSize(new Dimension(info.getWidth(), info.getHeight()+100));
@@ -329,7 +340,7 @@ public class View extends JFrame {
         info.add(scoreLabel,BorderLayout.SOUTH);
         fondDroite.add(info,BorderLayout.NORTH);
         fondDroite.add(jauge);
-         */
+         
 
         fond.add(fondDroite, BorderLayout.EAST);
         // --------------DROITE---------------------
@@ -654,9 +665,9 @@ public class View extends JFrame {
             int k = i;
             JPanel info = new JPanel(null){
                 @Override
-                public void paint(Graphics g) {
+                public void paintComponent(Graphics g) {
                     // TODO Auto-generated method stub
-                    super.paint(g);
+                    super.paintComponent(g);
                     g.setFont(new Font("TimesRoman", Font.PLAIN, 30));
                     ((Graphics2D)g).drawString("Pseudo : "+Sauvegarde.listeJoueurs.get(k).pseudo, getWidth()/4, getHeight()/4);
                     ((Graphics2D)g).drawString("Nombre de niveau: "+Sauvegarde.listeJoueurs.get(k).liste.size(), getWidth()/4, getHeight()/4*2);
@@ -675,9 +686,9 @@ public class View extends JFrame {
 
             JButton supprimer = new JButton("X"){
                 @Override
-                public void paint(Graphics g) {
+                public void paintComponent(Graphics g) {
                     // TODO Auto-generated method stub
-                    super.paint(g);
+                    super.paintComponent(g);
                     setBackground(Color.red);
                 }
             };
@@ -704,8 +715,10 @@ public class View extends JFrame {
         nouveau.addActionListener(
                 (ActionEvent e) -> {
                     Sauvegarde.joueur = Sauvegarde.listeJoueurs.size();
-                    Sauvegarde.listeJoueurs.add(new Player("Nouveau", 4));
+                    Player p = new Player("Nouveau", 4);
+                    Sauvegarde.listeJoueurs.add(p);
                     controleur.modele.getPlayer().listeScoreEdit.add(0);
+                    controleur.modele.setPlayer(p);
                     Sauvegarde.save(controleur.modele.getPlayer());
                     changerPanel(menuPrincipal());
                 });
@@ -908,7 +921,7 @@ public class View extends JFrame {
     }
 
     public void addExplosion(double x, double y,int point) {
-        partie.add(new Explosion(x * ratioX, y * ratioY,point));
+        partie.add(new Explosion(x * ratioX, y * ratioY,point,this));
     }
 
     public void setScore() {
@@ -920,8 +933,8 @@ public class View extends JFrame {
     }
 
     public static void resetRatio() {
-        ratioX = (float) (width - width / 7 - width / 11) / 800;
-        ratioY = (float) height / 600;
+        ratioX = 1;
+        ratioY = 1;
     }
 
     public static double getRatioX() {

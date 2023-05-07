@@ -49,7 +49,7 @@ public class Sauvegarde {
       if (p != null) {
          listeJoueurs.set(joueur, p);
       }
-      if(p.liste.size() == 0){
+      if(p != null && p.liste.size() == 0){
          ArrayList<Obstacle> a = new ArrayList<>();
          p.liste.add(a);
       }

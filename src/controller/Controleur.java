@@ -33,6 +33,7 @@ public class Controleur {
                 view.calculeAngle();
                 if (View.enJeu) {
                     view.repaint();
+                    view.repaint(50,50,50,50);
                     view.munition.removeAll();
                     view.afficheMunition();
                     view.munition.revalidate();
@@ -41,10 +42,14 @@ public class Controleur {
                 view.placePuit();
                 if (modele.getBalle() != null) {
                     modele.getBalle().update();
+                    if(Math.abs(modele.getBalle().vX) <=0.001 || Math.abs(modele.getBalle().vY) <=0.001){
+                        modele.setBalle(null);
+                        balleHorsJeu();
+                    }
                     // rebond
                     for (int i = 0; i < modele.niveau.list.size(); i++) {
                         if(!modele.niveau.list.get(i).getEstMort()){
-                            if (modele.niveau.list.get(i).rebond(modele.getBalle())) {
+                            if (modele.niveau.list.get(i).rebond(modele.getBalle()) && modele.niveau.list.get(i) instanceof Pegs) {
                                 modele.niveau.list.get(i).perdDeLaVie(1);
                                 boolean detruit = modele.niveau.list.get(i).getEstMort();
                                 int point = modele.player.calculScore(detruit, facteur++,balleEnJeu);
@@ -66,16 +71,9 @@ public class Controleur {
                     }
                     // munition
                     if (View.enJeu) {
-                        int xPuit = (int) (view.puit.getX());
-                        int yPuit = (int) (view.puit.getY());
-                        int widthRatio = (int) (view.puit.getWidth());
-                        int heightRatio = (int) (view.puit.getHeight());
-                        int xBalle = (int) (modele.getBalle().getX() * View.ratioX);
-                        int yBalle = (int) (modele.getBalle().getY() * View.ratioY);
-
-                        if (xBalle>= xPuit && xBalle <= xPuit + widthRatio
-                                && yBalle >= yPuit
-                                && yBalle <= yPuit + heightRatio) {
+                        if ( modele.getBalle().getY() * View.ratioY>= view.puit.getX() && modele.getBalle().getX() * View.ratioX <= view.puit.getX() + view.puit.getWidth()
+                                && modele.getBalle().getY() * View.ratioY >= view.puit.getY()
+                                && modele.getBalle().getY() * View.ratioY <= view.puit.getY() + view.puit.getHeight()) {
                             if (balleEnJeu) {
                                 // view.addExplosion(modele.balle.x, modele.balle.x);
                                 // view.addExplosion(xBalle, yBalle); //marche pas
@@ -102,7 +100,6 @@ public class Controleur {
                         }
 
                     }
-
                 }
             }
         });
