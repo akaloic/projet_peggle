@@ -104,7 +104,7 @@ public class Controleur {
                             view.nextLevel();
                         }
                     }
-                    if(view.nbMunition <= 0 && !balleEnJeu) {
+                    if(view.nbMunition == 0 && !balleEnJeu) {
                         if(Sauvegarde.numNiveau == -1) {
                             view.nextLevel();
                         }

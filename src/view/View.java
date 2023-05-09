@@ -52,7 +52,6 @@ public class View extends JFrame {
     public static double yBoutCanon;
     public static int colorX = 25;
     public static int colorY = 15;
-// >>>>>>> develop
     int seconde = 0;
     public static float ratioX;
     public static float ratioY;
@@ -303,7 +302,7 @@ public class View extends JFrame {
                             true);
                     g2d.setPaint(gp);
                     g2d.fillRect(10, (getHeight() - 20) - controleur.modele.player.score, getWidth() - 20,
-                            getHeight()/controleur.modele.player.score);
+                            getHeight()-10);
                 }
             }
         };
@@ -329,8 +328,6 @@ public class View extends JFrame {
 
 
     public JPanel choixNiveauPane(Controleur controleur) {
-// <<<<<<< HEAD
-// <<<<<<< HEAD
         controleur.modele.player.score = 0;
         String url = "ressources/SonsWav/page4.wav";
         LancerMusic(url);
@@ -346,20 +343,6 @@ public class View extends JFrame {
                 }
             }
         };
-// =======
-//         // controleur.modele.player.score=0;
-//         String url = "ressources/SonsWav/ChoixNiveau.wav";
-//         LancerMusic(url);
-
-//         JPanel choixNiv = new JPanel();
-// >>>>>>> develop
-// =======
-//         // controleur.modele.player.score=0;
-//         String url = "ressources/SonsWav/ChoixNiveau.wav";
-//         LancerMusic(url);
-
-//         JPanel choixNiv = new JPanel();
-// >>>>>>> develop
         choixNiv.setBackground(Color.lightGray);
         choixNiv.setLayout(null);
         choixNiv.setSize(width, height);
@@ -420,21 +403,8 @@ public class View extends JFrame {
             son.stop();
             changerPanel(menuPrincipal());
         });
-// <<<<<<< HEAD
-// // <<<<<<< HEAD
-// //         afficheMiniature(1, choixNiv, height/2-200);
-// //         afficheMiniature(2, choixNiv, height/2);
-//         mute(choixNiv,url);
-// // =======
-//         afficheMiniature(1, choixNiv);
-//         //afficheMiniature(2, choixNiv, height / 2);
-
-// // >>>>>>> develop
-// =======
         afficheMiniature(1, choixNiv);
-        //afficheMiniature(2, choixNiv, height / 2);
         mute(choixNiv,url);
-// >>>>>>> develop
         return choixNiv;
     }
 
@@ -478,9 +448,9 @@ public class View extends JFrame {
         acceuil.addActionListener(e->{
             changerPanel(menuPrincipal());
         });
-        if(controleur.modele.getNiveau().listeEstVide() && nbMunition >= 0) { 
+        if(controleur.modele.getNiveau().listeEstVide() && nbMunition == 0) { 
             winOrLose.setText("Vous avez gagné");
-            LancerMusic("ressources/SonsWav/win.wav");
+            bruitage("ressources/SonsWav/win.wav");
             controleur.modele.getPlayer().progression++;
             winOrLose.setFont(new Font("TimesRoman", Font.BOLD, 100));
             niveauSuiv_retry = new JButton("Niveau Suivant");
@@ -501,7 +471,7 @@ public class View extends JFrame {
             });
         }else {
             winOrLose.setText("Vous avez perdu");
-            LancerMusic("ressources/SonsWav/lose.wav");
+            bruitage("ressources/SonsWav/lose.wav");
             winOrLose.setFont(new Font("TimesRoman", Font.BOLD, 100));
             niveauSuiv_retry = new JButton("Réessayer");
             niveauSuiv_retry.addActionListener(e->{
@@ -589,10 +559,7 @@ public class View extends JFrame {
                         if(controleur.modele.getPlayer().progression >= k+1){
                             controleur.modele.setNiveau(new Niveau(k + 1));
                             dessineNiveau(g, controleur.modele.getNiveau().getList());
-                        }/*else{
-                            g.setFont(new Font("TimesRoman", Font.PLAIN, 80));
-                            g.drawString("Pas encore débloqué", getWidth()/2, getHeight()/2);
-                        }*/
+                        }
                     }
                     if(Sauvegarde.numNiveau == -1){
                         if(controleur.modele.getPlayer().progression >= k+1){

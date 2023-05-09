@@ -6,6 +6,8 @@ public class Niveau {
     public int niveau;
     public static double milieu=-1;
 
+    public int sommeVie = sommeViePeg();
+
     public Niveau(int i) {
         switch (i) {
             case 1:
@@ -223,5 +225,14 @@ public class Niveau {
             }
         }
         return true;
+    }
+    public int sommeViePeg() {
+        int rep = 0;
+        for (int i = 0 ; i < list.size() ; i++) {
+            if (list.get(i) instanceof Pegs) {
+                rep+= list.get(i).getVie();
+            }
+        }
+        return rep;
     }
 }
