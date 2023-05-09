@@ -6,11 +6,19 @@ import view.View;
 import view.Image;
 public class Pegs extends Obstacle{
     private int rayon = 25;
-    public Pegs(){
-        super(1);
-    }
-    public Pegs(double x, double y, int v){
+    public Pegs(double x, double y, int v){//vie initié
         super(x, y, 25,25, false, v);
+        switch(super.vie){
+            default:
+                    this.image=Image.pegRondRouge; break;
+            case 2:
+                    this.image=Image.pegRondRose; break;
+            case 3:
+                    this.image=Image.pegRondBleu; break;
+        }
+    }
+    public Pegs(double x, double y){//vie aléatoire
+        super(x, y, 25,25, false, 1);
         Random r = new Random();
         super.vie=r.nextInt(3)+1;
         switch(super.vie){
@@ -21,10 +29,6 @@ public class Pegs extends Obstacle{
             case 3:
                     this.image=Image.pegRondBleu; break;
         }
-    }
-    public Pegs(double x, double y, int v,double largeur, double hauteur){
-        super(x, y, largeur,hauteur, false, v);
-        this.rayon=(int)((hauteur+largeur)/2);
     }
 
     @Override
@@ -64,7 +68,7 @@ public class Pegs extends Obstacle{
     }
     @Override
     public Pegs clone(double x, double y, int v, double largeur,double hauteur){
-        Pegs p = new Pegs(x, y, v, largeur,hauteur);
+        Pegs p = new Pegs(x, y, v);
         p.rayon=(int)((hauteur+largeur)/4);
         return p;
     }
