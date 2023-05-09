@@ -342,7 +342,7 @@ public class View extends JFrame {
         info.add(pseudoLabel,BorderLayout.NORTH);
         info.add(scoreLabel,BorderLayout.SOUTH);
         fondDroite.add(info,BorderLayout.NORTH);
-        fondDroite.add(jauge);
+        //fondDroite.add(jauge);
          
 
         fond.add(fondDroite, BorderLayout.EAST);
@@ -723,8 +723,8 @@ public class View extends JFrame {
                     Sauvegarde.joueur = Sauvegarde.listeJoueurs.size();
                     Player p = new Player("Nouveau");
                     Sauvegarde.listeJoueurs.add(p);
-                    controleur.modele.getPlayer().listeScoreEdit.add(0);
                     controleur.modele.setPlayer(p);
+                    controleur.modele.getPlayer().listeScoreEdit.add(0);
                     Sauvegarde.save(controleur.modele.getPlayer());
                     changerPanel(menuPrincipal());
                 });

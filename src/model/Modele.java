@@ -43,7 +43,7 @@ public class Modele {
     }
 
     public void setPlayer(Player p){
-        player=p;
+        this.player=p;
     }
 
     // ---------GETTER SETTER---------
