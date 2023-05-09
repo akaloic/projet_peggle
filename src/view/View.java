@@ -721,7 +721,7 @@ public class View extends JFrame {
         nouveau.addActionListener(
                 (ActionEvent e) -> {
                     Sauvegarde.joueur = Sauvegarde.listeJoueurs.size();
-                    Player p = new Player("Nouveau", 4);
+                    Player p = new Player("Nouveau");
                     Sauvegarde.listeJoueurs.add(p);
                     controleur.modele.getPlayer().listeScoreEdit.add(0);
                     controleur.modele.setPlayer(p);

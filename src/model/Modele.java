@@ -10,7 +10,7 @@ public class Modele {
     public Modele() {
         balle = null;
         obstacles = new Obstacle[0];
-        player = new Player("Joueur", 4);
+        player = new Player("Joueur");
         // niveau initié dans la view
     }
 

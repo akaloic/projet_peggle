@@ -6,16 +6,14 @@ import controller.Sauvegarde;
 public class Player implements Serializable{
     public int score;
     public String pseudo;
-    public int munition;
     public int progression = 5;
     public int pointGagneParBalleEnJeu;
     public int[]listeScore = new int[5];
     public ArrayList<Integer> listeScoreEdit = new ArrayList<Integer>();
     public ArrayList<ArrayList<Obstacle>> liste = new ArrayList<ArrayList<Obstacle>>();
 
-    public Player(String s, int m) {
+    public Player(String s) {
         pseudo = s;
-        munition = m;
         score = 0;
         pointGagneParBalleEnJeu = 0;
     }
