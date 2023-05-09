@@ -96,6 +96,7 @@ public class View extends JFrame {
         pane.setLayout(null);
         pane.setBorder(BorderFactory.createTitledBorder("Bienvenue dans notre jeu"));
         pane.setBackground(Color.lightGray);
+        mute(pane, "ressources/SonsWav/Accueil.wav");
         add(pane);
 
         JButton jouer = new JButton("Jouer");
@@ -679,7 +680,7 @@ public class View extends JFrame {
             pane.add(info,BorderLayout.CENTER);
             info.add(supprimer);
             info.setBackground(Color.lightGray);
-
+            
             bis.add(pane);
             supprimer.setBounds(principal.getWidth() - 150, 0, 50, 50);
         }
@@ -702,6 +703,7 @@ public class View extends JFrame {
         principal.getVerticalScrollBar().setUnitIncrement(30);
         auxiliaire.add(principal);
         auxiliaire.setBackground(Color.lightGray);
+        mute(auxiliaire, "ressources/SonsWav/ChoixNiveau.wav");
         return auxiliaire;
     }
 
