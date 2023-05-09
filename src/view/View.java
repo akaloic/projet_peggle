@@ -59,7 +59,7 @@ public class View extends JFrame {
     public int MAX_MUNITION = 15;
 
     static Clip son;
-    static boolean sonMute = false;
+    public static boolean sonMute = false;
 
     public static int width;
     public static int height;
@@ -76,15 +76,10 @@ public class View extends JFrame {
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setUndecorated(true); // nécessaire sinon this.getHeight et this.getWidth renvoie 0
         this.setVisible(true);
-// <<<<<<< HEAD
-//         changerPanel(menuPrincipal());
-// =======
-        changerPanel(choixJoueur());
-// >>>>>>> develop
+        changerPanel(ecranTitre());
     }
-    public JPanel menuPrincipal() {
-        String urlDuSon = "ressources/SonsWav/Accueil.wav";
-        LancerMusic(urlDuSon);
+
+    public JPanel ecranTitre(){
         JPanel pane = new JPanel(){
             @Override
             public void paintComponent(Graphics g) {
@@ -103,18 +98,29 @@ public class View extends JFrame {
         pane.setBackground(Color.lightGray);
         add(pane);
 
+        JButton jouer = new JButton("Jouer");
+        jouer.setBackground(new Color(255, 51, 51));
+        jouer.setBounds(width/2 - width/10/2, height - height/5, width/10, height/10);
+        pane.add(jouer);
+        jouer.addActionListener(e -> {
+            changerPanel(choixJoueur());
+        });
+        pane.setBackground(Color.lightGray);
+        return pane;
+    }
+
+
+    public JPanel menuPrincipal() {
+        String urlDuSon = "ressources/SonsWav/Accueil.wav";
+        LancerMusic(urlDuSon);
+
+        
+        JPanel pane = new JPanel(null);
         JLabel nameLabel = new JLabel("Pseudo : ");
-// <<<<<<< HEAD
-//         nameLabel.setBounds(width / 2 - 60, height - height / 2, 100, 50);
-//         pane.add(nameLabel);
-//         JTextField nameField = new JTextField("Name");
-//         nameField.setBounds(width / 2, height - height / 2, 100, 50);
-// =======
         nameLabel.setBounds(width / 2 - 60, height - height / 3 * 2, width / 10, 30);
         pane.add(nameLabel);
         JTextField nameField = new JTextField(controleur.modele.getPlayer().getPseudo());
         nameField.setBounds(width / 2, height - height / 3 * 2, width / 10, 30);
-// >>>>>>> develop
         pane.add(nameField);
 
         JLabel titrePane = new JLabel("HIT THE PEGGLES");
@@ -150,12 +156,6 @@ public class View extends JFrame {
             controleur.modele.getPlayer().setPseudo(nameField.getText());
             changerPanel(choixEdit());
         });
-// <<<<<<< HEAD
-        // ratioX = (float) (width - width / 7 * 2) / 800;
-        // ratioY = (float) height / 600;
-        mute(pane, urlDuSon);
-// =======
-
         choixJoueur.addActionListener(e -> {
             son.stop();
             controleur.modele.getPlayer().setPseudo(nameField.getText());
@@ -163,7 +163,7 @@ public class View extends JFrame {
             changerPanel(choixJoueur());
         });
         resetRatio();
-// >>>>>>> develop
+        mute(pane, urlDuSon);
         return pane;
     }
 
@@ -283,23 +283,6 @@ public class View extends JFrame {
         fondDroite.setBackground(Color.white);
         fondDroite.setPreferredSize(new Dimension(getWidth() / 11, getHeight()));
 
-// <<<<<<< HEAD
-
-//         JPanel info=new JPanel();
-//         info.setBackground(Color.gray);
-//         info.setPreferredSize(new Dimension(info.getWidth(), info.getHeight()+100));
-
-//         scoreLabel.setText("Score : "+controleur.modele.getPlayer().score);
-//         scoreLabel.setFont(new Font("Serif",Font.PLAIN,20));
-
-//         JLabel pseudoLabel=new JLabel("Joueur : "+controleur.modele.player.pseudo);
-//         pseudoLabel.setFont(new Font("Serif",Font.PLAIN,20));
-
-
-//         info.add(pseudoLabel,BorderLayout.NORTH);
-//         info.add(scoreLabel,BorderLayout.SOUTH);
-//         fondDroite.add(info,BorderLayout.NORTH);
-// =======
         JPanel info = new JPanel() {
             @Override
             public void paint(Graphics g) {
@@ -326,7 +309,6 @@ public class View extends JFrame {
 
         fondDroite.add(info);
 
-// >>>>>>> develop
 
         fond.add(fondDroite, BorderLayout.EAST);
         // --------------DROITE---------------------
@@ -337,6 +319,7 @@ public class View extends JFrame {
 
         partie.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
+                LancerMusic("ressources/SonsWav/tir.wav");
                 controleur.tirer();
             }
         });
@@ -345,6 +328,7 @@ public class View extends JFrame {
 
 
     public JPanel choixNiveauPane(Controleur controleur) {
+// <<<<<<< HEAD
 // <<<<<<< HEAD
         controleur.modele.player.score = 0;
         String url = "ressources/SonsWav/ChoixNiveau.wav";
@@ -361,6 +345,13 @@ public class View extends JFrame {
                 }
             }
         };
+// =======
+//         // controleur.modele.player.score=0;
+//         String url = "ressources/SonsWav/ChoixNiveau.wav";
+//         LancerMusic(url);
+
+//         JPanel choixNiv = new JPanel();
+// >>>>>>> develop
 // =======
 //         // controleur.modele.player.score=0;
 //         String url = "ressources/SonsWav/ChoixNiveau.wav";
@@ -429,13 +420,19 @@ public class View extends JFrame {
             changerPanel(menuPrincipal());
         });
 // <<<<<<< HEAD
-//         afficheMiniature(1, choixNiv, height/2-200);
-//         afficheMiniature(2, choixNiv, height/2);
-        mute(choixNiv,url);
+// // <<<<<<< HEAD
+// //         afficheMiniature(1, choixNiv, height/2-200);
+// //         afficheMiniature(2, choixNiv, height/2);
+//         mute(choixNiv,url);
+// // =======
+//         afficheMiniature(1, choixNiv);
+//         //afficheMiniature(2, choixNiv, height / 2);
+
+// // >>>>>>> develop
 // =======
         afficheMiniature(1, choixNiv);
         //afficheMiniature(2, choixNiv, height / 2);
-
+        mute(choixNiv,url);
 // >>>>>>> develop
         return choixNiv;
     }
@@ -453,20 +450,12 @@ public class View extends JFrame {
         JButton acceuil = new JButton("Menu Principal");
         acceuil.setBackground(new Color(59, 89, 182));
         acceuil.addActionListener(
-// <<<<<<< HEAD
-//             (ActionEvent e) -> {
-//                 this.invalidate();
-//                 changerPanel(menuPrincipal());
-//             });
-//         acceuil.setBounds(0, 0, 100, 50);
-// =======
                 (ActionEvent e) -> {
                     this.invalidate();
                     controleur.modele.setPlayer(Sauvegarde.listeJoueurs.get(Sauvegarde.joueur));
                     changerPanel(menuPrincipal());
                 });
         acceuil.setBounds(0, 0, width/6, 50);
-// >>>>>>> develop
         choix.add(acceuil);
         ratioX = ratioX / 1;
         ratioY = ratioY / 1;
@@ -474,7 +463,6 @@ public class View extends JFrame {
         return choix;
     }
 
-// <<<<<<< HEAD
     public void nextLevel() {
         JPanel nextLvl = new JPanel();
         
@@ -491,8 +479,11 @@ public class View extends JFrame {
         });
         if(controleur.modele.getNiveau().listeEstVide() && nbMunition >= 0) { 
             winOrLose.setText("Vous avez gagné");
+            LancerMusic("ressources/SonsWav/win.wav");
+            controleur.modele.getPlayer().progression++;
             winOrLose.setFont(new Font("TimesRoman", Font.BOLD, 100));
             niveauSuiv_retry = new JButton("Niveau Suivant");
+            niveauSuiv_retry.setBackground(new Color(59, 89, 182));
             niveauSuiv_retry.addActionListener(e->{
                 int niv = controleur.modele.getNiveau().getNumNiveau() + 1;
                 fondEcran = new BufferedImage(20, 20, BufferedImage.TYPE_INT_RGB);
@@ -509,6 +500,7 @@ public class View extends JFrame {
             });
         }else {
             winOrLose.setText("Vous avez perdu");
+            LancerMusic("ressources/SonsWav/lose.wav");
             winOrLose.setFont(new Font("TimesRoman", Font.BOLD, 100));
             niveauSuiv_retry = new JButton("Réessayer");
             niveauSuiv_retry.addActionListener(e->{
@@ -526,17 +518,16 @@ public class View extends JFrame {
             });
         }
         winOrLose.setBounds(width/4,height/4, width,150);
+        winOrLose.setBackground(new Color(59, 89, 182));
         nextLvl.add(niveauSuiv_retry);
         niveauSuiv_retry.setBounds(acceuil.getX()+300, acceuil.getY(),150,150);
         nextLvl.add(winOrLose);
         nextLvl.add(acceuil);
+        Sauvegarde.save(controleur.modele.getPlayer());
         changerPanel(nextLvl);
     }
 
-//     public void afficheMiniature(int mode, JPanel pane, int hauteur) {
-// =======
     public void afficheMiniature(int mode, JPanel pane) {
-// >>>>>>> develop
         // 1 = Niveau imposé
         // 2 = Niveau créer soit même
         if (mode == 1) {
@@ -545,7 +536,7 @@ public class View extends JFrame {
             Sauvegarde.numNiveau = 0;
         }
         JPanel bis = new JPanel(null);
-        int borne = mode == 1 ? 5 : Math.max(Sauvegarde.listeJoueurs.get(Sauvegarde.joueur).liste.size(), 1);
+        int borne = mode == 1 ? controleur.modele.getPlayer().progression : Math.max(Sauvegarde.listeJoueurs.get(Sauvegarde.joueur).liste.size(), 1);
         bis.setBounds(width / 30, height/8, width, height / 6);
         for (int i = 0; i < borne; i++) {
             int k = i;
@@ -578,7 +569,7 @@ public class View extends JFrame {
                 edit.requestFocus();
                 miniature.add(edit);
             }
-            JButton bouton = new JButton("Jouer"){
+            JButton bouton = new JButton(){
                 @Override
                 protected void paintComponent(Graphics g) {
                     // TODO Auto-generated method stub
@@ -594,11 +585,18 @@ public class View extends JFrame {
                         dessineNiveau(g, Sauvegarde.charge(k));
                     }
                     if (mode == 1) {
-                        controleur.modele.setNiveau(new Niveau(k + 1));
-                        dessineNiveau(g, controleur.modele.getNiveau().getList());
+                        if(controleur.modele.getPlayer().progression >= k+1){
+                            controleur.modele.setNiveau(new Niveau(k + 1));
+                            dessineNiveau(g, controleur.modele.getNiveau().getList());
+                        }/*else{
+                            g.setFont(new Font("TimesRoman", Font.PLAIN, 80));
+                            g.drawString("Pas encore débloqué", getWidth()/2, getHeight()/2);
+                        }*/
                     }
                     if(Sauvegarde.numNiveau == -1){
-                        ((Graphics2D)g).drawString("Meilleur score : "+Sauvegarde.listeJoueurs.get(Sauvegarde.joueur).listeScore[k], 0, 30);
+                        if(controleur.modele.getPlayer().progression >= k+1){
+                            ((Graphics2D)g).drawString("Meilleur score : "+Sauvegarde.listeJoueurs.get(Sauvegarde.joueur).listeScore[k], 0, 30);
+                        }
                     }
                     else{
                         ((Graphics2D)g).drawString("Meilleur score : "+Sauvegarde.listeJoueurs.get(Sauvegarde.joueur).listeScoreEdit.get(k), 0, 30);
@@ -785,6 +783,7 @@ public class View extends JFrame {
         GeneralPath genPath = new GeneralPath();
         boolean premierRebond = false;
         while (!premierRebond) {
+            // LancerMusic("ressources/SonsWav/tir_canon.wav");
             fantome.update();
             double a = fantome.getX();
             double b = fantome.getY();
@@ -957,7 +956,7 @@ public class View extends JFrame {
 
     public void mute( JPanel panel, String url) {
         JButton btnMute = new JButton("Mute");
-        btnMute.setBounds(200,0,75,75);
+        btnMute.setBounds(width-75,0,75,75);
         panel.add(btnMute);
         btnMute.addActionListener(e->{
             if(son.isActive()) {
@@ -969,4 +968,5 @@ public class View extends JFrame {
             }
         });
     }
+
 }

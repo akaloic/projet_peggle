@@ -1,34 +1,26 @@
 package model;
 
-// <<<<<<< HEAD
 import java.security.cert.PolicyNode;
 
-// public class Player {
-//     public int score;
-//     public String pseudo;
-//     public int munition;
-
-// =======
 import java.io.Serializable;
 import java.util.ArrayList;
 import controller.Sauvegarde;
 public class Player implements Serializable{
-        public int pointGagneParBalleEnJeu;
     public int score;
     public String pseudo;
     public int munition;
+    public int progression = 1;
+    public int pointGagneParBalleEnJeu;
     public int[]listeScore = new int[5];
     public ArrayList<Integer> listeScoreEdit = new ArrayList<Integer>();
     public ArrayList<ArrayList<Obstacle>> liste = new ArrayList<ArrayList<Obstacle>>();
-// >>>>>>> develop
+
     public Player(String s, int m) {
         pseudo = s;
         munition = m;
         score = 0;
         pointGagneParBalleEnJeu = 0;
     }
-// <<<<<<< HEAD
-
     public void calculScore(boolean detruit, int facteur, boolean balleEnJeu) {
         pointGagneParBalleEnJeu += facteur;
         if(balleEnJeu) {

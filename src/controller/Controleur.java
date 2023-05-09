@@ -45,39 +45,20 @@ public class Controleur {
                     modele.getBalle().update();
                     // rebond
                     for (int i = 0; i < modele.niveau.list.size(); i++) {
-// <<<<<<< HEAD
-                        if (modele.niveau.list.get(i) instanceof Pegs) {
-                            modele.niveau.list.get(i).rebond(modele.getBalle());
-                            if (modele.niveau.list.get(i).collision(modele.getBalle())) {
-                            // if (modele.niveau.list.get(i).collision(modele.getBalle())) {
+                        // if (modele.niveau.list.get(i) instanceof Pegs) {
+                            if (modele.niveau.list.get(i).rebond(modele.getBalle())) {
                                 modele.niveau.list.get(i).perdDeLaVie(1);
                                 boolean detruit = modele.niveau.list.get(i).getEstMort();
-                                // boolean detruit = modele.niveau.detruit(i);
                                 if (detruit) {
                                     double x = modele.niveau.list.get(i).getX();
                                     double y = modele.niveau.list.get(i).getY();
                                     view.addExplosion(x, y);
                                     modele.niveau.list.remove(i);
                                 }
-                                modele.player.calculScore(detruit, facteur++, balleEnJeu);
+                                modele.player.calculScore(detruit, facteur++,balleEnJeu);
                                 view.setScore();
-// =======
-//                         modele.niveau.list.get(i).rebond(modele.getBalle());
-//                         if (modele.niveau.list.get(i).collision(modele.getBalle())) {
-//                             modele.niveau.list.get(i).perdDeLaVie(1);
-//                             boolean detruit = modele.niveau.list.get(i).getEstMort();
-//                             if (detruit) {
-//                                 double x = modele.niveau.list.get(i).getX();
-//                                 double y = modele.niveau.list.get(i).getY();
-//                                 view.addExplosion(x, y);
-//                                 modele.niveau.list.remove(i);
-// >>>>>>> develop
-//                             }
-//                             modele.player.calculScore(detruit, facteur++);
-//                             view.setScore();
                             }
-                            
-                        }
+                        // }
                     }
                     if (modele.getBalle().getX() - modele.getBalle().rayon / 2 <= 0
                             || modele.getBalle().getX() + modele.getBalle().rayon / 2 >= 800) {
@@ -117,9 +98,15 @@ public class Controleur {
                                 // s il n y a plus de pegs mais qu'il reste des munitions
                             } 
                         }
-                        view.nextLevel();
+                        if(Sauvegarde.numNiveau == -1){
+                            view.nextLevel();
+                        }
                     }
-
+                    if(view.nbMunition <= 0 && !balleEnJeu) {
+                        if(Sauvegarde.numNiveau == -1) {
+                            view.nextLevel();
+                        }
+                    }
                 }
             }
         });

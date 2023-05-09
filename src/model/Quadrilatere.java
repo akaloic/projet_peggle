@@ -23,6 +23,10 @@ public class Quadrilatere extends Obstacle {//peut etre un carré comme un recta
 
     @Override
     public boolean collision(Balle balle) {
+      coinHautGauche = new Point((int) x, (int) y);
+      coinHautDroit = new Point((int) ((x + largeur)), (int) y);
+      coinBasGauche = new Point((int) x, (int) (y + hauteur));
+      coinBasDroit = new Point((int) (x + largeur), (int) (y + hauteur));
     if ((balle.y >= this.y && balle.y <= (this.y + this.hauteur))
         && (((balle.x + balle.rayon) >= this.x && balle.x<= this.x) || ((balle.x - balle.rayon)<= (this.x + this.largeur) && balle.x>=(this.x + this.largeur) ))) {
       //System.out.println("Collision quadrilatere 1");
@@ -65,7 +69,7 @@ public class Quadrilatere extends Obstacle {//peut etre un carré comme un recta
     }
 
     @Override
-    public void rebond(Balle balle) {
+    public boolean rebond(Balle balle) {
         if (collision(balle)) {
             switch (this.typeCollision) {
                 case 1:
@@ -88,7 +92,9 @@ public class Quadrilatere extends Obstacle {//peut etre un carré comme un recta
                     coin(this.coinBasDroit,balle);
                   break;
               } 
+            return true;
         }
+      return false;
     }
 
     public void coin(Point point,Balle balle){
