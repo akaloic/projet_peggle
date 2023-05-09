@@ -405,82 +405,83 @@ public class Edit extends JPanel{
             public void keyPressed(KeyEvent e) {
               int keyCode = e.getKeyCode();
               view.repaint();
-              if (keyCode == KeyEvent.VK_Q) {
-                if(objetSelectionner != null && (peutBouger || objetSelectionner.decoration)){
-                    objetSelectionner.setLocation(objetSelectionner.getX()-10, objetSelectionner.getY());
-                    objetSelectionner.obstacle.setX(objetSelectionner.getX()/View.ratioX);
-                }else{
-                    objetSelectionner = plusProche(3);//Gauche
+              if(objetSelectionner != null){
+                if (keyCode == KeyEvent.VK_Q) {
+                    if(objetSelectionner != null && (peutBouger || objetSelectionner.decoration)){
+                        objetSelectionner.setLocation(objetSelectionner.getX()-10, objetSelectionner.getY());
+                        objetSelectionner.obstacle.setX(objetSelectionner.getX()/View.ratioX);
+                    }else{
+                        objetSelectionner = plusProche(3);//Gauche
+                    }
                 }
-              }
-              if (keyCode == KeyEvent.VK_D) {
-                if(objetSelectionner != null && (peutBouger || objetSelectionner.decoration)){
-                    objetSelectionner.setLocation(objetSelectionner.getX()+10, objetSelectionner.getY());
-                    objetSelectionner.obstacle.setX(objetSelectionner.getX()/View.ratioX);
-                }else{
-                    objetSelectionner = plusProche(1);//Droite
+                if (keyCode == KeyEvent.VK_D) {
+                    if(objetSelectionner != null && (peutBouger || objetSelectionner.decoration)){
+                        objetSelectionner.setLocation(objetSelectionner.getX()+10, objetSelectionner.getY());
+                        objetSelectionner.obstacle.setX(objetSelectionner.getX()/View.ratioX);
+                    }else{
+                        objetSelectionner = plusProche(1);//Droite
+                    }
                 }
-              }
-              if (keyCode == KeyEvent.VK_Z) {
-                if(objetSelectionner != null && (peutBouger || objetSelectionner.decoration)){
-                    objetSelectionner.setLocation(objetSelectionner.getX(), objetSelectionner.getY()-10);
-                    objetSelectionner.obstacle.setY(objetSelectionner.getY()/View.ratioY);
-                }else{
-                    objetSelectionner = plusProche(0);//Haut
+                if (keyCode == KeyEvent.VK_Z) {
+                    if(objetSelectionner != null && (peutBouger || objetSelectionner.decoration)){
+                        objetSelectionner.setLocation(objetSelectionner.getX(), objetSelectionner.getY()-10);
+                        objetSelectionner.obstacle.setY(objetSelectionner.getY()/View.ratioY);
+                    }else{
+                        objetSelectionner = plusProche(0);//Haut
+                    }
                 }
-              }
-              if (keyCode == KeyEvent.VK_S) {
-                if(objetSelectionner != null && (peutBouger || objetSelectionner.decoration)){
-                    objetSelectionner.setLocation(objetSelectionner.getX(), objetSelectionner.getY()+10);
-                    objetSelectionner.obstacle.setY(objetSelectionner.getY()/View.ratioY);
+                if (keyCode == KeyEvent.VK_S) {
+                    if(objetSelectionner != null && (peutBouger || objetSelectionner.decoration)){
+                        objetSelectionner.setLocation(objetSelectionner.getX(), objetSelectionner.getY()+10);
+                        objetSelectionner.obstacle.setY(objetSelectionner.getY()/View.ratioY);
+                    }
+                    else{
+                        objetSelectionner = plusProche(2);//Bas
+                    }
                 }
-                else{
-                    objetSelectionner = plusProche(2);//Bas
+                if (keyCode == KeyEvent.VK_ENTER) {
+                    if(objetSelectionner != null){
+                        peutBouger = !peutBouger;
+                    }
                 }
-              }
-              if (keyCode == KeyEvent.VK_ENTER) {
-                if(objetSelectionner != null){
-                    peutBouger = !peutBouger;
+                if (keyCode == KeyEvent.VK_W) {
+                    if(peutBouger){
+                        niveau.remove(objetSelectionner.obstacle);
+                        listPanel.remove(objetSelectionner);
+                        principal.remove(objetSelectionner);
+                        Obstacle o = pegRond.obstacle.clone(objetSelectionner.getX()/View.getRatioX(), objetSelectionner.getY()/View.getRatioY(), 20, pegRond.obstacle.getLargeur(),pegRond.obstacle.getHauteur());
+                        objetSelectionner = creeObstacle(o,(int)(objetSelectionner.obstacle.getX()*View.getRatioX()), (int)(objetSelectionner.obstacle.getY()*View.getRatioY()), 0, 0);
+                        objetSelectionner.deplacement = false;
+                    }else{
+                        Obstacle o = pegRond.obstacle.clone(objetSelectionner.getX()/View.getRatioX(), objetSelectionner.getY()/View.getRatioY(), 20, pegRond.obstacle.getLargeur(),pegRond.obstacle.getHauteur());
+                        objetSelectionner = creeObstacle(o, (int)(objetSelectionner.obstacle.getX()*View.getRatioX()), (int)(objetSelectionner.obstacle.getY()*View.getRatioY()), 0, 0);
+                        peutBouger = true;
+                    }
                 }
-              }
-              if (keyCode == KeyEvent.VK_W) {
-                if(peutBouger){
-                    niveau.remove(objetSelectionner.obstacle);
-                    listPanel.remove(objetSelectionner);
-                    principal.remove(objetSelectionner);
-                    Obstacle o = pegRond.obstacle.clone(objetSelectionner.getX()/View.getRatioX(), objetSelectionner.getY()/View.getRatioY(), 20, pegRond.obstacle.getLargeur(),pegRond.obstacle.getHauteur());
-                    objetSelectionner = creeObstacle(o,(int)(objetSelectionner.obstacle.getX()*View.getRatioX()), (int)(objetSelectionner.obstacle.getY()*View.getRatioY()), 0, 0);
-                    objetSelectionner.deplacement = false;
-                }else{
-                    Obstacle o = pegRond.obstacle.clone(objetSelectionner.getX()/View.getRatioX(), objetSelectionner.getY()/View.getRatioY(), 20, pegRond.obstacle.getLargeur(),pegRond.obstacle.getHauteur());
-                    objetSelectionner = creeObstacle(o, (int)(objetSelectionner.obstacle.getX()*View.getRatioX()), (int)(objetSelectionner.obstacle.getY()*View.getRatioY()), 0, 0);
-                    peutBouger = true;
+                if (keyCode == KeyEvent.VK_X) {
+                    if(peutBouger){
+                        niveau.remove(objetSelectionner.obstacle);
+                        listPanel.remove(objetSelectionner);
+                        principal.remove(objetSelectionner);
+                        Obstacle o = pegRect.obstacle.clone(objetSelectionner.getX()/View.ratioX, objetSelectionner.getY()/View.ratioY, 0,(int)(pegRect.obstacle.getLargeur()), (int)(pegRect.obstacle.getHauteur()));
+                        objetSelectionner = creeObstacle(o,(int)(objetSelectionner.obstacle.getX()*View.getRatioX()), (int)(objetSelectionner.obstacle.getY()*View.getRatioY()), 0, 0);
+                        objetSelectionner.deplacement = false;
+                    }else{
+                        Obstacle o = pegRect.obstacle.clone(objetSelectionner.getX()/View.ratioX, objetSelectionner.getY()/View.ratioY, 0,(int)(pegRect.obstacle.getLargeur()), (int)(pegRect.obstacle.getHauteur()));
+                        objetSelectionner = creeObstacle(o, (int)(objetSelectionner.obstacle.getX()*View.getRatioX()), (int)(objetSelectionner.obstacle.getY()*View.getRatioY()), 0, 0);
+                        peutBouger = true;
+                    }
                 }
-              }
-              if (keyCode == KeyEvent.VK_X) {
-                if(peutBouger){
-                    niveau.remove(objetSelectionner.obstacle);
-                    listPanel.remove(objetSelectionner);
-                    principal.remove(objetSelectionner);
-                    Obstacle o = pegRect.obstacle.clone(objetSelectionner.getX()/View.ratioX, objetSelectionner.getY()/View.ratioY, 0,(int)(pegRect.obstacle.getLargeur()), (int)(pegRect.obstacle.getHauteur()));
-                    objetSelectionner = creeObstacle(o,(int)(objetSelectionner.obstacle.getX()*View.getRatioX()), (int)(objetSelectionner.obstacle.getY()*View.getRatioY()), 0, 0);
-                    objetSelectionner.deplacement = false;
-                }else{
-                    Obstacle o = pegRect.obstacle.clone(objetSelectionner.getX()/View.ratioX, objetSelectionner.getY()/View.ratioY, 0,(int)(pegRect.obstacle.getLargeur()), (int)(pegRect.obstacle.getHauteur()));
-                    objetSelectionner = creeObstacle(o, (int)(objetSelectionner.obstacle.getX()*View.getRatioX()), (int)(objetSelectionner.obstacle.getY()*View.getRatioY()), 0, 0);
-                    peutBouger = true;
+                if (keyCode == KeyEvent.VK_N) {
+                    if(!listeSelection.contains(objetSelectionner)){
+                        listeSelection.add(objetSelectionner);
+                    }else{
+                        listeSelection.remove(objetSelectionner);   
+                    }
                 }
-              }
-              if (keyCode == KeyEvent.VK_N) {
-                if(!listeSelection.contains(objetSelectionner)){
-                    listeSelection.add(objetSelectionner);
-                }else{
-                    listeSelection.remove(objetSelectionner);   
-                }
-              }
             }
+        }
         });
-        objetSelectionner = new objetMobile(new Obstacle(0));
     }
 
     public boolean appartient(Component p){
@@ -680,16 +681,17 @@ public class Edit extends JPanel{
     }
 
     public void actualiseSlider(){
-
-        if(!objetSelectionner.obstacle.utiliseRayon()){
-            hauteur.setEnabled(!objetSelectionner.obstacle.utiliseRayon());
-            hauteur.setValue((int)objetSelectionner.obstacle.getHauteur());
-    
-            largeur.setEnabled(!objetSelectionner.obstacle.utiliseRayon());
-            largeur.setValue((int)objetSelectionner.obstacle.getLargeur());
-        }else{
-        rayon.setEnabled(objetSelectionner.obstacle.utiliseRayon());
-        rayon.setValue((int)(objetSelectionner.obstacle.getRayon()));            
+        if(objetSelectionner != null){
+            if(!objetSelectionner.obstacle.utiliseRayon()){
+                hauteur.setEnabled(!objetSelectionner.obstacle.utiliseRayon());
+                hauteur.setValue((int)objetSelectionner.obstacle.getHauteur());
+        
+                largeur.setEnabled(!objetSelectionner.obstacle.utiliseRayon());
+                largeur.setValue((int)objetSelectionner.obstacle.getLargeur());
+            }else{
+            rayon.setEnabled(objetSelectionner.obstacle.utiliseRayon());
+            rayon.setValue((int)(objetSelectionner.obstacle.getRayon()));            
+            }       
         }
     }
 
