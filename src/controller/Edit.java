@@ -346,6 +346,7 @@ public class Edit extends JPanel{
         //Peg qui servira à créer d'autre peg rond
         Pegs p= new Pegs(0, 0);
         p.setRayon((int)((20+20)/2));
+        p.image = null;
         objetMobile pegRond = new objetMobile(p){
             @Override
             public void paint(Graphics g) {

@@ -69,7 +69,7 @@ public class Pegs extends Obstacle{
     @Override
     public Pegs clone(double x, double y, int v, double largeur,double hauteur){
         Pegs p = new Pegs(x, y, v);
-        p.rayon=(int)((hauteur+largeur)/4);
+        p.image = null;
         return p;
     }
     public void setRayon(double i){

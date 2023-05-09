@@ -352,7 +352,7 @@ public class View extends JFrame {
         setVisible(true);
         resetRatio();
 
-        partie.addMouseListener(new MouseAdapter() {
+        fond.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 controleur.tirer();
             }
@@ -428,7 +428,6 @@ public class View extends JFrame {
             changerPanel(menuPrincipal());
         });
         afficheMiniature(1, choixNiv);
-        //afficheMiniature(2, choixNiv, height / 2);
         mute(choixNiv,url);
         return choixNiv;
     }
@@ -762,11 +761,6 @@ public class View extends JFrame {
         int widthBase = 150;
         int heightBase = 150;
 
-        // Pour la ligne multicolore
-        Path2D.Double ligne2 = new Path2D.Double();
-        ligne2.moveTo(partie.getWidth() / 2, 0);
-        ligne2.lineTo(mouseX - munition.getWidth(), mouseY);
-
         Arc2D.Double arc2 = new Arc2D.Double(partie.getWidth() / 2 - widthBase / 2, -heightBase / 2, widthBase,
                 heightBase, 180, 180, Arc2D.OPEN);
 
@@ -779,8 +773,8 @@ public class View extends JFrame {
         }
 
         double theta = Math.toRadians(90-angle);
-        xBoutCanon = (partie.getWidth() / 2) - (5 * heightBase / 8) * Math.sin(theta)- 12.5 /* Width balle */;
-        yBoutCanon = (5 * heightBase / 8) * Math.cos(theta) -12.5 /* Height balle */;
+        xBoutCanon = (partie.getWidth() / 2) - (5 * heightBase / 8) * Math.sin(theta)- 8 /* Width balle */;
+        yBoutCanon = (5 * heightBase / 8) * Math.cos(theta) -8 /* Height balle */;
         // Pour calculer nouvelles coordonnées de la balle après rotaion
         Balle fantome = new Balle(xBoutCanon/View.ratioX, yBoutCanon/View.ratioY, 300d, 180 - this.angle);
         GeneralPath genPath = new GeneralPath();
@@ -798,8 +792,8 @@ public class View extends JFrame {
             if (fantome.getY() > height) {
                 premierRebond = true;
             }
-            genPath.moveTo((a+12.5)*ratioX, (b+12.5)*ratioY);
-            genPath.lineTo((a+12.5)*ratioX, (b+12.5)*ratioY);
+            genPath.moveTo((a+8)*ratioX, (b+8)*ratioY);
+            genPath.lineTo((a+8)*ratioX, (b+8)*ratioY);
         }
         for (int i = 0; i < 10; i++) {
             fantome.update();
@@ -808,8 +802,8 @@ public class View extends JFrame {
             for (Obstacle o : controleur.modele.getNiveau().list) {
                 o.rebond(fantome);
             }
-            genPath.moveTo((a+12.5)*ratioX, (b+12.5)*ratioY);
-            genPath.lineTo((a+12.5)*ratioX, (b+12.5)*ratioY);
+            genPath.moveTo((a+8)*ratioX, (b+8)*ratioY);
+            genPath.lineTo((a+8)*ratioX, (b+8)*ratioY);
         }
 
         g2d.setStroke(new BasicStroke(5));
@@ -830,12 +824,9 @@ public class View extends JFrame {
             e.printStackTrace();
         }
 
-        //Rectangle rect2 = (new Rectangle(partie.getWidth() / 2 - widthBase / 10, heightBase / 3, widthBase / 5,heightBase / 2));
-
         g2d.rotate(Math.toRadians(90 - angle), partie.getWidth() / 2, 0);
         g2d.setClip(null);
         g2d.drawImage(img, partie.getWidth() / 2 - 85, -55, 170, 170, partie);
-        // g2d.draw(rect2);
         g2d.rotate(Math.toRadians(angle - 90), partie.getWidth() / 2, 0);
         // On annule la rotation après avoir dessiner le rectangle pour que seule le
         // bout du partie rotate
