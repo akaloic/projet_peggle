@@ -574,7 +574,7 @@ public class Edit extends JPanel{
 
     }
 
-    void drawString(Graphics g, String text, int x, int y) {
+    public static void drawString(Graphics g, String text, int x, int y) {
         int lineHeight = g.getFontMetrics().getHeight();
         for (String line : text.split("\n"))
             g.drawString(line, x, y += lineHeight);

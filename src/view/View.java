@@ -31,6 +31,7 @@ public class View extends JFrame {
     public JPanel fondGauche = new JPanel();
     public JPanel fondDroite = new JPanel();
     public JPanel partie = new JPanel();
+    public JProgressBar jauge;
 
     public JButton resetBalle;
     public static boolean enJeu = true;
@@ -314,7 +315,7 @@ public class View extends JFrame {
         fondDroite.add(info);*/
 
         
-        JProgressBar jauge = new JProgressBar(SwingConstants.VERTICAL,0,200){
+        jauge = new JProgressBar(SwingConstants.VERTICAL,0,200){
             @Override
             protected void paintComponent(Graphics g) {
                 // TODO Auto-generated method stub
@@ -342,8 +343,7 @@ public class View extends JFrame {
         info.add(pseudoLabel,BorderLayout.NORTH);
         info.add(scoreLabel,BorderLayout.SOUTH);
         fondDroite.add(info,BorderLayout.NORTH);
-        //fondDroite.add(jauge);
-         
+        fondDroite.add(jauge);
 
         fond.add(fondDroite, BorderLayout.EAST);
         // --------------DROITE---------------------
@@ -878,6 +878,27 @@ public class View extends JFrame {
         if (this.controleur.modele.balle != null) {
             this.controleur.modele.balle.dessine(g2d);
         }
+    }
+
+    public void changeFondDroite(){
+        fondDroite.remove(jauge);
+        JPanel finNiveau = new JPanel(null){
+            @Override
+            protected void paintComponent(Graphics g) {
+                // TODO Auto-generated method stub
+                super.paintComponent(g);
+                g.setFont(new Font("TimesRoman", Font.BOLD, width/105));
+                Edit.drawString(g, "Vous avez atteint\nle nombre de point\nminimum pour\nvalider le niveau !\n\n"+
+                                    "Vous pouvez\naccéder au menu\nde fin de partie\nou essayer de\ngagner le plus\nde point possible.", 2, 5);
+            }
+        };
+        JButton endScreen = new JButton("Fin de partie");
+        endScreen.setBounds(0, height/3,width/11,height/6);
+        endScreen.addActionListener(e->{
+            nextLevel();
+        });
+        finNiveau.add(endScreen);
+        fondDroite.add(finNiveau);
     }
 
     public JPanel getPartie() {
