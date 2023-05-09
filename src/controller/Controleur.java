@@ -47,6 +47,7 @@ public class Controleur {
                     for (int i = 0; i < modele.niveau.list.size(); i++) {
                         // if (modele.niveau.list.get(i) instanceof Pegs) {
                             if (modele.niveau.list.get(i).rebond(modele.getBalle())) {
+                                view.bruitage("ressources/SonsWav/rebond.wav");
                                 modele.niveau.list.get(i).perdDeLaVie(1);
                                 boolean detruit = modele.niveau.list.get(i).getEstMort();
                                 if (detruit) {
@@ -63,6 +64,7 @@ public class Controleur {
                     if (modele.getBalle().getX() - modele.getBalle().rayon / 2 <= 0
                             || modele.getBalle().getX() + modele.getBalle().rayon / 2 >= 800) {
                         modele.balle.rebondMur();
+                        view.bruitage("ressources/SonsWav/rebond.wav");
                     }
 
                     // munition

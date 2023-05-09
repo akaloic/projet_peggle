@@ -80,6 +80,7 @@ public class View extends JFrame {
     }
 
     public JPanel ecranTitre(){
+        LancerMusic("ressources/SonsWav/Accueil.wav");
         JPanel pane = new JPanel(){
             @Override
             public void paintComponent(Graphics g) {
@@ -103,6 +104,7 @@ public class View extends JFrame {
         jouer.setBounds(width/2 - width/10/2, height - height/5, width/10, height/10);
         pane.add(jouer);
         jouer.addActionListener(e -> {
+            son.stop();
             changerPanel(choixJoueur());
         });
         pane.setBackground(Color.lightGray);
@@ -111,7 +113,7 @@ public class View extends JFrame {
 
 
     public JPanel menuPrincipal() {
-        String urlDuSon = "ressources/SonsWav/Accueil.wav";
+        String urlDuSon = "ressources/SonsWav/page3.wav";
         LancerMusic(urlDuSon);
 
         
@@ -287,9 +289,8 @@ public class View extends JFrame {
             @Override
             public void paint(Graphics g) {
                 super.paintComponent(g);
-
                 if ((getHeight() - 20) - controleur.modele.player.score < 0) {
-                    // FIN DE PARTIE A FAIRE PAR MATTHEW
+                    
                 } else {
                     Graphics2D g2d = (Graphics2D) g;
                     setColorX();
@@ -302,7 +303,7 @@ public class View extends JFrame {
                             true);
                     g2d.setPaint(gp);
                     g2d.fillRect(10, (getHeight() - 20) - controleur.modele.player.score, getWidth() - 20,
-                            getHeight() - 20);
+                            getHeight()/controleur.modele.player.score);
                 }
             }
         };
@@ -319,7 +320,7 @@ public class View extends JFrame {
 
         partie.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                LancerMusic("ressources/SonsWav/tir.wav");
+                bruitage("ressources/SonsWav/tir.wav");
                 controleur.tirer();
             }
         });
@@ -331,7 +332,7 @@ public class View extends JFrame {
 // <<<<<<< HEAD
 // <<<<<<< HEAD
         controleur.modele.player.score = 0;
-        String url = "ressources/SonsWav/ChoixNiveau.wav";
+        String url = "ressources/SonsWav/page4.wav";
         LancerMusic(url);
         JPanel choixNiv = new JPanel(){
             @Override
@@ -659,6 +660,7 @@ public class View extends JFrame {
     }
 
     public Container choixJoueur(){
+        LancerMusic("ressources/SonsWav/ChoixNiveau.wav");
         JPanel auxiliaire = new JPanel(null);
         JPanel bis = new JPanel(new GridLayout(Sauvegarde.listeJoueurs.size()+1,1));
         JScrollPane principal = new JScrollPane(bis, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
@@ -687,6 +689,7 @@ public class View extends JFrame {
                 (ActionEvent e) -> {
                     Sauvegarde.joueur = k;
                     controleur.modele.setPlayer(Sauvegarde.listeJoueurs.get(Sauvegarde.joueur));
+                    son.stop();
                     changerPanel(menuPrincipal());
             });
 
@@ -915,6 +918,28 @@ public class View extends JFrame {
                     son.open(audio);
                     son.start();
                     son.loop(Clip.LOOP_CONTINUOUSLY);
+                } else {
+                    System.out.println("fichier introuvable");
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public static void bruitage(String url) {
+        if(!sonMute) {
+            try {
+
+                File ficSon = new File(url);
+
+                if (ficSon.exists()) {
+                    AudioInputStream audio = AudioSystem.getAudioInputStream(ficSon);
+                    son = AudioSystem.getClip();
+                    son.open(audio);
+                    son.start();
+
                 } else {
                     System.out.println("fichier introuvable");
                 }

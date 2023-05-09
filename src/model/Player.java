@@ -41,12 +41,6 @@ public class Player implements Serializable{
         if(pointGagneParBalleEnJeu > 5) {
             pointGagneParBalleEnJeu -= 5;
         }
-// =======
-//     public void calculScore(boolean detruit, int facteur) {
-//         score += facteur;
-//         if (detruit)
-//             score += 5;
-// >>>>>>> develop
     }
     public String getPseudo(){
         return this.pseudo;
