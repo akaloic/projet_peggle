@@ -3,6 +3,7 @@ package view;
 import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
@@ -15,12 +16,16 @@ public class Explosion extends JPanel {
     public int radius;
     public double maxRadius = 60.0;
     public boolean active;
+    public int point;
+    public View view;
 
-    public Explosion(double x, double y) {
+    public Explosion(double x, double y,int point,View view) {
         this.x = x;
         this.y = y;
         this.radius = 0;
         this.active = true;
+        this.point = point;
+        this.view = view;
         int size = (int) (maxRadius * 2);
 
         setBounds((int) x, (int) y, 40, 40);
@@ -42,8 +47,11 @@ public class Explosion extends JPanel {
             g2d.dispose();
             if (getWidth() / 2 - radius <= 0) {
                 active = false;
+                view.getPartie().remove(this);
             }
             radius += 4;
+            g.setFont(new Font("TimesRoman", Font.ROMAN_BASELINE, 12));
+            g.drawString("+"+point, 20, 10);
         }
     }
 }

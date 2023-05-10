@@ -49,6 +49,10 @@ public class Sauvegarde {
       if (p != null) {
          listeJoueurs.set(joueur, p);
       }
+      if(p != null && p.liste.size() == 0){
+         ArrayList<Obstacle> a = new ArrayList<>();
+         p.liste.add(a);
+      }
       try {
          FileOutputStream fileOut = new FileOutputStream("save.ser");
          ObjectOutputStream out = new ObjectOutputStream(fileOut);

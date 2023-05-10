@@ -3,7 +3,7 @@ package model;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import view.Image;
-public class Obstacle extends Objet{
+public abstract class Obstacle extends Objet{
 
     protected boolean estMort; 
     protected int vie;
@@ -18,6 +18,7 @@ public class Obstacle extends Objet{
 
     public void perdDeLaVie(int degats) {
         this.vie -= degats;
+        // System.out.println(" degats = "+ degats);
         switch(this.vie){
             default: this.estMort=true;break;
             case 1: this.image=Image.pegRondRouge;break;
@@ -25,11 +26,9 @@ public class Obstacle extends Objet{
             case 3: this.image=Image.pegRondBleu;break;
         }
     }
-    public boolean collision(Balle balle) {
-        return false;
-    }
+    public abstract boolean collision(Balle balle);
 
-    public boolean rebond(Balle balle) {return false;}
+    public abstract boolean rebond(Balle balle);
 
     // ---------GETTER GETTER---------
     public boolean isDead() {
@@ -42,9 +41,7 @@ public class Obstacle extends Objet{
         this.rayon = i;
     }
 
-    public Obstacle clone(double x, double y, int v, double largeur,double hauteur){
-        return new Obstacle(0);
-    }
+    public abstract Obstacle clone(double x, double y, int v, double largeur,double hauteur);
 
     public Obstacle(int v) {
         super();
@@ -82,12 +79,9 @@ public class Obstacle extends Objet{
         this.estMort = mort;
     }
 
-    public void dessine(Graphics g) {
-    }
-
-    public boolean utiliseRayon(){
-        return false;
-    }
+    public abstract void dessine(Graphics g);
+    
+    public abstract boolean utiliseRayon();
     // ---------GETTER SETTER---------
 
 }

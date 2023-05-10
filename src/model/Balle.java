@@ -39,7 +39,6 @@ public class Balle {
   }
   
   public void rebondMur() {
-    // view.View.LancerMusic("ressources/SonsWav/rebond.wav");
     vX = vX * -1;
   }
   public void dessine(Graphics g){

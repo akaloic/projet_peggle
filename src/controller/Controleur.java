@@ -3,8 +3,6 @@ package controller;
 import view.*;
 import javax.swing.*;
 import model.*;
-
-import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -45,55 +43,69 @@ public class Controleur {
                     modele.getBalle().update();
                     // rebond
                     for (int i = 0; i < modele.niveau.list.size(); i++) {
-                        // if (modele.niveau.list.get(i) instanceof Pegs) {
-                            if (modele.niveau.list.get(i).rebond(modele.getBalle())) {
+// <<<<<<< HEAD
+//                         // if (modele.niveau.list.get(i) instanceof Pegs) {
+//                             if (modele.niveau.list.get(i).rebond(modele.getBalle())) {
+//                                 view.bruitage("ressources/SonsWav/rebond.wav");
+//                                 modele.niveau.list.get(i).perdDeLaVie(1);
+//                                 boolean detruit = modele.niveau.list.get(i).getEstMort();
+//                                 if (detruit) {
+//                                     double x = modele.niveau.list.get(i).getX();
+//                                     double y = modele.niveau.list.get(i).getY();
+//                                     view.addExplosion(x, y);
+//                                     modele.niveau.list.remove(i);
+//                                 }
+//                                 modele.player.calculScore(detruit, facteur++,balleEnJeu);
+//                                 view.setScore();
+//                             }
+//                         // }
+// =======
+                        if(!modele.niveau.list.get(i).getEstMort()){
+                            if (modele.niveau.list.get(i).rebond(modele.getBalle()) && modele.niveau.list.get(i) instanceof Pegs) {
                                 view.bruitage("ressources/SonsWav/rebond.wav");
                                 modele.niveau.list.get(i).perdDeLaVie(1);
+                                modele.getNiveau().vieActuelTotale++;
                                 boolean detruit = modele.niveau.list.get(i).getEstMort();
+                                int point = modele.player.calculScore(detruit, facteur++,balleEnJeu);
                                 if (detruit) {
                                     double x = modele.niveau.list.get(i).getX();
                                     double y = modele.niveau.list.get(i).getY();
-                                    view.addExplosion(x, y);
+                                    view.addExplosion(x, y,point);
                                     modele.niveau.list.remove(i);
                                 }
-                                modele.player.calculScore(detruit, facteur++,balleEnJeu);
                                 view.setScore();
                             }
-                        // }
+                        }                        
                     }
                     if (modele.getBalle().getX() - modele.getBalle().rayon / 2 <= 0
                             || modele.getBalle().getX() + modele.getBalle().rayon / 2 >= 800) {
                         modele.balle.rebondMur();
                         view.bruitage("ressources/SonsWav/rebond.wav");
                     }
-
                     // munition
                     if (View.enJeu) {
-                        int xPuit = (int) (view.puit.getX() * View.ratioX);
-                        int yPuit = (int) (view.puit.getY() * View.ratioY);
-                        int widthRatio = (int) (view.puit.getWidth() * View.ratioX);
-                        int heightRatio = (int) (view.puit.getHeight() * View.ratioY);
-                        int xBalle = (int) (modele.getBalle().getX() * View.ratioX);
-                        int yBalle = (int) (modele.getBalle().getY() * View.ratioY);
-
-                        if (xBalle >= xPuit && xBalle <= xPuit + widthRatio
-                                && yBalle >= yPuit
-                                && yBalle <= yPuit + heightRatio) {
+                        view.repaint();
+                        view.munition.removeAll();
+                        view.afficheMunition();
+                        view.munition.revalidate();
+                        if ( modele.getBalle().getX() * View.ratioY>= view.puit.getX() && modele.getBalle().getX() * View.ratioX <= view.puit.getX() + view.puit.getWidth()
+                                && modele.getBalle().getY() * View.ratioY >= view.puit.getY()
+                                && modele.getBalle().getY() * View.ratioY <= view.puit.getY() + view.puit.getHeight()) {
                             if (balleEnJeu) {
                                 // view.addExplosion(modele.balle.x, modele.balle.x);
                                 // view.addExplosion(xBalle, yBalle); //marche pas
+                                modele.setBalle(null);
                                 view.nbMunition++;
                                 balleHorsJeu();
                             }
                         }
+                        if (modele.getBalle()!= null && modele.getBalle().getY() > view.getPartie().getHeight()) {
+                            modele.setBalle(null);
+                            balleHorsJeu();
+                        }
                     }
 
-                    if (modele.getBalle().getY() > view.getPartie().getHeight()) {
-                        modele.setBalle(null);
-                        balleHorsJeu();
-                    }
-
-                    if(modele.niveau.listeEstVide() && !balleEnJeu) {
+                    if(modele.niveau.NoMorePeg() && !balleEnJeu) {
                         if(view.nbMunition > 0) {
                             for(int i = 0 ; i < view.nbMunition ; i++) {
                                 modele.getPlayer().score += 400; 

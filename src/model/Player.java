@@ -8,20 +8,18 @@ import controller.Sauvegarde;
 public class Player implements Serializable{
     public int score;
     public String pseudo;
-    public int munition;
-    public int progression = 1;
+    public int progression = 5;
     public int pointGagneParBalleEnJeu;
     public int[]listeScore = new int[5];
     public ArrayList<Integer> listeScoreEdit = new ArrayList<Integer>();
     public ArrayList<ArrayList<Obstacle>> liste = new ArrayList<ArrayList<Obstacle>>();
 
-    public Player(String s, int m) {
+    public Player(String s) {
         pseudo = s;
-        munition = m;
         score = 0;
         pointGagneParBalleEnJeu = 0;
     }
-    public void calculScore(boolean detruit, int facteur, boolean balleEnJeu) {
+    public int calculScore(boolean detruit, int facteur, boolean balleEnJeu) {
         pointGagneParBalleEnJeu += facteur;
         if(balleEnJeu) {
             if (detruit){
@@ -41,6 +39,7 @@ public class Player implements Serializable{
         if(pointGagneParBalleEnJeu > 5) {
             pointGagneParBalleEnJeu -= 5;
         }
+        return pointGagneParBalleEnJeu;
     }
     public String getPseudo(){
         return this.pseudo;
