@@ -50,13 +50,5 @@ public abstract class Objet implements Serializable{
     this.angle = angle;
   }
 
-  public void setLargeur(double l){
-    this.largeur = l;
-  }
-
-  public void setHauteur(double h){
-    this.hauteur = h;
-  }
-
   // ---------GETTER SETTER---------
 }

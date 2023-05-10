@@ -1,33 +1,28 @@
 package model;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
-import view.Image;
+
 import view.View;
+
 public class Balle {
 
-  public double x;
-  public double vY;
-  public double y;
-  public double vX;
-  public double v0;
-  public final double diametre = 16;
-  public final double rayon = diametre/2;
-  public final double g = 800;
-  public BufferedImage image;
+  protected double x;
+  protected double vY;
+  protected double y;
+  protected double vX;
+  protected double v0;
+  protected final double rayon = 50;
+  protected final double g = 400;
 
   public Balle(double x0, double y0, double v0, double angle) {
     this.x = x0;
     this.y = y0;
     this.vX = Math.cos(Math.toRadians(angle)) * v0;
     this.vY = Math.sin(Math.toRadians(angle)) * v0;
-    this.image=Image.boulet;
   }
 
   public void update() {
-    x = x + 0.01 * vX;
-    y = y + 0.01 * vY;
-    vY = vY + 0.01 * g;
+    x = x + 0.03 * vX;
+    y = y + 0.03 * vY;
+    this.vY = vY + 0.03 * g;
   }
 
   public double getX() {
@@ -37,19 +32,24 @@ public class Balle {
   public double getY() {
     return y;
   }
-  
-  public void rebondMur() {
-    vX = vX * -1;
+
+  public double getRayon() {
+    return this.rayon;
   }
-  public void dessine(Graphics g){
-    int gx=(int)(this.x*View.ratioX);
-    int gy=(int)(this.y*View.ratioY);
-    int gw=(int)(this.diametre*View.ratioX);
-    int gh=(int)(this.diametre*View.ratioY);
-    if(image == null){
-        g.fillOval(gx,gy,gw,gh);
+
+  public boolean collision(Obstacle o) {
+    return ((o.getRayon() + this.rayon) / 2) >= Math.sqrt((this.x - o.getX()*View.ratioX) * (this.x - o.getX()*View.ratioX) + (this.y - o.getY()*View.ratioY) * (this.y - o.getY()*View.ratioY));
+  }
+
+  public void rebond(Obstacle o) {
+    if (collision(o)) {
+      double n = this.vX; // Variable auxiliaire pour garder vX avant qu'on modifie sa valeur
+      this.vX = this.vX - (2 * (this.vX * (this.x - o.getX()*View.ratioX) + this.vY * ((this.y - o.getY()*View.ratioY)))
+          / ((this.x - o.getX()*View.ratioX) * (this.x - o.getX()*View.ratioX) + (this.y - o.getY()*View.ratioY) * (this.y - o.getY()*View.ratioY)))
+          * (this.x - o.getX()*View.ratioX);
+      this.vY = this.vY - (2 * (n * (this.x - o.getX()*View.ratioX) + this.vY * ((this.y - o.getY()*View.ratioY)))
+          / ((this.x - o.getX()*View.ratioX) * (this.x - o.getX()*View.ratioX) + (this.y - o.getY()*View.ratioY) * (this.y - o.getY()*View.ratioY)))
+          * (this.y - o.getY()*View.ratioY);
     }
-    Graphics2D g2d = (Graphics2D)g;
-    g2d.drawImage(this.image,gx, gy,gw,gh,null);
   }
 }

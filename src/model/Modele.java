@@ -10,8 +10,8 @@ public class Modele {
     public Modele() {
         balle = null;
         obstacles = new Obstacle[0];
-        player = new Player("Joueur");
-        // niveau initié dans la view
+        niveau = new Niveau(1);
+        player = new Player(10, "Paul");
     }
 
     // ---------GETTER SETTER---------
@@ -38,12 +38,13 @@ public class Modele {
     public void setObstacles(Obstacle[] obstacles) {
         this.obstacles = obstacles;
     }
+
     public Player getPlayer(){
         return player;
     }
 
     public void setPlayer(Player p){
-        this.player=p;
+        player=p;
     }
 
     // ---------GETTER SETTER---------
