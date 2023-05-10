@@ -322,7 +322,7 @@ public class View extends JFrame {
                 // TODO Auto-generated method stub
                 super.paintComponent(g);
                 if(controleur.modele.balle != null){
-                    super.setValue(controleur.modele.getNiveau().vieActuelTotale*100/controleur.modele.getNiveau().nbVieTotal);
+                    super.setValue(controleur.modele.getNiveau().vieActuelTotale*100/controleur.modele.getNiveau().nbVieTotal*2);
                 }else{
                     super.setValue(0);
                 }
@@ -543,7 +543,7 @@ public class View extends JFrame {
             Sauvegarde.numNiveau = 0;
         }
         JPanel bis = new JPanel(null);
-        int borne = mode == 1 ? controleur.modele.getPlayer().progression : Math.max(Sauvegarde.listeJoueurs.get(Sauvegarde.joueur).liste.size(), 1);
+        int borne = mode == 1 ? controleur.modele.getPlayer().progression-1 : Math.max(Sauvegarde.listeJoueurs.get(Sauvegarde.joueur).liste.size(), 1);
         bis.setBounds(width / 30, height/8, width, height / 6);
         for (int i = 0; i < borne; i++) {
             int k = i;
@@ -895,27 +895,6 @@ public class View extends JFrame {
         if (this.controleur.modele.balle != null) {
             this.controleur.modele.balle.dessine(g2d);
         }
-    }
-
-    public void changeFondDroite(){
-        fondDroite.remove(jauge);
-        JPanel finNiveau = new JPanel(null){
-            @Override
-            protected void paintComponent(Graphics g) {
-                // TODO Auto-generated method stub
-                super.paintComponent(g);
-                g.setFont(new Font("TimesRoman", Font.BOLD, width/105));
-                Edit.drawString(g, "Vous avez atteint\nle nombre de point\nminimum pour\nvalider le niveau !\n\n"+
-                                    "Vous pouvez\naccéder au menu\nde fin de partie\nou essayer de\ngagner le plus\nde point possible.", 2, 5);
-            }
-        };
-        JButton endScreen = new JButton("Fin de partie");
-        endScreen.setBounds(0, height/3,width/11,height/6);
-        endScreen.addActionListener(e->{
-            nextLevel();
-        });
-        finNiveau.add(endScreen);
-        fondDroite.add(finNiveau);
     }
 
     public JPanel getPartie() {

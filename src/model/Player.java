@@ -1,7 +1,5 @@
 package model;
 
-import java.security.cert.PolicyNode;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import controller.Sauvegarde;
