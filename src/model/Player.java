@@ -51,6 +51,9 @@ public class Player implements Serializable{
                 listeScore[i] = score;
             } 
         }else{
+            if(listeScoreEdit.size() < Sauvegarde.numNiveau){
+                listeScoreEdit.add(0);
+            }
             if( score > listeScoreEdit.get(Sauvegarde.numNiveau)){
                 listeScoreEdit.set(Sauvegarde.numNiveau, score);
             } 

@@ -321,11 +321,7 @@ public class View extends JFrame {
             protected void paintComponent(Graphics g) {
                 // TODO Auto-generated method stub
                 super.paintComponent(g);
-                if(controleur.modele.balle != null){
-                    super.setValue(controleur.modele.getNiveau().vieActuelTotale*100/controleur.modele.getNiveau().nbVieTotal*2);
-                }else{
-                    super.setValue(0);
-                }
+                super.setValue(controleur.modele.getNiveau().vieActuelTotale*100/controleur.modele.getNiveau().nbVieTotal*2);
             }
         };
         jauge.setPreferredSize(new Dimension(fondDroite.getWidth(),fondDroite.getHeight()));
@@ -543,7 +539,7 @@ public class View extends JFrame {
             Sauvegarde.numNiveau = 0;
         }
         JPanel bis = new JPanel(null);
-        int borne = mode == 1 ? controleur.modele.getPlayer().progression-1 : Math.max(Sauvegarde.listeJoueurs.get(Sauvegarde.joueur).liste.size(), 1);
+        int borne = mode == 1 ? controleur.modele.getPlayer().progression : Math.max(Sauvegarde.listeJoueurs.get(Sauvegarde.joueur).liste.size(), 1);
         bis.setBounds(width / 30, height/8, width, height / 6);
         for (int i = 0; i < borne; i++) {
             int k = i;
@@ -598,7 +594,7 @@ public class View extends JFrame {
                         }
                     }
                     if(Sauvegarde.numNiveau == -1){
-                        if(controleur.modele.getPlayer().progression >= k+1){
+                        if(controleur.modele.getPlayer().progression >= k){
                             ((Graphics2D)g).drawString("Meilleur score : "+Sauvegarde.listeJoueurs.get(Sauvegarde.joueur).listeScore[k], 0, 30);
                         }
                     }
@@ -687,7 +683,7 @@ public class View extends JFrame {
                     g.setFont(new Font("TimesRoman", Font.PLAIN, 30));
                     ((Graphics2D)g).drawString("Pseudo : "+Sauvegarde.listeJoueurs.get(k).pseudo, getWidth()/4, getHeight()/4);
                     ((Graphics2D)g).drawString("Nombre de niveau: "+Sauvegarde.listeJoueurs.get(k).liste.size(), getWidth()/4, getHeight()/4*2);
-                    ((Graphics2D)g).drawString("Progressions: Niveau 5", getWidth()/4, getHeight()/4*3);
+                    ((Graphics2D)g).drawString("Progressions: Niveau "+Sauvegarde.listeJoueurs.get(k).progression, getWidth()/4, getHeight()/4*3);
                 }     
             };
 

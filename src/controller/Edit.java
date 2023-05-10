@@ -200,26 +200,32 @@ public class Edit extends JPanel{
         xPlus.addActionListener(
             (ActionEvent e) -> {
                 objetSelectionner.setLocation(objetSelectionner.getX()+1, objetSelectionner.getY());
+                objetSelectionner.obstacle.setX(objetSelectionner.getX()/View.ratioX);
         });
         xMoins.addActionListener(
             (ActionEvent e) -> {
                 objetSelectionner.setLocation(objetSelectionner.getX()-1, objetSelectionner.getY());
+                objetSelectionner.obstacle.setX(objetSelectionner.getX()/View.ratioX);
         });
         yPlus.addActionListener(
             (ActionEvent e) -> {
                 objetSelectionner.setLocation(objetSelectionner.getX(), objetSelectionner.getY()+1);
+                objetSelectionner.obstacle.setY(objetSelectionner.getY()/View.ratioY);
         });
         yMoins.addActionListener(
             (ActionEvent e) -> {
                 objetSelectionner.setLocation(objetSelectionner.getX(), objetSelectionner.getY()-1);
+                objetSelectionner.obstacle.setY(objetSelectionner.getY()/View.ratioY);
         });
         xSaisie.addActionListener(
             (ActionEvent e) -> {
                 objetSelectionner.setLocation(Integer.parseInt(xSaisie.getText()), objetSelectionner.getY());
+                objetSelectionner.obstacle.setX(objetSelectionner.getX()/View.ratioX);
         });
         ySaisie.addActionListener(
             (ActionEvent e) -> {
                 objetSelectionner.setLocation(objetSelectionner.getX(), Integer.parseInt(ySaisie.getText()));
+                objetSelectionner.obstacle.setY(objetSelectionner.getY()/View.ratioY);
         });
         save.addActionListener(
             (ActionEvent e) -> {
