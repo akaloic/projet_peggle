@@ -140,7 +140,7 @@ public class Controleur {
             this.modele.setBalle(null);
             t = 0;
             this.angleTir = this.view.getAngle();
-            this.modele.setBalle(new Balle(View.xBoutCanon/View.ratioX, View.yBoutCanon/View.ratioY, 300d, 180 - this.angleTir));
+            this.modele.setBalle(new Balle(View.xBoutCanon/View.ratioX, View.yBoutCanon/View.ratioY, 500d, 180 - this.angleTir));
         }
     }
 

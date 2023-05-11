@@ -13,7 +13,7 @@ public class Balle {
   public double v0;
   public final double diametre = 16;
   public final double rayon = diametre/2;
-  public final double g = 800;
+  public final double g = 1000;
   public BufferedImage image;
 
   public Balle(double x0, double y0, double v0, double angle) {
